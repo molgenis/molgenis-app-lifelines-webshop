@@ -15,6 +15,7 @@ const ciSettings = {
       'tunnel-identifier': process.env.TUNNEL_IDENTIFIER,
     }
   }
+  
 
   // Specific config for different browsers/OS combinations for CI env
 const ciChromeSettings = {
