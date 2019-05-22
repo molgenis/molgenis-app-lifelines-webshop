@@ -1,6 +1,6 @@
 <template>
   <div id="Sidebar-view">
-    <h3>1. Select cohorts</h3>
+    <h3>{{ 'biobank-webshop-sidebar-header' | i18n }}</h3>
   </div>
 </template>
 

@@ -1,4 +1,5 @@
 // vue.config.js
+const i18n = require('./i18n.schemas.js')
 
 module.exports = {
   filenameHashing: false,
@@ -10,6 +11,14 @@ module.exports = {
       '^/api': {
         'target': 'http://localhost:8080'
       }
+    },
+    before: function (app, server) {
+      app.get('/api/v2/i18n/biobank-webshop/en', function (req, res) {
+        res.json(i18n.en)
+      })
+      app.get('/api/v2/i18n/biobank-webshop', function (req, res) {
+        res.json(i18n.en)
+      })
     }
   }
 }

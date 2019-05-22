@@ -1,6 +1,6 @@
 <template>
   <div id="Content-view">
-    <h3>2. Select data</h3>
+    <h3>{{ 'biobank-webshop-content-header' | i18n }}</h3>
   </div>
 </template>
 

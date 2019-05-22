@@ -1,5 +1,9 @@
 # molgenis-app-lifelines-webshop
 
+## i18n
+
+For development and testing you can add your translations to `i18n.schemas.js`
+
 ## Project setup
 ```
 yarn install
@@ -35,5 +39,3 @@ yarn run test:e2e
 yarn run test:unit
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
