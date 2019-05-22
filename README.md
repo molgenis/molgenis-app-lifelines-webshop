@@ -3,7 +3,11 @@
 ## i18n
 
 For development and testing you can add your translations to `i18n.schemas.js`
-For production make sure to add the translations to the molgenis entity `Localization` using `biobank-webshop` as a namespace.
+For production make sure to add the translations to the molgenis entity `Localization` using `lifelines-webshop` as a namespace. 
+
+Tip: 
+Use `i18n.schemas.js` to create the `Localization` entities. For `msgid` add the schema key (for example: "lifelines-webshop-sidebar-header")
+The namespace should be `lifelines-webshop` and than add all of the needed translations.
 
 ## Project setup
 ```

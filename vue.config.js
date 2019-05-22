@@ -13,10 +13,10 @@ module.exports = {
       }
     },
     before: function (app, server) {
-      app.get('/api/v2/i18n/biobank-webshop/en', function (req, res) {
+      app.get('/api/v2/i18n/lifelines-webshop/en', function (req, res) {
         res.json(i18n.en)
       })
-      app.get('/api/v2/i18n/biobank-webshop', function (req, res) {
+      app.get('/api/v2/i18n/lifelines-webshop', function (req, res) {
         res.json(i18n.en)
       })
     }

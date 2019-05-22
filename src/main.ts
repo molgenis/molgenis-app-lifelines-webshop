@@ -9,7 +9,7 @@ Vue.config.productionTip = false
 Vue.use(i18n, {
   lng: 'en',
   fallbackLng: 'en',
-  namespace: ['biobank-webshop'],
+  namespace: ['lifelines-webshop'],
   callback () {
     new Vue({
       store,
