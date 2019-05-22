@@ -3,6 +3,7 @@
 ## i18n
 
 For development and testing you can add your translations to `i18n.schemas.js`
+For production make sure to add the translations to the molgenis entity `Localization` using `biobank-webshop` as a namespace.
 
 ## Project setup
 ```
