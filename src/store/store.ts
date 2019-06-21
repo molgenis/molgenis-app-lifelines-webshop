@@ -13,6 +13,12 @@ export default new Vuex.Store({
     },
     updateSubcohortfilter (state: ApplicationState, selectedSubcohorts: String[]) {
       state.facetFilter.subcohort = selectedSubcohorts
+    },
+    updateAgefilter (state: ApplicationState, selectedAgeGroups: String[]) {
+      // state.facetFilter.age = selectedAgeGroups
+    },
+    updateYearOfBirthRangefilter (state: ApplicationState, yobRange: Number[]) {
+      state.facetFilter.yearOfBirthRange = yobRange
     }
   },
   actions: {

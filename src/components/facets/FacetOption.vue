@@ -1,7 +1,7 @@
 <template>
     <button
     type="button"
-    class="ll-facet-option btn"
+    class="ll-facet-option btn btn-sm"
     :class="{ 'btn-secondary': !!isSelected, 'btn-outline-secondary': !isSelected }"
     @click.stop="$emit('facetToggled')"
     >
