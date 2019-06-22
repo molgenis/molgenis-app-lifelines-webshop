@@ -84,7 +84,7 @@ export default Vue.extend({
         }
       },
       set (value) {
-        this.$store.commit('updateAgefilter', value)
+        this.$store.commit('updateSelectedAgeAt', value)
       }
     },
     selectedAgeRange: {
