@@ -80,7 +80,7 @@ export default Vue.extend({
   watch: {
     activeAgeFacetId (active) {
       if (active === 'age') {
-        const tempState = [...this.selectedAgeRange]
+        const tempState = this.selectedAgeRange ? [...this.selectedAgeRange] : []
         this.$store.commit('removeYearOfBirthRangefilter')
         this.$store.commit('updateSelectedAgeAt', this.cachedAgeState)
         this.cachedAgeState = tempState
