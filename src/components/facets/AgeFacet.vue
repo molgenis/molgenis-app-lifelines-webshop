@@ -61,11 +61,10 @@ export default Vue.extend({
   },
   methods: {
     handleAgeAtChange () {
-      const selectedAgeAt = {
-        ageGroupAt1A: this.selectedAgeAt === 'ageGroupAt1A' ? this.selectedAgeGroups : [],
-        ageGroupAt2A: this.selectedAgeAt === 'ageGroupAt2A' ? this.selectedAgeGroups : [],
-        ageGroupAt3A: this.selectedAgeAt === 'ageGroupAt3A' ? this.selectedAgeGroups : []
-      }
+      const selectedAgeAt = this.ageAtOptions.reduce((accum, option) => {
+        accum[option.value] = (option.value === this.selectedAgeAt) ? this.selectedAgeGroups : []
+        return accum
+      }, {})
       this.$emit('input', selectedAgeAt)
     }
   }

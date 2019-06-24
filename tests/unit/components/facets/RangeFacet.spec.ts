@@ -3,39 +3,38 @@ import Vue from 'vue'
 import RangeFacet from '@/components/facets/RangeFacet.vue'
 
 describe('RangeFacet.vue', () => {
-  
   const minimalProps = {
     facetId: 'my-range-facet',
-    label: 'my range facet label',
+    label: 'my range facet label'
   }
 
   describe('initializeSlider', () => {
     it('should initialize the range if none is passed', () => {
-      let wrapper = shallowMount(RangeFacet, { propsData: minimalProps})
-        // @ts-ignore
-        expect(wrapper.vm.sliderValue).toEqual([1900, 2050])
+      let wrapper = shallowMount(RangeFacet, { propsData: minimalProps })
+      // @ts-ignore
+      expect(wrapper.vm.sliderValue).toEqual([1900, 2050])
     })
 
     it('should used the passed range if set', () => {
-        const propsData = {
-            facetId: 'my-range-facet',
-            label: 'my range facet label',
-            value: [1990, 2010]
-          }
-        let wrapper = shallowMount(RangeFacet, { propsData })
-          // @ts-ignore
-          expect(wrapper.vm.sliderValue).toEqual([1990, 2010])
+      const propsData = {
+        facetId: 'my-range-facet',
+        label: 'my range facet label',
+        value: [1990, 2010]
+      }
+      let wrapper = shallowMount(RangeFacet, { propsData })
+      // @ts-ignore
+      expect(wrapper.vm.sliderValue).toEqual([1990, 2010])
     })
 
     it('should use the default if empty range is passed', () => {
-        const propsData = {
-            facetId: 'my-range-facet',
-            label: 'my range facet label',
-            value: []
-          }
-        let wrapper = shallowMount(RangeFacet, { propsData })
-          // @ts-ignore
-          expect(wrapper.vm.sliderValue).toEqual([1900, 2050])
+      const propsData = {
+        facetId: 'my-range-facet',
+        label: 'my range facet label',
+        value: []
+      }
+      let wrapper = shallowMount(RangeFacet, { propsData })
+      // @ts-ignore
+      expect(wrapper.vm.sliderValue).toEqual([1900, 2050])
     })
   })
 
@@ -43,7 +42,7 @@ describe('RangeFacet.vue', () => {
     let wrapper: Wrapper<Vue>
 
     beforeEach(() => {
-      wrapper = shallowMount(RangeFacet, { propsData: minimalProps})
+      wrapper = shallowMount(RangeFacet, { propsData: minimalProps })
     })
 
     it('should emit a input event passing a clone of the new data', () => {
@@ -57,13 +56,13 @@ describe('RangeFacet.vue', () => {
     let wrapper: Wrapper<Vue>
 
     beforeEach(() => {
-        wrapper = shallowMount(RangeFacet, { propsData: minimalProps})
+      wrapper = shallowMount(RangeFacet, { propsData: minimalProps })
     })
 
     it('should update the from value and emit the new range', () => {
       const event = {
         currentTarget: {
-            value: '2011'
+          value: '2011'
         }
       }
       // @ts-ignore
@@ -76,13 +75,13 @@ describe('RangeFacet.vue', () => {
     let wrapper: Wrapper<Vue>
 
     beforeEach(() => {
-        wrapper = shallowMount(RangeFacet, { propsData: minimalProps})
+      wrapper = shallowMount(RangeFacet, { propsData: minimalProps })
     })
 
     it('should update the until value and emit the new range', () => {
       const event = {
         currentTarget: {
-            value: '2019'
+          value: '2019'
         }
       }
       // @ts-ignore
