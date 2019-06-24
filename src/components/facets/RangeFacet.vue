@@ -2,25 +2,21 @@
   <div class="facet range-facet">
     <label v-if="label" :for="rangeFacetId">{{ label }}</label>
     <form>
-      <div class="row">
-        <div class="col-4">
+      <div class="d-flex justify-content-between">
           <input
             type="number"
-            class="form-control form-control-sm"
+            class="range-input form-control form-control-sm"
             placeholder="From"
             v-model="sliderValue[0]"
             @change="handleFromChange"
           >
-        </div>
-        <div class="col-4">
           <input
             type="number"
-            class="form-control form-control-sm"
+            class="range-input form-control form-control-sm "
             placeholder="Until"
             v-model="sliderValue[1]"
             @change="handleUntilChange"
           >
-        </div>
       </div>
     </form>
     <div class="slider-container">
@@ -96,9 +92,13 @@ export default Vue.extend({
 })
 </script>
 
-<style>
+<style scoped>
 .slider-container {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.range-input {
+  width: 4rem;
 }
 </style>
