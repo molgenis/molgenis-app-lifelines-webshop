@@ -1,6 +1,6 @@
 <template>
   <div class="facet">
-      <label class="age-at-label" for="age-at-select">Age at</label>
+      <label class="age-at-label"  v-if="label" for="age-at-select">Age at</label>
       <select
       id="age-at-select"
       class="custom-select custom-select-sm"
@@ -28,7 +28,7 @@ export default Vue.extend({
     },
     label: {
       type: String,
-      required: true
+      required: false
     },
     ageAtOptions: {
       type: Array,

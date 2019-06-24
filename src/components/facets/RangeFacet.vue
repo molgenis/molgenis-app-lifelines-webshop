@@ -1,6 +1,6 @@
 <template>
   <div class="facet range-facet">
-    <label :for="rangeFacetId">{{ label }}</label>
+    <label v-if="label" :for="rangeFacetId">{{ label }}</label>
     <form>
       <div class="row">
         <div class="col-4">
@@ -55,21 +55,21 @@ export default Vue.extend({
     min: {
       type: Number,
       required: false,
-      default: () => 0
+      default: () => 1900
     },
     max: {
       type: Number,
       required: false,
-      default: () => 100
+      default: () => 2050
     },
     value: {
       type: Array,
-      default: () => [0, 100]
+      default: () => [1900, 2050]
     }
   },
   data: function () {
     return {
-      sliderValue: [...this.value]
+      sliderValue: this.value.length ? [...this.value] : [1900, 2050]
     }
   },
   computed: {

@@ -3,33 +3,37 @@
     <h3>{{ 'lifelines-webshop-sidebar-header' | i18n }}</h3>
     <ul class="list-unstyled">
       <li>
-        <age-facet
-        facetId="age"
-        label="Age"
-        :ageGroupOptions="ageGroupOptions"
-        :ageAtOptions="ageAtOptions"
-        v-model="selectedAgeAt" />
+        <facet-container facetId="age" label="Age">
+          <age-facet
+          facetId="age"
+          :ageGroupOptions="ageGroupOptions"
+          :ageAtOptions="ageAtOptions"
+          v-model="selectedAgeAt" />
+        </facet-container>
       </li>
       <li>
-        <range-facet
-        facetId="yob"
-        label="Year of birth"
-        :min="1900" :max="2050"
-        v-model="selectedAgeRange"/>
+        <facet-container facetId="yob" label="Year of birth">
+          <range-facet
+          facetId="yob"
+          :min="1900" :max="2050"
+          v-model="selectedAgeRange"/>
+        </facet-container>
       </li>
       <li>
-        <toggle-facet
-        facetId="gender"
-        label="Gender"
-        :options="genderOptions"
-        v-model="selectedGenderOptions" />
+        <facet-container facetId="gender" label="Gender">
+          <toggle-facet
+          facetId="gender"
+          :options="genderOptions"
+          v-model="selectedGenderOptions" />
+        </facet-container>
       </li>
       <li>
-        <toggle-facet
-        facetId="cohort"
-        label="Subcohorts"
-        :options="subcohortOptions"
-        v-model="selectedSubcohortOptions" />
+        <facet-container facetId="cohort" label="Subcohorts">
+          <toggle-facet
+          facetId="cohort"
+          :options="subcohortOptions"
+          v-model="selectedSubcohortOptions" />
+        </facet-container>
       </li>
     </ul>
   </div>
@@ -37,6 +41,7 @@
 
 <script>
 import Vue from 'vue'
+import FacetContainer from '../components/facets/FacetContainer.vue'
 import ToggleFacet from '../components/facets/ToggleFacet.vue'
 import AgeFacet from '../components/facets/AgeFacet.vue'
 import RangeFacet from '../components/facets/RangeFacet.vue'
@@ -44,7 +49,7 @@ import { mapMutations } from 'vuex'
 
 export default Vue.extend({
   name: 'SidebarView',
-  components: { ToggleFacet, AgeFacet, RangeFacet },
+  components: { FacetContainer, ToggleFacet, AgeFacet, RangeFacet },
   computed: {
     genderOptions () {
       return this.$store.state.genderOptions
