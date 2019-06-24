@@ -1,7 +1,7 @@
 <template>
   <div id="main-view" class="row">
-    <sidebar-view class="col-sm-3" />
-    <content-view class="col-sm-9" />
+    <sidebar-view class="col-sm-4 col-md-3 col-xl-2" />
+    <content-view class="col-sm-8 col-md-9 col-xl-10"/>
   </div>
 </template>
 
