@@ -21,6 +21,14 @@ export default new Vuex.Store({
     },
     updateYearOfBirthRangefilter (state: ApplicationState, yobRange: Number[]) {
       state.facetFilter.yearOfBirthRange = yobRange
+    },
+    removeYearOfBirthRangefilter (state: ApplicationState) {
+      state.facetFilter.yearOfBirthRange = []
+    },
+    removeAgeAtFilter (state: ApplicationState) {
+      state.facetFilter.ageGroupAt1A = []
+      state.facetFilter.ageGroupAt2A = []
+      state.facetFilter.ageGroupAt3A = []
     }
   },
   actions: {

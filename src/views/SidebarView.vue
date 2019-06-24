@@ -3,20 +3,30 @@
     <h3>{{ 'lifelines-webshop-sidebar-header' | i18n }}</h3>
     <ul class="list-unstyled">
       <li>
-        <facet-container facetId="age" label="Age">
-          <age-facet
+        <facet-container
           facetId="age"
-          :ageGroupOptions="ageGroupOptions"
-          :ageAtOptions="ageAtOptions"
-          v-model="selectedAgeAt" />
+          label="Age"
+          :collapsable="true"
+          :collapsed="activeAgeFacetId !== 'age'"
+          @facetToggle="handleAgeToggle">
+            <age-facet
+            facetId="age"
+            :ageGroupOptions="ageGroupOptions"
+            :ageAtOptions="ageAtOptions"
+            v-model="selectedAgeAt" />
         </facet-container>
       </li>
       <li>
-        <facet-container facetId="yob" label="Year of birth">
-          <range-facet
+        <facet-container
           facetId="yob"
-          :min="1900" :max="2050"
-          v-model="selectedAgeRange"/>
+          label="Year of birth"
+          :collapsable="true"
+          :collapsed="activeAgeFacetId !== 'yob'"
+          @facetToggle="handleAgeToggle">
+            <range-facet
+            facetId="yob"
+            :min="1900" :max="2050"
+            v-model="selectedAgeRange"/>
         </facet-container>
       </li>
       <li>
@@ -50,6 +60,39 @@ import { mapMutations } from 'vuex'
 export default Vue.extend({
   name: 'SidebarView',
   components: { FacetContainer, ToggleFacet, AgeFacet, RangeFacet },
+  data: function () {
+    return {
+      activeAgeFacetId: 'age',
+      cachedAgeState: null
+    }
+  },
+  methods: {
+    handleAgeToggle (event) {
+      const { collapsed, facetId } = event
+      if (facetId === 'yob') {
+        this.activeAgeFacetId = collapsed ? 'yob' : 'age'
+      }
+      if (facetId === 'age') {
+        this.activeAgeFacetId = collapsed ? 'age' : 'yob'
+      }
+    }
+  },
+  watch: {
+    activeAgeFacetId (active) {
+      if (active === 'age') {
+        const tempState = [...this.selectedAgeRange]
+        this.$store.commit('removeYearOfBirthRangefilter')
+        this.$store.commit('updateSelectedAgeAt', this.cachedAgeState)
+        this.cachedAgeState = tempState
+      }
+      if (active === 'yob') {
+        const tempState = Object.assign({}, this.selectedAgeAt)
+        this.$store.commit('removeAgeAtFilter')
+        this.$store.commit('updateYearOfBirthRangefilter', this.cachedAgeState)
+        this.cachedAgeState = tempState
+      }
+    }
+  },
   computed: {
     genderOptions () {
       return this.$store.state.genderOptions
