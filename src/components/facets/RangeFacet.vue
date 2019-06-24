@@ -76,16 +76,16 @@ export default Vue.extend({
   methods: {
     handleSliderChange (data) {
       // clone to break reactive loop
-      this.$emit('input', [...data])
+      this.$emit('input', [parseInt(data[0], 10), parseInt(data[1], 10)])
     },
     handleFromChange (data) {
-      // clone to break reactive loop
       this.sliderValue[0] = parseInt(data.currentTarget.value, 10)
+      // clone to break reactive loop
       this.$emit('input', [...this.sliderValue])
     },
     handleUntilChange (data) {
-      // clone to break reactive loop
       this.sliderValue[1] = parseInt(data.currentTarget.value, 10)
+      // clone to break reactive loop
       this.$emit('input', [...this.sliderValue])
     }
   }
