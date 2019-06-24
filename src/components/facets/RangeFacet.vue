@@ -38,7 +38,7 @@
 <script>
 import Vue from 'vue'
 import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/antd.css'
+import 'vue-slider-component/theme/default.css'
 
 export default Vue.extend({
   name: 'RangeFacet',
