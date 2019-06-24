@@ -61,4 +61,44 @@ describe('SidebarView.vue', () => {
     wrapper.vm.selectedSubcohortOptions = ['123']
     expect(commitMock).toBeCalledWith('updateSubcohortfilter', ['123'])
   })
+
+  it('should commit the new selectedAgeAt filter to the store when updated', () => {
+    // @ts-ignore
+    wrapper.vm.selectedAgeAt = {
+      ageGroupAt1A: [],
+      ageGroupAt2A: [],
+      ageGroupAt3A: ['0-17', '65+']
+    }
+    expect(commitMock).toBeCalledWith('updateSelectedAgeAt', {
+      ageGroupAt1A: [],
+      ageGroupAt2A: [],
+      ageGroupAt3A: ['0-17', '65+']
+    })
+  })
+
+  it('should commit the new selectedAgeRange filter to the store when updated', () => {
+    // @ts-ignore
+    wrapper.vm.selectedAgeRange = [2000, 2011]
+    expect(commitMock).toBeCalledWith('updateYearOfBirthRangefilter', [2000, 2011])
+  })
+
+  it('should cache the current age data, clear the age data in the store and activate the new age filter, initilizing it with the cached data', () => {
+    wrapper.setData({ activeAgeFacetId: 'yob' })
+    expect(commitMock).toBeCalledWith('removeAgeAtFilter')
+
+    wrapper.setData({ activeAgeFacetId: 'age' })
+    expect(commitMock).toBeCalledWith('removeYearOfBirthRangefilter')
+  })
+
+  it('should flip the active age facet when handleAgeToggle is called', () => {
+    // @ts-ignore
+    wrapper.vm.handleAgeToggle( { collapsed: false, facetId: 'age' })
+    // @ts-ignore
+    expect(wrapper.vm.activeAgeFacetId).toBe('yob')
+
+    // @ts-ignore
+    wrapper.vm.handleAgeToggle( { collapsed: false, facetId: 'yob' })
+    // @ts-ignore
+    expect(wrapper.vm.activeAgeFacetId).toBe('age')
+  })
 })
