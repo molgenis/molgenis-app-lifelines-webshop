@@ -23,4 +23,5 @@ export default interface ApplicationState {
   assessments: Assessment[]
   treeStructure: Object[]
   treeSelected: Number
+  gridSelection: Object[]
 }
