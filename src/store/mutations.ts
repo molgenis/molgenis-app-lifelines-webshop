@@ -2,12 +2,13 @@ import ApplicationState from '@/types/applicationState'
 import Variable from '@/types/Variable'
 import Assessment from '@/types/Assessment'
 import Count from '@/types/Count'
+import Vue from 'vue'
 
 export default {
-  updateGenderFilter (state: ApplicationState, selectedGenders: String[]) {
+  updateGenderFilter (state: ApplicationState, selectedGenders: string[]) {
     state.facetFilter.gender = selectedGenders
   },
-  updateSubcohortfilter (state: ApplicationState, selectedSubcohorts: String[]) {
+  updateSubcohortfilter (state: ApplicationState, selectedSubcohorts: string[]) {
     state.facetFilter.subcohort = selectedSubcohorts
   },
   updateSelectedAgeAt (state: ApplicationState, selectedAgeAt: any) {
@@ -15,7 +16,7 @@ export default {
     state.facetFilter.ageGroupAt2A = selectedAgeAt.ageGroupAt2A
     state.facetFilter.ageGroupAt3A = selectedAgeAt.ageGroupAt3A
   },
-  updateYearOfBirthRangefilter (state: ApplicationState, yobRange: Number[]) {
+  updateYearOfBirthRangefilter (state: ApplicationState, yobRange: number[]) {
     state.facetFilter.yearOfBirthRange = yobRange
   },
   removeYearOfBirthRangefilter (state: ApplicationState) {
@@ -26,16 +27,16 @@ export default {
     state.facetFilter.ageGroupAt2A = []
     state.facetFilter.ageGroupAt3A = []
   },
-  updateTreeSelection (state: ApplicationState, selection: Number) {
+  updateTreeSelection (state: ApplicationState, selection: number) {
     state.treeSelected = selection
   },
-  updateSection (state: ApplicationState, sections: String[]) {
+  updateSection (state: ApplicationState, sections: string[]) {
     state.sectionList = sections
   },
-  updateTreeStructure (state: ApplicationState, sections: String[]) {
+  updateTreeStructure (state: ApplicationState, sections: string[]) {
     state.treeStructure = sections
   },
-  updateSubSection (state: ApplicationState, subSections: String[]) {
+  updateSubSection (state: ApplicationState, subSections: string[]) {
     state.subSectionList = subSections
   },
   updateVariables (state: ApplicationState, variables: Variable[]) {
@@ -46,5 +47,19 @@ export default {
   },
   updateVariantCounts (state: ApplicationState, variantCounts: Count[]) {
     state.variantCounts = variantCounts
+  },
+  toggleGridSelection ({ gridSelection }: ApplicationState,
+    { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
+    if (!gridSelection.hasOwnProperty(variableId)) {
+      Vue.set(gridSelection, variableId, [assessmentId])
+    } else {
+      const selectedAssessments = gridSelection[variableId]
+      const assessmentIndex = selectedAssessments.indexOf(assessmentId)
+      if (assessmentIndex >= 0) {
+        selectedAssessments.splice(assessmentIndex, 1)
+      } else {
+        selectedAssessments.push(assessmentId)
+      }
+    }
   }
 }

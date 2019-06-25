@@ -1,6 +1,6 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
-import Variant from '@/types/Variant';
+import Variant from '@/types/Variant'
 
 export default {
   loadTreeStructure ({ dispatch, commit } : any) {
@@ -51,7 +51,7 @@ export default {
       commit('updateTreeStructure', final)
     })
   },
-  async loadAssessments({ commit }: any) {
+  async loadAssessments ({ commit }: any) {
     const response = await api.get('/api/v2/lifelines_assessment')
     commit('updateAssessments', response.items)
   },
@@ -71,13 +71,13 @@ export default {
       })
       ))
   },
-  async loadGridData({ commit, getters }: any) {
-    let url = "/api/v2/lifelines_who_when?aggs=x==variant_id"
+  async loadGridData ({ commit, getters }: any) {
+    let url = '/api/v2/lifelines_who_when?aggs=x==variant_id'
     if (!getters.rsql) {
       commit('updateVariantCounts', [])
     } else {
       url = `${url}&q=${getters.rsql}`
-      const {aggs: {matrix, xLabels}} = await api.get(url)
+      const { aggs: { matrix, xLabels } } = await api.get(url)
       const variantCounts = matrix.map((cell: any, index: Number) => ({
         variantId: parseInt(xLabels[index].id),
         count: cell[0]

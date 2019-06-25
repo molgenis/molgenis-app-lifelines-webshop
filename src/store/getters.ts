@@ -1,8 +1,8 @@
 import ApplicationState from '@/types/ApplicationState'
 // @ts-ignore
-import {transformToRSQL} from '@molgenis/rsql'
+import { transformToRSQL } from '@molgenis/rsql'
 import Getters from '@/types/Getters'
-import Count from '@/types/Count';
+import Count from '@/types/Count'
 
 export default {
   variantIds: (state: ApplicationState) =>
@@ -25,7 +25,7 @@ export default {
       }
       operands.push(variantFilter)
     }
-    if (operands.length == 0) {
+    if (operands.length === 0) {
       return ''
     }
     return transformToRSQL({
@@ -37,18 +37,17 @@ export default {
     const assessmentIds = new Set(state.variables.flatMap(variable => variable.variants.map(variant => variant.assessmentId)))
     return state.assessments.filter(assessment => assessmentIds.has(assessment.id))
   },
-  grid: (state: ApplicationState, getters: Getters) => 
-    state.variables.map(variable => 
+  grid: (state: ApplicationState, getters: Getters) =>
+    state.variables.map(variable =>
       getters.gridAssessments.map(assessment => {
         const variants = variable.variants.filter(variant => variant.assessmentId === assessment.id)
         const count = variants.reduce((sum, variant) => {
           const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
           return sum + (variantCount ? variantCount.count : 0)
         }, 0)
-        return {
-          count,
-          selected: false
-        }
+        const selectionForVariable = state.gridSelection[variable.id]
+        const selected = !!selectionForVariable && selectionForVariable.includes(assessment.id)
+        return { count, selected }
       })
     )
 }

@@ -34,13 +34,7 @@ const state: ApplicationState = {
   subSectionList: [],
   treeStructure: [],
   treeSelected: -1,
-  gridSelection: [{
-    variableId: 0,
-    values: [
-      { variantId: 0, state: true },
-      { variantId: 1, state: true }
-    ]
-  }],
+  gridSelection: {},
   variantCounts: [],
   assessments: []
 }

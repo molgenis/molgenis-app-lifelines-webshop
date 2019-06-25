@@ -17,6 +17,9 @@ describe('SidebarView.vue', () => {
   beforeEach(() => {
     state = {
       variables: [],
+      variantCounts: [],
+      assessments: [],
+      gridSelection: {},
       genderOptions: [{ value: '1', text: 'Male' }],
       subcohortOptions: [{ value: '101', text: 'baseline' }],
       ageGroupOptions: [],

@@ -28,7 +28,7 @@
         </td>
       </tr>
 
-      <tr 
+      <tr
         v-for="(row, rowIndex) in grid"
         :key="rowIndex"
       >
@@ -40,9 +40,10 @@
         </td>
         <td :key="colIndex"
             v-for="(cell,colIndex) in row">
-          <facet-option 
-            @click="toggle(rowIndex, colIndex)"
-            class="selectItem">
+          <facet-option
+            @facetToggled="toggle(rowIndex, colIndex)"
+            class="selectItem"
+            :isSelected="cell.selected">
             {{cell.count}}
             </facet-option>
         </td>
@@ -53,7 +54,7 @@
 
 <script>
 import Vue from 'vue'
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import FacetOption from '../components/facets/FacetOption.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
@@ -64,9 +65,13 @@ library.add(faArrowDown, faArrowRight, faArrowsAlt)
 export default Vue.extend({
   components: { FacetOption, FontAwesomeIcon },
   methods: {
-    toggle: (variableId, variantId) => {
-      //this.$store.state.gridSelection!=this.$store.state.gridSelection
+    toggle (rowIndex, colIndex) {
+      this.toggleGridSelection({
+        variableId: this.variables[rowIndex].id,
+        assessmentId: this.gridAssessments[colIndex].id
+      })
     },
+    ...mapMutations(['toggleGridSelection']),
     ...mapActions(['loadVariables', 'loadAssessments', 'loadGridData'])
   },
   computed: {

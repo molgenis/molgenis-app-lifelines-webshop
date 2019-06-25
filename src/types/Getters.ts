@@ -1,5 +1,5 @@
-import Assessment from '@/types/Assessment';
-import GridCell from '@/types/GridCell';
+import Assessment from '@/types/Assessment'
+import GridCell from '@/types/GridCell'
 
 export default interface Getters {
   variantIds: number[]

@@ -16,6 +16,9 @@ describe('TreeView.vue', () => {
 
   beforeEach(() => {
     state = {
+      variantCounts: [],
+      assessments: [],
+      gridSelection: {},
       variables: [],
       genderOptions: [{ value: '1', text: 'Male' }],
       subcohortOptions: [{ value: '101', text: 'baseline' }],
