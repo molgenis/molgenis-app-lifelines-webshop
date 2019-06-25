@@ -18,9 +18,15 @@ describe('SidebarView.vue', () => {
     state = {
       genderOptions: [{ value: '1', text: 'Male' }],
       subcohortOptions: [{ value: '101', text: 'baseline' }],
+      ageGroupOptions: [],
+      ageAtOptions: [],
       facetFilter: {
         gender: [],
-        subcohort: []
+        subcohort: [],
+        ageGroupAt1A: [],
+        ageGroupAt2A: [],
+        ageGroupAt3A: [],
+        yearOfBirthRange: []
       },
       treeStructure: [],
       sectionList: [],
@@ -58,5 +64,81 @@ describe('SidebarView.vue', () => {
     // @ts-ignore
     wrapper.vm.selectedSubcohortOptions = ['123']
     expect(commitMock).toBeCalledWith('updateSubcohortfilter', ['123'])
+  })
+
+  it('should commit the new selectedAgeAt filter to the store when updated', () => {
+    // @ts-ignore
+    wrapper.vm.selectedAgeAt = {
+      ageGroupAt1A: [],
+      ageGroupAt2A: [],
+      ageGroupAt3A: ['0-17', '65+']
+    }
+    expect(commitMock).toBeCalledWith('updateSelectedAgeAt', {
+      ageGroupAt1A: [],
+      ageGroupAt2A: [],
+      ageGroupAt3A: ['0-17', '65+']
+    })
+  })
+
+  it('should commit the new selectedAgeRange filter to the store when updated', () => {
+    // @ts-ignore
+    wrapper.vm.selectedAgeRange = [2000, 2011]
+    expect(commitMock).toBeCalledWith('updateYearOfBirthRangefilter', [2000, 2011])
+  })
+
+  it('should cache the current age data, clear the age data in the store and activate the new age filter, initilizing it with the cached data', () => {
+    wrapper.setData({ activeAgeFacetId: 'yob' })
+    expect(commitMock).toBeCalledWith('removeAgeAtFilter')
+
+    wrapper.setData({ activeAgeFacetId: 'age' })
+    expect(commitMock).toBeCalledWith('removeYearOfBirthRangefilter')
+  })
+
+  describe('handleAgeToggle', () => {
+    describe('when toggeling the yob facet when it is collapsed', () => {
+      beforeEach(() => {
+        // @ts-ignore
+        wrapper.vm.handleAgeToggle({ collapsed: true, facetId: 'yob' })
+      })
+      it('yob should become the active facet', () => {
+        // @ts-ignore
+        expect(wrapper.vm.activeAgeFacetId).toBe('yob')
+  
+      })
+    })
+    describe('when toggeling the yob facet when it is open', () => {
+      beforeEach(() => {
+        // @ts-ignore
+        wrapper.vm.handleAgeToggle({ collapsed: false, facetId: 'yob' })
+      })
+      it('age should become the facet', () => {
+        // @ts-ignore
+        expect(wrapper.vm.activeAgeFacetId).toBe('age')
+  
+      })
+    })
+    describe('when toggeling the age facet when it is collapsed', () => {
+      beforeEach(() => {
+        // @ts-ignore
+        wrapper.vm.handleAgeToggle({ collapsed: true, facetId: 'age' })
+      })
+      it('age should become the active facet', () => {
+        // @ts-ignore
+        expect(wrapper.vm.activeAgeFacetId).toBe('age')
+  
+      })
+    })
+    describe('when toggeling the age facet when it is open', () => {
+      beforeEach(() => {
+        // @ts-ignore
+        wrapper.vm.handleAgeToggle({ collapsed: false, facetId: 'age' })
+      })
+      it('yob should become the facet', () => {
+        // @ts-ignore
+        expect(wrapper.vm.activeAgeFacetId).toBe('yob')
+  
+      })
+    })
+    
   })
 })

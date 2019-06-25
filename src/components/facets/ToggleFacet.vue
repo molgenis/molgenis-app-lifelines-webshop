@@ -1,6 +1,6 @@
 <template>
-  <div class="ll-facet-container">
-      <label :for="facetOptionsId">{{ label }}</label>
+  <div class="facet">
+      <label v-if="label" :for="facetOptionsId">{{ label }}</label>
       <ul :id="facetOptionsId" class="list-unstyled list-inline">
           <li class="list-inline-item" v-for="option in options" :key=option.value>
               <facet-option :text="option.text" :isSelected="value.includes(option.value)" @facetToggled="handleFacetToggle(option)"/>
@@ -23,7 +23,7 @@ export default Vue.extend({
     },
     label: {
       type: String,
-      required: true
+      required: false
     },
     options: {
       type: Array,

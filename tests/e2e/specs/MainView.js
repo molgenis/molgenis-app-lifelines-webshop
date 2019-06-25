@@ -6,8 +6,8 @@ module.exports = {
     browser
       .url(process.env.VUE_DEV_SERVER_URL)
       .waitForElementVisible('#main-view', 5000)
-      .assert.elementPresent('div.row > .col-sm-3')
-      .assert.elementPresent('div.row > .col-sm-9')
+      .assert.elementPresent('div.row > .col-sm-4')
+      .assert.elementPresent('div.row > .col-sm-8')
       .end()
   }
 }

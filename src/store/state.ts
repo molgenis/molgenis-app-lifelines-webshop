@@ -11,9 +11,23 @@ const state: ApplicationState = {
     { value: 'deep', text: 'DEEP' },
     { value: 'dag3', text: 'DAG3' }
   ],
+  ageGroupOptions: [
+    { value: '1', text: '0-17' },
+    { value: '2', text: '18-65' },
+    { value: '3', text: '65+' }
+  ],
+  ageAtOptions: [
+    { value: 'ageGroupAt1A', text: 'baseline' },
+    { value: 'ageGroupAt2A', text: 'second assessment' },
+    { value: 'ageGroupAt3A', text: 'third assessment' }
+  ],
   facetFilter: {
     gender: [],
-    subcohort: []
+    subcohort: [],
+    ageGroupAt1A: [],
+    ageGroupAt2A: [],
+    ageGroupAt3A: [],
+    yearOfBirthRange: []
   },
   sectionList: [],
   subSectionList: [],
