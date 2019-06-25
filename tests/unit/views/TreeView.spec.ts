@@ -18,9 +18,15 @@ describe('TreeView.vue', () => {
     state = {
       genderOptions: [{ value: '1', text: 'Male' }],
       subcohortOptions: [{ value: '101', text: 'baseline' }],
+      ageGroupOptions: [],
+      ageAtOptions: [],
       facetFilter: {
         gender: [],
-        subcohort: []
+        subcohort: [],
+        ageGroupAt1A: [],
+        ageGroupAt2A: [],	      
+        ageGroupAt3A: [],
+        yearOfBirthRange: []
       },
       treeStructure: [{
         name: 'parent',
