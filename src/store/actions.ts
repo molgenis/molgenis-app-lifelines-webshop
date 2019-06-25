@@ -44,10 +44,11 @@ export default {
       const final = treeStructure.map((item:any) => {
         return {
           name: sections[item.key],
-          children: item.list.map((id:Number) => { return { name: subSections[id] } })
+          children: item.list.map((id:Number) => { return { name: subSections[id], id } })
         }
       })
       commit('updateTreeStructure', final)
+      console.log(final)
     })
   }
 }

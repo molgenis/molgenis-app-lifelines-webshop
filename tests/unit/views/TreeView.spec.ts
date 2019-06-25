@@ -33,13 +33,14 @@ describe('TreeView.vue', () => {
         open: true,
         children: [
           {
+            id: 10,
             name: 'child'
           }
         ]
       }],
       sectionList: [],
       subSectionList: [],
-      treeSelected: ''
+      treeSelected: -1
     }
 
     wrapper = mount(TreeView, {
@@ -60,6 +61,6 @@ describe('TreeView.vue', () => {
   it('Can select child item', () => {
     expect(wrapper.exists()).toBeTruthy()
     wrapper.find('[title="child"]').trigger('click')
-    expect(commitMock.mock.calls).toEqual([ [ 'updateTreeSelection', 'child' ] ])
+    expect(commitMock.mock.calls).toEqual([ [ 'updateTreeSelection', 10 ] ])
   })
 })

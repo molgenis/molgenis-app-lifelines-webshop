@@ -32,7 +32,7 @@ const state: ApplicationState = {
   sectionList: [],
   subSectionList: [],
   treeStructure: [],
-  treeSelected: ''
+  treeSelected: -1
 }
 
 export default state

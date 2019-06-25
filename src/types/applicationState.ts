@@ -16,5 +16,5 @@ export default interface ApplicationState {
   sectionList: String[],
   subSectionList: String[],
   treeStructure: Object[]
-  treeSelected: String | null
+  treeSelected: Number
 }
