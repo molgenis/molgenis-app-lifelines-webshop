@@ -48,7 +48,6 @@ export default {
         }
       })
       commit('updateTreeStructure', final)
-      console.log(final)
     })
   },
   async loadGridData ({ state, dispatch, commit } : any) {
@@ -59,13 +58,13 @@ export default {
     commit('updateVariables', subsectionVariables
       // map assessment_id to assessmentId somewhere deep in the structure
       .map((sv: any) => ({
-          ...sv.variable_id,
-          variants: sv.variable_id.variants
-            .map((variant: any) => ({
-              ...variant,
-              assessmentId: variant.assessment_id
-            }))
-        })
+        ...sv.variable_id,
+        variants: sv.variable_id.variants
+          .map((variant: any) => ({
+            ...variant,
+            assessmentId: variant.assessment_id
+          }))
+      })
       ))
   }
 }

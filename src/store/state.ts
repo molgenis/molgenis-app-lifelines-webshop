@@ -33,7 +33,14 @@ const state: ApplicationState = {
   sectionList: [],
   subSectionList: [],
   treeStructure: [],
-  treeSelected: -1
+  treeSelected: -1,
+  gridSelection: [{
+    variableId: 0,
+    values: [
+      { variantId: 0, state: true },
+      { variantId: 1, state: true }
+    ]
+  }]
 }
 
 export default state

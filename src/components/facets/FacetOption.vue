@@ -5,7 +5,7 @@
     :class="{ 'btn-secondary': !!isSelected, 'btn-outline-secondary': !isSelected }"
     @click.stop="$emit('facetToggled')"
     >
-        {{text}}
+      <slot />
     </button>
 </template>
 
@@ -15,10 +15,6 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'FacetOption',
   props: {
-    text: {
-      type: String,
-      required: true
-    },
     isSelected: {
       type: Boolean,
       default: () => false
