@@ -90,15 +90,51 @@ describe('SidebarView.vue', () => {
     expect(commitMock).toBeCalledWith('removeYearOfBirthRangefilter')
   })
 
-  it('should flip the active age facet when handleAgeToggle is called', () => {
-    // @ts-ignore
-    wrapper.vm.handleAgeToggle( { collapsed: false, facetId: 'age' })
-    // @ts-ignore
-    expect(wrapper.vm.activeAgeFacetId).toBe('yob')
-
-    // @ts-ignore
-    wrapper.vm.handleAgeToggle( { collapsed: false, facetId: 'yob' })
-    // @ts-ignore
-    expect(wrapper.vm.activeAgeFacetId).toBe('age')
+  describe('handleAgeToggle', () => {
+    describe('when toggeling the yob facet when it is collapsed', () => {
+      beforeEach(() => {
+        // @ts-ignore
+        wrapper.vm.handleAgeToggle({ collapsed: true, facetId: 'yob' })
+      })
+      it('yob should become the active facet', () => {
+        // @ts-ignore
+        expect(wrapper.vm.activeAgeFacetId).toBe('yob')
+  
+      })
+    })
+    describe('when toggeling the yob facet when it is open', () => {
+      beforeEach(() => {
+        // @ts-ignore
+        wrapper.vm.handleAgeToggle({ collapsed: false, facetId: 'yob' })
+      })
+      it('age should become the facet', () => {
+        // @ts-ignore
+        expect(wrapper.vm.activeAgeFacetId).toBe('age')
+  
+      })
+    })
+    describe('when toggeling the age facet when it is collapsed', () => {
+      beforeEach(() => {
+        // @ts-ignore
+        wrapper.vm.handleAgeToggle({ collapsed: true, facetId: 'age' })
+      })
+      it('age should become the active facet', () => {
+        // @ts-ignore
+        expect(wrapper.vm.activeAgeFacetId).toBe('age')
+  
+      })
+    })
+    describe('when toggeling the age facet when it is open', () => {
+      beforeEach(() => {
+        // @ts-ignore
+        wrapper.vm.handleAgeToggle({ collapsed: false, facetId: 'age' })
+      })
+      it('yob should become the facet', () => {
+        // @ts-ignore
+        expect(wrapper.vm.activeAgeFacetId).toBe('yob')
+  
+      })
+    })
+    
   })
 })
