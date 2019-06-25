@@ -5,41 +5,49 @@
     >
       <tr>
         <th scope="col">Variable</th>
-        <th scope="col" style="width:100%">Collection Round</th>
+        <th scope="col" :colspan="gridAssessments.length + 1">Collection Round</th>
+      </tr>
+      <tr>
+        <th class="w-0"></th>
+        <th class="w-0"></th>
+        <th
+          v-for="assessment in gridAssessments"
+          :key="assessment.id"
+          class="text-center">
+          {{assessment.name}}
+        </th>
       </tr>
       <tr>
         <th scope="row"></th>
         <td>
           <facet-option class="selectAll">All</facet-option>
-          <facet-option class="selectCol"><font-awesome-icon icon="arrow-down" /></facet-option>
-          <facet-option class="selectCol"><font-awesome-icon icon="arrow-down" /></facet-option>
-          <facet-option class="selectCol"><font-awesome-icon icon="arrow-down" /></facet-option>
+        </td>
+        <td v-for="assessment in gridAssessments"
+            :key="assessment.id">
           <facet-option class="selectCol"><font-awesome-icon icon="arrow-down" /></facet-option>
         </td>
       </tr>
 
-      <tr
-        v-for="variable in variables"
-        :key="variable.id"
+      <tr 
+        v-for="(row, rowIndex) in grid"
+        :key="rowIndex"
       >
-        <th scope="row">{{variable.label}}</th>
+        <th scope="row">
+          {{variables[rowIndex].label}}
+        </th>
         <td>
           <facet-option class="selectRow"><font-awesome-icon icon="arrow-right" /></facet-option>
-          <facet-option @click="toggle(variable.id, 0)" class="selectItem">1</facet-option>
-          <facet-option @click="toggle(variable.id, 1)" class="selectItem">5</facet-option>
-          <facet-option @click="toggle(variable.id, 2)" class="selectItem">0</facet-option>
-          <facet-option @click="toggle(variable.id, 3)" class="selectItem">4</facet-option>
+        </td>
+        <td :key="colIndex"
+            v-for="(cell,colIndex) in row">
+          <facet-option 
+            @click="toggle(rowIndex, colIndex)"
+            class="selectItem">
+            {{cell.count}}
+            </facet-option>
         </td>
       </tr>
-
     </table>
-    <dl>
-      <dt>variables</dt><dd>{{ variables.map(it => it.name) }}</dd>
-      <dt>rsql</dt><dd>{{ rsql }}</dd>
-      <dt>variantCounts</dt><dd>{{ variantCounts }}</dd>
-      <dt>gridAssessments</dt><dd>{{ gridAssessments }}</dd>
-      <dt>grid</dt><dd>{{grid}}</dd>
-    </dl>
   </div>
 </template>
 
@@ -85,12 +93,20 @@ export default Vue.extend({
     vertical-align: middle;
   }
   table td, th{
-    padding: 0 2px;
+    padding: 0 1px;
+  }
+  .w-0 {
+    width: 0;
   }
   button{
     display: inline-block;
     margin: 2px;
     width: 50px;
+  }
+  button.selectAll{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
   }
   button.selectItem{
     border-radius: 0;
