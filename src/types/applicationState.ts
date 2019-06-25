@@ -1,5 +1,7 @@
 import FacetOption from '@/types/facetOption'
-import Variable from './Variable'
+import Variable from '@/types/Variable'
+import Count from '@/types/Count'
+import Assessment from '@/types/Assessment'
 
 export default interface ApplicationState {
   genderOptions: FacetOption[],
@@ -17,6 +19,8 @@ export default interface ApplicationState {
   sectionList: String[],
   subSectionList: String[],
   variables: Variable[]
+  counts: Count[]
+  assessments: Assessment[]
   treeStructure: Object[]
   treeSelected: Number
 }
