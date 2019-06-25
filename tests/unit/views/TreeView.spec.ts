@@ -2,7 +2,7 @@ import { mount, createLocalVue, Wrapper } from '@vue/test-utils'
 import TreeView from '@/views/TreeView.vue'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import ApplicationState from '@/types/ApplicationState'
+import ApplicationState from '@/types/applicationState'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -16,6 +16,7 @@ describe('TreeView.vue', () => {
 
   beforeEach(() => {
     state = {
+      variables: [],
       genderOptions: [{ value: '1', text: 'Male' }],
       subcohortOptions: [{ value: '101', text: 'baseline' }],
       ageGroupOptions: [],

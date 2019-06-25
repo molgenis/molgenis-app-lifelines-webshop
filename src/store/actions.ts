@@ -50,5 +50,22 @@ export default {
       commit('updateTreeStructure', final)
       console.log(final)
     })
+  },
+  async loadGridData ({ state, dispatch, commit } : any) {
+    // TODO: use state.treeSelected
+    const subsectionID = 4
+    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${subsectionID}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000`)
+    const subsectionVariables = response.items
+    commit('updateVariables', subsectionVariables
+      // map assessment_id to assessmentId somewhere deep in the structure
+      .map((sv: any) => ({
+          ...sv.variable_id,
+          variants: sv.variable_id.variants
+            .map((variant: any) => ({
+              ...variant,
+              assessmentId: variant.assessment_id
+            }))
+        })
+      ))
   }
 }

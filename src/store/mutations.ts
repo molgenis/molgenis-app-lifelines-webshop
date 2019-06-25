@@ -1,4 +1,5 @@
-import ApplicationState from '@/types/ApplicationState'
+import ApplicationState from '@/types/applicationState'
+import Variable from '@/types/Variable'
 
 export default {
   updateGenderFilter (state: ApplicationState, selectedGenders: String[]) {
@@ -34,5 +35,8 @@ export default {
   },
   updateSubSection (state: ApplicationState, subSections: String[]) {
     state.subSectionList = subSections
+  },
+  updateVariables (state: ApplicationState, variables: Variable[]) {
+    state.variables = variables
   }
 }

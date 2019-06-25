@@ -1,6 +1,7 @@
-import ApplicationState from '@/types/ApplicationState'
+import ApplicationState from '@/types/applicationState'
 
 const state: ApplicationState = {
+  variables: [],
   genderOptions: [
     { value: '1', text: 'Male' },
     { value: '2', text: 'Female' }
