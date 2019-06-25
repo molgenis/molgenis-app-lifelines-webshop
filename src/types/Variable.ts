@@ -1,7 +1,7 @@
 import Variant from './Variant'
 export default interface Variable {
-  id: Number;
-  name: String;
-  label: String;
+  id: number;
+  name: string;
+  label: string;
   variants: Variant[];
 }

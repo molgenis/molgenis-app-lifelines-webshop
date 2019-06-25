@@ -1,5 +1,7 @@
 import ApplicationState from '@/types/applicationState'
 import Variable from '@/types/Variable'
+import Assessment from '@/types/Assessment'
+import Count from '@/types/Count'
 
 export default {
   updateGenderFilter (state: ApplicationState, selectedGenders: String[]) {
@@ -38,5 +40,11 @@ export default {
   },
   updateVariables (state: ApplicationState, variables: Variable[]) {
     state.variables = variables
+  },
+  updateAssessments (state: ApplicationState, assessments: Assessment[]) {
+    state.assessments = assessments
+  },
+  updateVariantCounts (state: ApplicationState, variantCounts: Count[]) {
+    state.variantCounts = variantCounts
   }
 }

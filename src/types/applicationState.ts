@@ -19,7 +19,7 @@ export default interface ApplicationState {
   sectionList: String[],
   subSectionList: String[],
   variables: Variable[]
-  counts: Count[]
+  variantCounts: Count[]
   assessments: Assessment[]
   treeStructure: Object[]
   treeSelected: Number

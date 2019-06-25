@@ -1,4 +1,4 @@
 export default interface Variant {
-  id: Number;
-  assessmentId: Number;
+  id: number;
+  assessmentId: number;
 }

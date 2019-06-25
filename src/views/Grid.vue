@@ -1,7 +1,13 @@
 <template>
   <div id="grid">
     <h3>Hier komt een grid</h3>
-    {{ variables }}
+    <dl>
+      <dt>variables</dt><dd>{{ variables.map(it => it.name) }}</dd>
+      <dt>rsql</dt><dd>{{ rsql }}</dd>
+      <dt>variantCounts</dt><dd>{{ variantCounts }}</dd>
+      <dt>gridAssessments</dt><dd>{{ gridAssessments }}</dd>
+      <dt>grid</dt><dd>{{grid}}</dd>
+    </dl>
   </div>
 </template>
 
@@ -11,16 +17,22 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default Vue.extend({
   methods: {
-    ...mapActions(['loadGridData'])
+    ...mapActions(['loadVariables', 'loadAssessments', 'loadGridData'])
   },
   computed: {
-    ...mapState(['treeSelected', 'variables'])
+    ...mapState(['treeSelected', 'variables', 'assessments', 'variantCounts']),
+    ...mapGetters(['rsql', 'gridAssessments', 'grid'])
   },
   watch: {
-    treeSelected: function (newValue, oldValue) {
-      console.log('treeSelected', newValue, oldValue)
+    treeSelected: function () {
+      this.loadVariables()
+    },
+    rsql: function () {
       this.loadGridData()
     }
+  },
+  created () {
+    this.loadAssessments()
   }
 })
 </script>

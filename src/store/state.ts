@@ -33,7 +33,9 @@ const state: ApplicationState = {
   sectionList: [],
   subSectionList: [],
   treeStructure: [],
-  treeSelected: -1
+  treeSelected: -1,
+  variantCounts: [],
+  assessments: []
 }
 
 export default state

@@ -1,4 +1,4 @@
 export default interface Assessment{
-  id: Number,
-  name: String
+  id: number,
+  name: string
 }

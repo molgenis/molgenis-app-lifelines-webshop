@@ -1,5 +1,6 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
+import Variant from '@/types/Variant';
 
 export default {
   loadTreeStructure ({ dispatch, commit } : any) {
@@ -48,12 +49,14 @@ export default {
         }
       })
       commit('updateTreeStructure', final)
-      console.log(final)
     })
   },
-  async loadGridData ({ state, dispatch, commit } : any) {
-    // TODO: use state.treeSelected
-    const subsectionID = 4
+  async loadAssessments({ commit }: any) {
+    const response = await api.get('/api/v2/lifelines_assessment')
+    commit('updateAssessments', response.items)
+  },
+  async loadVariables ({ state, commit, dispatch } : any) {
+    const subsectionID: Number = state.treeSelected
     const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${subsectionID}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000`)
     const subsectionVariables = response.items
     commit('updateVariables', subsectionVariables
@@ -67,5 +70,19 @@ export default {
             }))
         })
       ))
+  },
+  async loadGridData({ commit, getters }: any) {
+    let url = "/api/v2/lifelines_who_when?aggs=x==variant_id"
+    if (!getters.rsql) {
+      commit('updateVariantCounts', [])
+    } else {
+      url = `${url}&q=${getters.rsql}`
+      const {aggs: {matrix, xLabels}} = await api.get(url)
+      const variantCounts = matrix.map((cell: any, index: Number) => ({
+        variantId: parseInt(xLabels[index].id),
+        count: cell[0]
+      }))
+      commit('updateVariantCounts', variantCounts)
+    }
   }
 }
