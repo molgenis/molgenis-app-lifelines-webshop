@@ -103,7 +103,6 @@ describe('SidebarView.vue', () => {
       it('yob should become the active facet', () => {
         // @ts-ignore
         expect(wrapper.vm.activeAgeFacetId).toBe('yob')
-  
       })
     })
     describe('when toggeling the yob facet when it is open', () => {
@@ -114,7 +113,6 @@ describe('SidebarView.vue', () => {
       it('age should become the facet', () => {
         // @ts-ignore
         expect(wrapper.vm.activeAgeFacetId).toBe('age')
-  
       })
     })
     describe('when toggeling the age facet when it is collapsed', () => {
@@ -125,7 +123,6 @@ describe('SidebarView.vue', () => {
       it('age should become the active facet', () => {
         // @ts-ignore
         expect(wrapper.vm.activeAgeFacetId).toBe('age')
-  
       })
     })
     describe('when toggeling the age facet when it is open', () => {
@@ -136,9 +133,7 @@ describe('SidebarView.vue', () => {
       it('yob should become the facet', () => {
         // @ts-ignore
         expect(wrapper.vm.activeAgeFacetId).toBe('yob')
-  
       })
     })
-    
   })
 })
