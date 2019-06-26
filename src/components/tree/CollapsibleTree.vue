@@ -29,7 +29,7 @@
           <li class="list-group-item p-0" v-if="parent.name in collapsed && parent.children && parent.children.length > 0">
             <ul class="list-group list-group-flush">
               <li
-                :class="(value===child.name)&&'active'"
+                :class="(value===child.id)&&'active'"
                 class="list-group-item list-group-item-secondary list-group-item-action px-3"
                 role="button"
                 v-for="child in parent.children"
