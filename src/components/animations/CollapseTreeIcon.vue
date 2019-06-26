@@ -1,6 +1,6 @@
 <template>
   <font-awesome-icon
-    icon="caret-right"
+    icon="caret-up"
     class="collapse-tree-icon"
     :style="iconStyle"
   />
@@ -9,9 +9,9 @@
 <script>
 import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
+import { faCaretUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faCaretRight)
+library.add(faCaretUp)
 
 export default Vue.extend({
   name: 'CollapseTreeIcon',
@@ -25,7 +25,7 @@ export default Vue.extend({
   computed: {
     iconStyle () {
       return {
-        transform: `rotate(${this.state ? 90 : 0}deg)`,
+        transform: `rotate(${this.state ? 180 : 0}deg)`,
         transition: 'transform 0.2s'
       }
     }
