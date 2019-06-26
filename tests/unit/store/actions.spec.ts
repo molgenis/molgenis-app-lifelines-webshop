@@ -50,10 +50,26 @@ jest.mock('@molgenis/molgenis-api-client', () => {
           }]
         }
       }]
+    },
+    '/api/v2/lifelines_who_when?aggs=x==variant_id&q=variant_id%3Din%3D(1%2C10)%3Bll_nr.yob%3Dle%3D1970': {
+      aggs: {
+        matrix: [[1234], [5678]],
+        xLabels: [{
+            assessment_id: "1",
+            id: "1"
+          }, {
+            assessment_id: "2",
+            id: "10"
+          }
+        ]
+      }
     }
   }
   return {
-    get: (url: string) => Promise.resolve(responses[url])
+    get: (url: string) => {
+      console.log(url)
+      return Promise.resolve(responses[url])
+    }
   }
 })
 
@@ -80,6 +96,18 @@ describe('actions', () => {
         { 'id': 3, 'label': 'SAF', 'name': 'SAF', 'variants': [variant] },
         { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT', 'variants': [variant] },
         { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant] }
+      ])
+      done()
+    })
+  })
+
+  describe('loadGridData', () => {
+    it('loads variant counts', async (done) => {
+      const commit = jest.fn()
+      await actions.loadGridData({commit, getters: {rsql: 'variant_id=in=(1,10);ll_nr.yob=le=1970'}})
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [
+        {"count": 1234, "variantId": 1}, 
+        {"count": 5678, "variantId": 10}
       ])
       done()
     })
