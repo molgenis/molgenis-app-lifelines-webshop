@@ -7,7 +7,7 @@ describe('FacetOption.vue', () => {
     let wrapper: Wrapper<Vue>
 
     beforeEach(() => {
-      wrapper = shallowMount(FacetOption, { propsData: { text: 'option-text' } })
+      wrapper = shallowMount(FacetOption, { slots: { default: 'option-text' } })
     })
 
     it('should render a button with "option-text" as text', () => {
@@ -23,7 +23,7 @@ describe('FacetOption.vue', () => {
     let wrapper: Wrapper<Vue>
 
     beforeEach(() => {
-      wrapper = shallowMount(FacetOption, { propsData: { text: 'demo', isSelected: false } })
+      wrapper = shallowMount(FacetOption, { slots: { default: 'demo' }, propsData: { isSelected: false } })
     })
 
     it('should render a button with "demo" as text', () => {
@@ -39,7 +39,7 @@ describe('FacetOption.vue', () => {
     let wrapper: Wrapper<Vue>
 
     beforeEach(() => {
-      wrapper = shallowMount(FacetOption, { propsData: { text: 'my-option', isSelected: true } })
+      wrapper = shallowMount(FacetOption, { slots: { default: 'my-option' }, propsData: { isSelected: true } })
     })
 
     it('should render a button with "my-option" as text', () => {

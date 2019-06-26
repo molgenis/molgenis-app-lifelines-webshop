@@ -1,9 +1,8 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
-import Variant from '@/types/Variant'
 
 export default {
-  loadTreeStructure ({ dispatch, commit } : any) {
+  loadTreeStructure ({ commit } : any) {
     // Show simple initial tree (only the parents)
     const sections = api.get('/api/v2/lifelines_section?num=100').then((response: any) => {
       let sections:String[][] = []
@@ -45,7 +44,7 @@ export default {
       const final = treeStructure.map((item:any) => {
         return {
           name: sections[item.key],
-          children: item.list.map((id:Number) => { return { name: subSections[id], id } })
+          children: item.list.map((id:number) => { return { name: subSections[id], id } })
         }
       })
       commit('updateTreeStructure', final)
@@ -55,11 +54,9 @@ export default {
     const response = await api.get('/api/v2/lifelines_assessment')
     commit('updateAssessments', response.items)
   },
-  async loadVariables ({ state, commit, dispatch } : any) {
-    const subsectionID: Number = state.treeSelected
-    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${subsectionID}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000`)
-    const subsectionVariables = response.items
-    commit('updateVariables', subsectionVariables
+  async loadVariables ({ state, commit } : any) {
+    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${state.treeSelected}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000`)
+    commit('updateVariables', response.items
       // map assessment_id to assessmentId somewhere deep in the structure
       .map((sv: any) => ({
         ...sv.variable_id,
@@ -68,17 +65,14 @@ export default {
             ...variant,
             assessmentId: variant.assessment_id
           }))
-      })
-      ))
+      })))
   },
   async loadGridData ({ commit, getters }: any) {
-    let url = '/api/v2/lifelines_who_when?aggs=x==variant_id'
-    if (!getters.rsql) {
-      commit('updateVariantCounts', [])
-    } else {
-      url = `${url}&q=${getters.rsql}`
+    commit('updateVariantCounts', [])
+    if (getters.rsql) {
+      const url = `/api/v2/lifelines_who_when?aggs=x==variant_id&q=${encodeURIComponent(getters.rsql)}`
       const { aggs: { matrix, xLabels } } = await api.get(url)
-      const variantCounts = matrix.map((cell: any, index: Number) => ({
+      const variantCounts = matrix.map((cell: any, index: number) => ({
         variantId: parseInt(xLabels[index].id),
         count: cell[0]
       }))
