@@ -55,12 +55,12 @@ jest.mock('@molgenis/molgenis-api-client', () => {
       aggs: {
         matrix: [[1234], [5678]],
         xLabels: [{
-            assessment_id: "1",
-            id: "1"
-          }, {
-            assessment_id: "2",
-            id: "10"
-          }
+          assessment_id: '1',
+          id: '1'
+        }, {
+          assessment_id: '2',
+          id: '10'
+        }
         ]
       }
     }
@@ -104,10 +104,10 @@ describe('actions', () => {
   describe('loadGridData', () => {
     it('loads variant counts', async (done) => {
       const commit = jest.fn()
-      await actions.loadGridData({commit, getters: {rsql: 'variant_id=in=(1,10);ll_nr.yob=le=1970'}})
+      await actions.loadGridData({ commit, getters: { rsql: 'variant_id=in=(1,10);ll_nr.yob=le=1970' } })
       expect(commit).toHaveBeenCalledWith('updateVariantCounts', [
-        {"count": 1234, "variantId": 1}, 
-        {"count": 5678, "variantId": 10}
+        { 'count': 1234, 'variantId': 1 },
+        { 'count': 5678, 'variantId': 10 }
       ])
       done()
     })
