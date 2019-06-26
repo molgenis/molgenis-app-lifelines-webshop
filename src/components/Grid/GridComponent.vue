@@ -4,8 +4,8 @@
       v-if="treeSelected!=-1"
     >
       <tr>
-        <th scope="col">Variable</th>
-        <th scope="col" :colspan="gridAssessments.length + 1">Collection Round</th>
+        <th>Variable</th>
+        <th :colspan="gridAssessments.length + 1">Collection Round</th>
       </tr>
       <tr>
         <th class="w-0"></th>
@@ -18,7 +18,7 @@
         </th>
       </tr>
       <tr>
-        <th scope="row"></th>
+        <th></th>
         <td>
           <facet-option class="selectAll">All</facet-option>
         </td>
@@ -32,8 +32,10 @@
         v-for="(row, rowIndex) in grid"
         :key="rowIndex"
       >
-        <th scope="row">
-          {{variables[rowIndex].label}}
+        <th>
+          <span class="title">
+            {{variables[rowIndex].label?variables[rowIndex].label:variables[rowIndex].name}}
+          </span>
         </th>
         <td>
           <facet-option class="selectRow"><font-awesome-icon icon="arrow-right" /></facet-option>
@@ -99,6 +101,14 @@ export default Vue.extend({
   }
   table td, th{
     padding: 0 1px;
+  }
+  table tr th:first-child .title{
+    max-width:200px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 1rem;
+    font-weight: normal;
   }
   .w-0 {
     width: 0;
