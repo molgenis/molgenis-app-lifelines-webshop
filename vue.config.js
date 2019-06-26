@@ -9,7 +9,9 @@ module.exports = {
     host: process.env.JENKINS_AGENT_NAME || 'localhost',
     proxy: process.env.NODE_ENV === 'production' ? undefined : {
       '^/api': {
-        'target': 'http://localhost:8080'
+        //'target': 'http://localhost:8080'
+        'target': 'https://lifelines.dev.molgenis.org',
+        'keepOrigin': true
       }
     },
     before: function (app, server) {
