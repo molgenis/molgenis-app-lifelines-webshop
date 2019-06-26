@@ -5,7 +5,6 @@ import ApplicationState from '@/types/applicationState';
 import Variant from '@/types/Variant';
 import Assessment from '@/types/Assessment';
 import Variable from '@/types/Variable';
-import GridSelection from '@/types/GridSelection';
 
 describe('getters', () => {
   const emptyGetters: Getters = {
@@ -20,10 +19,10 @@ describe('getters', () => {
   const variant2: Variant = {id: 2, assessmentId: 2}
   const variant3: Variant = {id: 3, assessmentId: 1}
 
-  const assessement1A: Assessment = { id: 1, name: '1A' }
-  const assessement2A: Assessment = { id: 2, name: '2A' }
-  const assessement3A: Assessment = { id: 3, name: '3A' }
-  const assessement1B: Assessment = { id: 4, name: '1B' }
+  const assessment1A: Assessment = { id: 1, name: '1A' }
+  const assessment2A: Assessment = { id: 2, name: '2A' }
+  const assessment3A: Assessment = { id: 3, name: '3A' }
+  const assessment1B: Assessment = { id: 4, name: '1B' }
 
   const variable11: Variable = {
     id: 11,
@@ -164,13 +163,13 @@ describe('getters', () => {
     it('determines assessments for selected variants', () => {
       const state: ApplicationState = {
         ...emptyState,
-        assessments: [ assessement1A, assessement2A, assessement3A, assessement1B ],
+        assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ],
       }
       const gettersParam: Getters = {
         ...emptyGetters,
         variants: [variant1, variant2, variant3]
       }
-      expect(getters.gridAssessments(state, gettersParam)).toEqual([assessement1A, assessement2A])
+      expect(getters.gridAssessments(state, gettersParam)).toEqual([assessment1A, assessment2A])
     })
   })
 
@@ -184,7 +183,7 @@ describe('getters', () => {
       }
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [ assessement1A, assessement2A ],
+        gridAssessments: [ assessment1A, assessment2A ],
         variants: [variant1, variant2, variant3]
       }
 
@@ -200,7 +199,7 @@ describe('getters', () => {
       }
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [ assessement1A, assessement2A ],
+        gridAssessments: [ assessment1A, assessment2A ],
         variants: [variant1, variant2, variant3]
       }
 
