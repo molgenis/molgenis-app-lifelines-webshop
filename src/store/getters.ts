@@ -2,18 +2,18 @@ import ApplicationState from '@/types/ApplicationState'
 // @ts-ignore
 import { transformToRSQL } from '@molgenis/rsql'
 import Getters from '@/types/Getters'
+import Variant from '@/types/Variant';
+import Variable from '@/types/Variable';
 
 export default {
-  variantIds: (state: ApplicationState) =>
-    Array.from(
-      new Set(
-        state.variables.flatMap(
-          variable => variable.variants.map(
-            variant => variant.id
-          )
-        )
-      )
-    ),
+  variants: (state: ApplicationState): Variant[] =>
+    state.variables.reduce((result: Variant[], variable: Variable): Variant[] => 
+      variable.variants.reduce((accumulator: Variant[], variant: Variant) => 
+        accumulator.some((candidate: Variant): boolean => candidate.id === variant.id) ? 
+          accumulator : 
+          [...accumulator, variant], result), []),
+  variantIds: (state: ApplicationState, getters: Getters): number[] =>
+    getters.variants.map(variant => variant.id),
   rsql: (state: ApplicationState, getters: Getters) => {
     let operands: Object[] = []
     if (getters.variantIds.length > 0) {
@@ -93,11 +93,12 @@ export default {
       operands
     })
   },
-  gridAssessments: (state: ApplicationState) => {
-    const assessmentIds = new Set(state.variables.flatMap(variable => variable.variants.map(variant => variant.assessmentId)))
-    return state.assessments.filter(assessment => assessmentIds.has(assessment.id))
+  gridAssessments: (state: ApplicationState, getters: Getters) => {
+    const assessmentIds: number[] = getters.variants.reduce((acc: number[], variant: Variant) => 
+      acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
+    return state.assessments.filter(assessment => assessmentIds.includes(assessment.id))
   },
-  grid: (state: ApplicationState, getters: Getters) =>
+  grid: (state: ApplicationState, getters: Getters): Array<Array<{count: number, selected: boolean}>> =>
     state.variables.map(variable =>
       getters.gridAssessments.map(assessment => {
         const variants = variable.variants.filter(variant => variant.assessmentId === assessment.id)

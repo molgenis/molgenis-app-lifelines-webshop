@@ -2,19 +2,89 @@ import getters from '@/store/getters'
 import emptyState from '@/store/state'
 import Getters from '@/types/Getters';
 import ApplicationState from '@/types/applicationState';
+import Variant from '@/types/Variant';
+import Assessment from '@/types/Assessment';
+import Variable from '@/types/Variable';
+import GridSelection from '@/types/GridSelection';
 
 describe('getters', () => {
   const emptyGetters: Getters = {
+    variants: [],
     variantIds: [],
     rsql: '',
     grid: [],
     gridAssessments: []
   }
+
+  const variant1: Variant = {id: 1, assessmentId: 1}
+  const variant2: Variant = {id: 2, assessmentId: 2}
+  const variant3: Variant = {id: 3, assessmentId: 1}
+
+  const assessement1A: Assessment = { id: 1, name: '1A' }
+  const assessement2A: Assessment = { id: 2, name: '2A' }
+  const assessement3A: Assessment = { id: 3, name: '3A' }
+  const assessement1B: Assessment = { id: 4, name: '1B' }
+
+  const variable11: Variable = {
+    id: 11,
+    label: 'variable 11',
+    name: 'VAR11',
+    variants: [variant2, variant1]
+  }
+  const variable12: Variable = {
+    id: 12,
+    label: 'variable 12',
+    name: 'VAR12',
+    variants: [variant1]
+  }
+  const variable13: Variable = {
+    id: 13,
+    label: 'variable 13',
+    name: 'VAR13',
+    variants: [variant3]
+  }
+
+  describe('variants', () => {
+    it('determines unique variants from variables', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        variables: [variable11, variable12, variable13]
+      }
+      expect(getters.variants(state)).toEqual([variant2, variant1, variant3])
+    })
+    it('returns empty array for empty state', () => {
+      expect(getters.variants(emptyState)).toEqual([])
+    })
+  })
+
+  describe('variantIds', () => {
+    it('takes the ids of the variants getter', () => {
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        variants: [variant1, variant2, variant3]
+      }
+      expect(getters.variantIds(emptyState, gettersParam)).toEqual([1, 2, 3])
+    })
+    it('returns empty array for empty variants getter', () => {
+      expect(getters.variantIds(emptyState, emptyGetters)).toEqual([])
+    })
+  })
+
   describe('rsql', () => {
     const gettersParam = {
       ...emptyGetters,
       variantIds: [1, 2]
     }
+    it('only filters when variants selected', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        facetFilter: {
+          ...emptyState.facetFilter,
+          subcohort: ['ABCDE']
+        }
+      }
+      expect(getters.rsql(state, emptyGetters)).toBe('')
+    })
     it('filters subcohorts', () => {
       const state: ApplicationState = {
         ...emptyState,
@@ -90,4 +160,53 @@ describe('getters', () => {
     })
   })
 
+  describe('gridAssessments', () => {
+    it('determines assessments for selected variants', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        assessments: [ assessement1A, assessement2A, assessement3A, assessement1B ],
+      }
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        variants: [variant1, variant2, variant3]
+      }
+      expect(getters.gridAssessments(state, gettersParam)).toEqual([assessement1A, assessement2A])
+    })
+  })
+
+  describe('grid', () => {
+    it('computes grid counts and selections', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        variables: [variable11, variable12],
+        variantCounts: [{ variantId: 1, count: 10}, { variantId: 2, count: 100 }],
+        gridSelection: { 11: [1, 2], 12: [1]}
+      }
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        gridAssessments: [ assessement1A, assessement2A ],
+        variants: [variant1, variant2, variant3]
+      }
+
+      expect(getters.grid(state, gettersParam)).toEqual(
+        [[{count: 10, selected: true}, {count: 100, selected: true}], 
+         [{count: 10, selected: true}, {count: 0, selected: false}]])
+    })
+    it('returns zero if counts are missing', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        variables: [variable11, variable12],
+        gridSelection: { 11: [1, 2], 12: [1]}
+      }
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        gridAssessments: [ assessement1A, assessement2A ],
+        variants: [variant1, variant2, variant3]
+      }
+
+      expect(getters.grid(state, gettersParam)).toEqual(
+        [[{count: 0, selected: true}, {count: 0, selected: true}], 
+         [{count: 0, selected: true}, {count: 0, selected: false}]])
+    })
+  })
 })
