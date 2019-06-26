@@ -66,10 +66,7 @@ jest.mock('@molgenis/molgenis-api-client', () => {
     }
   }
   return {
-    get: (url: string) => {
-      console.log(url)
-      return Promise.resolve(responses[url])
-    }
+    get: (url: string) => Promise.resolve(responses[url])
   }
 })
 
@@ -87,7 +84,7 @@ describe('actions', () => {
   })
 
   describe('loadVariables', () => {
-    it('loads variables', async (done) => {
+    it('loads variables for selected subsection', async (done) => {
       const commit = jest.fn()
       await actions.loadVariables({ state: { treeSelected: 4 }, commit })
       const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
@@ -102,9 +99,19 @@ describe('actions', () => {
   })
 
   describe('loadGridData', () => {
-    it('loads variant counts', async (done) => {
+    it('cleans variant counts', async (done) => {
+      const commit = jest.fn()
+      const response = actions.loadGridData({ commit, getters: { rsql: '' } })
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
+      await response
+      expect(commit).toHaveBeenCalledTimes(1)
+      done()
+    })
+
+    it('loads new variant counts if rsql is nonempty', async (done) => {
       const commit = jest.fn()
       await actions.loadGridData({ commit, getters: { rsql: 'variant_id=in=(1,10);ll_nr.yob=le=1970' } })
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
       expect(commit).toHaveBeenCalledWith('updateVariantCounts', [
         { 'count': 1234, 'variantId': 1 },
         { 'count': 5678, 'variantId': 10 }
