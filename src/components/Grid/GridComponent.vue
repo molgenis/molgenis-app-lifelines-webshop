@@ -55,7 +55,7 @@
 <script>
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
-import FacetOption from '../components/facets/FacetOption.vue'
+import FacetOption from '../facets/FacetOption.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
