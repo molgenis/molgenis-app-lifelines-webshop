@@ -3,6 +3,7 @@ import Variable from '@/types/Variable'
 import Assessment from '@/types/Assessment'
 import Count from '@/types/Count'
 import Vue from 'vue'
+import GridSelection from '@/types/GridSelection'
 
 export default {
   updateGenderFilter (state: ApplicationState, selectedGenders: string[]) {
@@ -48,7 +49,7 @@ export default {
   updateVariantCounts (state: ApplicationState, variantCounts: Count[]) {
     state.variantCounts = variantCounts
   },
-  toggleGridSelection ({ gridSelection }: ApplicationState,
+  toggleGridSelection ({ gridSelection }: { gridSelection: GridSelection },
     { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
     if (!gridSelection.hasOwnProperty(variableId)) {
       Vue.set(gridSelection, variableId, [assessmentId])

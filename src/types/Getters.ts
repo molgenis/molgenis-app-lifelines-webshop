@@ -1,6 +1,6 @@
 import Assessment from '@/types/Assessment'
 import GridCell from '@/types/GridCell'
-import Variant from './Variant';
+import Variant from './Variant'
 
 export default interface Getters {
   variants: Variant[]

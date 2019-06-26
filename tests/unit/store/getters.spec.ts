@@ -1,10 +1,10 @@
 import getters from '@/store/getters'
 import emptyState from '@/store/state'
-import Getters from '@/types/Getters';
-import ApplicationState from '@/types/applicationState';
-import Variant from '@/types/Variant';
-import Assessment from '@/types/Assessment';
-import Variable from '@/types/Variable';
+import Getters from '@/types/Getters'
+import ApplicationState from '@/types/applicationState'
+import Variant from '@/types/Variant'
+import Assessment from '@/types/Assessment'
+import Variable from '@/types/Variable'
 
 describe('getters', () => {
   const emptyGetters: Getters = {
@@ -15,9 +15,9 @@ describe('getters', () => {
     gridAssessments: []
   }
 
-  const variant1: Variant = {id: 1, assessmentId: 1}
-  const variant2: Variant = {id: 2, assessmentId: 2}
-  const variant3: Variant = {id: 3, assessmentId: 1}
+  const variant1: Variant = { id: 1, assessmentId: 1 }
+  const variant2: Variant = { id: 2, assessmentId: 2 }
+  const variant3: Variant = { id: 3, assessmentId: 1 }
 
   const assessment1A: Assessment = { id: 1, name: '1A' }
   const assessment2A: Assessment = { id: 2, name: '2A' }
@@ -89,7 +89,7 @@ describe('getters', () => {
         ...emptyState,
         facetFilter: {
           ...emptyState.facetFilter,
-          subcohort:['ABCDE', 'FGHIJ']
+          subcohort: ['ABCDE', 'FGHIJ']
         }
       }
       expect(getters.rsql(state, gettersParam)).toBe('variant_id=in=(1,2);ll_nr.subcohortABCDE_group==true;ll_nr.subcohortFGHIJ_group==true')
@@ -99,7 +99,7 @@ describe('getters', () => {
         ...emptyState,
         facetFilter: {
           ...emptyState.facetFilter,
-          gender:["1", "2"]
+          gender: ['1', '2']
         }
       }
       expect(getters.rsql(state, gettersParam)).toBe('variant_id=in=(1,2);(ll_nr.gender_group==1,ll_nr.gender_group==2)')
@@ -163,7 +163,7 @@ describe('getters', () => {
     it('determines assessments for selected variants', () => {
       const state: ApplicationState = {
         ...emptyState,
-        assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ],
+        assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ]
       }
       const gettersParam: Getters = {
         ...emptyGetters,
@@ -178,8 +178,8 @@ describe('getters', () => {
       const state: ApplicationState = {
         ...emptyState,
         variables: [variable11, variable12],
-        variantCounts: [{ variantId: 1, count: 10}, { variantId: 2, count: 100 }],
-        gridSelection: { 11: [1, 2], 12: [1]}
+        variantCounts: [{ variantId: 1, count: 10 }, { variantId: 2, count: 100 }],
+        gridSelection: { 11: [1, 2], 12: [1] }
       }
       const gettersParam: Getters = {
         ...emptyGetters,
@@ -188,14 +188,14 @@ describe('getters', () => {
       }
 
       expect(getters.grid(state, gettersParam)).toEqual(
-        [[{count: 10, selected: true}, {count: 100, selected: true}], 
-         [{count: 10, selected: true}, {count: 0, selected: false}]])
+        [[{ count: 10, selected: true }, { count: 100, selected: true }],
+          [{ count: 10, selected: true }, { count: 0, selected: false }]])
     })
     it('returns zero if counts are missing', () => {
       const state: ApplicationState = {
         ...emptyState,
         variables: [variable11, variable12],
-        gridSelection: { 11: [1, 2], 12: [1]}
+        gridSelection: { 11: [1, 2], 12: [1] }
       }
       const gettersParam: Getters = {
         ...emptyGetters,
@@ -204,8 +204,8 @@ describe('getters', () => {
       }
 
       expect(getters.grid(state, gettersParam)).toEqual(
-        [[{count: 0, selected: true}, {count: 0, selected: true}], 
-         [{count: 0, selected: true}, {count: 0, selected: false}]])
+        [[{ count: 0, selected: true }, { count: 0, selected: true }],
+          [{ count: 0, selected: true }, { count: 0, selected: false }]])
     })
   })
 })

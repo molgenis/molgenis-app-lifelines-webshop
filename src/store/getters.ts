@@ -2,16 +2,16 @@ import ApplicationState from '@/types/ApplicationState'
 // @ts-ignore
 import { transformToRSQL } from '@molgenis/rsql'
 import Getters from '@/types/Getters'
-import Variant from '@/types/Variant';
-import Variable from '@/types/Variable';
+import Variant from '@/types/Variant'
+import Variable from '@/types/Variable'
 
 export default {
   variants: (state: ApplicationState): Variant[] =>
-    state.variables.reduce((result: Variant[], variable: Variable): Variant[] => 
-      variable.variants.reduce((accumulator: Variant[], variant: Variant) => 
-        accumulator.some((candidate: Variant): boolean => candidate.id === variant.id) ? 
-          accumulator : 
-          [...accumulator, variant], result), []),
+    state.variables.reduce((result: Variant[], variable: Variable): Variant[] =>
+      variable.variants.reduce((accumulator: Variant[], variant: Variant) =>
+        accumulator.some((candidate: Variant): boolean => candidate.id === variant.id)
+          ? accumulator
+          : [...accumulator, variant], result), []),
   variantIds: (state: ApplicationState, getters: Getters): number[] =>
     getters.variants.map(variant => variant.id),
   rsql: (state: ApplicationState, getters: Getters) => {
@@ -94,7 +94,7 @@ export default {
     })
   },
   gridAssessments: (state: ApplicationState, getters: Getters) => {
-    const assessmentIds: number[] = getters.variants.reduce((acc: number[], variant: Variant) => 
+    const assessmentIds: number[] = getters.variants.reduce((acc: number[], variant: Variant) =>
       acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
     return state.assessments.filter(assessment => assessmentIds.includes(assessment.id))
   },
