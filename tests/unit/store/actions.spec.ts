@@ -51,9 +51,22 @@ jest.mock('@molgenis/molgenis-api-client', () => {
         }
       }]
     },
-    '/api/v2/lifelines_who_when?aggs=x==variant_id&q=variant_id%3Din%3D(1%2C10)%3Bll_nr.yob%3Dle%3D1970': {
+    '/api/v2/lifelines_who_when?aggs=x==variant_id&q=ll_nr.yob%3Dle%3D1970': {
       aggs: {
         matrix: [[1234], [5678]],
+        xLabels: [{
+          assessment_id: '1',
+          id: '1'
+        }, {
+          assessment_id: '2',
+          id: '10'
+        }
+        ]
+      }
+    },
+    '/api/v2/lifelines_who_when?aggs=x==variant_id': {
+      aggs: {
+        matrix: [[12340], [56780]],
         xLabels: [{
           assessment_id: '1',
           id: '1'
@@ -101,18 +114,21 @@ describe('actions', () => {
   })
 
   describe('loadGridData', () => {
-    it('cleans variant counts', async (done) => {
+    it('loads new variant counts if rsql is empty', async (done) => {
       const commit = jest.fn()
       const response = actions.loadGridData({ commit, getters: { rsql: '' } })
       expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
       await response
-      expect(commit).toHaveBeenCalledTimes(1)
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [
+        { 'count': 12340, 'variantId': 1 },
+        { 'count': 56780, 'variantId': 10 }
+      ])
       done()
     })
 
     it('loads new variant counts if rsql is nonempty', async (done) => {
       const commit = jest.fn()
-      await actions.loadGridData({ commit, getters: { rsql: 'variant_id=in=(1,10);ll_nr.yob=le=1970' } })
+      await actions.loadGridData({ commit, getters: { rsql: 'll_nr.yob=le=1970' } })
       expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
       expect(commit).toHaveBeenCalledWith('updateVariantCounts', [
         { 'count': 1234, 'variantId': 1 },

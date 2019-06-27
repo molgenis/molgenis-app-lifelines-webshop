@@ -70,20 +70,6 @@ describe('getters', () => {
   })
 
   describe('rsql', () => {
-    const gettersParam = {
-      ...emptyGetters,
-      variantIds: [1, 2]
-    }
-    it('only filters when variants selected', () => {
-      const state: ApplicationState = {
-        ...emptyState,
-        facetFilter: {
-          ...emptyState.facetFilter,
-          subcohort: ['ABCDE']
-        }
-      }
-      expect(getters.rsql(state, emptyGetters)).toBe('')
-    })
     it('filters subcohorts', () => {
       const state: ApplicationState = {
         ...emptyState,
@@ -92,7 +78,7 @@ describe('getters', () => {
           subcohort: ['ABCDE', 'FGHIJ']
         }
       }
-      expect(getters.rsql(state, gettersParam)).toBe('variant_id=in=(1,2);ll_nr.subcohortABCDE_group==true;ll_nr.subcohortFGHIJ_group==true')
+      expect(getters.rsql(state)).toBe('ll_nr.subcohortABCDE_group==true;ll_nr.subcohortFGHIJ_group==true')
     })
     it('filters gender', () => {
       const state: ApplicationState = {
@@ -102,7 +88,7 @@ describe('getters', () => {
           gender: ['1', '2']
         }
       }
-      expect(getters.rsql(state, gettersParam)).toBe('variant_id=in=(1,2);(ll_nr.gender_group==1,ll_nr.gender_group==2)')
+      expect(getters.rsql(state)).toBe('ll_nr.gender_group==1,ll_nr.gender_group==2')
     })
     it('filters age at 1A', () => {
       const state: ApplicationState = {
@@ -112,7 +98,7 @@ describe('getters', () => {
           ageGroupAt1A: ['1', '2']
         }
       }
-      expect(getters.rsql(state, gettersParam)).toBe('variant_id=in=(1,2);(ll_nr.age_group_at_1a==1,ll_nr.age_group_at_1a==2)')
+      expect(getters.rsql(state)).toBe('ll_nr.age_group_at_1a==1,ll_nr.age_group_at_1a==2')
     })
     it('filters age at 2A', () => {
       const state: ApplicationState = {
@@ -122,7 +108,7 @@ describe('getters', () => {
           ageGroupAt2A: ['1', '2']
         }
       }
-      expect(getters.rsql(state, gettersParam)).toBe('variant_id=in=(1,2);(ll_nr.age_group_at_2a==1,ll_nr.age_group_at_2a==2)')
+      expect(getters.rsql(state)).toBe('ll_nr.age_group_at_2a==1,ll_nr.age_group_at_2a==2')
     })
     it('filters age at 3A', () => {
       const state: ApplicationState = {
@@ -132,7 +118,7 @@ describe('getters', () => {
           ageGroupAt3A: ['1', '2']
         }
       }
-      expect(getters.rsql(state, gettersParam)).toBe('variant_id=in=(1,2);(ll_nr.age_group_at_3a==1,ll_nr.age_group_at_3a==2)')
+      expect(getters.rsql(state)).toBe('ll_nr.age_group_at_3a==1,ll_nr.age_group_at_3a==2')
     })
     it('filters year of birth', () => {
       const state: ApplicationState = {
@@ -142,7 +128,7 @@ describe('getters', () => {
           yearOfBirthRange: [1960, 1980]
         }
       }
-      expect(getters.rsql(state, gettersParam)).toBe('variant_id=in=(1,2);ll_nr.year_of_birth=ge=1960;ll_nr.year_of_birth=le=1980')
+      expect(getters.rsql(state)).toBe('ll_nr.year_of_birth=ge=1960;ll_nr.year_of_birth=le=1980')
     })
     it('combines filters', () => {
       const state: ApplicationState = {
@@ -154,8 +140,8 @@ describe('getters', () => {
           subcohort: ['DEF']
         }
       }
-      expect(getters.rsql(state, gettersParam))
-        .toBe('variant_id=in=(1,2);ll_nr.age_group_at_1a==1;ll_nr.subcohortDEF_group==true;ll_nr.gender_group==2')
+      expect(getters.rsql(state))
+        .toBe('ll_nr.age_group_at_1a==1;ll_nr.subcohortDEF_group==true;ll_nr.gender_group==2')
     })
   })
 

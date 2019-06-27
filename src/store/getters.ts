@@ -14,15 +14,8 @@ export default {
           : [...accumulator, variant], result), []),
   variantIds: (state: ApplicationState, getters: Getters): number[] =>
     getters.variants.map(variant => variant.id),
-  rsql: (state: ApplicationState, getters: Getters) => {
+  rsql: (state: ApplicationState) => {
     let operands: Object[] = []
-    if (getters.variantIds.length > 0) {
-      operands.push({
-        selector: 'variant_id',
-        comparison: '=in=',
-        arguments: getters.variantIds
-      })
-    } else return ''
     if (state.facetFilter.ageGroupAt1A.length > 0) {
       operands.push({
         operator: 'OR',

@@ -90,6 +90,7 @@ export default Vue.extend({
   },
   created () {
     this.loadAssessments()
+    this.loadGridData()
   }
 })
 </script>
