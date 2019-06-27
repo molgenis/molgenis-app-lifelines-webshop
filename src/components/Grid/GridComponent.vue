@@ -46,7 +46,7 @@
             @facetToggled="toggle(rowIndex, colIndex)"
             class="selectItem"
             :isSelected="cell.selected">
-            {{cell.count}}
+            {{formatter(cell.count)}}
             </facet-option>
         </td>
       </tr>
@@ -67,6 +67,9 @@ library.add(faArrowDown, faArrowRight, faArrowsAlt)
 export default Vue.extend({
   components: { FacetOption, FontAwesomeIcon },
   methods: {
+    formatter (num) {
+      return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
+    },
     toggle (rowIndex, colIndex) {
       this.toggleGridSelection({
         variableId: this.variables[rowIndex].id,
@@ -116,7 +119,7 @@ export default Vue.extend({
   button{
     display: inline-block;
     margin: 2px;
-    width: 50px;
+    width: 60px;
   }
   button.selectAll{
     border-top-right-radius: 0;
