@@ -86,7 +86,9 @@ describe('actions', () => {
   describe('loadVariables', () => {
     it('loads variables for selected subsection', async (done) => {
       const commit = jest.fn()
-      await actions.loadVariables({ state: { treeSelected: 4 }, commit })
+      const action = actions.loadVariables({ state: { treeSelected: 4 }, commit })
+      expect(commit).toHaveBeenCalledWith('updateVariables', [])
+      await action
       const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
       expect(commit).toHaveBeenCalledWith('updateVariables', [
         { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant] },

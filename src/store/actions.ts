@@ -55,6 +55,7 @@ export default {
     commit('updateAssessments', response.items)
   },
   async loadVariables ({ state, commit } : any) {
+    commit('updateVariables', [])
     const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${state.treeSelected}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000`)
     commit('updateVariables', response.items
       // map assessment_id to assessmentId somewhere deep in the structure
