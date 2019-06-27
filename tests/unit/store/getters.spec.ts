@@ -160,38 +160,46 @@ describe('getters', () => {
   })
 
   describe('grid', () => {
-    it('computes grid counts and selections', () => {
+    it('computes grid counts', () => {
       const state: ApplicationState = {
         ...emptyState,
         variables: [variable11, variable12],
-        variantCounts: [{ variantId: 1, count: 10 }, { variantId: 2, count: 100 }],
-        gridSelection: { 11: [1, 2], 12: [1] }
+        variantCounts: [{ variantId: 1, count: 10 }, { variantId: 2, count: 100 }]
       }
       const gettersParam: Getters = {
         ...emptyGetters,
         gridAssessments: [ assessment1A, assessment2A ],
         variants: [variant1, variant2, variant3]
       }
-
-      expect(getters.grid(state, gettersParam)).toEqual(
-        [[{ count: 10, selected: true }, { count: 100, selected: true }],
-          [{ count: 10, selected: true }, { count: 0, selected: false }]])
+      expect(getters.grid(state, gettersParam)).toEqual([[10, 100], [10, 0]])
     })
     it('returns zero if counts are missing', () => {
       const state: ApplicationState = {
         ...emptyState,
-        variables: [variable11, variable12],
-        gridSelection: { 11: [1, 2], 12: [1] }
+        variables: [variable11, variable12]
       }
       const gettersParam: Getters = {
         ...emptyGetters,
         gridAssessments: [ assessment1A, assessment2A ],
         variants: [variant1, variant2, variant3]
       }
+      expect(getters.grid(state, gettersParam)).toEqual([[0,0],[0,0]])
+    })
+  })
 
-      expect(getters.grid(state, gettersParam)).toEqual(
-        [[{ count: 0, selected: true }, { count: 0, selected: true }],
-          [{ count: 0, selected: true }, { count: 0, selected: false }]])
+  describe('gridSelections', () => {
+    it('computes grid selections', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        variables: [variable11, variable12, variable13],
+        gridSelection: { 11: [1, 2], 12: [1] }
+      }
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        gridAssessments: [ assessment1A, assessment2A ]
+      }
+      expect(getters.gridSelections(state, gettersParam))
+        .toEqual([[true, true],[true, false],[false, false]])
     })
   })
 })

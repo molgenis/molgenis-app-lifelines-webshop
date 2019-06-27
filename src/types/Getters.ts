@@ -7,5 +7,5 @@ export default interface Getters {
   variantIds: number[]
   rsql: string
   gridAssessments: Assessment[]
-  grid: GridCell[][]
+  grid: number[][]
 }

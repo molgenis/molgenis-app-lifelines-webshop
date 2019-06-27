@@ -41,12 +41,12 @@
           <facet-option class="selectRow"><font-awesome-icon icon="arrow-right" /></facet-option>
         </td>
         <td :key="colIndex"
-            v-for="(cell,colIndex) in row">
+            v-for="(count,colIndex) in row">
           <facet-option
             @facetToggled="toggle(rowIndex, colIndex)"
-            class="selectItem"
-            :isSelected="cell.selected">
-            {{formatter(cell.count)}}
+            :isSelected="gridSelections[rowIndex][colIndex]"
+            class="selectItem">
+            {{formatter(count)}}
             </facet-option>
         </td>
       </tr>
@@ -81,7 +81,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['treeSelected', 'variables', 'assessments', 'variantCounts']),
-    ...mapGetters(['rsql', 'gridAssessments', 'grid']),
+    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections']),
     variableName () {
       return variable => variable.label ? variable.label : variable.name
     }

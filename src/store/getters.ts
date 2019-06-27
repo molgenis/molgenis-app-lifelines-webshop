@@ -91,7 +91,7 @@ export default {
       acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
     return state.assessments.filter(assessment => assessmentIds.includes(assessment.id))
   },
-  grid: (state: ApplicationState, getters: Getters): Array<Array<{count: number, selected: boolean}>> =>
+  grid: (state: ApplicationState, getters: Getters): number[][] =>
     state.variables.map(variable =>
       getters.gridAssessments.map(assessment => {
         const variants = variable.variants.filter(variant => variant.assessmentId === assessment.id)
@@ -99,9 +99,14 @@ export default {
           const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
           return sum + (variantCount ? variantCount.count : 0)
         }, 0)
-        const selectionForVariable = state.gridSelection[variable.id]
-        const selected = !!selectionForVariable && selectionForVariable.includes(assessment.id)
-        return { count, selected }
+        return count
       })
+    ),
+  gridSelections: (state: ApplicationState, getters: Getters): boolean[][] =>
+    state.variables.map(variable => {
+      const variableSelections = state.gridSelection[variable.id]
+      return getters.gridAssessments.map(assessment =>
+        !!variableSelections && variableSelections.includes(assessment.id)
+      )}
     )
 }
