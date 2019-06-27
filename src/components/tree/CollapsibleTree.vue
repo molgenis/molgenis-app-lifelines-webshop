@@ -30,13 +30,13 @@
           <li class="list-group-item p-0" v-if="parent.name == collapsed && parent.children && parent.children.length > 0">
             <ul class="list-group list-group-flush">
               <li
-                :class="(value===child.name)&&'active'"
+                :class="(value===child.id)&&'active'"
                 class="list-group-item list-group-item-outline-secondary list-group-item-action py-1 child-list"
                 role="button"
                 v-for="child in parent.children"
                 :key="child.name"
                 :title="child.name"
-                @click="selectElement(child.name)"
+                @click="selectElement(child.id)"
               >
                 <div class="row">
                   <div class="text-truncate col pr-0">
@@ -71,7 +71,7 @@ export default Vue.extend({
   },
   props: {
     value: {
-      type: String,
+      type: Number,
       required: true
     },
     structure: {
@@ -80,8 +80,8 @@ export default Vue.extend({
     }
   },
   methods: {
-    selectElement (name) {
-      this.$emit('input', name)
+    selectElement (id) {
+      this.$emit('input', id)
     },
     toggleCollapse (name) {
       if (this.collapsed === name) {

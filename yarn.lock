@@ -719,6 +719,13 @@
     i18next-xhr-backend "^1.4.1"
     moment "^2.18.1"
 
+"@molgenis/rsql@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@molgenis/rsql/-/rsql-0.1.4.tgz#a9841dcb5fad1e3719d0f887e85cf7c7f2ef5d28"
+  integrity sha512-/9Ywbg12jjsX7VYqKb14OOLuclbQZyN5xZ2nkU5sTCNETdvrwbhWxf5FPZYx7+GpXWMJPYlFfRM3t3nuRmNw6w==
+  dependencies:
+    mdurl "^1.0.1"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -6822,6 +6829,11 @@ mdn-data@~1.1.0:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-1.1.4.tgz#50b5d4ffc4575276573c4eedb8780812a8419f01"
   integrity sha512-FSYbp3lyKjyj3E7fMl6rYvUdX0FBXaluGqlFoYESWQlyUTq8R+wp0rkFxoYFqZlHCvsUXGjyJmLQSnXToYhOSA==
+
+mdurl@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
+  integrity sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
 
 media-typer@0.3.0:
   version "0.3.0"

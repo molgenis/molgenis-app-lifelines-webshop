@@ -11,12 +11,13 @@ describe('CollapsibleTree.vue', () => {
         'font-awesome-icon': '<div/>'
       },
       propsData: {
-        value: '',
+        value: -1,
         structure: [
           {
             name: 'test-parent',
             children: [
               {
+                id: 10,
                 name: 'test-child'
               }
             ]
@@ -45,6 +46,6 @@ describe('CollapsibleTree.vue', () => {
   it('can select child', () => {
     wrapper.find('[title="test-parent"]').trigger('click')
     wrapper.find('[title="test-child"]').trigger('click')
-    expect(wrapper.emitted().input[0]).toEqual(['test-child'])
+    expect(wrapper.emitted().input[0]).toEqual([10])
   })
 })
