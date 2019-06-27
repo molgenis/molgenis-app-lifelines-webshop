@@ -34,7 +34,7 @@
       >
         <th>
           <span class="title">
-            {{variables[rowIndex].label?variables[rowIndex].label:variables[rowIndex].name}}
+            {{variableName(variables[rowIndex])}}
           </span>
         </th>
         <td>
@@ -81,7 +81,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['treeSelected', 'variables', 'assessments', 'variantCounts']),
-    ...mapGetters(['rsql', 'gridAssessments', 'grid'])
+    ...mapGetters(['rsql', 'gridAssessments', 'grid']),
+    variableName () {
+      return variable => variable.label ? variable.label : variable.name
+    }
   },
   watch: {
     treeSelected: function () {
@@ -106,7 +109,7 @@ export default Vue.extend({
     padding: 0 1px;
   }
   table tr th:first-child .title{
-    max-width:200px;
+    max-width: 12rem;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -119,7 +122,7 @@ export default Vue.extend({
   button{
     display: inline-block;
     margin: 2px;
-    width: 60px;
+    width: 3.5rem;
   }
   button.selectAll{
     border-top-right-radius: 0;
