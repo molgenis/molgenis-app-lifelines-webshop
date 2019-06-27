@@ -34,7 +34,7 @@
       >
         <th>
           <span class="title">
-            {{variables[rowIndex].label?variables[rowIndex].label:variables[rowIndex].name}}
+            {{variableName(variables[rowIndex])}}
           </span>
         </th>
         <td>
@@ -46,7 +46,7 @@
             @facetToggled="toggle(rowIndex, colIndex)"
             class="selectItem"
             :isSelected="cell.selected">
-            {{cell.count}}
+            {{formatter(cell.count)}}
             </facet-option>
         </td>
       </tr>
@@ -67,6 +67,9 @@ library.add(faArrowDown, faArrowRight, faArrowsAlt)
 export default Vue.extend({
   components: { FacetOption, FontAwesomeIcon },
   methods: {
+    formatter (num) {
+      return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
+    },
     toggle (rowIndex, colIndex) {
       this.toggleGridSelection({
         variableId: this.variables[rowIndex].id,
@@ -78,7 +81,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['treeSelected', 'variables', 'assessments', 'variantCounts']),
-    ...mapGetters(['rsql', 'gridAssessments', 'grid'])
+    ...mapGetters(['rsql', 'gridAssessments', 'grid']),
+    variableName () {
+      return variable => variable.label ? variable.label : variable.name
+    }
   },
   watch: {
     treeSelected: function () {
@@ -104,7 +110,7 @@ export default Vue.extend({
     padding: 0 1px;
   }
   table tr th:first-child .title{
-    max-width:200px;
+    max-width: 12rem;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -117,7 +123,7 @@ export default Vue.extend({
   button{
     display: inline-block;
     margin: 2px;
-    width: 50px;
+    width: 3.5rem;
   }
   button.selectAll{
     border-top-right-radius: 0;
