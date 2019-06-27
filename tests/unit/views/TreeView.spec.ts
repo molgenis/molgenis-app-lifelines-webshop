@@ -16,6 +16,7 @@ describe('TreeView.vue', () => {
 
   beforeEach(() => {
     state = {
+      toast: null,
       genderOptions: [{ value: '1', text: 'Male' }],
       subcohortOptions: [{ value: '101', text: 'baseline' }],
       ageGroupOptions: [],

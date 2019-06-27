@@ -1,6 +1,12 @@
 import FacetOption from '@/types/facetOption'
 
+export type Toast = {
+  type: 'danger' | 'success',
+  message: string
+}
+
 export default interface ApplicationState {
+  toast: Toast | null,
   genderOptions: FacetOption[],
   subcohortOptions: FacetOption[],
   ageGroupOptions: FacetOption[],

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import state from '@/store/state'
-import ApplicationState from '@/types/ApplicationState'
+import ApplicationState, { Toast } from '@/types/ApplicationState'
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
 
@@ -10,6 +10,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state,
   mutations: {
+    clearToast (state: ApplicationState) {
+      state.toast = null
+    },
     updateGenderFilter (state: ApplicationState, selectedGenders: String[]) {
       state.facetFilter.gender = selectedGenders
     },

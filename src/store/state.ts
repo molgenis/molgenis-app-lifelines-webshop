@@ -1,6 +1,7 @@
 import ApplicationState from '@/types/ApplicationState'
 
 const state: ApplicationState = {
+  toast: null,
   genderOptions: [
     { value: '1', text: 'Male' },
     { value: '2', text: 'Female' }
