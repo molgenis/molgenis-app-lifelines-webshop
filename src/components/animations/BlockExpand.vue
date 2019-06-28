@@ -1,5 +1,5 @@
 <template>
-  <div class="expander">
+  <div class="block-expander">
     <slot />
   </div>
 </template>
@@ -11,7 +11,7 @@ export default Vue.extend({
   name: 'BlockExpand',
   methods: {
     expand () {
-      let height = this.$el.scrollHeight
+      const height = this.$el.scrollHeight
       this.$el.style.height = height + 'px'
       this.$el.addEventListener('transitionend', (e) => {
         this.$el.removeEventListener('transitionend', his.$el)
@@ -20,8 +20,8 @@ export default Vue.extend({
       this.$el.classList.add('expanded')
     },
     collapse () {
-      let height = this.$el.scrollHeight
-      let elementTransition = this.$el.style.transition
+      const height = this.$el.scrollHeight
+      const elementTransition = this.$el.style.transition
       this.$el.style.transition = ''
       requestAnimationFrame(() => {
         this.$el.style.height = height + 'px'
@@ -34,13 +34,13 @@ export default Vue.extend({
     }
   },
   props: {
-    state: {
+    isExpaned: {
       type: Boolean,
       required: true
     }
   },
   watch: {
-    state (newVal) {
+    isExpaned (newVal) {
       if (newVal) {
         this.expand()
       } else {
@@ -52,7 +52,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-  .expander {
+  .block-expander {
     transition: height 0.3s ease-out;
     overflow: hidden;
     height: 0

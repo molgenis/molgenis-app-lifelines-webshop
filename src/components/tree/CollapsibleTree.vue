@@ -26,7 +26,7 @@
           </div>
         </li>
 
-        <block-expand :key="'b'+parent.name" :state="parent.name == collapsed && parent.children && parent.children.length > 0" class="list-group-item p-0" >
+        <block-expand :key="'b'+parent.name" :isExpaned="parent.name == collapsed && parent.children && parent.children.length > 0" class="list-group-item p-0" >
           <ul class="list-group list-group-flush">
             <li
               :class="(value===child.id)&&'active'"
@@ -106,7 +106,8 @@ export default Vue.extend({
     background-color: var(--secondary);
     border-color: var(--secondary);
   }
-  .expander{
+  /* Make sure not to get a 2 pixel wide line while using the block-expander in a 'list-group' */
+  .block-expander{
     margin-top: -1px;
   }
 </style>

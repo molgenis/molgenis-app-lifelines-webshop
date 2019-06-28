@@ -9,7 +9,7 @@ describe('BlockExpand.vue', () => {
     wrapper = mount(BlockExpand, {
       slots: { default: '<div><div id="test">test</div></div>' },
       propsData: {
-        state: false
+        isExpaned: false
       }
     })
   })
