@@ -1,4 +1,4 @@
-import ApplicationState from '@/types/applicationState'
+import ApplicationState, { Toast } from '@/types/ApplicationState'
 import Variable from '@/types/Variable'
 import Assessment from '@/types/Assessment'
 import Count from '@/types/Count'
@@ -6,6 +6,9 @@ import Vue from 'vue'
 import GridSelection from '@/types/GridSelection'
 
 export default {
+  setToast (state: ApplicationState, toast: Toast) {
+    state.toast = toast
+  },
   clearToast (state: ApplicationState) {
     state.toast = null
   },

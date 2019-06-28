@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import state from '@/store/state'
-import ApplicationState, { Toast } from '@/types/ApplicationState'
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
 
