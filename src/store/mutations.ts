@@ -6,6 +6,9 @@ import Vue from 'vue'
 import GridSelection from '@/types/GridSelection'
 
 export default {
+  clearToast (state: ApplicationState) {
+    state.toast = null
+  },
   updateGenderFilter (state: ApplicationState, selectedGenders: string[]) {
     state.facetFilter.gender = selectedGenders
   },
