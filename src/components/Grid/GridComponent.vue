@@ -27,29 +27,15 @@
           <facet-option class="selectCol"><font-awesome-icon icon="arrow-down" /></facet-option>
         </td>
       </tr>
-
-      <tr
-        v-for="(row, rowIndex) in grid"
-        :key="rowIndex"
+      <grid-row
+        v-for="(variable, rowIndex) in variables"
+        :key="variable.id"
+        :label="variableName(variable)"
+        :selected="gridSelections[rowIndex]"
+        :counts="grid[rowIndex]"
+        @facetToggled="(colIndex) => toggle(rowIndex, colIndex)"
       >
-        <th>
-          <span class="variable-title">
-            {{variableName(variables[rowIndex])}}
-          </span>
-        </th>
-        <td>
-          <facet-option class="selectRow"><font-awesome-icon icon="arrow-right" /></facet-option>
-        </td>
-        <td :key="colIndex"
-            v-for="(count,colIndex) in row">
-          <facet-option
-            @facetToggled="toggle(rowIndex, colIndex)"
-            :isSelected="gridSelections[rowIndex][colIndex]"
-            class="selectItem">
-            {{formatter(count)}}
-            </facet-option>
-        </td>
-      </tr>
+      </grid-row>
     </table>
   </div>
 </template>
@@ -61,15 +47,13 @@ import FacetOption from '../facets/FacetOption.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import GridRow from './GridRow'
 
-library.add(faArrowDown, faArrowRight, faArrowsAlt)
+library.add(faArrowDown, faArrowsAlt)
 
 export default Vue.extend({
-  components: { FacetOption, FontAwesomeIcon },
+  components: { FacetOption, FontAwesomeIcon, GridRow },
   methods: {
-    formatter (num) {
-      return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
-    },
     toggle (rowIndex, colIndex) {
       this.toggleGridSelection({
         variableId: this.variables[rowIndex].id,
@@ -110,13 +94,6 @@ export default Vue.extend({
   table td, th {
     padding: 0 1px;
   }
-  .variable-title {
-    max-width: 12rem;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-right: 1rem;
-  }
   .assessments-title {
     height: 6em;
     width: auto;
@@ -147,13 +124,6 @@ export default Vue.extend({
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-  }
-  button.selectItem{
-    border-radius: 0;
-  }
-  button.selectRow{
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
   }
   button.selectCol{
     border-bottom-left-radius: 0;
