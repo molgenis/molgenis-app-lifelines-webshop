@@ -9,6 +9,30 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'BlockExpand',
+  methods: {
+    expand () {
+      let height = this.$el.scrollHeight
+      this.$el.style.height = height + 'px'
+      this.$el.addEventListener('transitionend', (e) => {
+        this.$el.removeEventListener('transitionend', his.$el)
+        this.$el.style.height = null
+      })
+      this.$el.classList.add('expanded')
+    },
+    collapse () {
+      let height = this.$el.scrollHeight
+      let elementTransition = this.$el.style.transition
+      this.$el.style.transition = ''
+      requestAnimationFrame(() => {
+        this.$el.style.height = height + 'px'
+        this.$el.style.transition = elementTransition
+        requestAnimationFrame(() => {
+          this.$el.style.height = 0 + 'px'
+        })
+      })
+      this.$el.classList.remove('expanded')
+    }
+  },
   props: {
     state: {
       type: Boolean,
@@ -16,24 +40,11 @@ export default Vue.extend({
     }
   },
   watch: {
-    state (newVal, oldVal) {
-      let height = this.$el.scrollHeight
+    state (newVal) {
       if (newVal) {
-        this.$el.style.height = height + 'px'
-        this.$el.addEventListener('transitionend', (e) => {
-          this.$el.removeEventListener('transitionend', his.$el)
-          this.$el.style.height = null
-        })
+        this.expand()
       } else {
-        let elementTransition = this.$el.style.transition
-        this.$el.style.transition = ''
-        requestAnimationFrame(() => {
-          this.$el.style.height = height + 'px'
-          this.$el.style.transition = elementTransition
-          requestAnimationFrame(() => {
-            this.$el.style.height = 0 + 'px'
-          })
-        })
+        this.collapse()
       }
     }
   }
