@@ -14,11 +14,15 @@ describe('BlockExpand.vue', () => {
     })
   })
 
-  it('It animates the element', () => {
+  it('It animates the element', (done) => {
     expect(wrapper.classes('expanded')).toBeFalsy()
-    wrapper.vm.expand()
+    wrapper.setProps({ isExpaned: true })
     expect(wrapper.classes('expanded')).toBeTruthy()
-    wrapper.vm.collapse()
+    wrapper.setProps({ isExpaned: false })
     expect(wrapper.classes('expanded')).toBeFalsy()
+    setTimeout(function () {
+      // wait for all events to be done
+      done()
+    }, 100)
   })
 })

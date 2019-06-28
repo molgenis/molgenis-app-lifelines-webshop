@@ -13,8 +13,8 @@ export default Vue.extend({
     expand () {
       const height = this.$el.scrollHeight
       this.$el.style.height = height + 'px'
-      this.$el.addEventListener('transitionend', (e) => {
-        this.$el.removeEventListener('transitionend', his.$el)
+      this.$el.addEventListener('transitionend', () => {
+        this.$el.removeEventListener('transitionend', this.$el)
         this.$el.style.height = null
       })
       this.$el.classList.add('expanded')
