@@ -80,6 +80,5 @@ export default {
       count: cell[0]
     }))
     commit('updateVariantCounts', variantCounts)
-    
   }
 }

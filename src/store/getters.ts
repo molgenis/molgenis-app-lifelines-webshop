@@ -107,6 +107,7 @@ export default {
       const variableSelections = state.gridSelection[variable.id]
       return getters.gridAssessments.map(assessment =>
         !!variableSelections && variableSelections.includes(assessment.id)
-      )}
+      )
+    }
     )
 }

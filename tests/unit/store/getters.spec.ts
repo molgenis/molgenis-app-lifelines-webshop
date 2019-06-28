@@ -183,7 +183,7 @@ describe('getters', () => {
         gridAssessments: [ assessment1A, assessment2A ],
         variants: [variant1, variant2, variant3]
       }
-      expect(getters.grid(state, gettersParam)).toEqual([[0,0],[0,0]])
+      expect(getters.grid(state, gettersParam)).toEqual([[0, 0], [0, 0]])
     })
   })
 
@@ -199,7 +199,7 @@ describe('getters', () => {
         gridAssessments: [ assessment1A, assessment2A ]
       }
       expect(getters.gridSelections(state, gettersParam))
-        .toEqual([[true, true],[true, false],[false, false]])
+        .toEqual([[true, true], [true, false], [false, false]])
     })
   })
 })

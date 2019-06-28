@@ -26,30 +26,28 @@
           </div>
         </li>
 
-        <transition-expand :key="parent.name+'-children'" >
-          <li class="list-group-item p-0" v-if="parent.name == collapsed && parent.children && parent.children.length > 0">
-            <ul class="list-group list-group-flush">
-              <li
-                :class="(value===child.id)&&'active'"
-                class="list-group-item list-group-item-outline-secondary list-group-item-action py-1 child-list"
-                role="button"
-                v-for="child in parent.children"
-                :key="child.name"
-                :title="child.name"
-                @click="selectElement(child.id)"
-              >
-                <div class="row">
-                  <div class="text-truncate col pr-0">
-                    {{child.name}}
-                  </div>
-                  <div class="col-md-auto d-flex align-items-center">
-                    <span class="badge badge-pill badge-light float-right align-self-center">{{child.count}}</span>
-                  </div>
+        <block-expand :key="'b'+parent.name" :state="parent.name == collapsed && parent.children && parent.children.length > 0" class="list-group-item p-0" >
+          <ul class="list-group list-group-flush">
+            <li
+              :class="(value===child.id)&&'active'"
+              class="list-group-item list-group-item-outline-secondary list-group-item-action py-1 child-list"
+              role="button"
+              v-for="child in parent.children"
+              :key="child.name"
+              :title="child.name"
+              @click="selectElement(child.id)"
+            >
+              <div class="row">
+                <div class="text-truncate col pr-0">
+                  {{child.name}}
                 </div>
-              </li>
-            </ul>
-          </li>
-        </transition-expand>
+                <div class="col-md-auto d-flex align-items-center">
+                  <span class="badge badge-pill badge-light float-right align-self-center">{{child.count}}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </block-expand>
       </template>
     </ul>
 
@@ -60,7 +58,7 @@
 import Vue from 'vue'
 import CollapseTreeIcon from '../animations/CollapseTreeIcon.vue'
 import SpinnerAnimation from '../animations/SpinnerAnimation.vue'
-import TransitionExpand from '../animations/TransitionExpand.vue'
+import BlockExpand from '../animations/BlockExpand.vue'
 
 export default Vue.extend({
   name: 'CollapsibleTree',
@@ -92,7 +90,7 @@ export default Vue.extend({
       this.$forceUpdate()
     }
   },
-  components: { TransitionExpand, CollapseTreeIcon, SpinnerAnimation }
+  components: { CollapseTreeIcon, SpinnerAnimation, BlockExpand }
 })
 </script>
 
@@ -107,5 +105,8 @@ export default Vue.extend({
   .child-list.active{
     background-color: var(--secondary);
     border-color: var(--secondary);
+  }
+  .expander{
+    margin-top: -1px;
   }
 </style>
