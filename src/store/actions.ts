@@ -1,8 +1,9 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
+import { tryAction } from './helpers'
 
 export default {
-  loadTreeStructure ({ commit } : any) {
+  loadTreeStructure: tryAction(({ commit } : any) => {
     // Show simple initial tree (only the parents)
     const sections = api.get('/api/v2/lifelines_section?num=100').then((response: any) => {
       let sections:String[][] = []
@@ -40,7 +41,7 @@ export default {
     })
 
     // Build final tree
-    Promise.all([sections, subSections, tree]).then(([sections, subSections, treeStructure]) => {
+    return Promise.all([sections, subSections, tree]).then(([sections, subSections, treeStructure]) => {
       const final = treeStructure.map((item:any) => {
         return {
           name: sections[item.key],
@@ -49,12 +50,12 @@ export default {
       })
       commit('updateTreeStructure', final)
     })
-  },
-  async loadAssessments ({ commit }: any) {
+  }),
+  loadAssessments: tryAction(async ({ commit }: any) => {
     const response = await api.get('/api/v2/lifelines_assessment')
     commit('updateAssessments', response.items)
-  },
-  async loadVariables ({ state, commit } : any) {
+  }),
+  loadVariables: tryAction(async ({ state, commit } : any) => {
     commit('updateVariables', [])
     const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${state.treeSelected}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000`)
     commit('updateVariables', response.items
@@ -67,8 +68,8 @@ export default {
             assessmentId: variant.assessment_id
           }))
       })))
-  },
-  async loadGridData ({ commit, getters }: any) {
+  }),
+  loadGridData: tryAction(async ({ commit, getters }: any) => {
     commit('updateVariantCounts', [])
     let url = '/api/v2/lifelines_who_when?aggs=x==variant_id'
     if (getters.rsql) {
@@ -80,5 +81,5 @@ export default {
       count: cell[0]
     }))
     commit('updateVariantCounts', variantCounts)
-  }
+  })
 }
