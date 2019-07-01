@@ -11,13 +11,13 @@ describe('CollapsibleTree.vue', () => {
         'font-awesome-icon': '<div/>'
       },
       propsData: {
-        value: '',
+        value: -1,
         structure: [
           {
             name: 'test-parent',
-            open: true,
             children: [
               {
+                id: 10,
                 name: 'test-child'
               }
             ]
@@ -28,23 +28,23 @@ describe('CollapsibleTree.vue', () => {
   })
 
   it('should render a list with a test-parent and test-child', () => {
+    wrapper.find('[title="test-parent"]').trigger('click')
     const items = wrapper.findAll('[title]')
-    expect(items.length).toEqual(2)
     expect(items.at(0).text()).toEqual('test-parent')
     expect(items.at(1).text()).toEqual('test-child')
   })
 
   it('can close and hide children', () => {
+    expect(wrapper.find('.block-expander').classes('expanded')).toBeFalsy()
     wrapper.find('[title="test-parent"]').trigger('click')
-    let items = wrapper.findAll('[title]')
-    expect(items.length).toEqual(1)
+    expect(wrapper.find('.block-expander').classes('expanded')).toBeTruthy()
     wrapper.find('[title="test-parent"]').trigger('click')
-    items = wrapper.findAll('[title]')
-    expect(items.length).toEqual(2)
+    expect(wrapper.find('.block-expander').classes('expanded')).toBeFalsy()
   })
 
-  it('can can select child', () => {
+  it('can select child', () => {
+    wrapper.find('[title="test-parent"]').trigger('click')
     wrapper.find('[title="test-child"]').trigger('click')
-    expect(wrapper.emitted().input[0]).toEqual(['test-child'])
+    expect(wrapper.emitted().input[0]).toEqual([10])
   })
 })

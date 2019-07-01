@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils'
 import SidebarView from '@/views/SidebarView.vue'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import ApplicationState from '@/types/ApplicationState'
+import ApplicationState from '@/types/applicationState'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -16,6 +16,10 @@ describe('SidebarView.vue', () => {
 
   beforeEach(() => {
     state = {
+      variables: [],
+      variantCounts: [],
+      assessments: [],
+      gridSelection: {},
       genderOptions: [{ value: '1', text: 'Male' }],
       subcohortOptions: [{ value: '101', text: 'baseline' }],
       ageGroupOptions: [],
@@ -31,7 +35,7 @@ describe('SidebarView.vue', () => {
       treeStructure: [],
       sectionList: [],
       subSectionList: [],
-      treeSelected: ''
+      treeSelected: -1
     }
 
     wrapper = shallowMount(SidebarView, {

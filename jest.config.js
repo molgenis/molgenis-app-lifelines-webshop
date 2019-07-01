@@ -10,10 +10,11 @@ module.exports = {
   transform: {
     '^.+\\.vue$': 'vue-jest',
     '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.es.js$': 'babel-jest'
   },
   transformIgnorePatterns: [
-    '/node_modules/'
+    '/node_modules/(?!(@molgenis/molgenis-api-client.*))'
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',

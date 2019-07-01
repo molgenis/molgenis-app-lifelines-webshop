@@ -63,7 +63,7 @@ export default Vue.extend({
   data: function () {
     return {
       activeAgeFacetId: 'age',
-      cachedAgeState: null
+      cachedAgeState: []
     }
   },
   methods: {

@@ -12,7 +12,14 @@
               </li>
           </ul>
           <div v-show="activeTab == 'variables'">
-              <tree-view  />
+                <div class="row">
+                  <div class="col-4" >
+                    <tree-view />
+                  </div>
+                  <div class="col-8" >
+                    <grid-view />
+                  </div>
+                </div>
           </div>
           <div v-show="activeTab == 'selection'">
               <cart-view  />
@@ -25,15 +32,17 @@
 <script>
 import Vue from 'vue'
 import TreeView from './TreeView.vue'
+import GridView from './GridView.vue'
 import CartView from './CartView.vue'
 
 export default Vue.extend({
   name: 'ContentView',
-  components: { TreeView, CartView },
+  components: { TreeView, GridView, CartView },
   data: () => {
     return {
       activeTab: 'variables'
     }
   }
 })
+
 </script>
