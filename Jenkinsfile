@@ -18,6 +18,7 @@ pipeline {
                         env.SAUCE_CRED_USR = sh(script: 'vault read -field=username secret/ops/token/saucelabs', returnStdout: true)
                         env.SAUCE_CRED_PSW = sh(script: 'vault read -field=value secret/ops/token/saucelabs', returnStdout: true)
                         env.NPM_TOKEN = sh(script: 'vault read -field=value secret/ops/token/npm', returnStdout: true)
+                        env.NEXUS_AUTH = sh(script: 'vault read -field=base64 secret/ops/account/nexus', returnStdout: true)
                     }
                 }
                 container('node') {
@@ -25,7 +26,7 @@ pipeline {
                 }
             }
         }
-        stage('Install and test: [ pull request ]') {
+        stage('Install and test: [ PR ]') {
             when {
                 changeRequest()
             }
@@ -35,6 +36,7 @@ pipeline {
                     sh "yarn lint"
                     sh "yarn test:unit"
                     sh "yarn test:e2e --env ci_chrome,ci_safari,ci_ie11,ci_firefox"
+                    sh "yarn build"
                 }
             }
             post {
@@ -45,6 +47,62 @@ pipeline {
                 }
             }
         }
+        stage('Build container serving the app [ PR ]') {
+            when {
+                changeRequest()
+            }
+            environment {
+                TAG = "PR-${CHANGE_ID}-${BUILD_NUMBER}"
+                DOCKER_CONFIG="/root/.docker"
+                LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/molgenis/molgenis-app-lifelines-webshop"
+            }
+            steps {
+                container (name: 'kaniko', shell: '/busybox/sh') {
+                    sh "#!/busybox/sh\nmkdir -p ${DOCKER_CONFIG}"
+                    sh "#!/busybox/sh\necho '{\"auths\": {\"registry.molgenis.org\": {\"auth\": \"${NEXUS_AUTH}\"}}}' > ${DOCKER_CONFIG}/config.json"
+                    sh "#!/busybox/sh\n. ${WORKSPACE}/copy_dist_dir.sh"
+                    sh "#!/busybox/sh\n/kaniko/executor --context ${WORKSPACE}/docker --destination ${LOCAL_REPOSITORY}:${TAG}"
+                }
+            }
+        }
+        // TODO: deploy!
+        // stage('Deploy preview [ PR ]') {
+        //     when {
+        //         changeRequest()
+        //     }
+        //     environment {
+        //         TAG = "PR-${CHANGE_ID}-${BUILD_NUMBER}"
+        //         NAME = "preview-frontend-${TAG.toLowerCase()}"
+        //     }
+        //     steps {
+        //         container('vault') {
+        //             sh "mkdir /home/jenkins/.rancher"
+        //             sh 'vault read -field=value secret/ops/jenkins/rancher/cli2.json > /home/jenkins/.rancher/cli2.json'
+        //         }
+        //         container('rancher') {
+        //             sh "rancher context switch dev-molgenis"
+        //             sh "rancher apps install " +
+        //                 "molgenis-frontend " +
+        //                 "${NAME} " +
+        //                 "--no-prompt " +
+        //                 "--set molgenis-proxy.environment=dev " +
+        //                 "--set image.tag=${TAG} " +
+        //                 "--set image.repository=${LOCAL_REGISTRY} " +
+        //                 "--set molgenis-proxy.url=http://master-molgenis.molgenis-abcde.svc:8080 " +
+        //                 "--set image.pullPolicy=Always"
+        //         }
+        //     }
+        //     post {
+        //         success {
+        //             hubotSend(message: "PR Preview available on https://${NAME}.dev.molgenis.org", status:'INFO', site: 'slack-pr-app-team')
+        //             container('node') {
+        //                 sh "set +x; curl -X POST -H 'Content-Type: application/json' -H 'Authorization: token ${GITHUB_TOKEN}' " +
+        //                     "--data '{\"body\":\":star: PR Preview available on https://${NAME}.dev.molgenis.org\"}' " +
+        //                     "https://api.github.com/repos/molgenis/molgenis-app-lifelines-webshop/issues/${CHANGE_ID}/comments"
+        //             }
+        //         }
+        //     }
+        // }
         stage('Install, test and build: [ master ]') {
             when {
                 branch 'master'
