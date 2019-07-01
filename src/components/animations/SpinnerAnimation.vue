@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faSpinner)
 
 export default Vue.extend({
-  name: 'Spinner',
+  name: 'SpinnerAnimation',
   components: { FontAwesomeIcon }
 })
 </script>
