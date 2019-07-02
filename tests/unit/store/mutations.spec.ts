@@ -93,4 +93,29 @@ describe('mutations', () => {
       expect(state.gridSelection).toEqual({ 123: [1, 2] })
     })
   })
+  describe('toggleGridRow', () => {
+    it('selects if none selected', () => {
+      const state = {
+        gridSelection: {}
+      }
+      mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }] })
+      expect(state.gridSelection).toEqual({ 123: [1, 2] })
+    })
+
+    it('removes if all already selected', () => {
+      const state = {
+        gridSelection: { 123: [1, 2, 3] }
+      }
+      mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      expect(state.gridSelection).toEqual({})
+    })
+
+    it('selects all if already selected', () => {
+      const state = {
+        gridSelection: { 123: [1] }
+      }
+      mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      expect(state.gridSelection).toEqual({ 123: [1, 2, 3] })
+    })
+  })
 })
