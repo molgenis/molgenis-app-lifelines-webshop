@@ -108,6 +108,26 @@ export default {
       return getters.gridAssessments.map(assessment =>
         !!variableSelections && variableSelections.includes(assessment.id)
       )
+    }),
+  treeStructure: (state: ApplicationState, getters: Getters) => {
+    const loadedSection:Boolean = state.sectionList.length > 0
+    const loadedSubSection:Boolean = state.subSectionList.length > 0
+    const loadedTreeStructure:Boolean = state.treeStructure.length > 0
+
+    if (loadedSection && loadedSubSection && loadedTreeStructure) {
+      // return full tree
+      const final = state.treeStructure.map((item:any) => {
+        return {
+          name: state.sectionList[item.key],
+          children: item.list.map((id:number) => { return { name: state.subSectionList[id], id } })
+        }
+      })
+      return final
+    } else if (loadedSection) {
+      // return temporary partial tree
+      return state.sectionList.map((item:string) => { if (item) return { 'name': item } }).filter(Boolean)
     }
-    )
+
+    return []
+  }
 }

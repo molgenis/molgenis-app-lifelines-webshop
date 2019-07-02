@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-auto d-flex align-items-center">
               <collapse-tree-icon
-                v-if="parent.children && parent.children.length > 0"
+                v-if="hasChildren(parent)"
                 class="mr-2"
                 :state="parent.name == collapsed"
               />
@@ -25,8 +25,7 @@
             </div>
           </div>
         </li>
-
-        <block-expand :key="'b'+parent.name" :isExpaned="parent.name == collapsed && parent.children && parent.children.length > 0" class="list-group-item p-0" >
+        <block-expand :key="'b'+parent.name" :isExpanded="parent.name == collapsed && hasChildren(parent)" class="list-group-item p-0" >
           <ul class="list-group list-group-flush">
             <li
               :class="(value===child.id)&&'active'"
@@ -77,6 +76,11 @@ export default Vue.extend({
       required: true
     }
   },
+  computed: {
+    hasChildren () {
+      return parent => !!parent.children && parent.children.length > 0
+    }
+  },
   methods: {
     selectElement (id) {
       this.$emit('input', id)
@@ -87,7 +91,6 @@ export default Vue.extend({
       } else {
         this.collapsed = name
       }
-      this.$forceUpdate()
     }
   },
   components: { CollapseTreeIcon, SpinnerAnimation, BlockExpand }

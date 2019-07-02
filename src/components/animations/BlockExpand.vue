@@ -1,5 +1,5 @@
 <template>
-  <div class="block-expander">
+  <div class="block-expander" :class="isExpanded&&'open'">
     <slot />
   </div>
 </template>
@@ -13,7 +13,6 @@ export default Vue.extend({
     expand () {
       const height = this.$el.scrollHeight
       this.$el.style.height = height + 'px'
-      this.$el.classList.add('expanded')
     },
     collapse () {
       const height = this.$el.scrollHeight
@@ -26,17 +25,16 @@ export default Vue.extend({
           this.$el.style.height = 0 + 'px'
         })
       })
-      this.$el.classList.remove('expanded')
     }
   },
   props: {
-    isExpaned: {
+    isExpanded: {
       type: Boolean,
       required: true
     }
   },
   watch: {
-    isExpaned (newVal) {
+    isExpanded (newVal) {
       if (newVal) {
         this.expand()
       } else {
@@ -52,5 +50,8 @@ export default Vue.extend({
     transition: height 0.3s ease-out;
     overflow: hidden;
     height: 0
+  }
+  .open{
+    height: auto;
   }
 </style>

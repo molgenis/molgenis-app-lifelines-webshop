@@ -9,17 +9,17 @@ describe('BlockExpand.vue', () => {
     wrapper = mount(BlockExpand, {
       slots: { default: '<div><div id="test">test</div></div>' },
       propsData: {
-        isExpaned: false
+        isExpanded: false
       }
     })
   })
 
   it('It animates the element', (done) => {
-    expect(wrapper.classes('expanded')).toBeFalsy()
-    wrapper.setProps({ isExpaned: true })
-    expect(wrapper.classes('expanded')).toBeTruthy()
-    wrapper.setProps({ isExpaned: false })
-    expect(wrapper.classes('expanded')).toBeFalsy()
+    expect(wrapper.classes('open')).toBeFalsy()
+    wrapper.setProps({ isExpanded: true })
+    expect(wrapper.classes('open')).toBeTruthy()
+    wrapper.setProps({ isExpanded: false })
+    expect(wrapper.classes('open')).toBeFalsy()
     setTimeout(function () {
       // wait for all events to be done
       done()

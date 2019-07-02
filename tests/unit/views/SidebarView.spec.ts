@@ -35,6 +35,7 @@ describe('SidebarView.vue', () => {
       treeStructure: [],
       sectionList: [],
       subSectionList: [],
+      treeOpenSection: '',
       treeSelected: -1
     }
 
