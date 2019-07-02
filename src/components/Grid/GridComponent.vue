@@ -93,9 +93,6 @@ export default Vue.extend({
         assessmentId: this.gridAssessments[colIndex].id
       })
     },
-    scrollUp () {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    },
     ...mapMutations(['toggleGridSelection']),
     ...mapActions(['loadVariables', 'loadAssessments', 'loadGridData'])
   },
