@@ -6,7 +6,7 @@
 
 <script>
 import Vue from 'vue'
-import Grid from '../components/Grid/GridComponent.vue'
+import Grid from '../components/grid/GridComponent.vue'
 
 export default Vue.extend({
   name: 'ContentView',
