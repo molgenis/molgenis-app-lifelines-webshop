@@ -16,6 +16,7 @@ describe('SidebarView.vue', () => {
 
   beforeEach(() => {
     state = {
+      toast: null,
       variables: [],
       variantCounts: [],
       assessments: [],
