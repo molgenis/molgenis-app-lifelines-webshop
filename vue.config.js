@@ -4,7 +4,7 @@ const i18n = require('./i18n.schemas.js')
 module.exports = {
   filenameHashing: false,
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/@molgenis-app/lifelines-webshop/dist/'
+    ? '/%40molgenis-app/lifelines-webshop/dist/'
     : '/',
   outputDir: 'dist',
   'devServer': {
