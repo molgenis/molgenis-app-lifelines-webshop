@@ -5,7 +5,7 @@ import { post } from '@molgenis/molgenis-api-client'
 
 jest.mock('@molgenis/molgenis-api-client', () => {
   const responses: {[key:string]: Object} = {
-    '/api/v2/aaaac25subz7tdqidk7exmyaae/fghij': {
+    '/api/v2/lifelines_cart/fghij': {
       selection: '{"1":[2,3]}'
     },
     '/api/v2/lifelines_assessment': {
@@ -149,10 +149,10 @@ describe('actions', () => {
     it('saves grid selection', async (done) => {
       const headers = { get: jest.fn() }
       post.mockReturnValueOnce({ headers })
-      headers.get.mockReturnValueOnce('https://lifelines.dev.molgenis.org/api/v1/aaaac25subz7tdqidk7exmyaae/fghij')
+      headers.get.mockReturnValueOnce('https://lifelines.dev.molgenis.org/api/v1/lifelines_cart/fghij')
       await actions.save({ state: { gridSelection: { 1: [2, 3] } } })
       expect(headers.get).toHaveBeenCalledWith('Location')
-      expect(post).toHaveBeenCalledWith('/api/v1/aaaac25subz7tdqidk7exmyaae', { body: '{"selection":"{\\\"1\\\":[2,3]}"}' })
+      expect(post).toHaveBeenCalledWith('/api/v1/lifelines_cart', { body: '{"selection":"{\\\"1\\\":[2,3]}"}' })
       done()
     })
   })
