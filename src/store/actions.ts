@@ -2,33 +2,39 @@
 import api from '@molgenis/molgenis-api-client'
 
 export default {
-  async loadSections  ({ commit } : any) {
-    const response = await api.get('/api/v2/lifelines_section?num=10000')
-    let sections:String[] = []
-    response.items.map((item:any) => { sections[item.id] = item.name })
-    commit('updateSections', sections)
-  },
-  async loadSubSections  ({ commit } : any) {
-    const response = await api.get('/api/v2/lifelines_sub_section?num=10000')
-    let subSections:String[] = []
-    response.items.map((item:any) => { subSections[item.id] = item.name })
-    commit('updateSubSections', subSections)
-  },
-  async loadSectionTree  ({ commit } : any) {
-    const response = await api.get('/api/v2/lifelines_tree?num=10000')
-    let structure:any = {}
-    response.items.map((item:any) => {
-      if (item.section_id.id in structure) {
-        structure[item.section_id.id].push(item.subsection_id.id)
-      } else {
-        structure[item.section_id.id] = [item.subsection_id.id]
-      }
-    })
-    let treeStructure:Array<Object> = []
-    for (let [key, value] of Object.entries(structure)) {
-      treeStructure.push({ key: key, list: value })
+  async loadSections  ({ commit, state } : any) {
+    if (state.sectionList.length === 0) {
+      const response = await api.get('/api/v2/lifelines_section?num=10000')
+      let sections:String[] = []
+      response.items.map((item:any) => { sections[item.id] = item.name })
+      commit('updateSections', sections)
     }
-    commit('updateSectionTree', treeStructure)
+  },
+  async loadSubSections  ({ commit, state } : any) {
+    if (state.subSectionList.length === 0) {
+      const response = await api.get('/api/v2/lifelines_sub_section?num=10000')
+      let subSections:String[] = []
+      response.items.map((item:any) => { subSections[item.id] = item.name })
+      commit('updateSubSections', subSections)
+    }
+  },
+  async loadSectionTree  ({ commit, state } : any) {
+    if (state.treeStructure.length === 0) {
+      const response = await api.get('/api/v2/lifelines_tree?num=10000')
+      let structure: any = {}
+      response.items.map((item: any) => {
+        if (item.section_id.id in structure) {
+          structure[item.section_id.id].push(item.subsection_id.id)
+        } else {
+          structure[item.section_id.id] = [item.subsection_id.id]
+        }
+      })
+      let treeStructure: Array<Object> = []
+      for (let [key, value] of Object.entries(structure)) {
+        treeStructure.push({ key: key, list: value })
+      }
+      commit('updateSectionTree', treeStructure)
+    }
   },
 
   async loadAssessments ({ commit }: any) {
