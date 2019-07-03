@@ -1,5 +1,20 @@
 <template>
   <div id="main-view">
+    <div class="pt-3">
+      <img src="logo.svg" alt="Lifelines" />
+    </div>
+    <div class="pt-3">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Grid</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Cart</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
     <div class="row justify-content-md-center pt-3">
       <div class="col-6">
         <toast-component
@@ -23,8 +38,7 @@ import Vue from 'vue'
 import ContentView from './ContentView.vue'
 import SidebarView from './SidebarView.vue'
 import ToastComponent from '../components/ToastComponent.vue'
-import { mapState, mapMutations } from 'vuex'
-import { mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default Vue.extend({
   name: 'MainView',
