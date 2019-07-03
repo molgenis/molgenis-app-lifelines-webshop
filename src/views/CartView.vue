@@ -27,7 +27,6 @@
 <script>
 import Vue from 'vue'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
-import variableRepository from '../repository/variablesRepository.ts'
 import assessmentsRepository from '../repository/assessmentsRepository.ts'
 
 export default Vue.extend({
