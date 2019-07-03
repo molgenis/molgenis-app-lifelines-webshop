@@ -9,7 +9,7 @@
           <li class="nav-item active">
             <a class="nav-link" href="#">Grid</a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="#">Cart</a>
           </li>
         </ul>
