@@ -46,7 +46,7 @@
           >
             <th>
           <span class="variable-title">
-            {{variableName(variables[rowIndex])}}
+            {{variableName(gridVariables[rowIndex])}}
           </span>
             </th>
             <td>
@@ -89,15 +89,15 @@ export default Vue.extend({
     },
     toggle (rowIndex, colIndex) {
       this.toggleGridSelection({
-        variableId: this.variables[rowIndex].id,
+        variableId: this.gridVariables[rowIndex].id,
         assessmentId: this.gridAssessments[colIndex].id
       })
     },
     ...mapMutations(['toggleGridSelection']),
-    ...mapActions(['loadVariables', 'loadAssessments', 'loadGridData'])
+    ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData'])
   },
   computed: {
-    ...mapState(['treeSelected', 'variables', 'assessments', 'variantCounts']),
+    ...mapState(['treeSelected', 'gridVariables', 'assessments', 'variantCounts']),
     ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections']),
     variableName () {
       return variable => variable.label ? variable.label : variable.name
@@ -108,7 +108,7 @@ export default Vue.extend({
   },
   watch: {
     treeSelected: function () {
-      this.loadVariables()
+      this.loadGridVariables()
     },
     rsql: function () {
       this.loadGridData()
