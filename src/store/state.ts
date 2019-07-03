@@ -2,7 +2,8 @@ import ApplicationState from '@/types/ApplicationState'
 
 const state: ApplicationState = {
   toast: null,
-  variables: [],
+  variables: {},
+  gridVariables: [],
   genderOptions: [
     { value: '1', text: 'Male' },
     { value: '2', text: 'Female' }

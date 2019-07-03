@@ -3,6 +3,7 @@ import TreeView from '@/views/TreeView.vue'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ApplicationState from '@/types/ApplicationState'
+import emptyState from '@/store/state'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)

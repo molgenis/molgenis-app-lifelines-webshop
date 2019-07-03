@@ -3,11 +3,12 @@ import ApplicationState from '@/types/ApplicationState'
 import { transformToRSQL } from '@molgenis/rsql'
 import Getters from '@/types/Getters'
 import Variant from '@/types/Variant'
-import Variable from '@/types/Variable'
+import { Variable, VariableWithVariants } from '@/types/Variable'
+import Assessment from '@/types/Assessment'
 
 export default {
   variants: (state: ApplicationState): Variant[] =>
-    state.variables.reduce((result: Variant[], variable: Variable): Variant[] =>
+    state.gridVariables.reduce((result: Variant[], variable: VariableWithVariants): Variant[] =>
       variable.variants.reduce((accumulator: Variant[], variant: Variant) =>
         accumulator.some((candidate: Variant): boolean => candidate.id === variant.id)
           ? accumulator
@@ -92,10 +93,10 @@ export default {
     return state.assessments.filter(assessment => assessmentIds.includes(assessment.id))
   },
   grid: (state: ApplicationState, getters: Getters): number[][] =>
-    state.variables.map(variable =>
-      getters.gridAssessments.map(assessment => {
-        const variants = variable.variants.filter(variant => variant.assessmentId === assessment.id)
-        const count = variants.reduce((sum, variant) => {
+    state.gridVariables.map((variable: VariableWithVariants) =>
+      getters.gridAssessments.map((assessment: Assessment) => {
+        const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
+        const count: number = variants.reduce((sum: number, variant: Variant) => {
           const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
           return sum + (variantCount ? variantCount.count : 0)
         }, 0)
@@ -103,7 +104,7 @@ export default {
       })
     ),
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] =>
-    state.variables.map(variable => {
+    state.gridVariables.map(variable => {
       const variableSelections = state.gridSelection[variable.id]
       return getters.gridAssessments.map(assessment =>
         !!variableSelections && variableSelections.includes(assessment.id)
