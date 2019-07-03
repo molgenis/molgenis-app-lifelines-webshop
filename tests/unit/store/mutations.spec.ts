@@ -237,4 +237,96 @@ describe('mutations', () => {
       expect(state.gridSelection).toEqual({ 1: [3], 2: [3], 3: [3] })
     })
   })
+
+  describe('toggleAll', () => {
+    it('selects if none selected', () => {
+      const state = {
+        gridSelection: {},
+        variables: [
+          { id: 1,
+            label: 'A',
+            name: 'A1',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 1, assessment_id: 1, id: 22 },
+              { assessmentId: 3, assessment_id: 3, id: 33 } ] },
+          { id: 2,
+            label: 'B',
+            name: 'B2',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 1, assessment_id: 1, id: 55 },
+              { assessmentId: 3, assessment_id: 3, id: 66 }] },
+          { id: 3,
+            label: 'C',
+            name: 'C3',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 2, assessment_id: 2, id: 22 },
+              { assessmentId: 3, assessment_id: 3, id: 33 }] } ]
+      }
+      mutations.toggleAll(state, { gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      expect(state.gridSelection).toEqual({ 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] })
+    })
+
+    it('removes if all already selected', () => {
+      const state = {
+        gridSelection: { 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] },
+        variables: [
+          { id: 1,
+            label: 'A',
+            name: 'A1',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 1, assessment_id: 1, id: 22 },
+              { assessmentId: 3, assessment_id: 3, id: 33 } ] },
+          { id: 2,
+            label: 'B',
+            name: 'B2',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 1, assessment_id: 1, id: 55 },
+              { assessmentId: 3, assessment_id: 3, id: 66 }] },
+          { id: 3,
+            label: 'C',
+            name: 'C3',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 2, assessment_id: 2, id: 22 },
+              { assessmentId: 3, assessment_id: 3, id: 33 }] } ]
+      }
+      mutations.toggleAll(state, { gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      expect(state.gridSelection).toEqual({})
+    })
+
+    it('selects all if one already selected', () => {
+      const state = {
+        gridSelection: { 1: [2]},
+        variables: [
+          { id: 1,
+            label: 'A',
+            name: 'A1',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 1, assessment_id: 1, id: 22 },
+              { assessmentId: 3, assessment_id: 3, id: 33 } ] },
+          { id: 2,
+            label: 'B',
+            name: 'B2',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 1, assessment_id: 1, id: 55 },
+              { assessmentId: 3, assessment_id: 3, id: 66 }] },
+          { id: 3,
+            label: 'C',
+            name: 'C3',
+            variants: [
+              { assessmentId: 1, assessment_id: 1, id: 11 },
+              { assessmentId: 2, assessment_id: 2, id: 22 },
+              { assessmentId: 3, assessment_id: 3, id: 33 }] } ]
+      }
+      mutations.toggleAll(state, { gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      expect(state.gridSelection).toEqual({ 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] })
+    })
+  })
 })
