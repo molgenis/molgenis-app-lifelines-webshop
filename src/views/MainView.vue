@@ -1,7 +1,18 @@
 <template>
-  <div id="main-view" class="row pt-3">
+  <div id="main-view">
+    <div class="row justify-content-md-center pt-3">
+        <div class="col-6">
+          <toast-component
+          class="toast-component"
+          v-if="toast"
+          :type="toast.type"
+          :message="toast.message"
+          @toastCloseBtnClicked="clearToast">
+          </toast-component>
+        </div>
+    </div>
+    <div class="row pt-3">
       <div class="col-12" >
-
           <ul class="nav nav-tabs">
               <li class="nav-item">
                   <a class="nav-link" :class="{active: (activeTab == 'variables')}" href="#" @click="activeTab = 'variables'">Shop</a>
@@ -19,7 +30,7 @@
           <div v-else>
               <cart-view  class="mt-3" />
           </div>
-
+      </div>
       </div>
   </div>
 </template>
@@ -29,14 +40,26 @@ import Vue from 'vue'
 import ContentView from './ContentView.vue'
 import SidebarView from './SidebarView.vue'
 import CartView from './CartView.vue'
+import ToastComponent from '../components/ToastComponent.vue'
+import { mapState, mapMutations } from 'vuex'
 
 export default Vue.extend({
   name: 'MainView',
-  components: { ContentView, SidebarView, CartView },
+  components: { ContentView, SidebarView, CartView, ToastComponent },
   data: () => {
     return {
       activeTab: 'variables'
     }
+  },
+  computed: {
+    ...mapState([
+      'toast'
+    ])
+  },
+  methods: {
+    ...mapMutations([
+      'clearToast'
+    ])
   }
 })
 </script>

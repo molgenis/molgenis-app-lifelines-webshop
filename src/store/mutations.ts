@@ -1,4 +1,4 @@
-import ApplicationState from '@/types/applicationState'
+import ApplicationState, { Toast } from '@/types/ApplicationState'
 import Variable from '@/types/Variable'
 import Assessment from '@/types/Assessment'
 import Count from '@/types/Count'
@@ -6,6 +6,12 @@ import Vue from 'vue'
 import GridSelection from '@/types/GridSelection'
 
 export default {
+  setToast (state: ApplicationState, toast: Toast) {
+    state.toast = toast
+  },
+  clearToast (state: ApplicationState) {
+    state.toast = null
+  },
   updateGenderFilter (state: ApplicationState, selectedGenders: string[]) {
     state.facetFilter.gender = selectedGenders
   },
@@ -49,6 +55,9 @@ export default {
   updateVariantCounts (state: ApplicationState, variantCounts: Count[]) {
     state.variantCounts = variantCounts
   },
+  updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
+    state.gridSelection = gridSelection
+  },
   toggleGridSelection ({ gridSelection }: { gridSelection: GridSelection },
     { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
     if (!gridSelection.hasOwnProperty(variableId)) {
@@ -57,7 +66,11 @@ export default {
       const selectedAssessments = gridSelection[variableId]
       const assessmentIndex = selectedAssessments.indexOf(assessmentId)
       if (assessmentIndex >= 0) {
-        selectedAssessments.splice(assessmentIndex, 1)
+        if (selectedAssessments.length === 1) {
+          Vue.delete(gridSelection, variableId)
+        } else {
+          selectedAssessments.splice(assessmentIndex, 1)
+        }
       } else {
         selectedAssessments.push(assessmentId)
       }
