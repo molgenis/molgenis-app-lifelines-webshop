@@ -39,7 +39,7 @@ const state: ApplicationState = {
   treeOpenSection: '',
   gridSelection: {},
   variantCounts: [],
-  assessments: []
+  assessments: {}
 }
 
 export default state

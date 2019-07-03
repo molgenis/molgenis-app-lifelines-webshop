@@ -3,6 +3,7 @@ import api from '@molgenis/molgenis-api-client'
 import { tryAction } from './helpers'
 import GridSelection from '@/types/GridSelection'
 import { Variable, VariableWithVariants } from '@/types/Variable'
+import Assessment from '@/types/Assessment'
 
 export default {
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -41,7 +42,10 @@ export default {
   }),
   loadAssessments: tryAction(async ({ commit }: any) => {
     const response = await api.get('/api/v2/lifelines_assessment')
-    commit('updateAssessments', response.items)
+    commit('updateAssessments', response.items.reduce((accum: { [key:number]: Assessment }, assessment: Assessment) => {
+      accum[assessment.id] = assessment
+      return accum
+    }, {}))
   }),
   loadVariables: tryAction(async ({ state, commit } : any) => {
     const [response0, response1] = await Promise.all([

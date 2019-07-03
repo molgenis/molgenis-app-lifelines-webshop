@@ -117,10 +117,10 @@ describe('actions', () => {
     it('loads the assessments and commits them', async (done) => {
       const commit = jest.fn()
       await actions.loadAssessments({ commit })
-      expect(commit).toHaveBeenCalledWith('updateAssessments', [
-        { id: 1, name: '1A' },
-        { id: 2, name: '1B' }
-      ])
+      expect(commit).toHaveBeenCalledWith('updateAssessments', {
+        1: { id: 1, name: '1A' },
+        2: { id: 2, name: '1B' }
+      })
       done()
     })
   })

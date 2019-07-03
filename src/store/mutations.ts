@@ -52,7 +52,7 @@ export default {
   updateGridVariables (state: ApplicationState, gridVariables: VariableWithVariants[]) {
     state.gridVariables = gridVariables
   },
-  updateAssessments (state: ApplicationState, assessments: Assessment[]) {
+  updateAssessments (state: ApplicationState, assessments: { [key:number]: Assessment }) {
     state.assessments = assessments
   },
   updateVariantCounts (state: ApplicationState, variantCounts: Count[]) {
