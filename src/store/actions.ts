@@ -69,8 +69,8 @@ export default {
         return soFar
       }, {})
     commit('updateVariables', variableMap)
-  },
-  async loadGridVariables ({ state, commit } : any) {
+  }),
+  loadGridVariables: tryAction(async ({ state, commit } : any) => {
     commit('updateGridVariables', [])
     const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${state.treeSelected}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000`)
     commit('updateGridVariables', response.items
