@@ -1,10 +1,11 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
+import { tryAction } from './helpers'
 import GridSelection from '@/types/GridSelection'
 import { Variable, VariableWithVariants } from '@/types/Variable'
 
 export default {
-  loadTreeStructure ({ commit } : any) {
+  loadTreeStructure: tryAction(({ commit } : any) => {
     // Show simple initial tree (only the parents)
     const sections = api.get('/api/v2/lifelines_section?num=100').then((response: any) => {
       let sections:String[][] = []
@@ -42,7 +43,7 @@ export default {
     })
 
     // Build final tree
-    Promise.all([sections, subSections, tree]).then(([sections, subSections, treeStructure]) => {
+    return Promise.all([sections, subSections, tree]).then(([sections, subSections, treeStructure]) => {
       const final = treeStructure.map((item:any) => {
         return {
           name: sections[item.key],
@@ -51,12 +52,12 @@ export default {
       })
       commit('updateTreeStructure', final)
     })
-  },
-  async loadAssessments ({ commit }: any) {
+  }),
+  loadAssessments: tryAction(async ({ commit }: any) => {
     const response = await api.get('/api/v2/lifelines_assessment')
     commit('updateAssessments', response.items)
-  },
-  async loadVariables ({ state, commit } : any) {
+  }),
+  loadVariables: tryAction(async ({ state, commit } : any) => {
     const [response0, response1] = await Promise.all([
       api.get('/api/v2/lifelines_variable?attrs=id,name,label&num=10000'),
       api.get('/api/v2/lifelines_variable?attrs=id,name,label&num=10000&start=10000')
@@ -82,8 +83,8 @@ export default {
             assessmentId: variant.assessment_id
           }))
       })))
-  },
-  async loadGridData ({ commit, getters }: any) {
+  }),
+  loadGridData: tryAction(async ({ commit, getters }: any) => {
     commit('updateVariantCounts', [])
     let url = '/api/v2/lifelines_who_when?aggs=x==variant_id'
     if (getters.rsql) {
@@ -95,16 +96,16 @@ export default {
       count: cell[0]
     }))
     commit('updateVariantCounts', variantCounts)
-  },
-  async save ({ state: { gridSelection } }: { state: {gridSelection: GridSelection} }) {
+  }),
+  save: tryAction(async ({ state: { gridSelection } }: { state: {gridSelection: GridSelection} }) => {
     const body = { selection: JSON.stringify(gridSelection) }
     const response = await api.post('/api/v1/lifelines_cart', { body: JSON.stringify(body) })
     const location: string = response.headers.get('Location')
     const id: string = location.substring(location.lastIndexOf('/') + 1)
-  },
-  async load ({ commit }:any, id: string) {
+  }),
+  load: tryAction(async ({ commit }:any, id: string) => {
     const response = await api.get(`/api/v2/lifelines_cart/${id}`)
     const gridSelection = JSON.parse(response.selection)
     commit('updateGridSelection', gridSelection)
-  }
+  })
 }
