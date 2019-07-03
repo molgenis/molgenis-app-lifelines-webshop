@@ -186,7 +186,6 @@ export default Vue.extend({
 
   .spinner {
     width: 100%;
-    height: 5%;
   }
 
   .table-loading {
