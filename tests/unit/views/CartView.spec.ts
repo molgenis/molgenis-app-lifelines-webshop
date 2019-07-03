@@ -55,11 +55,16 @@ describe('CartView.vue', () => {
     })
   })
 
-  it('renders cart view', () => {
+  it('renders cart view', (done) => {
     // @ts-ignore
     assessmentsRepository.getAssessments.mockResolvedValue(mockedAssesments)
     const wrapper = shallowMount(CartView, { store, localVue })
     expect(wrapper.exists()).toBeTruthy()
     expect(wrapper.find('#cart-view').exists()).toBeTruthy()
+    localVue.nextTick(() => {
+      expect(wrapper.findAll('li').at(0).text()).toEqual('var 123  ( assessment1,assessment3 )')
+      expect(wrapper.findAll('li').at(1).text()).toEqual('var 456  ( assessment3 )')
+      done()
+    })
   })
 })
