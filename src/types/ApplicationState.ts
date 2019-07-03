@@ -1,4 +1,4 @@
-import FacetOption from '@/types/facetOption'
+import FacetOption from '@/types/FacetOption'
 import Variable from '@/types/Variable'
 import Count from '@/types/Count'
 import Assessment from '@/types/Assessment'
