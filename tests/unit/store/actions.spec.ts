@@ -14,6 +14,28 @@ jest.mock('@molgenis/molgenis-api-client', () => {
         { id: 2, name: '1B' }
       ]
     },
+    '/api/v2/lifelines_variable?attrs=id,name,label&num=10000': {
+      items: [{
+        id: 2,
+        name: 'ARZON',
+        label: 'Suncream used'
+      }, {
+        id: 3,
+        name: 'SAF',
+        label: 'SAF'
+      }]
+    },
+    '/api/v2/lifelines_variable?attrs=id,name,label&num=10000&start=10000': {
+      items: [{
+        id: 4,
+        name: 'UVREFLECT',
+        label: 'Reflection'
+      }, {
+        id: 5,
+        name: 'ARCREME',
+        label: 'Skin cream used'
+      }]
+    },
     '/api/v2/lifelines_subsection_variable?q=subsection_id==4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000': {
       items: [{
         variable_id: {
@@ -103,19 +125,34 @@ describe('actions', () => {
     })
   })
 
-  describe('loadVariables', () => {
+  describe('loadGridVariables', () => {
     it('loads variables for selected subsection', async (done) => {
       const commit = jest.fn()
-      const action = actions.loadVariables({ state: { treeSelected: 4 }, commit })
-      expect(commit).toHaveBeenCalledWith('updateVariables', [])
+      const action = actions.loadGridVariables({ state: { treeSelected: 4 }, commit })
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
       await action
       const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
-      expect(commit).toHaveBeenCalledWith('updateVariables', [
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', [
         { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant] },
         { 'id': 3, 'label': 'SAF', 'name': 'SAF', 'variants': [variant] },
         { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT', 'variants': [variant] },
         { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant] }
       ])
+      done()
+    })
+  })
+
+  describe('loadVariables', () => {
+    it('loads all variables', async (done) => {
+      const commit = jest.fn()
+      const action = actions.loadVariables({ commit })
+      await action
+      expect(commit).toHaveBeenCalledWith('updateVariables', {
+        2: { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON' },
+        3: { 'id': 3, 'label': 'SAF', 'name': 'SAF' },
+        4: { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT' },
+        5: { 'id': 5, 'label': 'Skin cream used', 'name': 'ARCREME' }
+      })
       done()
     })
   })

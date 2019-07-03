@@ -35,11 +35,11 @@ describe('CollapsibleTree.vue', () => {
   })
 
   it('can close and hide children', () => {
-    expect(wrapper.find('.block-expander').classes('expanded')).toBeFalsy()
+    expect(wrapper.find('.block-expander').classes('open')).toBeFalsy()
     wrapper.find('[title="test-parent"]').trigger('click')
-    expect(wrapper.find('.block-expander').classes('expanded')).toBeTruthy()
+    expect(wrapper.find('.block-expander').classes('open')).toBeTruthy()
     wrapper.find('[title="test-parent"]').trigger('click')
-    expect(wrapper.find('.block-expander').classes('expanded')).toBeFalsy()
+    expect(wrapper.find('.block-expander').classes('open')).toBeFalsy()
   })
 
   it('can select child', () => {

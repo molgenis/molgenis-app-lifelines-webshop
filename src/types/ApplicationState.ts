@@ -1,5 +1,5 @@
 import FacetOption from '@/types/FacetOption'
-import Variable from '@/types/Variable'
+import { Variable, VariableWithVariants } from '@/types/Variable'
 import Count from '@/types/Count'
 import Assessment from '@/types/Assessment'
 import GridSelection from '@/types/GridSelection'
@@ -25,10 +25,12 @@ export default interface ApplicationState {
   },
   sectionList: string[],
   subSectionList: string[],
-  variables: Variable[]
+  treeStructure: Object[]
+  variables: { [key:number]: Variable }
+  gridVariables: VariableWithVariants[]
   variantCounts: Count[]
   assessments: Assessment[]
-  treeStructure: Object[]
   treeSelected: number
+  treeOpenSection: string
   gridSelection: GridSelection
 }
