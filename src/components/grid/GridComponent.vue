@@ -30,14 +30,14 @@
           <tr>
             <th></th>
             <td>
-              <facet-option class="selectAll gridItem" v-on:facetToggled="toggleGrid">All</facet-option>
+              <button class="ll-facet-option btn btn-sm selectAll gridItem btn-outline-secondary" @click="toggleGrid">All</button>
             </td>
             <td v-for="assessment in gridAssessments"
                 :key="assessment.id"
             >
-              <facet-option class="selectCol gridItem" v-on:facetToggled="selectColumn(assessment.id)">
+              <button class="ll-facet-option btn btn-sm selectCol gridItem btn-outline-secondary" @click="selectColumn(assessment.id)">
                 <font-awesome-icon icon="arrow-down"/>
-              </facet-option>
+              </button>
             </td>
           </tr>
 
@@ -52,19 +52,19 @@
           </span>
             </th>
             <td>
-              <facet-option class="selectRow gridItem" v-on:facetToggled="toggleRow(gridVariables[rowIndex].id)">
+              <button class="ll-facet-option btn btn-sm selectRow gridItem btn-outline-secondary" @click="toggleRow(gridVariables[rowIndex].id)">
                 <font-awesome-icon icon="arrow-right"/>
-              </facet-option>
+              </button>
             </td>
             <td :key="colIndex"
                 v-for="(count,colIndex) in row"
             >
-              <facet-option
-                @facetToggled="toggle(rowIndex, colIndex)"
-                :isSelected="gridSelections[rowIndex][colIndex]"
-                class="selectItem gridItem">
+              <button
+                @click="toggle(rowIndex, colIndex)"
+                :class="{ 'btn-secondary': !!isSelected(gridSelections[rowIndex][colIndex]), 'btn-outline-secondary': !isSelected(isSelected(gridSelections[rowIndex][colIndex])) }"
+                class="ll-facet-option btn btn-sm selectItem gridItem">
                 {{formatter(count)}}
-              </facet-option>
+              </button>
             </td>
           </tr>
         </table>
@@ -76,7 +76,6 @@
 <script>
 import Vue from 'vue'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
-import FacetOption from '../facets/FacetOption.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -85,13 +84,19 @@ import SpinnerAnimation from '../animations/SpinnerAnimation.vue'
 library.add(faArrowDown, faArrowRight, faArrowsAlt)
 
 export default Vue.extend({
-  components: { FacetOption, FontAwesomeIcon, SpinnerAnimation },
+  components: { FontAwesomeIcon, SpinnerAnimation },
   methods: {
     formatter (num) {
       return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
     },
     selectColumn (assessmentId) {
       this.toggleGridColumn({ assessmentId })
+    },
+    hoverColumn () {
+      console.log('Hover!')
+    },
+    isSelected (selected) {
+      return selected
     },
     toggleRow (variableId) {
       this.toggleGridRow({
@@ -107,6 +112,9 @@ export default Vue.extend({
         variableId: this.gridVariables[rowIndex].id,
         assessmentId: this.gridAssessments[colIndex].id
       })
+    },
+    toggleSelectedClass () {
+
     },
     ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
     ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData'])
