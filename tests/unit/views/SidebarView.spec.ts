@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils'
 import SidebarView from '@/views/SidebarView.vue'
+import emptyState from '@/store/state'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ApplicationState from '@/types/ApplicationState'
@@ -15,30 +16,7 @@ describe('SidebarView.vue', () => {
   let commitMock = jest.fn()
 
   beforeEach(() => {
-    state = {
-      toast: null,
-      variables: [],
-      variantCounts: [],
-      assessments: [],
-      gridSelection: {},
-      genderOptions: [{ value: '1', text: 'Male' }],
-      subcohortOptions: [{ value: '101', text: 'baseline' }],
-      ageGroupOptions: [],
-      ageAtOptions: [],
-      facetFilter: {
-        gender: [],
-        subcohort: [],
-        ageGroupAt1A: [],
-        ageGroupAt2A: [],
-        ageGroupAt3A: [],
-        yearOfBirthRange: []
-      },
-      treeStructure: [],
-      sectionList: [],
-      subSectionList: [],
-      treeSelected: -1
-    }
-
+    state = { ...emptyState }
     wrapper = shallowMount(SidebarView, {
       mocks: {
         $store: {

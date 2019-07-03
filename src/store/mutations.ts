@@ -1,5 +1,5 @@
 import ApplicationState, { Toast } from '@/types/ApplicationState'
-import Variable from '@/types/Variable'
+import { Variable, VariableWithVariants } from '@/types/Variable'
 import Assessment from '@/types/Assessment'
 import Count from '@/types/Count'
 import Vue from 'vue'
@@ -37,17 +37,20 @@ export default {
   updateTreeSelection (state: ApplicationState, selection: number) {
     state.treeSelected = selection
   },
-  updateSection (state: ApplicationState, sections: string[]) {
+  updateSections (state: ApplicationState, sections: string[]) {
     state.sectionList = sections
   },
-  updateTreeStructure (state: ApplicationState, sections: string[]) {
-    state.treeStructure = sections
-  },
-  updateSubSection (state: ApplicationState, subSections: string[]) {
+  updateSubSections (state: ApplicationState, subSections: string[]) {
     state.subSectionList = subSections
   },
-  updateVariables (state: ApplicationState, variables: Variable[]) {
+  updateSectionTree (state: ApplicationState, sections: string[]) {
+    state.treeStructure = sections
+  },
+  updateVariables (state: ApplicationState, variables: {[key:number]: Variable}) {
     state.variables = variables
+  },
+  updateGridVariables (state: ApplicationState, gridVariables: VariableWithVariants[]) {
+    state.gridVariables = gridVariables
   },
   updateAssessments (state: ApplicationState, assessments: Assessment[]) {
     state.assessments = assessments
@@ -57,6 +60,51 @@ export default {
   },
   updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
     state.gridSelection = gridSelection
+  },
+  toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
+    const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))
+    if (allSelected) {
+      gridVariables.forEach((variable) => {
+        const selectedAssessments = gridSelection[variable.id]
+        const assessmentIndex = selectedAssessments.indexOf(assessmentId)
+        if (assessmentIndex >= 0) {
+          selectedAssessments.splice(assessmentIndex, 1)
+        }
+      })
+    } else {
+      gridVariables.forEach((variable) => {
+        if (!gridSelection.hasOwnProperty(variable.id)) {
+          Vue.set(gridSelection, variable.id, [assessmentId])
+        } else {
+          const selectedAssessments = gridSelection[variable.id]
+          if (!selectedAssessments.includes(assessmentId)) {
+            selectedAssessments.push(assessmentId)
+          }
+        }
+      })
+    }
+  },
+  toggleGridRow ({ gridSelection }: { gridSelection: GridSelection }, { variableId, gridAssessments }: {variableId: number, gridAssessments: Assessment[] }) {
+    if (gridSelection.hasOwnProperty(variableId) && (gridSelection[variableId].length === gridAssessments.length)) {
+      Vue.delete(gridSelection, variableId)
+    } else {
+      Vue.set(gridSelection, variableId, gridAssessments.map((it) => it.id))
+    }
+  },
+  toggleAll ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: VariableWithVariants[]}, { gridAssessments }: {gridAssessments: Assessment[] }) {
+    // For each variable all assessments are selected
+    const allSelected = gridVariables.every((variable) => {
+      return gridSelection.hasOwnProperty(variable.id) && (gridSelection[variable.id].length === gridAssessments.length)
+    })
+    if (allSelected) {
+      gridVariables.forEach((variable) => {
+        Vue.delete(gridSelection, variable.id)
+      })
+    } else {
+      gridVariables.forEach((variable) => {
+        Vue.set(gridSelection, variable.id, gridAssessments.map((it) => it.id))
+      })
+    }
   },
   toggleGridSelection ({ gridSelection }: { gridSelection: GridSelection },
     { variableId, assessmentId }: { variableId: number, assessmentId: number }) {

@@ -1,19 +1,18 @@
 <template>
   <div id="tree-view">
-    <collapsible-tree v-model="selection" :structure="structure" />
+    <collapsible-tree v-model="selection" :structure="treeStructure" />
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import CollapsibleTree from '../components/tree/CollapsibleTree.vue'
+import { mapGetters } from 'vuex'
 
 export default Vue.extend({
   name: 'TreeView',
   computed: {
-    structure () {
-      return this.$store.state.treeStructure
-    },
+    ...mapGetters(['treeStructure']),
     selection: {
       get () {
         return this.$store.state.treeSelected
@@ -24,7 +23,9 @@ export default Vue.extend({
     }
   },
   created () {
-    this.$store.dispatch('loadTreeStructure')
+    this.$store.dispatch('loadSections')
+    this.$store.dispatch('loadSubSections')
+    this.$store.dispatch('loadSectionTree')
   },
   components: { CollapsibleTree }
 })
