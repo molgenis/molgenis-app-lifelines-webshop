@@ -30,7 +30,7 @@
           <tr>
             <th></th>
             <td>
-              <facet-option class="selectAll gridItem">All</facet-option>
+              <facet-option class="selectAll gridItem" v-on:facetToggled="toggleGrid">All</facet-option>
             </td>
             <td v-for="assessment in gridAssessments"
                 :key="assessment.id"
@@ -58,7 +58,6 @@
             </td>
             <td :key="colIndex"
                 v-for="(count,colIndex) in row"
-                :class="'grid-col-'+colIndex"
             >
               <facet-option
                 @facetToggled="toggle(rowIndex, colIndex)"
@@ -100,13 +99,16 @@ export default Vue.extend({
         gridAssessments: this.gridAssessments
       })
     },
+    toggleGrid () {
+      this.toggleAll({ gridAssessments: this.gridAssessments })
+    },
     toggle (rowIndex, colIndex) {
       this.toggleGridSelection({
         variableId: this.variables[rowIndex].id,
         assessmentId: this.gridAssessments[colIndex].id
       })
     },
-    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn']),
+    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
     ...mapActions(['loadVariables', 'loadAssessments', 'loadGridData'])
   },
   computed: {

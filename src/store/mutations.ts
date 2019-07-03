@@ -88,6 +88,21 @@ export default {
       Vue.set(gridSelection, variableId, gridAssessments.map((it) => it.id))
     }
   },
+  toggleAll ({ gridSelection, variables }: {gridSelection: GridSelection, variables: Variable[]}, { gridAssessments }: {gridAssessments: Assessment[] }) {
+    // For each variable all assessments are selected
+    const allSelected = variables.every((variable) => {
+      return gridSelection.hasOwnProperty(variable.id) && (gridSelection[variable.id].length === gridAssessments.length)
+    })
+    if (allSelected) {
+      variables.forEach((variable) => {
+        Vue.delete(gridSelection, variable.id)
+      })
+    } else {
+      variables.forEach((variable) => {
+        Vue.set(gridSelection, variable.id, gridAssessments.map((it) => it.id))
+      })
+    }
+  },
   toggleGridSelection ({ gridSelection }: { gridSelection: GridSelection },
     { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
     if (!gridSelection.hasOwnProperty(variableId)) {
