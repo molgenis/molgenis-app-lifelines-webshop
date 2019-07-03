@@ -90,9 +90,6 @@ export default {
     const id: string = location.substring(location.lastIndexOf('/') + 1)
   }),
   load: tryAction(async ({ commit }:any, id: string) => {
-    const response = await api.get(`/api/v2/aaaac25subz7tdqidk7exmyaae/${id}`)
-  },
-  async load ({ commit }:any, id: string) {
     const response = await api.get(`/api/v2/lifelines_cart/${id}`)
     const gridSelection = JSON.parse(response.selection)
     commit('updateGridSelection', gridSelection)
