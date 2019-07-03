@@ -301,7 +301,7 @@ describe('mutations', () => {
 
     it('selects all if one already selected', () => {
       const state = {
-        gridSelection: { 1: [2]},
+        gridSelection: { 1: [2] },
         variables: [
           { id: 1,
             label: 'A',
