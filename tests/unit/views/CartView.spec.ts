@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import * as assessmentsRepository from '@/repository/assessmentsRepository.ts'
 
 jest.mock('@/repository/assessmentsRepository.ts', () => ({
-  getAssessments: jest.fn(),
+  getAssessments: jest.fn()
 }))
 
 const mockedAssesments = {
@@ -21,7 +21,6 @@ const mockedAssesments = {
     name: 'assessment3'
   }
 }
-   
 
 describe('CartView.vue', () => {
   const localVue = createLocalVue()
