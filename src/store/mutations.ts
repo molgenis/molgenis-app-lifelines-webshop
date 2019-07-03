@@ -61,10 +61,10 @@ export default {
   updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
     state.gridSelection = gridSelection
   },
-  toggleGridColumn ({ gridSelection, variables }: {gridSelection: GridSelection, variables: Variable[]}, { assessmentId } : {assessmentId: number}) {
-    const allSelected = variables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))
+  toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
+    const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))
     if (allSelected) {
-      variables.forEach((variable) => {
+      gridVariables.forEach((variable) => {
         const selectedAssessments = gridSelection[variable.id]
         const assessmentIndex = selectedAssessments.indexOf(assessmentId)
         if (assessmentIndex >= 0) {
@@ -72,7 +72,7 @@ export default {
         }
       })
     } else {
-      variables.forEach((variable) => {
+      gridVariables.forEach((variable) => {
         if (!gridSelection.hasOwnProperty(variable.id)) {
           Vue.set(gridSelection, variable.id, [assessmentId])
         } else {
@@ -91,17 +91,17 @@ export default {
       Vue.set(gridSelection, variableId, gridAssessments.map((it) => it.id))
     }
   },
-  toggleAll ({ gridSelection, variables }: {gridSelection: GridSelection, variables: Variable[]}, { gridAssessments }: {gridAssessments: Assessment[] }) {
+  toggleAll ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: VariableWithVariants[]}, { gridAssessments }: {gridAssessments: Assessment[] }) {
     // For each variable all assessments are selected
-    const allSelected = variables.every((variable) => {
+    const allSelected = gridVariables.every((variable) => {
       return gridSelection.hasOwnProperty(variable.id) && (gridSelection[variable.id].length === gridAssessments.length)
     })
     if (allSelected) {
-      variables.forEach((variable) => {
+      gridVariables.forEach((variable) => {
         Vue.delete(gridSelection, variable.id)
       })
     } else {
-      variables.forEach((variable) => {
+      gridVariables.forEach((variable) => {
         Vue.set(gridSelection, variable.id, gridAssessments.map((it) => it.id))
       })
     }

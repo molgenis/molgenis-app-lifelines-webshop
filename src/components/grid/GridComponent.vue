@@ -52,7 +52,7 @@
           </span>
             </th>
             <td>
-              <facet-option class="selectRow gridItem" v-on:facetToggled="toggleRow(variables[rowIndex].id)">
+              <facet-option class="selectRow gridItem" v-on:facetToggled="toggleRow(gridVariables[rowIndex].id)">
                 <font-awesome-icon icon="arrow-right"/>
               </facet-option>
             </td>

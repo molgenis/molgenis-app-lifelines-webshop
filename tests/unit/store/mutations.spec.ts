@@ -141,7 +141,7 @@ describe('mutations', () => {
     it('selects if none selected', () => {
       const state = {
         gridSelection: {},
-        variables: [
+        gridVariables: [
           { id: 1,
             label: 'A',
             name: 'A1',
@@ -174,7 +174,7 @@ describe('mutations', () => {
     it('removes if all already selected', () => {
       const state = {
         gridSelection: { 1: [2, 3], 2: [2], 3: [2] },
-        variables: [
+        gridVariables: [
           { id: 1,
             label: 'A',
             name: 'A1',
@@ -207,7 +207,7 @@ describe('mutations', () => {
     it('selects all if one already selected', () => {
       const state = {
         gridSelection: { 3: [3] },
-        variables: [
+        gridVariables: [
           { id: 1,
             label: 'A',
             name: 'A1',
@@ -242,7 +242,7 @@ describe('mutations', () => {
     it('selects if none selected', () => {
       const state = {
         gridSelection: {},
-        variables: [
+        gridVariables: [
           { id: 1,
             label: 'A',
             name: 'A1',
@@ -272,7 +272,7 @@ describe('mutations', () => {
     it('removes if all already selected', () => {
       const state = {
         gridSelection: { 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] },
-        variables: [
+        gridVariables: [
           { id: 1,
             label: 'A',
             name: 'A1',
@@ -302,7 +302,7 @@ describe('mutations', () => {
     it('selects all if one already selected', () => {
       const state = {
         gridSelection: { 1: [2] },
-        variables: [
+        gridVariables: [
           { id: 1,
             label: 'A',
             name: 'A1',
