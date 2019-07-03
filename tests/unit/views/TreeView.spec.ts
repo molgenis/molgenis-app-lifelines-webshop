@@ -3,6 +3,7 @@ import TreeView from '@/views/TreeView.vue'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ApplicationState from '@/types/ApplicationState'
+import emptyState from '@/store/state'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -16,23 +17,7 @@ describe('TreeView.vue', () => {
 
   beforeEach(() => {
     state = {
-      toast: null,
-      variantCounts: [],
-      assessments: [],
-      gridSelection: {},
-      variables: [],
-      genderOptions: [{ value: '1', text: 'Male' }],
-      subcohortOptions: [{ value: '101', text: 'baseline' }],
-      ageGroupOptions: [],
-      ageAtOptions: [],
-      facetFilter: {
-        gender: [],
-        subcohort: [],
-        ageGroupAt1A: [],
-        ageGroupAt2A: [],
-        ageGroupAt3A: [],
-        yearOfBirthRange: []
-      },
+      ...emptyState,
       treeStructure: [{
         name: 'parent',
         open: true,
@@ -43,8 +28,6 @@ describe('TreeView.vue', () => {
           }
         ]
       }],
-      sectionList: [],
-      subSectionList: [],
       treeSelected: -1
     }
 

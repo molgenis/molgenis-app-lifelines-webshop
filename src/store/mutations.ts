@@ -1,5 +1,5 @@
 import ApplicationState, { Toast } from '@/types/ApplicationState'
-import Variable from '@/types/Variable'
+import { Variable, VariableWithVariants } from '@/types/Variable'
 import Assessment from '@/types/Assessment'
 import Count from '@/types/Count'
 import Vue from 'vue'
@@ -46,8 +46,11 @@ export default {
   updateSubSection (state: ApplicationState, subSections: string[]) {
     state.subSectionList = subSections
   },
-  updateVariables (state: ApplicationState, variables: Variable[]) {
+  updateVariables (state: ApplicationState, variables: {[key:number]: Variable}) {
     state.variables = variables
+  },
+  updateGridVariables (state: ApplicationState, gridVariables: VariableWithVariants[]) {
+    state.gridVariables = gridVariables
   },
   updateAssessments (state: ApplicationState, assessments: Assessment[]) {
     state.assessments = assessments

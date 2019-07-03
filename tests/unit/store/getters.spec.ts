@@ -4,7 +4,7 @@ import Getters from '@/types/Getters'
 import ApplicationState from '@/types/ApplicationState'
 import Variant from '@/types/Variant'
 import Assessment from '@/types/Assessment'
-import Variable from '@/types/Variable'
+import { Variable, VariableWithVariants } from '@/types/Variable'
 
 describe('getters', () => {
   const emptyGetters: Getters = {
@@ -24,19 +24,19 @@ describe('getters', () => {
   const assessment3A: Assessment = { id: 3, name: '3A' }
   const assessment1B: Assessment = { id: 4, name: '1B' }
 
-  const variable11: Variable = {
+  const variable11: VariableWithVariants = {
     id: 11,
     label: 'variable 11',
     name: 'VAR11',
     variants: [variant2, variant1]
   }
-  const variable12: Variable = {
+  const variable12: VariableWithVariants = {
     id: 12,
     label: 'variable 12',
     name: 'VAR12',
     variants: [variant1]
   }
-  const variable13: Variable = {
+  const variable13: VariableWithVariants = {
     id: 13,
     label: 'variable 13',
     name: 'VAR13',
@@ -47,7 +47,7 @@ describe('getters', () => {
     it('determines unique variants from variables', () => {
       const state: ApplicationState = {
         ...emptyState,
-        variables: [variable11, variable12, variable13]
+        gridVariables: [variable11, variable12, variable13]
       }
       expect(getters.variants(state)).toEqual([variant2, variant1, variant3])
     })
@@ -163,7 +163,7 @@ describe('getters', () => {
     it('computes grid counts', () => {
       const state: ApplicationState = {
         ...emptyState,
-        variables: [variable11, variable12],
+        gridVariables: [variable11, variable12],
         variantCounts: [{ variantId: 1, count: 10 }, { variantId: 2, count: 100 }]
       }
       const gettersParam: Getters = {
@@ -176,7 +176,7 @@ describe('getters', () => {
     it('returns zero if counts are missing', () => {
       const state: ApplicationState = {
         ...emptyState,
-        variables: [variable11, variable12]
+        gridVariables: [variable11, variable12]
       }
       const gettersParam: Getters = {
         ...emptyGetters,
@@ -191,7 +191,7 @@ describe('getters', () => {
     it('computes grid selections', () => {
       const state: ApplicationState = {
         ...emptyState,
-        variables: [variable11, variable12, variable13],
+        gridVariables: [variable11, variable12, variable13],
         gridSelection: { 11: [1, 2], 12: [1] }
       }
       const gettersParam: Getters = {
