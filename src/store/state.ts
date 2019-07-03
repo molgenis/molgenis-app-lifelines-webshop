@@ -1,4 +1,4 @@
-import ApplicationState from '@/types/applicationState'
+import ApplicationState from '@/types/ApplicationState'
 
 const state: ApplicationState = {
   toast: null,

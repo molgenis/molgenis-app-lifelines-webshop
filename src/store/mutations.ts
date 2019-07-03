@@ -55,6 +55,9 @@ export default {
   updateVariantCounts (state: ApplicationState, variantCounts: Count[]) {
     state.variantCounts = variantCounts
   },
+  updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
+    state.gridSelection = gridSelection
+  },
   toggleGridSelection ({ gridSelection }: { gridSelection: GridSelection },
     { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
     if (!gridSelection.hasOwnProperty(variableId)) {
@@ -63,7 +66,11 @@ export default {
       const selectedAssessments = gridSelection[variableId]
       const assessmentIndex = selectedAssessments.indexOf(assessmentId)
       if (assessmentIndex >= 0) {
-        selectedAssessments.splice(assessmentIndex, 1)
+        if (selectedAssessments.length === 1) {
+          Vue.delete(gridSelection, variableId)
+        } else {
+          selectedAssessments.splice(assessmentIndex, 1)
+        }
       } else {
         selectedAssessments.push(assessmentId)
       }
