@@ -27,18 +27,10 @@
 <script>
 import Vue from 'vue'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
-import assessmentsRepository from '../repository/assessmentsRepository.ts'
 
 export default Vue.extend({
   name: 'CartView',
   components: { SpinnerAnimation },
-  data: function () {
-    return {
-      variableAssesments: {},
-      assessments: [],
-      loading: true
-    }
-  },
   computed: {
     gridSelection () {
       return this.$store.state.gridSelection
@@ -48,17 +40,22 @@ export default Vue.extend({
     },
     variablesMap () {
       return this.$store.state.variables
-    }
-  },
-  mounted () {
-    assessmentsRepository.getAssessments().then((assessments) => {
+    },
+    assessmentsMap () {
+      return this.$store.state.assessments
+    },
+    variableAssesments () {
+      let variableAssesmentsStings = {}
       for (const [variableId, assessmentIds] of Object.entries(this.gridSelection)) {
-        const assessmentNames = assessmentIds.map(assessmentId => assessments[assessmentId].name)
-        this.variableAssesments[variableId] = '( ' + assessmentNames.join(',') + ' )'
+        const assessmentNames = assessmentIds.map(assessmentId => this.assessmentsMap[assessmentId].name)
+        variableAssesmentsStings[variableId] = '( ' + assessmentNames.join(', ') + ' )'
       }
 
-      this.loading = false
-    })
+      return variableAssesmentsStings
+    },
+    loading () {
+      return !(Object.keys(this.assessmentsMap).length && Object.keys(this.variablesMap).length)
+    }
   }
 })
 </script>
