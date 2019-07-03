@@ -87,7 +87,6 @@ export default {
     const response = await api.post('/api/v1/lifelines_cart', { body: JSON.stringify(body) })
     const location: string = response.headers.get('Location')
     const id: string = location.substring(location.lastIndexOf('/') + 1)
-    console.log('id:', id)
   },
   async load ({ commit }:any, id: string) {
     const response = await api.get(`/api/v2/lifelines_cart/${id}`)

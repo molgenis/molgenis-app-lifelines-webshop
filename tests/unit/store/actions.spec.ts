@@ -152,7 +152,7 @@ describe('actions', () => {
       headers.get.mockReturnValueOnce('https://lifelines.dev.molgenis.org/api/v1/lifelines_cart/fghij')
       await actions.save({ state: { gridSelection: { 1: [2, 3] } } })
       expect(headers.get).toHaveBeenCalledWith('Location')
-      expect(post).toHaveBeenCalledWith('/api/v1/lifelines_cart', { body: '{"selection":"{\\\"1\\\":[2,3]}"}' })
+      expect(post).toHaveBeenCalledWith('/api/v1/lifelines_cart', { body: '{"selection":"{\\"1\\":[2,3]}"}' })
       done()
     })
   })
