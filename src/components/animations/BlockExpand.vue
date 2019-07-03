@@ -1,5 +1,5 @@
 <template>
-  <div class="block-expander" :class="isExpanded&&'open'">
+  <div class="block-expander" :class="{open:isExpanded}">
     <slot />
   </div>
 </template>
@@ -9,6 +9,11 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'BlockExpand',
+  data: function () {
+    return {
+      collapsed: ''
+    }
+  },
   methods: {
     expand () {
       const height = this.$el.scrollHeight
