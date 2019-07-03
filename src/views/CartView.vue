@@ -5,13 +5,13 @@
         <template v-if="selectedVariableIds.length">
            <h5>Selected variables</h5>
            <spinner-animation v-show="loading"/>
-           <ul>
+           <ul v-if="!loading">
              <li
-              v-for="selectedVariable in selectedVariables"
-              :key="selectedVariable.id">
-              <template v-if="selectedVariable.label">{{selectedVariable.label}}</template>
-              <template v-else>{{selectedVariable.name}}</template>
-               <span> {{ varAssesments(selectedVariable.id) }}</span>
+              v-for="variableId in selectedVariableIds"
+              :key="variableId">
+              <template v-if="variablesMap[variableId].label">{{variablesMap[variableId].label}}</template>
+              <template v-else>{{variablesMap[variableId].name}}</template>
+               <span> {{ variableAssesments[variableId] }}</span>
               </li>
            </ul>
         </template>
@@ -35,9 +35,9 @@ export default Vue.extend({
   components: { SpinnerAnimation },
   data: function () {
     return {
-      selectedVariables: [],
+      variableAssesments: {},
       assessments: [],
-      loading: false
+      loading: true
     }
   },
   computed: {
@@ -47,31 +47,18 @@ export default Vue.extend({
     selectedVariableIds () {
       return Object.keys(this.gridSelection)
     },
-    variableAssesments () {
-      let assessments = {}
-
-      for (const [variableId, assessmentIds] of Object.entries(this.gridSelection)) {
-        const assessmentNames = assessmentIds.map(assessmentId => this.assessments[assessmentId].name)
-        assessments[variableId] = '( ' + assessmentNames.join(',') + ' )'
-      }
-
-      return assessments
-    }
-  },
-  methods: {
-    varAssesments (variableId) {
-      return this.variableAssesments[variableId]
+    variablesMap () {
+      return this.$store.state.variables
     }
   },
   mounted () {
-    this.loading = true
-    variableRepository.resolveVariableIds(this.selectedVariableIds).then((vars) => {
-      this.loading = false
-      this.selectedVariables = vars
-    })
-
     assessmentsRepository.getAssessments().then((assessments) => {
-      this.assessments = assessments
+      for (const [variableId, assessmentIds] of Object.entries(this.gridSelection)) {
+        const assessmentNames = assessmentIds.map(assessmentId => assessments[assessmentId].name)
+        this.variableAssesments[variableId] = '( ' + assessmentNames.join(',') + ' )'
+      }
+
+      this.loading = false
     })
   }
 })
