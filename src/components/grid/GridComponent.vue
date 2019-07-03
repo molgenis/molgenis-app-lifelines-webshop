@@ -30,11 +30,12 @@
           <tr>
             <th></th>
             <td>
-              <facet-option class="selectAll gridItem">All</facet-option>
+              <facet-option class="selectAll gridItem" v-on:facetToggled="toggleGrid">All</facet-option>
             </td>
             <td v-for="assessment in gridAssessments"
-                :key="assessment.id">
-              <facet-option class="selectCol gridItem">
+                :key="assessment.id"
+            >
+              <facet-option class="selectCol gridItem" v-on:facetToggled="selectColumn(assessment.id)">
                 <font-awesome-icon icon="arrow-down"/>
               </facet-option>
             </td>
@@ -42,20 +43,22 @@
 
           <tr
             v-for="(row, rowIndex) in grid"
+            :class="'grid-row-'+rowIndex"
             :key="rowIndex"
           >
             <th>
           <span class="variable-title">
-            {{variableName(variables[rowIndex])}}
+            {{variableName(gridVariables[rowIndex])}}
           </span>
             </th>
             <td>
-              <facet-option class="selectRo gridItem">
+              <facet-option class="selectRow gridItem" v-on:facetToggled="toggleRow(gridVariables[rowIndex].id)">
                 <font-awesome-icon icon="arrow-right"/>
               </facet-option>
             </td>
             <td :key="colIndex"
-                v-for="(count,colIndex) in row">
+                v-for="(count,colIndex) in row"
+            >
               <facet-option
                 @facetToggled="toggle(rowIndex, colIndex)"
                 :isSelected="gridSelections[rowIndex][colIndex]"
@@ -87,17 +90,29 @@ export default Vue.extend({
     formatter (num) {
       return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
     },
+    selectColumn (assessmentId) {
+      this.toggleGridColumn({ assessmentId })
+    },
+    toggleRow (variableId) {
+      this.toggleGridRow({
+        variableId,
+        gridAssessments: this.gridAssessments
+      })
+    },
+    toggleGrid () {
+      this.toggleAll({ gridAssessments: this.gridAssessments })
+    },
     toggle (rowIndex, colIndex) {
       this.toggleGridSelection({
-        variableId: this.variables[rowIndex].id,
+        variableId: this.gridVariables[rowIndex].id,
         assessmentId: this.gridAssessments[colIndex].id
       })
     },
-    ...mapMutations(['toggleGridSelection']),
-    ...mapActions(['loadVariables', 'loadAssessments', 'loadGridData'])
+    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
+    ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData'])
   },
   computed: {
-    ...mapState(['treeSelected', 'variables', 'assessments', 'variantCounts']),
+    ...mapState(['treeSelected', 'gridVariables', 'assessments', 'variantCounts']),
     ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections']),
     variableName () {
       return variable => variable.label ? variable.label : variable.name
@@ -108,7 +123,7 @@ export default Vue.extend({
   },
   watch: {
     treeSelected: function () {
-      this.loadVariables()
+      this.loadGridVariables()
     },
     rsql: function () {
       this.loadGridData()
@@ -186,7 +201,6 @@ export default Vue.extend({
 
   .spinner {
     width: 100%;
-    height: 5%;
   }
 
   .table-loading {
