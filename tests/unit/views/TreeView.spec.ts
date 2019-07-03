@@ -16,6 +16,7 @@ describe('TreeView.vue', () => {
 
   beforeEach(() => {
     state = {
+      toast: null,
       variantCounts: [],
       assessments: [],
       gridSelection: {},

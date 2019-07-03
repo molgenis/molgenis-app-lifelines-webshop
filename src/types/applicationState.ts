@@ -4,7 +4,13 @@ import Count from '@/types/Count'
 import Assessment from '@/types/Assessment'
 import GridSelection from '@/types/GridSelection'
 
+export type Toast = {
+  type: 'danger' | 'success',
+  message: string
+}
+
 export default interface ApplicationState {
+  toast: Toast | null,
   genderOptions: FacetOption[],
   subcohortOptions: FacetOption[],
   ageGroupOptions: FacetOption[],

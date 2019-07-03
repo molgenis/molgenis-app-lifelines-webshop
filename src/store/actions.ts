@@ -1,6 +1,7 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
 import { tryAction } from './helpers'
+import GridSelection from '@/types/GridSelection'
 
 export default {
   loadTreeStructure: tryAction(({ commit } : any) => {
@@ -81,5 +82,17 @@ export default {
       count: cell[0]
     }))
     commit('updateVariantCounts', variantCounts)
+  }),
+  save: tryAction(async ({ state: { gridSelection } }: { state: {gridSelection: GridSelection} }) => {
+    const body = { selection: JSON.stringify(gridSelection) }
+    const response = await api.post('/api/v1/aaaac25subz7tdqidk7exmyaae', { body: JSON.stringify(body) })
+    const location: string = response.headers.get('Location')
+    const id: string = location.substring(location.lastIndexOf('/') + 1)
+    console.log('id:', id)
+  }),
+  load: tryAction(async ({ commit }:any, id: string) => {
+    const response = await api.get(`/api/v2/aaaac25subz7tdqidk7exmyaae/${id}`)
+    const gridSelection = JSON.parse(response.selection)
+    commit('updateGridSelection', gridSelection)
   })
 }
