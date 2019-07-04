@@ -190,6 +190,17 @@ describe('actions', () => {
       ])
       done()
     })
+
+    it('does not commit the variant counts if the rsql has changed during the call', async (done) => {
+      const commit = jest.fn()
+      const getters = { rsql: 'll_nr.yob=le=1970' }
+      const action = actions.loadGridData({ commit, getters })
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
+      getters.rsql = ''
+      await action
+      expect(commit).toHaveBeenCalledTimes(1)
+      done()
+    })
   })
 
   describe('save', () => {

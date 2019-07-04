@@ -80,15 +80,18 @@ export default {
   loadGridData: tryAction(async ({ commit, getters }: any) => {
     commit('updateVariantCounts', [])
     let url = '/api/v2/lifelines_who_when?aggs=x==variant_id'
-    if (getters.rsql) {
-      url = `${url}&q=${encodeURIComponent(getters.rsql)}`
+    const rsql = getters.rsql
+    if (rsql) {
+      url = `${url}&q=${encodeURIComponent(rsql)}`
     }
     const { aggs: { matrix, xLabels } } = await api.get(url)
-    const variantCounts = matrix.map((cell: any, index: number) => ({
-      variantId: parseInt(xLabels[index].id),
-      count: cell[0]
-    }))
-    commit('updateVariantCounts', variantCounts)
+    if (getters.rsql === rsql) {
+      const variantCounts = matrix.map((cell: any, index: number) => ({
+        variantId: parseInt(xLabels[index].id),
+        count: cell[0]
+      }))
+      commit('updateVariantCounts', variantCounts)
+    }
   }),
   save: tryAction(async ({ state: { gridSelection } }: { state: {gridSelection: GridSelection} }) => {
     const body = { selection: JSON.stringify(gridSelection) }
