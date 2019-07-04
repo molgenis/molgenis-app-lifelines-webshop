@@ -1,18 +1,9 @@
 <template>
   <div id="grid">
     <div class="row">
-      <div class="col">
-        <table v-if="isLoading && treeSelected!=-1" class="table-loading bg-light">
-          <tr>
-            <td class="spinner-container">
-              <spinner-animation class="spinner mx-auto align-middle"></spinner-animation>
-            </td>
-          </tr>
-        </table>
-
-        <table class="grid-table"
-          v-else-if="treeSelected!=-1"
-        >
+      <div class="col vld-parent grid-col" v-if="treeSelected!=-1">
+        <loading :active.sync="isLoading" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
+        <table class="grid-table" v-show="!isLoading">
           <tr>
             <th>Variable</th>
             <th :colspan="gridAssessments.length + 1">Assessments</th>
@@ -75,17 +66,21 @@
 
 <script>
 import Vue from 'vue'
+// Import component
+import Loading from 'vue-loading-overlay'
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css'
+
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import FacetOption from '../facets/FacetOption.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import SpinnerAnimation from '../animations/SpinnerAnimation.vue'
 
 library.add(faArrowDown, faArrowRight, faArrowsAlt)
 
 export default Vue.extend({
-  components: { FacetOption, FontAwesomeIcon, SpinnerAnimation },
+  components: { FacetOption, FontAwesomeIcon, Loading },
   methods: {
     formatter (num) {
       return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
@@ -199,19 +194,13 @@ export default Vue.extend({
     border-bottom-right-radius: 0;
   }
 
-  .spinner {
-    width: 100%;
-  }
-
-  .table-loading {
-    position: fixed;
-    width: 60%;
-    height: 90%;
-  }
-
   .gridItem {
     display: inline-block;
     margin: 2px;
     width: 3.5rem;
+  }
+
+  .grid-col {
+    height:90vh;
   }
 </style>
