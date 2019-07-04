@@ -32,10 +32,13 @@
             <td>
               <button class="ll-facet-option btn btn-sm selectAll gridItem btn-outline-secondary" @click="toggleGrid">All</button>
             </td>
-            <td v-for="assessment in gridAssessments"
+            <td v-for="(assessment, colIndex) in gridAssessments"
                 :key="assessment.id"
             >
-              <button class="ll-facet-option btn btn-sm selectCol gridItem btn-outline-secondary" @click="selectColumn(assessment.id)">
+              <button class="ll-facet-option btn btn-sm selectCol gridItem btn-outline-secondary"
+                      @click="selectColumn(assessment.id)"
+                      @mouseenter="onMouseEnter(colIndex, 'col')"
+                      @mouseleave="onMouseLeave(colIndex, 'col')">
                 <font-awesome-icon icon="arrow-down"/>
               </button>
             </td>
@@ -52,7 +55,10 @@
           </span>
             </th>
             <td>
-              <button class="ll-facet-option btn btn-sm selectRow gridItem btn-outline-secondary" @click="toggleRow(gridVariables[rowIndex].id)">
+              <button class="ll-facet-option btn btn-sm selectRow gridItem btn-outline-secondary"
+                      @click="toggleRow(gridVariables[rowIndex].id)"
+                      @mouseenter="onMouseEnter(rowIndex, 'row')"
+                      @mouseleave="onMouseLeave(rowIndex, 'row')">
                 <font-awesome-icon icon="arrow-right"/>
               </button>
             </td>
@@ -61,7 +67,7 @@
             >
               <button
                 @click="toggle(rowIndex, colIndex)"
-                :class="{ 'btn-secondary': !!isSelected(gridSelections[rowIndex][colIndex]), 'btn-outline-secondary': !isSelected(isSelected(gridSelections[rowIndex][colIndex])) }"
+                :class="getGridCellClass(rowIndex, colIndex)"
                 class="ll-facet-option btn btn-sm selectItem gridItem">
                 {{formatter(count)}}
               </button>
@@ -92,17 +98,26 @@ export default Vue.extend({
     selectColumn (assessmentId) {
       this.toggleGridColumn({ assessmentId })
     },
-    hoverColumn () {
-      console.log('Hover!')
+    onMouseEnter (index, type) {
+      const collection = Array.from(document.getElementsByClassName('grid-button-' + type + '-' + index))
+      collection.forEach((button) => button.classList.add('gridHover'))
     },
-    isSelected (selected) {
-      return selected
+    onMouseLeave (index, type) {
+      const collection = Array.from(document.getElementsByClassName('grid-button-' + type + '-' + index))
+      collection.forEach((button) => button.classList.remove('gridHover'))
     },
     toggleRow (variableId) {
       this.toggleGridRow({
         variableId,
         gridAssessments: this.gridAssessments
       })
+    },
+    getGridCellClass (rowIndex, colIndex) {
+      const selected = !!this.gridSelections[rowIndex][colIndex]
+      const selectedClass = selected ? 'btn-secondary' : 'btn-outline-secondary'
+      const colClass = ' grid-button-col-' + colIndex
+      const rowClass = ' grid-button-row-' + rowIndex
+      return selectedClass + rowClass + colClass
     },
     toggleGrid () {
       this.toggleAll({ gridAssessments: this.gridAssessments })
@@ -112,9 +127,6 @@ export default Vue.extend({
         variableId: this.gridVariables[rowIndex].id,
         assessmentId: this.gridAssessments[colIndex].id
       })
-    },
-    toggleSelectedClass () {
-
     },
     ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
     ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData'])
@@ -221,5 +233,11 @@ export default Vue.extend({
     display: inline-block;
     margin: 2px;
     width: 3.5rem;
+  }
+
+  .gridHover {
+    color: #fff;
+    background-color: var(--secondary);
+    border-color: var(--secondary);
   }
 </style>
