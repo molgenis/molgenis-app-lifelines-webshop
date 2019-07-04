@@ -1,5 +1,8 @@
 <template>
   <div id="main-view">
+    <div class="pt-3">
+      <img src="logo.svg" alt="Lifelines" />
+    </div>
     <div class="row justify-content-md-center pt-3">
         <div class="col-6">
           <toast-component

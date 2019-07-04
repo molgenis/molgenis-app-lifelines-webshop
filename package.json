@@ -16,6 +16,7 @@
     "@molgenis/molgenis-api-client": "^3.1.0",
     "@molgenis/molgenis-i18n-js": "^0.1.1",
     "@molgenis/rsql": "^0.1.4",
+    "bootstrap": "^4.3.1",
     "core-js": "2.6.8",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
@@ -38,6 +39,8 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "geckodriver": "^1.16.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.4.3",
     "vue-template-compiler": "^2.5.21"
