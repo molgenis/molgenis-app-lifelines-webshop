@@ -5,6 +5,7 @@ import { Variable } from '@/types/Variable'
 import Assessment from '@/types/Assessment'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
+import router from '@/router'
 
 export default {
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -94,17 +95,20 @@ export default {
       commit('updateVariantCounts', variantCounts)
     }
   }),
-  save: tryAction(async ({ state }: {state: ApplicationState}) => {
+  save: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
     const body = { contents: JSON.stringify(toCart(state)) }
     const response = await api.post('/api/v1/lifelines_cart', { body: JSON.stringify(body) })
     const location: string = response.headers.get('Location')
     const id: string = location.substring(location.lastIndexOf('/') + 1)
+    commit('setToast', { type: 'success', message: 'Saved order with id ' + id })
+    router.push({name: 'load', params: {cartId: id}})
   }),
-  load: tryAction(async ({ state, commit }:{state: ApplicationState, commit: any}, id: string) => {
+  load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, id: string) => {
     const response = await api.get(`/api/v2/lifelines_cart/${id}`)
     const cart: Cart = JSON.parse(response.contents)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
+    commit('setToast', { type: 'success', message: 'Loaded order with id ' + id })
   })
 }

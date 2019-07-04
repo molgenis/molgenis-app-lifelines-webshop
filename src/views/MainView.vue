@@ -1,10 +1,10 @@
 <template>
   <div id="main-view">
-    <div class="pt-3">
-      <img src="logo.svg" alt="Lifelines" />
-    </div>
-    <div class="row justify-content-md-center pt-3">
-        <div class="col-6">
+    <div class="row pt-3">
+      <div class="col col-4">
+        <img src="logo.svg" alt="Lifelines" />
+      </div>
+      <div class="col col-7">
           <toast-component
           class="toast-component"
           v-if="toast"
@@ -13,6 +13,9 @@
           @toastCloseBtnClicked="clearToast">
           </toast-component>
         </div>
+      <div class="col col-1">
+        <button class="btn btn-outline-success" id="order" type="button" @click="save">Order</button>
+      </div>
     </div>
     <div class="row pt-3">
       <div class="col-12" >
@@ -44,7 +47,7 @@ import ContentView from './ContentView.vue'
 import SidebarView from './SidebarView.vue'
 import CartView from './CartView.vue'
 import ToastComponent from '../components/ToastComponent.vue'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default Vue.extend({
   name: 'MainView',
@@ -62,7 +65,17 @@ export default Vue.extend({
   methods: {
     ...mapMutations([
       'clearToast'
+    ]),
+    ...mapActions([
+      'save', 'load', 'loadVariables', 'loadAssessments'
     ])
+  },
+  async created () {
+    const promises = Promise.all([this.loadVariables(), this.loadAssessments()])
+    await promises
+    if (this.$route.params.cartId) {
+      this.load(this.$route.params.cartId)
+    }
   }
 })
 </script>

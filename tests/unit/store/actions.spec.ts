@@ -1,4 +1,5 @@
 import actions from '@/store/actions'
+import router from '@/router'
 import { Cart } from '@/types/Cart'
 import emptyState from '@/store/state'
 
@@ -125,6 +126,9 @@ jest.mock('@molgenis/molgenis-api-client', () => {
     post: jest.fn()
   }
 })
+jest.mock('@/router', () => ({
+  push: jest.fn()
+}))
 
 describe('actions', () => {
   describe('loadAssessments', () => {
@@ -220,6 +224,7 @@ describe('actions', () => {
   describe('save', () => {
     it('saves grid selection', async (done) => {
       const headers = { get: jest.fn() }
+      const commit = jest.fn()
       post.mockReturnValueOnce({ headers })
       headers.get.mockReturnValueOnce('https://lifelines.dev.molgenis.org/api/v1/lifelines_cart/fghij')
       const state: ApplicationState = {
@@ -232,9 +237,11 @@ describe('actions', () => {
           ageGroupAt1A: ['18-64', '65+']
         }
       }
-      await actions.save({ state })
+      await actions.save({ state, commit })
       expect(headers.get).toHaveBeenCalledWith('Location')
       expect(post).toHaveBeenCalledWith('/api/v1/lifelines_cart', { body: JSON.stringify({ contents: cartContents }) })
+      expect(commit).toHaveBeenCalledWith('setToast', {type: 'success', message: 'Saved order with id fghij'})
+      expect(router.push).toHaveBeenCalledWith({name: 'load', params: {cartId: 'fghij'}})
       done()
     })
   })
