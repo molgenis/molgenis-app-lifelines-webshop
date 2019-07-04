@@ -51,7 +51,7 @@ describe('CartView.vue', () => {
   it('renders cart view', () => {
     const wrapper = shallowMount(CartView, { store, localVue })
     expect(wrapper.find('#cart-view').exists()).toBeTruthy()
-    expect(wrapper.findAll('li').at(0).text()).toEqual('var 123  ( assessment1, assessment3 )')
-    expect(wrapper.findAll('li').at(1).text()).toEqual('var 456  ( assessment3 )')
+    expect(wrapper.findAll('li').at(0).text()).toEqual('var 123 ( assessment1, assessment3 )')
+    expect(wrapper.findAll('li').at(1).text()).toEqual('var 456 ( assessment3 )')
   })
 })
