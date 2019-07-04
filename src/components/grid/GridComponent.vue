@@ -30,15 +30,20 @@
           <tr>
             <th></th>
             <td>
-              <button class="ll-facet-option btn btn-sm selectAll gridItem btn-outline-secondary" @click="toggleGrid">All</button>
+              <button class="ll-facet-option btn btn-sm selectAll gridItem btn-outline-secondary"
+                      @click="toggleGrid"
+                      @mouseenter="onMouseEnter('gridItem')"
+                      @mouseleave="onMouseLeave('gridItem')">
+                All
+              </button>
             </td>
             <td v-for="(assessment, colIndex) in gridAssessments"
                 :key="assessment.id"
             >
               <button class="ll-facet-option btn btn-sm selectCol gridItem btn-outline-secondary"
                       @click="selectColumn(assessment.id)"
-                      @mouseenter="onMouseEnter(colIndex, 'col')"
-                      @mouseleave="onMouseLeave(colIndex, 'col')">
+                      @mouseenter="onMouseEnter('grid-button-col-'+colIndex)"
+                      @mouseleave="onMouseLeave('grid-button-col-'+colIndex)">
                 <font-awesome-icon icon="arrow-down"/>
               </button>
             </td>
@@ -57,8 +62,8 @@
             <td>
               <button class="ll-facet-option btn btn-sm selectRow gridItem btn-outline-secondary"
                       @click="toggleRow(gridVariables[rowIndex].id)"
-                      @mouseenter="onMouseEnter(rowIndex, 'row')"
-                      @mouseleave="onMouseLeave(rowIndex, 'row')">
+                      @mouseenter="onMouseEnter('grid-button-row-'+rowIndex)"
+                      @mouseleave="onMouseLeave('grid-button-row-'+rowIndex)">
                 <font-awesome-icon icon="arrow-right"/>
               </button>
             </td>
@@ -98,12 +103,12 @@ export default Vue.extend({
     selectColumn (assessmentId) {
       this.toggleGridColumn({ assessmentId })
     },
-    onMouseEnter (index, type) {
-      const collection = Array.from(document.getElementsByClassName('grid-button-' + type + '-' + index))
+    onMouseEnter (className) {
+      const collection = Array.from(document.getElementsByClassName(className))
       collection.forEach((button) => button.classList.add('gridHover'))
     },
-    onMouseLeave (index, type) {
-      const collection = Array.from(document.getElementsByClassName('grid-button-' + type + '-' + index))
+    onMouseLeave (className) {
+      const collection = Array.from(document.getElementsByClassName(className))
       collection.forEach((button) => button.classList.remove('gridHover'))
     },
     toggleRow (variableId) {
