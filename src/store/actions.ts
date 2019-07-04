@@ -1,9 +1,10 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
-import { tryAction } from './helpers'
-import GridSelection from '@/types/GridSelection'
-import { Variable, VariableWithVariants } from '@/types/Variable'
+import { tryAction, toCart, fromCart } from './helpers'
+import { Variable } from '@/types/Variable'
 import Assessment from '@/types/Assessment'
+import { Cart } from '@/types/Cart'
+import ApplicationState from '@/types/ApplicationState'
 
 export default {
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -93,15 +94,17 @@ export default {
       commit('updateVariantCounts', variantCounts)
     }
   }),
-  save: tryAction(async ({ state: { gridSelection } }: { state: {gridSelection: GridSelection} }) => {
-    const body = { selection: JSON.stringify(gridSelection) }
+  save: tryAction(async ({ state }: {state: ApplicationState}) => {
+    const body = { contents: JSON.stringify(toCart(state)) }
     const response = await api.post('/api/v1/lifelines_cart', { body: JSON.stringify(body) })
     const location: string = response.headers.get('Location')
     const id: string = location.substring(location.lastIndexOf('/') + 1)
   }),
-  load: tryAction(async ({ commit }:any, id: string) => {
+  load: tryAction(async ({ state, commit }:{state: ApplicationState, commit: any}, id: string) => {
     const response = await api.get(`/api/v2/lifelines_cart/${id}`)
-    const gridSelection = JSON.parse(response.selection)
+    const cart: Cart = JSON.parse(response.contents)
+    const { facetFilter, gridSelection } = fromCart(cart, state)
+    commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
   })
 }
