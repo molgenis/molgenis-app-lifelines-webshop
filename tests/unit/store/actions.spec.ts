@@ -140,6 +140,16 @@ describe('actions', () => {
       ])
       done()
     })
+    it('does not commit the grid variables if the tree selection changes during the call', async (done) => {
+      const commit = jest.fn()
+      const state = { treeSelected: 4 }
+      const action = actions.loadGridVariables({ state, commit })
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
+      state.treeSelected = 6
+      await action
+      expect(commit).toHaveBeenCalledTimes(1)
+      done()
+    })
   })
 
   describe('loadVariables', () => {
