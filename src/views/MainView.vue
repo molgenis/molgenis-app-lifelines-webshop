@@ -3,18 +3,6 @@
     <div class="pt-3">
       <img src="logo.svg" alt="Lifelines" />
     </div>
-    <div class="pt-3">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Grid</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Cart</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
     <div class="row justify-content-md-center pt-3">
       <div class="col-6">
         <toast-component
