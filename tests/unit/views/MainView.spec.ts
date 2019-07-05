@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue, Wrapper, VueClass } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import MainView from '@/views/MainView.vue'
 import Vuex from 'vuex'
 

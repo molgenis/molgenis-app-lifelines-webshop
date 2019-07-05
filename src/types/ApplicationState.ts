@@ -29,7 +29,7 @@ export default interface ApplicationState {
   variables: { [key:number]: Variable }
   gridVariables: VariableWithVariants[]
   variantCounts: Count[]
-  assessments: Assessment[]
+  assessments: { [key:number]: Assessment }
   treeSelected: number
   treeOpenSection: string
   gridSelection: GridSelection

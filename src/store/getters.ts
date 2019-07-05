@@ -90,7 +90,7 @@ export default {
   gridAssessments: (state: ApplicationState, getters: Getters) => {
     const assessmentIds: number[] = getters.variants.reduce((acc: number[], variant: Variant) =>
       acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
-    return state.assessments.filter(assessment => assessmentIds.includes(assessment.id))
+    return Object.values(state.assessments).filter(assessment => assessmentIds.includes(assessment.id))
   },
   grid: (state: ApplicationState, getters: Getters): number[][] =>
     state.gridVariables.map((variable: VariableWithVariants) =>

@@ -117,10 +117,10 @@ describe('actions', () => {
     it('loads the assessments and commits them', async (done) => {
       const commit = jest.fn()
       await actions.loadAssessments({ commit })
-      expect(commit).toHaveBeenCalledWith('updateAssessments', [
-        { id: 1, name: '1A' },
-        { id: 2, name: '1B' }
-      ])
+      expect(commit).toHaveBeenCalledWith('updateAssessments', {
+        1: { id: 1, name: '1A' },
+        2: { id: 2, name: '1B' }
+      })
       done()
     })
   })
@@ -138,6 +138,16 @@ describe('actions', () => {
         { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT', 'variants': [variant] },
         { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant] }
       ])
+      done()
+    })
+    it('does not commit the grid variables if the tree selection changes during the call', async (done) => {
+      const commit = jest.fn()
+      const state = { treeSelected: 4 }
+      const action = actions.loadGridVariables({ state, commit })
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
+      state.treeSelected = 6
+      await action
+      expect(commit).toHaveBeenCalledTimes(1)
       done()
     })
   })
@@ -178,6 +188,17 @@ describe('actions', () => {
         { 'count': 1234, 'variantId': 1 },
         { 'count': 5678, 'variantId': 10 }
       ])
+      done()
+    })
+
+    it('does not commit the variant counts if the rsql has changed during the call', async (done) => {
+      const commit = jest.fn()
+      const getters = { rsql: 'll_nr.yob=le=1970' }
+      const action = actions.loadGridData({ commit, getters })
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
+      getters.rsql = ''
+      await action
+      expect(commit).toHaveBeenCalledTimes(1)
       done()
     })
   })
