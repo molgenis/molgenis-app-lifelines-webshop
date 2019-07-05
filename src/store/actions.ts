@@ -3,6 +3,8 @@ import api from '@molgenis/molgenis-api-client'
 import { tryAction } from './helpers'
 import GridSelection from '@/types/GridSelection'
 import { Variable, VariableWithVariants } from '@/types/Variable'
+import Assessment from "@/types/Assessment";
+import Vue from "vue/types/vue";
 
 export default {
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -93,5 +95,8 @@ export default {
     const response = await api.get(`/api/v2/lifelines_cart/${id}`)
     const gridSelection = JSON.parse(response.selection)
     commit('updateGridSelection', gridSelection)
-  })
+  }),
+  toggleAllGridItems: ({ state, commit } : any, { gridAssessments } : any) => {
+    commit('toggleAll', { gridAssessments })
+  }
 }

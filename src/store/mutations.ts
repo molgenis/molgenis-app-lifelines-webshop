@@ -92,6 +92,7 @@ export default {
     }
   },
   toggleAll ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: VariableWithVariants[]}, { gridAssessments }: {gridAssessments: Assessment[] }) {
+    console.log(gridSelection, gridVariables)
     // For each variable all assessments are selected
     const allSelected = gridVariables.every((variable) => {
       return gridSelection.hasOwnProperty(variable.id) && (gridSelection[variable.id].length === gridAssessments.length)

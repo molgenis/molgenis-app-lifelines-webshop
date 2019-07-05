@@ -2,6 +2,7 @@
   <div id="grid">
     <div class="row">
       <div class="col vld-parent grid-col" v-if="treeSelected!=-1">
+        <loading :active.sync="selecting" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
         <loading :active.sync="isLoading" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
         <table class="grid-table" v-show="!isLoading">
           <tr>
@@ -81,21 +82,31 @@ library.add(faArrowDown, faArrowRight, faArrowsAlt)
 
 export default Vue.extend({
   components: { FacetOption, FontAwesomeIcon, Loading },
+  data: function () {
+    return {
+      selecting: false
+    }
+  },
   methods: {
     formatter (num) {
       return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
     },
     selectColumn (assessmentId) {
+      this.selecting = true
       this.toggleGridColumn({ assessmentId })
+      this.selecting = false
     },
     toggleRow (variableId) {
+      this.selecting = true
       this.toggleGridRow({
         variableId,
         gridAssessments: this.gridAssessments
       })
+      this.selecting = false
     },
     toggleGrid () {
-      this.toggleAll({ gridAssessments: this.gridAssessments })
+      this.selecting = true
+      this.toggleAllGridItems({ gridAssessments: this.gridAssessments }).then(() => { this.selecting = false })
     },
     toggle (rowIndex, colIndex) {
       this.toggleGridSelection({
@@ -103,8 +114,8 @@ export default Vue.extend({
         assessmentId: this.gridAssessments[colIndex].id
       })
     },
-    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
-    ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData'])
+    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn']),
+    ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData', 'toggleAllGridItems'])
   },
   computed: {
     ...mapState(['treeSelected', 'gridVariables', 'assessments', 'variantCounts']),
