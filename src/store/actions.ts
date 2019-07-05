@@ -110,7 +110,7 @@ export default {
   toggleGridColumn: ({ state, commit } : { state: {gridSelection : GridSelection, gridVariable: VariableWithVariants[] }, commit: any}, { assessmentId } : {assessmentId: number}) => {
     commit('toggleColumn', { assessmentId })
   },
-  toggleGridRow: ({ state, commit }: { state: { gridselection: GridSelection }, commit: any }, { variableId, gridAssessments }: {variableId: number, gridAssessments: Assessment[] }) => {
+  toggleGridRow: ({ state, commit }: { state: { gridSelection: GridSelection }, commit: any }, { variableId, gridAssessments }: {variableId: number, gridAssessments: Assessment[] }) => {
     commit('toggleRow', { variableId, gridAssessments })
   }
 }

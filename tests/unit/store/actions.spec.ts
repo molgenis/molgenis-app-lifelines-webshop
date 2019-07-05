@@ -223,4 +223,42 @@ describe('actions', () => {
       done()
     })
   })
+  describe('toggleAllGridItems', () => {
+    it('calls toggle all mutation', async (done) => {
+      const commit = jest.fn()
+      const state = {
+        gridSelection: { },
+        gridVariable: [ ]
+      }
+      const assessments = { gridAssessments: [ { id: 0, name: 'test' } ] }
+      await actions.toggleAllGridItems({ state, commit }, assessments)
+      expect(commit).toHaveBeenCalledWith('toggleAll', assessments)
+      done()
+    })
+  })
+  describe('toggleGridColumn', () => {
+    it('calls toggle column mutation', async (done) => {
+      const commit = jest.fn()
+      const state = {
+        gridSelection: { },
+        gridVariable: [ ]
+      }
+      const assessment = { assessmentId: 1 }
+      await actions.toggleGridColumn({ state, commit }, assessment)
+      expect(commit).toHaveBeenCalledWith('toggleColumn', assessment)
+      done()
+    })
+  })
+  describe('toggleGridRow', () => {
+    it('calls toggle all mutation', async (done) => {
+      const commit = jest.fn()
+      const state = {
+        gridSelection: { }
+      }
+      const assessments = { variableId: 1, gridAssessments: [ { id: 0, name: 'test' } ] }
+      await actions.toggleGridRow({ state, commit }, assessments)
+      expect(commit).toHaveBeenCalledWith('toggleRow', assessments)
+      done()
+    })
+  })
 })
