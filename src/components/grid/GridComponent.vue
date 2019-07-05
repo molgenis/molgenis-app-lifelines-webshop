@@ -23,7 +23,7 @@
             <th></th>
             <td>
               <button class="ll-facet-option btn btn-sm selectAll gridItem btn-outline-secondary"
-                      @click="toggleGrid"
+                      @click.prevent="toggleGrid"
                       @mouseenter="onMouseEnter('gridItem')"
                       @mouseleave="onMouseLeave('gridItem')">
                 All
@@ -33,7 +33,7 @@
                 :key="assessment.id"
             >
               <button class="ll-facet-option btn btn-sm selectCol gridItem btn-outline-secondary"
-                      @click="selectColumn(assessment.id)"
+                      @click.prevent="selectColumn(assessment.id)"
                       @mouseenter="onMouseEnter('grid-button-col-'+colIndex)"
                       @mouseleave="onMouseLeave('grid-button-col-'+colIndex)">
                 <font-awesome-icon icon="arrow-down"/>
@@ -53,7 +53,7 @@
             </th>
             <td>
               <button class="ll-facet-option btn btn-sm selectRow gridItem btn-outline-secondary"
-                      @click="toggleRow(gridVariables[rowIndex].id)"
+                      @click.prevent="toggleRow(gridVariables[rowIndex].id)"
                       @mouseenter="onMouseEnter('grid-button-row-'+rowIndex)"
                       @mouseleave="onMouseLeave('grid-button-row-'+rowIndex)">
                 <font-awesome-icon icon="arrow-right"/>
@@ -63,7 +63,7 @@
                 v-for="(count,colIndex) in row"
             >
               <button
-                @click="toggle(rowIndex, colIndex)"
+                @click.prevent="toggle(rowIndex, colIndex)"
                 :class="getGridCellClass(rowIndex, colIndex)"
                 class="ll-facet-option btn btn-sm selectItem gridItem">
                 {{formatter(count)}}
@@ -103,8 +103,9 @@ export default Vue.extend({
     },
     selectColumn (assessmentId) {
       this.selecting = true
-      this.toggleGridColumn({ assessmentId })
-      this.selecting = false
+      setTimeout(() => {
+        this.toggleGridColumn({ assessmentId }).then(() => { this.selecting = false })
+      }, 0)
     },
     onMouseEnter (className) {
       const collection = Array.from(document.getElementsByClassName(className))
@@ -116,11 +117,12 @@ export default Vue.extend({
     },
     toggleRow (variableId) {
       this.selecting = true
-      this.toggleGridRow({
-        variableId,
-        gridAssessments: this.gridAssessments
-      })
-      this.selecting = false
+      this.toggleGridRow(
+        {
+          variableId,
+          gridAssessments: this.gridAssessments
+        }
+      ).then(() => { this.selecting = false })
     },
     getGridCellClass (rowIndex, colIndex) {
       const selected = !!this.gridSelections[rowIndex][colIndex]
@@ -139,8 +141,8 @@ export default Vue.extend({
         assessmentId: this.gridAssessments[colIndex].id
       })
     },
-    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn']),
-    ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData', 'toggleAllGridItems'])
+    ...mapMutations(['toggleGridSelection']),
+    ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData', 'toggleAllGridItems', 'toggleGridColumn', 'toggleGridRow'])
   },
   computed: {
     ...mapState(['treeSelected', 'gridVariables', 'assessments', 'variantCounts']),

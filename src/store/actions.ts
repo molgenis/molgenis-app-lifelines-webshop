@@ -2,7 +2,7 @@
 import api from '@molgenis/molgenis-api-client'
 import { tryAction } from './helpers'
 import GridSelection from '@/types/GridSelection'
-import { Variable } from '@/types/Variable'
+import {Variable, VariableWithVariants} from '@/types/Variable'
 import Assessment from '@/types/Assessment'
 
 export default {
@@ -104,7 +104,13 @@ export default {
     const gridSelection = JSON.parse(response.selection)
     commit('updateGridSelection', gridSelection)
   }),
-  toggleAllGridItems: ({ state, commit } : any, { gridAssessments } : any) => {
+  toggleAllGridItems: ({ state, commit } : { state: {gridSelection : GridSelection, gridVariable: VariableWithVariants[] }, commit: any}, { gridAssessments } : {gridAssessments: Assessment[]}) => {
     commit('toggleAll', { gridAssessments })
+  },
+  toggleGridColumn: ({ state, commit } : { state: {gridSelection : GridSelection, gridVariable: VariableWithVariants[] }, commit: any}, { assessmentId } : {assessmentId: number}) => {
+    commit('toggleColumn', { assessmentId })
+  },
+  toggleGridRow: ({ state, commit }: { state: { gridselection: GridSelection }, commit: any }, { variableId, gridAssessments }: {variableId: number, gridAssessments: Assessment[] }) => {
+    commit('toggleRow', { variableId, gridAssessments })
   }
 }
