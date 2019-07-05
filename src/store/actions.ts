@@ -1,9 +1,12 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
-import { tryAction } from './helpers'
-import GridSelection from '@/types/GridSelection'
-import {Variable, VariableWithVariants} from '@/types/Variable'
+import { tryAction, toCart, fromCart } from './helpers'
+import { Variable, VariableWithVariants } from '@/types/Variable'
 import Assessment from '@/types/Assessment'
+import GridSelection from '@/types/GridSelection'
+import { Cart } from '@/types/Cart'
+import ApplicationState from '@/types/ApplicationState'
+import router from '@/router'
 
 export default {
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -93,16 +96,21 @@ export default {
       commit('updateVariantCounts', variantCounts)
     }
   }),
-  save: tryAction(async ({ state: { gridSelection } }: { state: {gridSelection: GridSelection} }) => {
-    const body = { selection: JSON.stringify(gridSelection) }
+  save: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
+    const body = { contents: JSON.stringify(toCart(state)) }
     const response = await api.post('/api/v1/lifelines_cart', { body: JSON.stringify(body) })
     const location: string = response.headers.get('Location')
     const id: string = location.substring(location.lastIndexOf('/') + 1)
+    commit('setToast', { type: 'success', message: 'Saved order with id ' + id })
+    router.push({ name: 'load', params: { cartId: id } })
   }),
-  load: tryAction(async ({ commit }:any, id: string) => {
+  load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, id: string) => {
     const response = await api.get(`/api/v2/lifelines_cart/${id}`)
-    const gridSelection = JSON.parse(response.selection)
+    const cart: Cart = JSON.parse(response.contents)
+    const { facetFilter, gridSelection } = fromCart(cart, state)
+    commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
+    commit('setToast', { type: 'success', message: 'Loaded order with id ' + id })
   }),
   toggleAllGridItems: ({ state, commit } : { state: {gridSelection : GridSelection, gridVariable: VariableWithVariants[] }, commit: any}, { gridAssessments } : {gridAssessments: Assessment[]}) => {
     commit('toggleAll', { gridAssessments })

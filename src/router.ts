@@ -12,6 +12,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: MainView
+    },
+    {
+      path: '/:cartId',
+      name: 'load',
+      component: MainView
     }
   ]
 })

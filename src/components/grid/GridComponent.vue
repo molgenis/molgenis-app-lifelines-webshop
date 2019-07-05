@@ -142,7 +142,7 @@ export default Vue.extend({
       })
     },
     ...mapMutations(['toggleGridSelection']),
-    ...mapActions(['loadGridVariables', 'loadAssessments', 'loadGridData', 'toggleAllGridItems', 'toggleGridColumn', 'toggleGridRow'])
+    ...mapActions(['loadGridVariables', 'loadGridData', 'toggleAllGridItems', 'toggleGridColumn', 'toggleGridRow'])
   },
   computed: {
     ...mapState(['treeSelected', 'gridVariables', 'assessments', 'variantCounts']),
@@ -163,7 +163,6 @@ export default Vue.extend({
     }
   },
   created () {
-    this.loadAssessments()
     this.loadGridData()
   }
 })
