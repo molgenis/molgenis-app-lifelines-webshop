@@ -1,8 +1,15 @@
-import Filter from './Filter'
-
 export interface Cart {
     selection: Selection[]
-    filters: Filter
+    filters: CartFilter
+}
+
+export interface CartFilter {
+    gender?: string[],
+    subcohort?: string[],
+    ageGroupAt1A?: string[],
+    ageGroupAt2A?: string[],
+    ageGroupAt3A?: string[],
+    yearOfBirthRange?: number[]
 }
 
 export interface Selection {

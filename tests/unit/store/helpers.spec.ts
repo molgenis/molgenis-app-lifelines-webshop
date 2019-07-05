@@ -1,5 +1,8 @@
-import { getErrorMessage, tryAction } from '@/store/helpers'
+import { getErrorMessage, tryAction, toCart, fromCart } from '@/store/helpers'
 import Vue from 'vue'
+import emptyState from '@/store/state'
+import { CartFilter } from '@/types/Cart';
+import Filter from '@/types/Filter';
 
 describe('store', () => {
   describe('helpers', () => {
@@ -57,6 +60,127 @@ describe('store', () => {
           expect(commit).toHaveBeenCalledWith('setToast', toast)
           done()
         })
+      })
+    })
+
+    const facetFilter: Filter = {
+      ageGroupAt1A: ['1'],
+      ageGroupAt2A: ['2', '3'],
+      ageGroupAt3A: ['3'],
+      gender: ['1'],
+      subcohort: ['gwas'],
+      yearOfBirthRange: [1960, 1970]
+    }
+
+    const cartFilter: CartFilter = {
+      ageGroupAt1A: ['0-17'],
+      ageGroupAt2A: ['18-65', '65+'],
+      ageGroupAt3A: ['65+'],
+      gender: ['Male'],
+      subcohort: ['GWAS'],
+      yearOfBirthRange: [1960, 1970]
+    }
+
+    describe('toCart', () => {
+      it('converts empty state to empty cart', () => {
+        expect(toCart(emptyState)).toEqual({ filters: {}, selection: [] })
+      })
+      it('converts facetFilter to cart filter', () => {
+        expect(toCart({
+          ...emptyState,
+          facetFilter 
+        })).toEqual({
+          filters: cartFilter,
+          selection: []
+        })
+      })
+      it('complains when it cannot find a filter option', () => {
+        try {
+          toCart({
+            ...emptyState,
+            facetFilter: {
+              ...emptyState.facetFilter,
+              ageGroupAt1A: ['123']
+            } 
+          })
+        } catch (error) {
+          expect(error).toBe('Cannot find ageGroupAt1A facet option with id 123')
+        }
+      })
+      it('converts gridSelection to cart selections', () => {
+        expect(toCart({
+          ...emptyState,
+          variables: {
+            1: { id: 1, name: 'VAR1', label: 'variable 1' },
+            2: { id: 2, name: 'VAR2', label: 'variable 2' }
+          },
+          assessments: {
+            1: { id: 1, name: '1A' },
+            2: { id: 2, name: '1B' }
+          },
+          gridSelection: {
+            1: [1, 2],
+            2: [1]
+          }
+        })).toEqual({
+          filters: {},
+          selection: [{
+            assessment: '1A',
+            variables: ['VAR1', 'VAR2']
+          }, {
+            assessment: '1B',
+            variables: ['VAR1']
+          }]
+        })
+      })
+    })
+
+    describe('fromCart', () => {
+      it('converts empty cart', () => {
+        expect(fromCart({filters: {}, selection: []}, emptyState))
+          .toEqual({
+            facetFilter: emptyState.facetFilter,
+            gridSelection: {}
+          })
+      })
+      it('converts cart selection to grid selection', () => {
+        expect(fromCart({
+          filters: {},
+          selection: [{
+            assessment: '1A',
+            variables: ['VAR1', 'VAR2']
+          }, {
+            assessment: '1B',
+            variables: ['VAR1']
+          }]
+        }, {
+          ...emptyState,
+          variables: {
+            1: { id: 1, name: 'VAR1', label: 'variable 1' },
+            2: { id: 2, name: 'VAR2', label: 'variable 2' }
+          },
+          assessments: {
+            1: { id: 1, name: '1A' },
+            2: { id: 2, name: '1B' }
+          }
+        })).toEqual({
+          facetFilter: emptyState.facetFilter,
+          gridSelection: {
+            1: [1, 2],
+            2: [1]
+          }
+        })
+      })
+      it('converts cart filter to facetFilter', () => {
+        expect(fromCart({filters: cartFilter, selection: []}, emptyState))
+          .toEqual({ facetFilter, gridSelection: {} })
+      })
+      it('complains when it cannot find a filter option', () => {
+        try {
+          fromCart({filters: { ageGroupAt1A: ["blah"] }, selection: []}, emptyState)
+        } catch (error) {
+          expect(error.message).toBe('Cannot find ageGroupAt1A facet option with text blah')
+        }
       })
     })
   })
