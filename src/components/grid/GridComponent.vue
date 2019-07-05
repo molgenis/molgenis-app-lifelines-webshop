@@ -5,7 +5,7 @@
         <loading :active.sync="selecting" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
         <loading :active.sync="isLoading" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
 
-        <table class="grid-table" v-if="treeSelected!=-1">
+        <table class="grid-table" v-if="treeSelected!=-1" :class="{'sticky':stickyTableHeader}">
           <tr>
             <th>
             </th>
