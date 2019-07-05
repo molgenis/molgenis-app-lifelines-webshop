@@ -1,31 +1,31 @@
 <template>
   <div class="facet-container">
-      <label
-        v-if="label"
-        @click="handleFacetToggle"
-         >
-        {{ label }}
-        <font-awesome-icon
-          icon="chevron-up"
-          v-if="collapsable"
-          :class="{ 'fa-rotate-180': collapsed}"
-        />
-      </label>
-      <div v-show="!collapsed" class="facet-container-content">
-       <slot></slot>
-      </div>
+    <label
+      v-if="label"
+      @click="handleFacetToggle"
+       >
+      {{ label }}
+      <collapse-tree-icon
+        v-if="collapsable"
+        :state="collapsed"
+      />
+    </label>
+    <block-expand :isExpanded="!collapsed" class="facet-container-content">
+      <slot></slot>
+    </block-expand>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faChevronUp)
+import CollapseTreeIcon from '../animations/CollapseTreeIcon'
+import BlockExpand from '../animations/BlockExpand'
 
 export default Vue.extend({
   name: 'FacetContainer',
+  components: {
+    CollapseTreeIcon, BlockExpand
+  },
   props: {
     facetId: {
       type: String,
@@ -57,9 +57,6 @@ export default Vue.extend({
       }
       )
     }
-  },
-  components: {
-    FontAwesomeIcon
   }
 })
 </script>

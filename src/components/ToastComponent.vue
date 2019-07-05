@@ -29,12 +29,15 @@ export default Vue.extend({
 
 <style>
   .slide-enter-active, .slide-leave-active {
-    transition: transform 500ms ease-in-out;
+    transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+    opacity: 1;
   }
   .slide-enter, .slide-leave-to {
     transform: translateY(-100%);
+    opacity: 0;
   }
   .slide-enter-to, .slide-leave {
     transform: translateY(0);
+    opacity: 1;
   }
 </style>

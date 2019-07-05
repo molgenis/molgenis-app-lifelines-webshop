@@ -1,14 +1,14 @@
 <template>
   <div id="Content-view">
-    <h3>2. Select data</h3>
-        <div class="row mt-3" >
-          <div class="col-4" >
-            <tree-view  />
-          </div>
-          <div class="col-8" >
-            <grid-view />
-          </div>
-        </div>
+    <div class="row flex-nowrap">
+      <div class="col tree">
+        <h3 class="my-3">2. Select data</h3>
+        <tree-view  />
+      </div>
+      <div class="col">
+        <grid-view />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,5 +21,10 @@ export default Vue.extend({
   name: 'ContentView',
   components: { TreeView, GridView }
 })
-
 </script>
+
+<style scoped>
+  .col.tree{
+    max-width: 20rem;
+  }
+</style>

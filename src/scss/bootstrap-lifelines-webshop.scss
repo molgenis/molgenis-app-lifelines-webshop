@@ -1,19 +1,10 @@
-// Colors
-$primary:            #276daa;
-$secondary:          #00ACC7;
-$warning:            #fc5c61;
-$light:              #e9f6f9;
-$link-color:         #fc5c61;
-
-// Typography
-$font-size-base:     1rem;
-$line-height-base:   1.6;
-$font-family-base:   Arial,Tahoma,Verdana,sans-serif;
-$headings-color:     $primary;
-
-// input
-$input-border-color: #00ACC7;
-$input-color:        #00ACC7;
-$custom-select-indicator-color: #00ACC7;
-
+@import "variables";
 @import "node_modules/bootstrap/scss/bootstrap";
+
+nav.navbar{
+  border-bottom:4px solid $secondary
+}
+
+.row-hover:hover {
+  background-color: $light;
+}

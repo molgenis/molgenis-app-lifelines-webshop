@@ -4,21 +4,25 @@
       <div class="col vld-parent grid-col" v-if="treeSelected!=-1">
         <loading :active.sync="selecting" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
         <loading :active.sync="isLoading" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
-        <table class="grid-table" v-show="!isLoading">
+
+        <table class="grid-table" v-if="treeSelected!=-1">
           <tr>
-            <th>Variable</th>
-            <th :colspan="gridAssessments.length + 1">Assessments</th>
-          </tr>
-          <tr>
-            <th class="w-0"></th>
-            <th class="w-0"></th>
-            <th
+            <th>
+            </th>
+            <td></td>
+            <td
               v-for="assessment in gridAssessments"
               :key="assessment.id"
               class="text-center">
               <div class="assessments-title"><span>{{assessment.name}}</span></div>
-            </th>
+            </td>
           </tr>
+        </table>
+        <div :class="{'space-holder':stickyTableHeader}"></div>
+
+        <table class="grid-table col-hover"
+               v-if="!isLoading && treeSelected!=-1"
+        >
           <tr>
             <th></th>
             <td>
@@ -44,12 +48,14 @@
           <tr
             v-for="(row, rowIndex) in grid"
             :class="'grid-row-'+rowIndex"
+            class="row-hover"
             :key="rowIndex"
+
           >
             <th>
-          <span class="variable-title">
-            {{variableName(gridVariables[rowIndex])}}
-          </span>
+              <span class="variable-title">
+                {{variableName(gridVariables[rowIndex])}}
+              </span>
             </th>
             <td>
               <button class="ll-facet-option btn btn-sm selectRow gridItem btn-outline-secondary"
@@ -94,10 +100,16 @@ export default Vue.extend({
   components: { FontAwesomeIcon, Loading },
   data: function () {
     return {
-      selecting: false
+      selecting: false,
+      stickyTableHeader: false
     }
   },
   methods: {
+    scroll () {
+      const scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
+      if (scrollTop > 170) this.stickyTableHeader = true
+      else this.stickyTableHeader = false
+    },
     formatter (num) {
       return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
     },
@@ -142,7 +154,15 @@ export default Vue.extend({
       })
     },
     ...mapMutations(['toggleGridSelection']),
-    ...mapActions(['loadGridVariables', 'loadGridData', 'toggleAllGridItems', 'toggleGridColumn', 'toggleGridRow'])
+    ...mapActions(['loadGridVariables', 'loadGridData', 'loadAssessments', 'toggleAllGridItems', 'toggleGridColumn', 'toggleGridRow'])
+  },
+  created: function () {
+    this.loadAssessments()
+    this.loadGridData()
+    window.addEventListener('scroll', this.scroll)
+  },
+  destroyed: function () {
+    window.removeEventListener('scroll', this.scroll)
   },
   computed: {
     ...mapState(['treeSelected', 'gridVariables', 'assessments', 'variantCounts']),
@@ -161,30 +181,74 @@ export default Vue.extend({
     rsql: function () {
       this.loadGridData()
     }
-  },
-  created () {
-    this.loadGridData()
   }
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @import "../../scss/variables";
+
+  table {
+    overflow: hidden;
+    position: relative;
+  }
+  table th:first-child {
+    width: 15rem;
+    max-width: 15rem;
+    overflow: hidden;
+  }
+  table td,
+  table th:not(:first-child){
+    width: 4rem;
+    max-width: 4rem;
+    min-width: 4rem;
+  }
   table th {
     white-space: nowrap;
     vertical-align: middle;
     font-weight: normal;
   }
+  .sticky{
+    position: fixed;
+    top:0;
+    background-color: white;
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%);
+    z-index: 1030;
+  }
+  .sticky .assessments-title{
+    height: 8rem;
+  }
+  .sticky .assessments-title span{
+    bottom: 1rem;
+  }
+  .space-holder{
+    height: 6em;
+  }
 
   table td, th {
     padding: 0 1px;
+    position: relative;
+  }
+
+  .col-hover td:hover::after {
+    content:"";
+    left: 0;
+    right: 0;
+    display: inline-block;
+    position: absolute;
+    background-color: $light;
+    top: -5000px;
+    height: 10000px;
+    z-index: -1;
   }
 
   .variable-title {
-    max-width: 12rem;
-    display: inline-block;
+    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-right: 1rem;
+    vertical-align: middle;
+    padding-left: 1rem;
   }
 
   .assessments-title {
@@ -194,6 +258,7 @@ export default Vue.extend({
   }
 
   .assessments-title span {
+    white-space: nowrap;
     position: absolute;
     bottom: -1rem;
     left: 1.3rem;
@@ -232,15 +297,16 @@ export default Vue.extend({
   }
 
   .gridItem {
-    display: inline-block;
-    margin: 2px;
-    width: 3.5rem;
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 1px;
   }
 
   .gridHover {
-    color: #fff;
-    background-color: var(--secondary);
-    border-color: var(--secondary);
+    color: white;
+    background-color: $secondary;
+    border-color: $secondary;
   }
 
   .grid-col {

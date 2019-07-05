@@ -41,9 +41,9 @@ describe('MainView.vue', () => {
     expect(wrapper.find('toast-component-stub').attributes('message')).toEqual('i am not a message')
   })
 
-  it('renders an order button that saves the current order', () => {
+  it('renders an save button that saves the current state', () => {
     const wrapper = shallowMount(MainView, { store, localVue, mocks })
-    wrapper.find('#order').trigger('click')
+    wrapper.find('#save').trigger('click')
     expect(actions.save).toHaveBeenCalled()
   })
 
