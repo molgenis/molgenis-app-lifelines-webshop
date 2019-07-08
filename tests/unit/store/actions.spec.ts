@@ -13,7 +13,6 @@ const cart: Cart = {
     variables: ['VAR1', 'VAR2']
   }],
   filters: {
-    ...emptyState.facetFilter,
     ageGroupAt1A: ['18-65', '65+']
   }
 }
@@ -234,7 +233,7 @@ describe('actions', () => {
         gridSelection: { 1: [1], 2: [1] },
         facetFilter: {
           ...emptyState.facetFilter,
-          ageGroupAt1A: ['18-65', '65+']
+          ageGroupAt1A: ['2', '3']
         }
       }
       await actions.save({ state, commit })
@@ -256,7 +255,8 @@ describe('actions', () => {
       }
       await actions.load({ commit, state }, 'fghij')
       expect(commit).toHaveBeenCalledWith('updateGridSelection', { 1: [1], 2: [1] })
-      expect(commit).toHaveBeenCalledWith('updateFacetFilter', { ...emptyState.facetFilter, ageGroupAt1A: ['18-65', '65+'] })
+      expect(commit).toHaveBeenCalledWith('updateFacetFilter', { ...emptyState.facetFilter, ageGroupAt1A: ['2', '3'] })
+      expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Loaded order with id fghij' })
       done()
     })
   })

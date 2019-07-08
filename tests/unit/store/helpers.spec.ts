@@ -1,8 +1,8 @@
 import { getErrorMessage, tryAction, toCart, fromCart } from '@/store/helpers'
 import Vue from 'vue'
 import emptyState from '@/store/state'
-import { CartFilter } from '@/types/Cart';
-import Filter from '@/types/Filter';
+import { CartFilter } from '@/types/Cart'
+import Filter from '@/types/Filter'
 
 describe('store', () => {
   describe('helpers', () => {
@@ -88,7 +88,7 @@ describe('store', () => {
       it('converts facetFilter to cart filter', () => {
         expect(toCart({
           ...emptyState,
-          facetFilter 
+          facetFilter
         })).toEqual({
           filters: cartFilter,
           selection: []
@@ -101,10 +101,10 @@ describe('store', () => {
             facetFilter: {
               ...emptyState.facetFilter,
               ageGroupAt1A: ['123']
-            } 
+            }
           })
         } catch (error) {
-          expect(error).toBe('Cannot find ageGroupAt1A facet option with id 123')
+          expect(error.message).toBe('Cannot find ageGroupAt1A facet option with id 123')
         }
       })
       it('converts gridSelection to cart selections', () => {
@@ -137,7 +137,7 @@ describe('store', () => {
 
     describe('fromCart', () => {
       it('converts empty cart', () => {
-        expect(fromCart({filters: {}, selection: []}, emptyState))
+        expect(fromCart({ filters: {}, selection: [] }, emptyState))
           .toEqual({
             facetFilter: emptyState.facetFilter,
             gridSelection: {}
@@ -172,12 +172,12 @@ describe('store', () => {
         })
       })
       it('converts cart filter to facetFilter', () => {
-        expect(fromCart({filters: cartFilter, selection: []}, emptyState))
+        expect(fromCart({ filters: cartFilter, selection: [] }, emptyState))
           .toEqual({ facetFilter, gridSelection: {} })
       })
       it('complains when it cannot find a filter option', () => {
         try {
-          fromCart({filters: { ageGroupAt1A: ["blah"] }, selection: []}, emptyState)
+          fromCart({ filters: { ageGroupAt1A: ['blah'] }, selection: [] }, emptyState)
         } catch (error) {
           expect(error.message).toBe('Cannot find ageGroupAt1A facet option with text blah')
         }
