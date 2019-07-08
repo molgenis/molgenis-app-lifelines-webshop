@@ -36,8 +36,8 @@ describe('store', () => {
         })).toBe('The request was rejected because the URL was not normalized. (401)')
       })
 
-      it('converts Error to \'Unknown error\'', () => {
-        expect(getErrorMessage(new Error('Some error'))).toBe('Unknown error')
+      it('returns message from Error', () => {
+        expect(getErrorMessage(new Error('Some error'))).toBe('Some error')
       })
     })
 
@@ -51,7 +51,7 @@ describe('store', () => {
         const action = () => Promise.reject(new Error('Something went wrong'))
         const commit = jest.fn()
         const context = { commit }
-        const toast = { message: 'Unknown error', type: 'danger' }
+        const toast = { message: 'Something went wrong', type: 'danger' }
         tryAction(action)(context)
         Vue.nextTick(() => {
           expect(commit).toHaveBeenCalledWith('setToast', toast)

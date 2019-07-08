@@ -1,5 +1,5 @@
 <template>
-  <div id="tree-view">
+  <div id="tree-component">
     <spinner-animation v-if="structure.length == 0"/>
     <ul v-else class="list-group">
       <template v-for="parent in structure">
@@ -109,7 +109,13 @@ export default Vue.extend({
     background-color: var(--secondary);
     border-color: var(--secondary);
   }
+  .parent-list{
+    white-space: nowrap;
+  }
   /* Make sure not to get a 2 pixel wide line while using the block-expander in a 'list-group' */
+  .block-expander.open {
+    margin-top: 0px;
+  }
   .block-expander{
     margin-top: -1px;
   }

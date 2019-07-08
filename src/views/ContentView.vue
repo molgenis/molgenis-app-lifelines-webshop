@@ -1,8 +1,8 @@
 <template>
   <div id="Content-view">
-      <div class="row" >
-          <div class="col-3" >
-            <h3>2. Select data</h3>
+      <div class="row flex-nowrap" >
+      <div class="col tree">
+           <h3 class="my-3">2. Select data</h3>
           </div>
           <div class="col-span-4 col-4" >
             <search-component></search-component>
@@ -16,6 +16,7 @@
           <grid-view />
         </div>
       </div>
+
   </div>
 </template>
 
@@ -29,5 +30,10 @@ export default Vue.extend({
   name: 'ContentView',
   components: { TreeView, GridView, SearchComponent }
 })
-
 </script>
+
+<style scoped>
+  .col.tree{
+    max-width: 20rem;
+  }
+</style>

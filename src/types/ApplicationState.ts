@@ -3,6 +3,7 @@ import { Variable, VariableWithVariants } from '@/types/Variable'
 import Count from '@/types/Count'
 import Assessment from '@/types/Assessment'
 import GridSelection from '@/types/GridSelection'
+import Filter from './Filter'
 
 export type Toast = {
   type: 'danger' | 'success',
@@ -15,14 +16,7 @@ export default interface ApplicationState {
   subcohortOptions: FacetOption[],
   ageGroupOptions: FacetOption[],
   ageAtOptions: FacetOption[],
-  facetFilter: {
-    gender: string[],
-    subcohort: string[],
-    ageGroupAt1A: string[],
-    ageGroupAt2A: string[],
-    ageGroupAt3A: string[],
-    yearOfBirthRange: number[]
-  },
+  facetFilter: Filter,
   sectionList: string[],
   subSectionList: string[],
   treeStructure: Object[]

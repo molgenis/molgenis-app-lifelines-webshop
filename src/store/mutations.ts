@@ -4,6 +4,7 @@ import Assessment from '@/types/Assessment'
 import Count from '@/types/Count'
 import Vue from 'vue'
 import GridSelection from '@/types/GridSelection'
+import Filter from '@/types/Filter'
 
 export default {
   setToast (state: ApplicationState, toast: Toast) {
@@ -11,6 +12,9 @@ export default {
   },
   clearToast (state: ApplicationState) {
     state.toast = null
+  },
+  updateFacetFilter (state: ApplicationState, facetFilter: Filter) {
+    state.facetFilter = facetFilter
   },
   updateGenderFilter (state: ApplicationState, selectedGenders: string[]) {
     state.facetFilter.gender = selectedGenders

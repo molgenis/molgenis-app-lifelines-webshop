@@ -1,6 +1,6 @@
 <template>
   <div id="Sidebar-view">
-    <h3>{{ 'lifelines-webshop-sidebar-header' | i18n }}</h3>
+    <h3 class="my-3">{{ 'lifelines-webshop-sidebar-header' | i18n }}</h3>
     <ul class="list-unstyled">
       <li>
         <facet-container
