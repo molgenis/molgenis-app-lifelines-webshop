@@ -72,6 +72,15 @@ export default {
   updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
     state.gridSelection = gridSelection
   },
+  updateSearchTerm (state: ApplicationState, searchTerm: string|null) {
+    state.searchTerm = searchTerm
+  },
+  updateFilteredSections (state: ApplicationState, sections: number[]) {
+    state.filteredSections = sections
+  },
+  updateFiteredSubsections (state: ApplicationState, subsections: number[]) {
+    state.filteredSubsections = subsections
+  },
   toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
     const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))
     if (allSelected) {

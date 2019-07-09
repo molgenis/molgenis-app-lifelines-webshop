@@ -16,6 +16,20 @@ describe('mutations', () => {
     })
   })
 
+  describe('updateSearchTerm', () => {
+    it('updates search term', () => {
+      const baseAppState = { ...state }
+      mutations.updateSearchTerm(baseAppState, 'hello')
+      expect(baseAppState.searchTerm).toEqual('hello')
+    })
+
+    it('removes search term', () => {
+      const baseAppState = { ...state }
+      mutations.updateSearchTerm(baseAppState, null)
+      expect(baseAppState.searchTerm).toEqual(null)
+    })
+  })
+
   describe('setToast', () => {
     it('replace the toast with the passed toast', () => {
       let baseAppState = Object.assign({}, state)

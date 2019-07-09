@@ -29,4 +29,7 @@ export default interface ApplicationState {
   treeSelected: number
   treeOpenSection: string
   gridSelection: GridSelection
+  searchTerm: string | null
+  filteredSubsections: number[] | null
+  filteredSections: number[] | null
 }

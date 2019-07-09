@@ -12,7 +12,9 @@ describe('getters', () => {
     variantIds: [],
     rsql: '',
     grid: [],
-    gridAssessments: []
+    gridAssessments: [],
+    searchTermQuery: null,
+    treeStructure: []
   }
 
   const variant1: Variant = { id: 1, assessmentId: 1 }
@@ -252,6 +254,20 @@ describe('getters', () => {
       }
       it('should return the complete tree structure', () => {
         expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'children': [{ 'id': 0, 'name': 'sub-section1' }], 'id': 1, 'name': 'section' }])
+      })
+    })
+
+    describe('searchTermQuery', () => {
+      it('should be null if the search term is null', () => {
+        expect(getters.searchTermQuery(emptyState)).toBeNull()
+      })
+
+      it('should give rsql for the search term', () => {
+        expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'hello' })).toBe('*=q=hello')
+      })
+
+      it('should escape rsql characters', () => {
+        expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'a==b' })).toBe('*=q=\'a==b\'')
       })
     })
   })
