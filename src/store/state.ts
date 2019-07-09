@@ -39,6 +39,7 @@ const state: ApplicationState = {
   treeOpenSection: '',
   gridSelection: {},
   variantCounts: [],
+  participantCount: null,
   assessments: {}
 }
 

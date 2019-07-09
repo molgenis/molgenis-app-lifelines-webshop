@@ -63,6 +63,9 @@ export default {
   updateVariantCounts (state: ApplicationState, variantCounts: Count[]) {
     state.variantCounts = variantCounts
   },
+  updateParticipantCount: (state: ApplicationState, participantCount: number | null) => {
+    state.participantCount = participantCount
+  },
   updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
     state.gridSelection = gridSelection
   },

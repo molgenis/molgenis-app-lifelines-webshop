@@ -74,7 +74,7 @@
                 @click.prevent="toggle(rowIndex, colIndex)"
                 :class="getGridCellClass(rowIndex, colIndex)"
                 class="ll-facet-option btn btn-sm selectItem gridItem">
-                {{formatter(count)}}
+                {{count | formatSI}}
               </button>
             </td>
           </tr>
@@ -88,13 +88,13 @@
 import Vue from 'vue'
 // Import component
 import Loading from 'vue-loading-overlay'
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css'
 
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+// @ts-ignore
+import { formatSI } from 'format-si-prefix'
 
 library.add(faArrowDown, faArrowRight, faArrowsAlt)
 
@@ -110,9 +110,6 @@ export default Vue.extend({
       const scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
       if (scrollTop > 170) this.stickyTableHeader = true
       else this.stickyTableHeader = false
-    },
-    formatter (num) {
-      return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
     },
     selectColumn (assessmentId) {
       this.toggleGridColumn({ assessmentId })
@@ -175,7 +172,8 @@ export default Vue.extend({
     rsql: function () {
       this.loadGridData()
     }
-  }
+  },
+  filters: { formatSI }
 })
 </script>
 

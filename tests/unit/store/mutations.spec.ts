@@ -2,6 +2,20 @@ import mutations from '@/store/mutations'
 import state from '@/store/state'
 
 describe('mutations', () => {
+  describe('updateParticipantCount', () => {
+    it('updates participant count', () => {
+      const baseAppState = { ...state }
+      mutations.updateParticipantCount(baseAppState, 12)
+      expect(baseAppState.participantCount).toBe(12)
+    })
+
+    it('sets participant count to null', () => {
+      const baseAppState = { ...state, participantCount: 12 }
+      mutations.updateParticipantCount(baseAppState, null)
+      expect(baseAppState.participantCount).toBeNull()
+    })
+  })
+
   describe('setToast', () => {
     it('replace the toast with the passed toast', () => {
       let baseAppState = Object.assign({}, state)

@@ -81,6 +81,18 @@ export default {
         })))
     }
   }),
+  loadParticipantCount: tryAction(async ({ commit, getters }: any) => {
+    commit('updateParticipantCount', null)
+    let url = '/api/v2/lifelines_who?num=0'
+    const rsql = getters.rsql
+    if (rsql) {
+      url = `${url}&q=${encodeURIComponent(rsql.replace(/ll_nr\./g, ''))}`
+    }
+    const response = await api.get(url)
+    if (getters.rsql === rsql) {
+      commit('updateParticipantCount', response.total)
+    }
+  }),
   loadGridData: tryAction(async ({ commit, getters }: any) => {
     commit('updateVariantCounts', [])
     let url = '/api/v2/lifelines_who_when?aggs=x==variant_id'

@@ -18,6 +18,7 @@
     "@molgenis/rsql": "^0.1.4",
     "bootstrap": "^4.3.1",
     "core-js": "2.6.8",
+    "format-si-prefix": "^0.3.2",
     "vue": "^2.6.10",
     "vue-loading-overlay": "^3.2.0",
     "vue-router": "^3.0.3",
