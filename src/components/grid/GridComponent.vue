@@ -1,18 +1,12 @@
 <template>
   <div id="grid">
     <div class="row">
-      <div class="col">
-        <table v-if="isLoading && treeSelected!=-1" class="table-loading bg-light">
-          <tr>
-            <td class="spinner-container">
-              <spinner-animation class="spinner mx-auto align-middle"></spinner-animation>
-            </td>
-          </tr>
-        </table>
+      <div class="col vld-parent grid-col" v-if="treeSelected!=-1">
+        <loading :active="isLoading" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
 
-        <table class="grid-table"
+        <table
+          class="grid-table"
                :class="{'sticky':stickyTableHeader}"
-               v-if="!isLoading && treeSelected!=-1"
         >
           <tr>
             <th>
@@ -35,7 +29,7 @@
             <th></th>
             <td>
               <button class="ll-facet-option btn btn-sm selectAll gridItem btn-outline-secondary"
-                      @click="toggleGrid"
+                      @click.prevent="toggleGrid"
                       @mouseenter="onMouseEnter('gridItem')"
                       @mouseleave="onMouseLeave('gridItem')">
                 All
@@ -45,7 +39,7 @@
                 :key="assessment.id"
             >
               <button class="ll-facet-option btn btn-sm selectCol gridItem btn-outline-secondary"
-                      @click="selectColumn(assessment.id)"
+                      @click.prevent="selectColumn(assessment.id)"
                       @mouseenter="onMouseEnter('grid-button-col-'+colIndex)"
                       @mouseleave="onMouseLeave('grid-button-col-'+colIndex)">
                 <font-awesome-icon icon="arrow-down"/>
@@ -67,7 +61,7 @@
             </th>
             <td>
               <button class="ll-facet-option btn btn-sm selectRow gridItem btn-outline-secondary"
-                      @click="toggleRow(gridVariables[rowIndex].id)"
+                      @click.prevent="toggleRow(gridVariables[rowIndex].id)"
                       @mouseenter="onMouseEnter('grid-button-row-'+rowIndex)"
                       @mouseleave="onMouseLeave('grid-button-row-'+rowIndex)">
                 <font-awesome-icon icon="arrow-right"/>
@@ -77,7 +71,7 @@
                 v-for="(count,colIndex) in row"
             >
               <button
-                @click="toggle(rowIndex, colIndex)"
+                @click.prevent="toggle(rowIndex, colIndex)"
                 :class="getGridCellClass(rowIndex, colIndex)"
                 class="ll-facet-option btn btn-sm selectItem gridItem">
                 {{formatter(count)}}
@@ -92,16 +86,20 @@
 
 <script>
 import Vue from 'vue'
+// Import component
+import Loading from 'vue-loading-overlay'
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css'
+
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import SpinnerAnimation from '../animations/SpinnerAnimation.vue'
 
 library.add(faArrowDown, faArrowRight, faArrowsAlt)
 
 export default Vue.extend({
-  components: { FontAwesomeIcon, SpinnerAnimation },
+  components: { FontAwesomeIcon, Loading },
   data: function () {
     return {
       stickyTableHeader: false
@@ -292,16 +290,6 @@ export default Vue.extend({
     border-bottom-right-radius: 0;
   }
 
-  .spinner {
-    width: 100%;
-  }
-
-  .table-loading {
-    position: fixed;
-    width: 60%;
-    height: 90%;
-  }
-
   .gridItem {
     display: block;
     width: 100%;
@@ -313,5 +301,9 @@ export default Vue.extend({
     color: white;
     background-color: $secondary;
     border-color: $secondary;
+  }
+
+  .grid-col {
+    height:90vh;
   }
 </style>

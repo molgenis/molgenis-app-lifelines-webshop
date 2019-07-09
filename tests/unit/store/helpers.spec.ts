@@ -1,7 +1,7 @@
 import { getErrorMessage, tryAction, toCart, fromCart } from '@/store/helpers'
 import Vue from 'vue'
 import emptyState from '@/store/state'
-import { CartFilter } from '@/types/Cart'
+import { CartFilter, Cart } from '@/types/Cart'
 import Filter from '@/types/Filter'
 
 describe('store', () => {
@@ -94,19 +94,16 @@ describe('store', () => {
           selection: []
         })
       })
-      it('complains when it cannot find a filter option', () => {
-        try {
+      it('complains when it cannot find a filter option', () =>
+        expect(() =>
           toCart({
             ...emptyState,
             facetFilter: {
               ...emptyState.facetFilter,
               ageGroupAt1A: ['123']
             }
-          })
-        } catch (error) {
-          expect(error.message).toBe('Cannot find ageGroupAt1A facet option with id 123')
-        }
-      })
+          })).toThrowError('Cannot find ageGroupAt1A facet option with id 123')
+      )
       it('converts gridSelection to cart selections', () => {
         expect(toCart({
           ...emptyState,
@@ -175,12 +172,35 @@ describe('store', () => {
         expect(fromCart({ filters: cartFilter, selection: [] }, emptyState))
           .toEqual({ facetFilter, gridSelection: {} })
       })
-      it('complains when it cannot find a filter option', () => {
-        try {
+      it('complains when it cannot find a filter option', () =>
+        expect(() =>
           fromCart({ filters: { ageGroupAt1A: ['blah'] }, selection: [] }, emptyState)
-        } catch (error) {
-          expect(error.message).toBe('Cannot find ageGroupAt1A facet option with text blah')
+        ).toThrowError('Cannot find ageGroupAt1A facet option with text blah')
+      )
+
+      it('should throw an error if the cart selection assessments are not found in the application state', () => {
+        const cart: Cart = {
+          selection: [{
+            assessment: 'assessment1',
+            variables: []
+          }],
+          filters: cartFilter
         }
+        expect(() => (fromCart(cart, emptyState))).toThrowError('Cannot find assessment with name assessment1.')
+      })
+
+      it('should throw an error if the cart selection variables are non found in the application state', () => {
+        const cart: Cart = {
+          selection: [{
+            assessment: 'assessment1',
+            variables: ['variable1']
+          }],
+          filters: cartFilter
+        }
+        const assessments = {
+          1: { id: 1, name: 'assessment1' }
+        }
+        expect(() => (fromCart(cart, { ...emptyState, assessments }))).toThrowError('Cannot find variable with name variable1.')
       })
     })
   })

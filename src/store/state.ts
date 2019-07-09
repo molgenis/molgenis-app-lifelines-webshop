@@ -32,7 +32,7 @@ const state: ApplicationState = {
     ageGroupAt3A: [],
     yearOfBirthRange: []
   },
-  sectionList: [],
+  sections: {},
   subSectionList: [],
   treeStructure: [],
   treeSelected: -1,

@@ -2,6 +2,45 @@ import mutations from '@/store/mutations'
 import state from '@/store/state'
 
 describe('mutations', () => {
+  describe('setToast', () => {
+    it('replace the toast with the passed toast', () => {
+      let baseAppState = Object.assign({}, state)
+      mutations.setToast(baseAppState, { type: 'danger', message: 'message' })
+      expect(baseAppState.toast).toEqual({ type: 'danger', message: 'message' })
+    })
+  })
+
+  describe('clearToast', () => {
+    it('clears the toast', () => {
+      let baseAppState = Object.assign({}, state)
+      mutations.setToast(baseAppState, { type: 'danger', message: 'message' })
+      mutations.clearToast(baseAppState)
+      expect(baseAppState.toast).toEqual(null)
+    })
+  })
+
+  describe('updateFacetFilter', () => {
+    it('replace facets with the passed facets', () => {
+      let baseAppState = Object.assign({}, state)
+      mutations.updateFacetFilter(baseAppState, {
+        gender: ['female'],
+        subcohort: [],
+        ageGroupAt1A: [],
+        ageGroupAt2A: ['65+'],
+        ageGroupAt3A: [],
+        yearOfBirthRange: []
+      })
+      expect(baseAppState.facetFilter).toEqual({
+        gender: ['female'],
+        subcohort: [],
+        ageGroupAt1A: [],
+        ageGroupAt2A: ['65+'],
+        ageGroupAt3A: [],
+        yearOfBirthRange: []
+      })
+    })
+  })
+
   describe('updateGenderFilter', () => {
     it('replace the filter genders with the selected genders', () => {
       let baseAppState = Object.assign({}, state)

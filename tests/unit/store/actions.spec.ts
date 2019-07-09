@@ -21,13 +21,25 @@ const mockResponses: {[key:string]: Object} = {
   '/api/v2/lifelines_cart/fghij': {
     contents: cartContents
   },
+  '/api/v2/lifelines_section?num=10000': {
+    items: [
+      { id: 1, name: 'section1' },
+      { id: 2, name: 'section2' }
+    ]
+  },
+  '/api/v2/lifelines_sub_section?num=10000': {
+    items: [
+      { id: 1, name: 'sub_section1' },
+      { id: 2, name: 'sub_section2' }
+    ]
+  },
   '/api/v2/lifelines_assessment': {
     items: [
       { id: 1, name: '1A' },
       { id: 2, name: '1B' }
     ]
   },
-  '/api/v2/lifelines_variable?attrs=id,name,label&num=10000': {
+  '/api/v2/lifelines_variable?attrs=id,name,label&num=10000&sort=id': {
     items: [{
       id: 2,
       name: 'ARZON',
@@ -38,7 +50,7 @@ const mockResponses: {[key:string]: Object} = {
       label: 'SAF'
     }]
   },
-  '/api/v2/lifelines_variable?attrs=id,name,label&num=10000&start=10000': {
+  '/api/v2/lifelines_variable?attrs=id,name,label&num=10000&start=10000&sort=id': {
     items: [{
       id: 4,
       name: 'UVREFLECT',
@@ -49,7 +61,7 @@ const mockResponses: {[key:string]: Object} = {
       label: 'Skin cream used'
     }]
   },
-  '/api/v2/lifelines_subsection_variable?q=subsection_id==4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000': {
+  '/api/v2/lifelines_subsection_variable?q=subsection_id==4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
     items: [{
       variable_id: {
         id: 2,
@@ -130,6 +142,45 @@ jest.mock('@/router', () => ({
 }))
 
 describe('actions', () => {
+  describe('loadSections', () => {
+    it('fetch the sections and commits them', async (done) => {
+      const commit = jest.fn()
+      await actions.loadSections({ state: { sections: {} }, commit })
+      expect(commit).toHaveBeenCalledWith('updateSections', {
+        1: { id: 1, name: 'section1' },
+        2: { id: 2, name: 'section2' }
+      })
+      done()
+    })
+
+    it('not fetch the sections if already in state', async (done) => {
+      const commit = jest.fn()
+      await actions.loadSections({ state: { sections: { 1: { id: 1, name: 'section1' } } }, commit })
+      expect(commit).toHaveBeenCalledTimes(0)
+      done()
+    })
+  })
+
+  describe('loadSubSections', () => {
+    it('fetch the sub sections and commits them as a string list', async (done) => {
+      const commit = jest.fn()
+      await actions.loadSubSections({ state: { subSectionList: [] }, commit })
+      expect(commit).toHaveBeenCalledWith('updateSubSections', [
+        undefined, // todo refactor action to remove this undefined item
+        'sub_section1',
+        'sub_section2'
+      ])
+      done()
+    })
+
+    it('not fetch the sub sections if already in state', async (done) => {
+      const commit = jest.fn()
+      await actions.loadSubSections({ state: { subSectionList: ['sub_section1'] }, commit })
+      expect(commit).toHaveBeenCalledTimes(0)
+      done()
+    })
+  })
+
   describe('loadAssessments', () => {
     it('loads the assessments and commits them', async (done) => {
       const commit = jest.fn()
