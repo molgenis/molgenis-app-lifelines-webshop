@@ -3,17 +3,19 @@ import api from '@molgenis/molgenis-api-client'
 import { tryAction, toCart, fromCart } from './helpers'
 import { Variable } from '@/types/Variable'
 import Assessment from '@/types/Assessment'
+import { Section } from '@/types/Section.ts'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
 import router from '@/router'
 
 export default {
   loadSections: tryAction(async ({ commit, state } : any) => {
-    if (state.sectionList.length === 0) {
+    if (!Object.keys(state.sections).length) {
       const response = await api.get('/api/v2/lifelines_section?num=10000')
-      let sections:String[] = []
-      response.items.map((item:any) => { sections[item.id] = item.name })
-      commit('updateSections', sections)
+      commit('updateSections', response.items.reduce((sections: { [key:number]: Section }, item:any) => {
+        sections[item.id] = item
+        return sections
+      }, {}))
     }
   }),
   loadSubSections: tryAction(async ({ commit, state } : any) => {
@@ -51,8 +53,8 @@ export default {
   }),
   loadVariables: tryAction(async ({ state, commit } : any) => {
     const [response0, response1] = await Promise.all([
-      api.get('/api/v2/lifelines_variable?attrs=id,name,label&num=10000'),
-      api.get('/api/v2/lifelines_variable?attrs=id,name,label&num=10000&start=10000')
+      api.get('/api/v2/lifelines_variable?attrs=id,name,label&num=10000&sort=id'),
+      api.get('/api/v2/lifelines_variable?attrs=id,name,label&num=10000&start=10000&sort=id')
     ])
     const variables: Variable[] = [...response0.items, ...response1.items]
     const variableMap: {[key:number]: Variable} =
@@ -65,7 +67,7 @@ export default {
   loadGridVariables: tryAction(async ({ state, commit } : any) => {
     commit('updateGridVariables', [])
     const subsectionId = state.treeSelected
-    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${subsectionId}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000`)
+    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${subsectionId}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id`)
     if (state.treeSelected === subsectionId) {
       commit('updateGridVariables', response.items
       // map assessment_id to assessmentId somewhere deep in the structure

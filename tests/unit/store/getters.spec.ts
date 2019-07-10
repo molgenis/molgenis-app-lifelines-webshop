@@ -202,4 +202,57 @@ describe('getters', () => {
         .toEqual([[true, true], [true, false], [false, false]])
     })
   })
+
+  describe('treeStructure', () => {
+    describe('when section data has not been loaded', () => {
+      const state: ApplicationState = {
+        ...emptyState
+      }
+      const gettersParam: Getters = {
+        ...emptyGetters
+      }
+      it('should return a empty array', () => {
+        expect(getters.treeStructure(state, gettersParam)).toEqual([])
+      })
+    })
+
+    describe('when section was loaded but subsection was not', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        sections: {
+          1: {
+            id: 1,
+            name: 'section'
+          }
+        }
+      }
+      const gettersParam: Getters = {
+        ...emptyGetters
+      }
+      it('should return the section list', () => {
+        expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'id': 1, 'name': 'section' }])
+      })
+    })
+
+    describe('when sections, subSections and treeStructure are loaded', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        sections: {
+          1: {
+            id: 1,
+            name: 'section'
+          }
+        },
+        subSectionList: ['sub-section1'],
+        treeStructure: [{ key: 1, list: [0] }]
+      }
+
+      const gettersParam: Getters = {
+        ...emptyGetters
+      }
+      it('should return the complete tree structure', () => {
+        expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'children': [{ 'id': 0, 'name': 'sub-section1' }], 'id': 1, 'name': 'section' }])
+      })
+    })
+  })
 })

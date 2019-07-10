@@ -25,7 +25,7 @@
             </div>
           </div>
         </li>
-        <block-expand :key="'b'+parent.name" :isExpanded="parent.name == collapsed && hasChildren(parent)" class="list-group-item p-0" >
+        <block-expand :key="'b-'+ parent.name" :isExpanded="parent.name == collapsed && hasChildren(parent)" class="list-group-item p-0" >
           <ul class="list-group list-group-flush">
             <li
               :class="(value===child.id)&&'active'"
