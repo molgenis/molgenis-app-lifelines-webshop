@@ -15,10 +15,14 @@ export default Vue.extend({
     ...mapGetters(['treeStructure']),
     selection: {
       get () {
-        return this.$store.state.treeSelected
+        return {
+          selected: this.$store.state.treeSelected,
+          open: this.$store.state.treeOpenSection
+        }
       },
-      set (value) {
-        this.$store.commit('updateTreeSelection', value)
+      set ({ selected, open }) {
+        this.$store.commit('updateTreeSelection', selected)
+        this.$store.commit('updateTreeOpenSection', open)
       }
     }
   },

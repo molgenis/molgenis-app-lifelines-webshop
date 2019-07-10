@@ -42,6 +42,9 @@ export default {
   updateTreeSelection (state: ApplicationState, selection: number) {
     state.treeSelected = selection
   },
+  updateTreeOpenSection (state: ApplicationState, treeOpenSection: string) {
+    state.treeOpenSection = treeOpenSection
+  },
   updateSections (state: ApplicationState, sections: {[key:number]: Section}) {
     state.sections = sections
   },

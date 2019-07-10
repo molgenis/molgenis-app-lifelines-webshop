@@ -19,16 +19,16 @@
               <collapse-tree-icon
                 v-if="hasChildren(parent)"
                 class="mr-2"
-                :state="parent.name == collapsed"
+                :state="parent.name == value.open"
               />
               <span v-if="parent.count" class="badge badge-pill badge-light float-right align-self-center">{{parent.count}}</span>
             </div>
           </div>
         </li>
-        <block-expand :key="'b-'+ parent.name" :isExpanded="parent.name == collapsed && hasChildren(parent)" class="list-group-item p-0" >
+        <block-expand :key="'b-'+ parent.name" :isExpanded="parent.name == value.open && hasChildren(parent)" class="list-group-item p-0" >
           <ul class="list-group list-group-flush">
             <li
-              :class="(value===child.id)&&'active'"
+              :class="(value.selection===child.id)&&'active'"
               class="list-group-item list-group-item-outline-secondary list-group-item-action py-1 child-list"
               role="button"
               v-for="child in parent.children"
@@ -61,14 +61,9 @@ import BlockExpand from '../animations/BlockExpand.vue'
 
 export default Vue.extend({
   name: 'CollapsibleTree',
-  data: function () {
-    return {
-      collapsed: ''
-    }
-  },
   props: {
     value: {
-      type: Number,
+      type: Object,
       required: true
     },
     structure: {
@@ -83,13 +78,13 @@ export default Vue.extend({
   },
   methods: {
     selectElement (id) {
-      this.$emit('input', id)
+      this.$emit('input', { selected: id, open: this.value.open })
     },
     toggleCollapse (name) {
-      if (this.collapsed === name) {
-        this.collapsed = ''
+      if (this.value.open === name) {
+        this.$emit('input', { selected: this.value.selected, open: '' })
       } else {
-        this.collapsed = name
+        this.$emit('input', { selected: this.value.selected, open: name })
       }
     }
   },
