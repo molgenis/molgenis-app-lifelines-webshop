@@ -192,7 +192,7 @@ export default Vue.extend({
     overflow: hidden;
   }
   table td,
-  table th:not(:first-child){
+  table th:not(:first-child) {
     width: 4rem;
     max-width: 4rem;
     min-width: 4rem;
@@ -202,30 +202,28 @@ export default Vue.extend({
     vertical-align: middle;
     font-weight: normal;
   }
-  .sticky{
+  .sticky {
     position: fixed;
-    top:0;
+    top: 0;
     background-color: white;
     background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%);
     z-index: 1030;
   }
-  .sticky .assessments-title{
+  .sticky .assessments-title {
     height: 8rem;
   }
-  .sticky .assessments-title span{
+  .sticky .assessments-title span {
     bottom: 1rem;
   }
-  .space-holder{
+  .space-holder {
     height: 6em;
   }
-
   table td, th {
     padding: 0 1px;
     position: relative;
   }
-
   .col-hover td:hover::after {
-    content:"";
+    content: "";
     left: 0;
     right: 0;
     display: inline-block;
@@ -235,7 +233,6 @@ export default Vue.extend({
     height: 10000px;
     z-index: -1;
   }
-
   .variable-title {
     display: block;
     overflow: hidden;
@@ -244,13 +241,11 @@ export default Vue.extend({
     vertical-align: middle;
     padding-left: 1rem;
   }
-
   .assessments-title {
     height: 6em;
     width: auto;
     position: relative;
   }
-
   .assessments-title span {
     white-space: nowrap;
     position: absolute;
@@ -265,45 +260,37 @@ export default Vue.extend({
     transform: rotate(-60deg);
     transform-origin: 0% 50%;
   }
-
   .w-0 {
     width: 0;
   }
-
   button.selectAll {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
-
   button.selectItem {
     border-radius: 0;
   }
-
   button.selectRow {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
-
   button.selectCol {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
-
   .gridItem {
     display: block;
     width: 100%;
     height: 100%;
     margin: 1px;
   }
-
   .gridHover {
     color: white;
     background-color: $secondary;
     border-color: $secondary;
   }
-
   .grid-col {
-    height:90vh;
+    height: 90vh;
   }
 </style>

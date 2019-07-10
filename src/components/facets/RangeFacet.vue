@@ -93,12 +93,12 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.slider-container {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
+  .slider-container {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
 
-.range-input {
-  width: 4rem;
-}
+  .range-input {
+    width: 4rem;
+  }
 </style>

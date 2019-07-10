@@ -72,11 +72,11 @@ export default Vue.extend({
 </script>
 
 <style>
-.age-at-label {
-  margin-right: 1rem;
-}
+  .age-at-label {
+    margin-right: 1rem;
+  }
 
-.age-at-container {
-  margin-bottom: 1rem;
-}
+  .age-at-container {
+    margin-bottom: 1rem;
+  }
 </style>

@@ -97,26 +97,26 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
-  [role="button"]{
+<style scoped lang="scss">
+  @import "../../scss/variables";
+  [role="button"] {
     cursor: pointer;
   }
-  .child-list{
+  .child-list {
     font-weight: lighter;
     padding-left:2.1rem;
   }
-  .child-list.active{
-    background-color: var(--secondary);
-    border-color: var(--secondary);
+  .child-list.active {
+    background-color: $secondary;
+    border-color: $secondary;
   }
-  .parent-list{
+  .parent-list {
     white-space: nowrap;
   }
-  /* Make sure not to get a 2 pixel wide line while using the block-expander in a 'list-group' */
   .block-expander.open {
     margin-top: 0px;
   }
-  .block-expander{
+  .block-expander {
     margin-top: -1px;
   }
 </style>
