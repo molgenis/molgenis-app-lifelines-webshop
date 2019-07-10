@@ -14,6 +14,12 @@ describe('TreeView.vue', () => {
   let wrapper: Wrapper<Vue>
   let store: any
   let treeUpdate = jest.fn()
+  let treeOpenUpdate = jest.fn()
+  let actions = {
+    loadSections: jest.fn(),
+    loadSubSections: jest.fn(),
+    loadSectionTree: jest.fn()
+  }
 
   beforeEach(() => {
     store = new Vuex.Store({
@@ -29,16 +35,16 @@ describe('TreeView.vue', () => {
           ]
         }]
       },
-      actions: {
-        loadSections: jest.fn(),
-        loadSubSections: jest.fn(),
-        loadSectionTree: jest.fn()
+      state: {
+        treeSelected: -1,
+        treeOpenSection: ''
       },
+      actions,
       mutations: {
-        updateTreeSelection: treeUpdate
+        updateTreeSelection: treeUpdate,
+        updateTreeOpenSection: treeOpenUpdate
       }
     })
-    store.state.treeSelected = -1
 
     wrapper = mount(TreeView, {
       stubs: {
@@ -49,10 +55,17 @@ describe('TreeView.vue', () => {
     })
   })
 
-  it('Can select child item', () => {
+  it('Will load needed data', () => {
+    expect(actions.loadSections.mock.calls.length).toBe(1)
+    expect(actions.loadSubSections.mock.calls.length).toBe(1)
+    expect(actions.loadSectionTree.mock.calls.length).toBe(1)
+  })
+
+  it('Can update state', () => {
     expect(wrapper.exists()).toBeTruthy()
     wrapper.find('[title="parent"]').trigger('click')
+    expect(treeOpenUpdate.mock.calls).toEqual([[{ 'treeOpenSection': '', 'treeSelected': -1 }, 'parent']])
     wrapper.find('[title="child"]').trigger('click')
-    expect(treeUpdate.mock.calls).toEqual([ [ { treeSelected: -1 }, 10 ] ])
+    expect(treeUpdate.mock.calls).toEqual([[{ 'treeOpenSection': '', 'treeSelected': -1 }, 10]])
   })
 })
