@@ -46,6 +46,7 @@
         </facet-container>
       </li>
     </ul>
+    <count-view></count-view>
   </div>
 </template>
 
@@ -56,10 +57,11 @@ import ToggleFacet from '../components/facets/ToggleFacet.vue'
 import AgeFacet from '../components/facets/AgeFacet.vue'
 import RangeFacet from '../components/facets/RangeFacet.vue'
 import { mapMutations } from 'vuex'
+import CountView from '@/views/CountView'
 
 export default Vue.extend({
   name: 'SidebarView',
-  components: { FacetContainer, ToggleFacet, AgeFacet, RangeFacet },
+  components: { FacetContainer, ToggleFacet, AgeFacet, RangeFacet, CountView },
   data: function () {
     return {
       activeAgeFacetId: 'age',

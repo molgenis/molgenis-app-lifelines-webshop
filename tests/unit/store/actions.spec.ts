@@ -104,6 +104,12 @@ const mockResponses: {[key:string]: Object} = {
       }
     }]
   },
+  '/api/v2/lifelines_who?num=0': {
+    total: 123456
+  },
+  '/api/v2/lifelines_who?num=0&q=yob%3Dle%3D1970': {
+    total: 3456
+  },
   '/api/v2/lifelines_who_when?aggs=x==variant_id&q=ll_nr.yob%3Dle%3D1970': {
     aggs: {
       matrix: [[1234], [5678]],
@@ -231,6 +237,35 @@ describe('actions', () => {
         4: { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT' },
         5: { 'id': 5, 'label': 'Skin cream used', 'name': 'ARCREME' }
       })
+      done()
+    })
+  })
+
+  describe('loadParticipantCount', () => {
+    it('loads new participant count if rsql is empty', async (done) => {
+      const commit = jest.fn()
+      const response = actions.loadParticipantCount({ commit, getters: { rsql: '' } })
+      expect(commit).toHaveBeenCalledWith('updateParticipantCount', null)
+      await response
+      expect(commit).toHaveBeenCalledWith('updateParticipantCount', 123456)
+      done()
+    })
+    it('loads new participant count if rsql is nonempty', async (done) => {
+      const commit = jest.fn()
+      const response = actions.loadParticipantCount({ commit, getters: { rsql: 'll_nr.yob=le=1970' } })
+      expect(commit).toHaveBeenCalledWith('updateParticipantCount', null)
+      await response
+      expect(commit).toHaveBeenCalledWith('updateParticipantCount', 3456)
+      done()
+    })
+    it('does not commit the participant count if the rsql has been updated while loading', async (done) => {
+      const commit = jest.fn()
+      const getters = { rsql: 'll_nr.yob=le=1970' }
+      const response = actions.loadParticipantCount({ commit, getters })
+      expect(commit).toHaveBeenCalledWith('updateParticipantCount', null)
+      getters.rsql = 'll_nr.yob=le=1971'
+      await response
+      expect(commit).toHaveBeenCalledTimes(1)
       done()
     })
   })

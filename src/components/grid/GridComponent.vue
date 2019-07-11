@@ -1,7 +1,7 @@
 <template>
   <div id="grid">
     <div class="row">
-      <div class="col vld-parent grid-col" v-if="treeSelected!=-1">
+      <div class="col vld-parent grid-col">
         <loading :active="isLoading" loader="dots" :is-full-page="false" color="var(--secondary)" background-color="var(--light)"></loading>
 
         <table
@@ -22,9 +22,7 @@
         </table>
         <div :class="{'space-holder':stickyTableHeader}"></div>
 
-        <table class="grid-table col-hover"
-               v-if="!isLoading && treeSelected!=-1"
-        >
+        <table class="grid-table col-hover" v-if="!isLoading">
           <tr>
             <th></th>
             <td>
@@ -39,7 +37,7 @@
                 :key="assessment.id"
             >
               <button class="ll-facet-option btn btn-sm selectCol gridItem btn-outline-secondary"
-                      @click.prevent="selectColumn(assessment.id)"
+                      @click.prevent="toggleColumn(assessment.id)"
                       @mouseenter="onMouseEnter('grid-button-col-'+colIndex)"
                       @mouseleave="onMouseLeave('grid-button-col-'+colIndex)">
                 <font-awesome-icon icon="arrow-down"/>
@@ -71,10 +69,10 @@
                 v-for="(count,colIndex) in row"
             >
               <button
-                @click.prevent="toggle(rowIndex, colIndex)"
+                @click.prevent="toggleCell(rowIndex, colIndex)"
                 :class="getGridCellClass(rowIndex, colIndex)"
                 class="ll-facet-option btn btn-sm selectItem gridItem">
-                {{formatter(count)}}
+                {{count | formatSI}}
               </button>
             </td>
           </tr>
@@ -88,18 +86,36 @@
 import Vue from 'vue'
 // Import component
 import Loading from 'vue-loading-overlay'
-// Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css'
 
-import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+// @ts-ignore
+import { formatSI } from 'format-si-prefix'
 
 library.add(faArrowDown, faArrowRight, faArrowsAlt)
 
 export default Vue.extend({
+  name: 'GridComponent',
   components: { FontAwesomeIcon, Loading },
+  props: {
+    grid: {
+      type: Array,
+      required: true
+    },
+    gridAssessments: {
+      type: Array,
+      required: true
+    },
+    gridVariables: {
+      type: Array,
+      required: true
+    },
+    gridSelections: {
+      type: Array,
+      required: true
+    }
+  },
   data: function () {
     return {
       stickyTableHeader: false
@@ -111,12 +127,6 @@ export default Vue.extend({
       if (scrollTop > 170) this.stickyTableHeader = true
       else this.stickyTableHeader = false
     },
-    formatter (num) {
-      return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
-    },
-    selectColumn (assessmentId) {
-      this.toggleGridColumn({ assessmentId })
-    },
     onMouseEnter (className) {
       const collection = Array.from(document.getElementsByClassName(className))
       collection.forEach((button) => button.classList.add('gridHover'))
@@ -126,10 +136,16 @@ export default Vue.extend({
       collection.forEach((button) => button.classList.remove('gridHover'))
     },
     toggleRow (variableId) {
-      this.toggleGridRow({
-        variableId,
-        gridAssessments: this.gridAssessments
-      })
+      this.$emit('gridRowToggle', variableId)
+    },
+    toggleColumn (assessmentId) {
+      this.$emit('gridColumnToggle', assessmentId)
+    },
+    toggleCell (rowIndex, colIndex) {
+      this.$emit('gridCellToggle', rowIndex, colIndex)
+    },
+    toggleGrid () {
+      this.$emit('gridAllToggle')
     },
     getGridCellClass (rowIndex, colIndex) {
       const selected = !!this.gridSelections[rowIndex][colIndex]
@@ -137,30 +153,15 @@ export default Vue.extend({
       const colClass = ' grid-button-col-' + colIndex
       const rowClass = ' grid-button-row-' + rowIndex
       return selectedClass + rowClass + colClass
-    },
-    toggleGrid () {
-      this.toggleAll({ gridAssessments: this.gridAssessments })
-    },
-    toggle (rowIndex, colIndex) {
-      this.toggleGridSelection({
-        variableId: this.gridVariables[rowIndex].id,
-        assessmentId: this.gridAssessments[colIndex].id
-      })
-    },
-    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
-    ...mapActions(['loadGridVariables', 'loadGridData', 'loadAssessments'])
+    }
   },
   created: function () {
-    this.loadAssessments()
-    this.loadGridData()
     window.addEventListener('scroll', this.scroll)
   },
   destroyed: function () {
     window.removeEventListener('scroll', this.scroll)
   },
   computed: {
-    ...mapState(['treeSelected', 'gridVariables', 'assessments', 'variantCounts']),
-    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections']),
     variableName () {
       return variable => variable.label ? variable.label : variable.name
     },
@@ -168,14 +169,7 @@ export default Vue.extend({
       return this.grid.length === 0
     }
   },
-  watch: {
-    treeSelected: function () {
-      this.loadGridVariables()
-    },
-    rsql: function () {
-      this.loadGridData()
-    }
-  }
+  filters: { formatSI }
 })
 </script>
 
@@ -192,7 +186,7 @@ export default Vue.extend({
     overflow: hidden;
   }
   table td,
-  table th:not(:first-child){
+  table th:not(:first-child) {
     width: 4rem;
     max-width: 4rem;
     min-width: 4rem;
@@ -202,30 +196,28 @@ export default Vue.extend({
     vertical-align: middle;
     font-weight: normal;
   }
-  .sticky{
+  .sticky {
     position: fixed;
-    top:0;
+    top: 0;
     background-color: white;
     background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%);
     z-index: 1030;
   }
-  .sticky .assessments-title{
+  .sticky .assessments-title {
     height: 8rem;
   }
-  .sticky .assessments-title span{
+  .sticky .assessments-title span {
     bottom: 1rem;
   }
-  .space-holder{
+  .space-holder {
     height: 6em;
   }
-
   table td, th {
     padding: 0 1px;
     position: relative;
   }
-
   .col-hover td:hover::after {
-    content:"";
+    content: "";
     left: 0;
     right: 0;
     display: inline-block;
@@ -235,7 +227,6 @@ export default Vue.extend({
     height: 10000px;
     z-index: -1;
   }
-
   .variable-title {
     display: block;
     overflow: hidden;
@@ -244,13 +235,11 @@ export default Vue.extend({
     vertical-align: middle;
     padding-left: 1rem;
   }
-
   .assessments-title {
     height: 6em;
     width: auto;
     position: relative;
   }
-
   .assessments-title span {
     white-space: nowrap;
     position: absolute;
@@ -265,45 +254,37 @@ export default Vue.extend({
     transform: rotate(-60deg);
     transform-origin: 0% 50%;
   }
-
   .w-0 {
     width: 0;
   }
-
   button.selectAll {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
-
   button.selectItem {
     border-radius: 0;
   }
-
   button.selectRow {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
-
   button.selectCol {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
-
   .gridItem {
     display: block;
     width: 100%;
     height: 100%;
     margin: 1px;
   }
-
   .gridHover {
     color: white;
     background-color: $secondary;
     border-color: $secondary;
   }
-
   .grid-col {
-    height:90vh;
+    height: 90vh;
   }
 </style>

@@ -54,9 +54,9 @@ export default Vue.extend({
   .block-expander {
     transition: height 0.3s ease-out;
     overflow: hidden;
-    height: 0
+    height: 0;
   }
-  .open{
+  .open {
     height: auto;
   }
 </style>

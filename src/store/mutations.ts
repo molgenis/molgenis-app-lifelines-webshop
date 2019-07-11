@@ -42,6 +42,9 @@ export default {
   updateTreeSelection (state: ApplicationState, selection: number) {
     state.treeSelected = selection
   },
+  updateTreeOpenSection (state: ApplicationState, treeOpenSection: string) {
+    state.treeOpenSection = treeOpenSection
+  },
   updateSections (state: ApplicationState, sections: {[key:number]: Section}) {
     state.sections = sections
   },
@@ -62,6 +65,9 @@ export default {
   },
   updateVariantCounts (state: ApplicationState, variantCounts: Count[]) {
     state.variantCounts = variantCounts
+  },
+  updateParticipantCount: (state: ApplicationState, participantCount: number | null) => {
+    state.participantCount = participantCount
   },
   updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
     state.gridSelection = gridSelection

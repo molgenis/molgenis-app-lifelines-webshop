@@ -25,6 +25,7 @@ export default interface ApplicationState {
   treeStructure: Object[]
   gridVariables: VariableWithVariants[]
   variantCounts: Count[]
+  participantCount: number | null
   treeSelected: number
   treeOpenSection: string
   gridSelection: GridSelection

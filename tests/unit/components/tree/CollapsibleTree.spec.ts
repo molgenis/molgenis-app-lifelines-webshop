@@ -11,7 +11,8 @@ describe('CollapsibleTree.vue', () => {
         'font-awesome-icon': '<div/>'
       },
       propsData: {
-        value: -1,
+        opensection: '',
+        selection: -1,
         structure: [
           {
             name: 'test-parent',
@@ -34,17 +35,20 @@ describe('CollapsibleTree.vue', () => {
     expect(items.at(1).text()).toEqual('test-child')
   })
 
-  it('can close and hide children', () => {
-    expect(wrapper.find('.block-expander').classes('open')).toBeFalsy()
+  it('can open a section', () => {
     wrapper.find('[title="test-parent"]').trigger('click')
-    expect(wrapper.find('.block-expander').classes('open')).toBeTruthy()
-    wrapper.find('[title="test-parent"]').trigger('click')
-    expect(wrapper.find('.block-expander').classes('open')).toBeFalsy()
+    expect(wrapper.emitted().updateopensection).toEqual([['test-parent']])
   })
 
   it('can select child', () => {
     wrapper.find('[title="test-parent"]').trigger('click')
     wrapper.find('[title="test-child"]').trigger('click')
-    expect(wrapper.emitted().input[0]).toEqual([10])
+    expect(wrapper.emitted().updateselection).toEqual([[10]])
+  })
+
+  it('will close by selecting the same section', () => {
+    wrapper.setProps({ opensection: 'test-parent' })
+    wrapper.find('[title="test-parent"]').trigger('click')
+    expect(wrapper.emitted().updateopensection).toEqual([['']])
   })
 })

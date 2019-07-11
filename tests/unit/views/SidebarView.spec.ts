@@ -4,6 +4,7 @@ import emptyState from '@/store/state'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ApplicationState from '@/types/ApplicationState'
+import CountView from '@/views/CountView.vue'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -30,6 +31,10 @@ describe('SidebarView.vue', () => {
 
   it('Renders the sidebar', () => {
     expect(wrapper.find('#Sidebar-view').exists()).toBeTruthy()
+  })
+
+  it('Renders CountView', () => {
+    expect(wrapper.find(CountView).exists()).toBeTruthy()
   })
 
   it('Should contain gender and cohort facets', () => {

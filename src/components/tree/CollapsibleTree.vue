@@ -19,16 +19,16 @@
               <collapse-tree-icon
                 v-if="hasChildren(parent)"
                 class="mr-2"
-                :state="parent.name == collapsed"
+                :state="parent.name == opensection"
               />
               <span v-if="parent.count" class="badge badge-pill badge-light float-right align-self-center">{{parent.count}}</span>
             </div>
           </div>
         </li>
-        <block-expand :key="'b-'+ parent.name" :isExpanded="parent.name == collapsed && hasChildren(parent)" class="list-group-item p-0" >
+        <block-expand :key="'b-'+ parent.name" :isExpanded="parent.name == opensection && hasChildren(parent)" class="list-group-item p-0" >
           <ul class="list-group list-group-flush">
             <li
-              :class="(value===child.id)&&'active'"
+              :class="(selection===child.id)&&'active'"
               class="list-group-item list-group-item-outline-secondary list-group-item-action py-1 child-list"
               role="button"
               v-for="child in parent.children"
@@ -61,18 +61,17 @@ import BlockExpand from '../animations/BlockExpand.vue'
 
 export default Vue.extend({
   name: 'CollapsibleTree',
-  data: function () {
-    return {
-      collapsed: ''
-    }
-  },
   props: {
-    value: {
+    selection: {
       type: Number,
       required: true
     },
     structure: {
       type: Array,
+      required: true
+    },
+    opensection: {
+      type: String,
       required: true
     }
   },
@@ -83,13 +82,13 @@ export default Vue.extend({
   },
   methods: {
     selectElement (id) {
-      this.$emit('input', id)
+      this.$emit('updateselection', id)
     },
     toggleCollapse (name) {
-      if (this.collapsed === name) {
-        this.collapsed = ''
+      if (this.opensection === name) {
+        this.$emit('updateopensection', '')
       } else {
-        this.collapsed = name
+        this.$emit('updateopensection', name)
       }
     }
   },
@@ -97,26 +96,26 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
-  [role="button"]{
+<style scoped lang="scss">
+  @import "../../scss/variables";
+  [role="button"] {
     cursor: pointer;
   }
-  .child-list{
+  .child-list {
     font-weight: lighter;
     padding-left:2.1rem;
   }
-  .child-list.active{
-    background-color: var(--secondary);
-    border-color: var(--secondary);
+  .child-list.active {
+    background-color: $secondary;
+    border-color: $secondary;
   }
-  .parent-list{
+  .parent-list {
     white-space: nowrap;
   }
-  /* Make sure not to get a 2 pixel wide line while using the block-expander in a 'list-group' */
   .block-expander.open {
     margin-top: 0px;
   }
-  .block-expander{
+  .block-expander {
     margin-top: -1px;
   }
 </style>
