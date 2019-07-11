@@ -46,12 +46,10 @@ export default {
     }
   }),
   filterSections: tryAction(async ({ getters, commit }: {getters: Getters, commit: any}) => {
-    console.log('filterSections')
     const q = getters.searchTermQuery
-    if (q === null) {
-      commit('updateFilteredSections', null)
-    } else {
-      const response = await api.get(`/api/v2/lifelines_section?q=${encodeURIComponent(q)}`)
+    commit('updateFilteredSections', null)
+    if (q !== null) {
+      const response = await api.get(`/api/v2/lifelines_section?num=10000&q=${encodeURIComponent(q)}`)
       if (q === getters.searchTermQuery) {
         commit('updateFilteredSections', response.items.map((it: any) => it.id))
       }
@@ -59,12 +57,11 @@ export default {
   }),
   filterSubsections: tryAction(async ({ getters, commit }: {getters: Getters, commit: any}) => {
     const q = getters.searchTermQuery
-    if (q === null) {
-      commit('updateFiteredSubsections', null)
-    } else {
+    commit('updateFilteredSubsections', null)
+    if (q !== null) {
       const response = await api.get(`/api/v2/lifelines_subsection_variable?aggs=x==subsection_agg&q=${encodeURIComponent(q)}`)
       if (q === getters.searchTermQuery) {
-        commit('updateFiteredSubsections', response.aggs.xLabels.map((label: string) => parseInt(label, 10)))
+        commit('updateFilteredSubsections', response.aggs.xLabels.map((label: string) => parseInt(label, 10)))
       }
     }
   }),

@@ -78,7 +78,7 @@ export default {
   updateFilteredSections (state: ApplicationState, sections: number[]) {
     state.filteredSections = sections
   },
-  updateFiteredSubsections (state: ApplicationState, subsections: number[]) {
+  updateFilteredSubsections (state: ApplicationState, subsections: number[]) {
     state.filteredSubsections = subsections
   },
   toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {

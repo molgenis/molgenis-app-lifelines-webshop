@@ -5,6 +5,8 @@ import ApplicationState from '@/types/ApplicationState'
 import Variant from '@/types/Variant'
 import Assessment from '@/types/Assessment'
 import { Variable, VariableWithVariants } from '@/types/Variable'
+import { Section } from '@/types/Section'
+import { TreeNode } from '@/types/TreeNode'
 
 describe('getters', () => {
   const emptyGetters: Getters = {
@@ -268,6 +270,47 @@ describe('getters', () => {
 
       it('should escape rsql characters', () => {
         expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'a==b' })).toBe('*=q=\'a==b\'')
+      })
+    })
+
+    describe('filteredTreeStructure', () => {
+      const education: TreeNode = {
+        id: 1,
+        name: 'Education',
+        children: [
+          { id: 1, name: 'Primary education' },
+          { id: 2, name: 'Secondary education' }
+        ]
+      }
+      const breakfast = { id: 3, name: 'Breakfast' }
+      const lunch = { id: 4, name: 'Lunch' }
+      const dinner = { id: 5, name: 'Dinner' }
+      const food: TreeNode = {
+        id: 2,
+        name: 'Food',
+        children: [ breakfast, lunch, dinner ]
+      }
+      const treeStructure = [education, food]
+
+      it('does not filter if there are no filters', () => {
+        const result = getters.filteredTreeStructure(
+          { ...emptyState, filteredSections: null, filteredSubsections: null },
+          { ...emptyGetters, treeStructure })
+        expect(result).toEqual(treeStructure)
+      })
+
+      it('filters the tree if there are filters', () => {
+        const result = getters.filteredTreeStructure(
+          { ...emptyState, filteredSections: [], filteredSubsections: [4] },
+          { ...emptyGetters, treeStructure })
+        expect(result).toEqual([{ ...food, children: [lunch] }])
+      })
+
+      it('prunes empty sections when filtering', () => {
+        const result = getters.filteredTreeStructure(
+          { ...emptyState, filteredSections: [1], filteredSubsections: [4] },
+          { ...emptyGetters, treeStructure })
+        expect(result).toEqual([education, { ...food, children: [lunch] }])
       })
     })
   })
