@@ -42,7 +42,7 @@ export default {
   updateTreeSelection (state: ApplicationState, selection: number) {
     state.treeSelected = selection
   },
-  updateTreeOpenSection (state: ApplicationState, treeOpenSection: string) {
+  updateTreeOpenSection (state: ApplicationState, treeOpenSection: number) {
     state.treeOpenSection = treeOpenSection
   },
   updateSections (state: ApplicationState, sections: {[key:number]: Section}) {
@@ -73,14 +73,7 @@ export default {
     state.gridSelection = gridSelection
   },
   setTreeCount (state: ApplicationState, count: Number) {
-    /*
-    let count = 0
-    console.log(state.gridSelection)
-    for (let prop in state.gridSelection) {
-      count += state.gridSelection[prop].length
-    }
-    */
-    state.treeStructure[state.treeOpenSection - 1].list.find((item) => item.id === state.treeSelected).count = count
+    state.treeStructure[state.treeOpenSection - 1].list.find((item:object) => item.id === state.treeSelected).count = count
   },
   toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
     const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))

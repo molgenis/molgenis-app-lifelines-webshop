@@ -25,6 +25,6 @@ export default Vue.extend({
 
 <style scoped>
   .col.tree{
-    max-width: 20rem;
+    max-width: 22rem;
   }
 </style>

@@ -51,10 +51,10 @@ export default {
       operands = [
         ...operands,
         ...state.facetFilter.subcohort.map(subcohort => ({
-            selector: `ll_nr.subcohort${subcohort}_group`,
-            comparison: '==',
-            arguments: true
-          })
+          selector: `ll_nr.subcohort${subcohort}_group`,
+          comparison: '==',
+          arguments: true
+        })
         )]
     }
     if (state.facetFilter.gender.length > 0) {
@@ -124,13 +124,16 @@ export default {
       return state.treeStructure.map((item:any) => {
         return {
           ...state.sections[item.key],
-          children: item.list.map((child:object) => { return {
+          children: item.list.map((child:object) => {
+            return {
               name: state.subSectionList[child.id],
               count: child.count,
               id: child.id
             }
           })
         }
+      }).map((item:any) => { // Add count of all children to parent
+        return { ...item, count: item.children.reduce((total:number, child:object) => (total + child.count), 0) }
       })
     } else if (loadedSection) {
       // return temporary partial tree

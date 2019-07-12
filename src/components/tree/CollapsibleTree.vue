@@ -6,6 +6,7 @@
         <li
           :key="parent.name"
           class="list-group-item list-group-item-outline-secondary list-group-item-action text-truncate pr-3 py-2 parent-list"
+          :class="{ selecteditems: parent.count > 0 }"
           :title="parent.name"
           role="button"
           @click="toggleCollapse(parent.id)"
@@ -21,14 +22,16 @@
                 class="mr-2"
                 :state="parent.id == opensection"
               />
+              <!--
               <span v-if="parent.count" class="badge badge-pill badge-light float-right align-self-center">{{parent.count}}</span>
+              -->
             </div>
           </div>
         </li>
         <block-expand :key="'b-'+ parent.name" :isExpanded="parent.id == opensection && hasChildren(parent)" class="list-group-item p-0" >
           <ul class="list-group list-group-flush">
             <li
-              :class="{active: (selection===child.id), selecteditems: child.count > 0}"
+              :class="{ active: (selection===child.id), selecteditems: child.count > 0 }"
               class="list-group-item list-group-item-outline-secondary list-group-item-action py-1 child-list"
               role="button"
               v-for="child in parent.children"
@@ -106,7 +109,7 @@ export default Vue.extend({
   }
   .child-list {
     font-weight: lighter;
-    padding-left: 3rem;
+    padding-left: 3.5rem;
   }
   .child-list.active {
     background-color: $secondary;
@@ -114,7 +117,7 @@ export default Vue.extend({
   }
   .parent-list {
     white-space: nowrap;
-    padding-left: 2rem;
+    padding-left: 2.5rem;
   }
   .block-expander.open {
     margin-top: 0px;
@@ -123,7 +126,7 @@ export default Vue.extend({
     margin-top: -1px;
   }
 
-  .child-list{
+  .list-group-item{
     &:before {
       content: "";
       border-radius: 50%;
@@ -147,6 +150,9 @@ export default Vue.extend({
       &.active:before {
         background-color: $light;
       }
+    }
+    &.child-list:before{
+      /* left: 2rem; */
     }
   }
 </style>

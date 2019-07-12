@@ -12,7 +12,9 @@ describe('getters', () => {
     variantIds: [],
     rsql: '',
     grid: [],
-    gridAssessments: []
+    gridAssessments: [],
+    gridSelections: [],
+    numberOfSelectedItems: 0
   }
 
   const variant1: Variant = { id: 1, assessmentId: 1 }
