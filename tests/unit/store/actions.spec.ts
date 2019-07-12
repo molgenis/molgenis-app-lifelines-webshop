@@ -74,7 +74,7 @@ const mockResponses: {[key:string]: Object} = {
       label: 'Skin cream used'
     }]
   },
-  '/api/v2/lifelines_subsection_variable?q=subsection_id==4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
+  '/api/v2/lifelines_subsection_variable?q=subsection_id%3D%3D4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
     items: [{
       variable_id: {
         id: 2,
@@ -117,7 +117,7 @@ const mockResponses: {[key:string]: Object} = {
       }
     }]
   },
-  '/api/v2/lifelines_subsection_variable?q=subsection_id==4;*=q=cream&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
+  '/api/v2/lifelines_subsection_variable?q=subsection_id%3D%3D4%3B*%3Dq%3Dcream&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
     items: [{
       variable_id: {
         id: 2,
