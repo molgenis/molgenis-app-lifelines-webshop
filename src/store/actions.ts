@@ -7,6 +7,7 @@ import { Section } from '@/types/Section.ts'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
 import router from '@/router'
+import Getters from '@/types/Getters'
 
 export default {
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -44,6 +45,26 @@ export default {
       commit('updateSectionTree', treeStructure)
     }
   }),
+  filterSections: tryAction(async ({ getters, commit }: {getters: Getters, commit: any}) => {
+    const q = getters.searchTermQuery
+    commit('updateFilteredSections', null)
+    if (q !== null) {
+      const response = await api.get(`/api/v2/lifelines_section?num=10000&q=${encodeURIComponent(q)}`)
+      if (q === getters.searchTermQuery) {
+        commit('updateFilteredSections', response.items.map((it: any) => it.id))
+      }
+    }
+  }),
+  filterSubsections: tryAction(async ({ getters, commit }: {getters: Getters, commit: any}) => {
+    const q = getters.searchTermQuery
+    commit('updateFilteredSubsections', null)
+    if (q !== null) {
+      const response = await api.get(`/api/v2/lifelines_subsection_variable?aggs=x==subsection_agg&q=${encodeURIComponent(q)}`)
+      if (q === getters.searchTermQuery) {
+        commit('updateFilteredSubsections', response.aggs.xLabels.map((label: string) => parseInt(label, 10)))
+      }
+    }
+  }),
   loadAssessments: tryAction(async ({ commit }: any) => {
     const response = await api.get('/api/v2/lifelines_assessment')
     commit('updateAssessments', response.items.reduce((accum: { [key:number]: Assessment }, assessment: Assessment) => {
@@ -64,11 +85,16 @@ export default {
       }, {})
     commit('updateVariables', variableMap)
   }),
-  loadGridVariables: tryAction(async ({ state, commit } : any) => {
+  loadGridVariables: tryAction(async ({ state, commit, getters } : { state: ApplicationState, commit: any, getters: Getters}) => {
     commit('updateGridVariables', [])
     const subsectionId = state.treeSelected
-    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=subsection_id==${subsectionId}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id`)
-    if (state.treeSelected === subsectionId) {
+    const searchTermQuery = getters.searchTermQuery
+    let q = `subsection_id==${subsectionId}`
+    if (searchTermQuery !== null) {
+      q = `${q};${searchTermQuery}`
+    }
+    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=${encodeURIComponent(q)}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id`)
+    if ((state.treeSelected === subsectionId) && (searchTermQuery === getters.searchTermQuery)) {
       commit('updateGridVariables', response.items
       // map assessment_id to assessmentId somewhere deep in the structure
         .map((sv: any) => ({

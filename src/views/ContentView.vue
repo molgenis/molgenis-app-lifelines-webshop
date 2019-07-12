@@ -5,7 +5,7 @@
            <h3 class="my-3">2. Select data</h3>
           </div>
           <div class="col-span-4 col-4" >
-            <search-component v-model="searchValue"></search-component>
+            <search-component @seachChanged="onSearchChange"></search-component>
           </div>
       </div>
       <div class="row mt-3" >
@@ -25,13 +25,22 @@ import Vue from 'vue'
 import TreeView from './TreeView.vue'
 import GridView from './GridView.vue'
 import SearchComponent from '../components/search/SearchComponent.vue'
+import { mapMutations, mapActions, mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'ContentView',
   components: { TreeView, GridView, SearchComponent },
-  data: () => {
-    return {
-      searchValue: ''
+  computed: mapState(['treeSelection']),
+  methods: {
+    ...mapMutations(['updateSearchTerm']),
+    ...mapActions(['filterSections', 'filterSubsections', 'loadGridVariables']),
+    onSearchChange (value) {
+      this.updateSearchTerm(value || null)
+      this.filterSections()
+      this.filterSubsections()
+      if (this.treeSelection !== -1) {
+        this.loadGridVariables()
+      }
     }
   }
 })

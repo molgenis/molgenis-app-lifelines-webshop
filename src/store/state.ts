@@ -40,7 +40,10 @@ const state: ApplicationState = {
   gridSelection: {},
   variantCounts: [],
   participantCount: null,
-  assessments: {}
+  assessments: {},
+  searchTerm: null,
+  filteredSubsections: null,
+  filteredSections: null
 }
 
 export default state
