@@ -51,10 +51,10 @@ export default {
       operands = [
         ...operands,
         ...state.facetFilter.subcohort.map(subcohort => ({
-          selector: `ll_nr.subcohort${subcohort}_group`,
-          comparison: '==',
-          arguments: true
-        })
+            selector: `ll_nr.subcohort${subcohort}_group`,
+            comparison: '==',
+            arguments: true
+          })
         )]
     }
     if (state.facetFilter.gender.length > 0) {
@@ -110,6 +110,10 @@ export default {
         !!variableSelections && variableSelections.includes(assessment.id)
       )
     }),
+  numberOfSelectedItems: (state: ApplicationState, getters: Getters): Number =>
+    getters.gridSelections.reduce((total: number, item: object[]) => {
+      return total + item.filter(Boolean).length
+    }, 0),
   treeStructure: (state: ApplicationState, getters: Getters) => {
     const loadedSection:Boolean = Object.keys(state.sections).length > 0
     const loadedSubSection:Boolean = state.subSectionList.length > 0
@@ -120,7 +124,12 @@ export default {
       return state.treeStructure.map((item:any) => {
         return {
           ...state.sections[item.key],
-          children: item.list.map((id:number) => { return { name: state.subSectionList[id], id } })
+          children: item.list.map((child:object) => { return {
+              name: state.subSectionList[child.id],
+              count: child.count,
+              id: child.id
+            }
+          })
         }
       })
     } else if (loadedSection) {

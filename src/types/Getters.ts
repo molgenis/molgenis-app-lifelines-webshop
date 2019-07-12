@@ -8,4 +8,6 @@ export default interface Getters {
   rsql: string
   gridAssessments: Assessment[]
   grid: number[][]
+  gridSelections: boolean[][]
+  numberOfSelectedItems: Number
 }

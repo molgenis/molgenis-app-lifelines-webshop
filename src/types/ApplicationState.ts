@@ -27,6 +27,6 @@ export default interface ApplicationState {
   variantCounts: Count[]
   participantCount: number | null
   treeSelected: number
-  treeOpenSection: string
+  treeOpenSection: number
   gridSelection: GridSelection
 }

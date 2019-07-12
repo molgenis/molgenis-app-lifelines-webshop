@@ -32,9 +32,9 @@ export default {
       let structure: any = {}
       response.items.map((item: any) => {
         if (item.section_id.id in structure) {
-          structure[item.section_id.id].push(item.subsection_id.id)
+          structure[item.section_id.id].push({ id: item.subsection_id.id, count: 0 })
         } else {
-          structure[item.section_id.id] = [item.subsection_id.id]
+          structure[item.section_id.id] = [{ id: item.subsection_id.id, count: 0 }]
         }
       })
       let treeStructure: Array<Object> = []

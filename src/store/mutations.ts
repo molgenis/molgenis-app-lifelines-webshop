@@ -72,6 +72,16 @@ export default {
   updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
     state.gridSelection = gridSelection
   },
+  setTreeCount (state: ApplicationState, count: Number) {
+    /*
+    let count = 0
+    console.log(state.gridSelection)
+    for (let prop in state.gridSelection) {
+      count += state.gridSelection[prop].length
+    }
+    */
+    state.treeStructure[state.treeOpenSection - 1].list.find((item) => item.id === state.treeSelected).count = count
+  },
   toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
     const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))
     if (allSelected) {
@@ -95,14 +105,14 @@ export default {
       })
     }
   },
-  toggleGridRow ({ gridSelection }: { gridSelection: GridSelection }, { variableId, gridAssessments }: {variableId: number, gridAssessments: Assessment[] }) {
+  toggleGridRow ({ gridSelection, treeSelected }: { gridSelection: GridSelection, treeSelected: number }, { variableId, gridAssessments }: {variableId: number, gridAssessments: Assessment[] }) {
     if (gridSelection.hasOwnProperty(variableId) && (gridSelection[variableId].length === gridAssessments.length)) {
       Vue.delete(gridSelection, variableId)
     } else {
       Vue.set(gridSelection, variableId, gridAssessments.map((it) => it.id))
     }
   },
-  toggleAll ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: VariableWithVariants[]}, { gridAssessments }: {gridAssessments: Assessment[] }) {
+  toggleAll ({ gridSelection, gridVariables, treeSelected, treeStructure }: {gridSelection: GridSelection, gridVariables: VariableWithVariants[], treeSelected: number, treeStructure: object[]}, { gridAssessments }: {gridAssessments: Assessment[] }) {
     // For each variable all assessments are selected
     const allSelected = gridVariables.every((variable) => {
       return gridSelection.hasOwnProperty(variable.id) && (gridSelection[variable.id].length === gridAssessments.length)
