@@ -19,16 +19,16 @@ describe('mutations', () => {
   describe('updateFilteredSections', () => {
     it('updates filtered sections', () => {
       const baseAppState = { ...state }
-      mutations.updateFilteredSections(baseAppState, [1,2])
-      expect(baseAppState.filteredSections).toEqual([1,2])
+      mutations.updateFilteredSections(baseAppState, [1, 2])
+      expect(baseAppState.filteredSections).toEqual([1, 2])
     })
   })
 
   describe('updateFilteredSubsections', () => {
     it('updates filtered subsections', () => {
       const baseAppState = { ...state }
-      mutations.updateFilteredSubsections(baseAppState, [1,2])
-      expect(baseAppState.filteredSubsections).toEqual([1,2])
+      mutations.updateFilteredSubsections(baseAppState, [1, 2])
+      expect(baseAppState.filteredSubsections).toEqual([1, 2])
     })
   })
 

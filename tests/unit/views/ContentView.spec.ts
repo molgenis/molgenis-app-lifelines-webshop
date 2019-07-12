@@ -2,13 +2,12 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import ContentView from '@/views/ContentView.vue'
 import Vuex, { Store } from 'vuex'
 import SearchComponent from '@/components/search/SearchComponent.vue'
-import mutations from '@/store/mutations';
+import mutations from '@/store/mutations'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
 describe('ContentView.vue', () => {
-
   const filterSections = jest.fn()
   const filterSubsections = jest.fn()
   const loadGridVariables = jest.fn()
