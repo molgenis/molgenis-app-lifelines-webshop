@@ -27,6 +27,19 @@ const mockResponses: {[key:string]: Object} = {
       { id: 2, name: 'section2' }
     ]
   },
+  '/api/v2/lifelines_section?num=10000&q=*%3Dq%3Dhello': {
+    items: [
+      { id: 1, name: 'section1' }
+    ]
+  },
+  '/api/v2/lifelines_subsection_variable?aggs=x==subsection_agg&q=*%3Dq%3Dhello': {
+    aggs: {
+      xLabels: [
+        '1',
+        '3'
+      ]
+    }
+  },
   '/api/v2/lifelines_sub_section?num=10000': {
     items: [
       { id: 1, name: 'sub_section1' },
@@ -61,7 +74,7 @@ const mockResponses: {[key:string]: Object} = {
       label: 'Skin cream used'
     }]
   },
-  '/api/v2/lifelines_subsection_variable?q=subsection_id==4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
+  '/api/v2/lifelines_subsection_variable?q=subsection_id%3D%3D4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
     items: [{
       variable_id: {
         id: 2,
@@ -87,6 +100,29 @@ const mockResponses: {[key:string]: Object} = {
         id: 4,
         name: 'UVREFLECT',
         label: 'Reflection',
+        variants: [{
+          id: 197,
+          assessment_id: 1
+        }]
+      }
+    }, {
+      variable_id: {
+        id: 4,
+        name: 'ARCREME',
+        label: 'Skin cream used',
+        variants: [{
+          id: 197,
+          assessment_id: 1
+        }]
+      }
+    }]
+  },
+  '/api/v2/lifelines_subsection_variable?q=subsection_id%3D%3D4%3B*%3Dq%3Dcream&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
+    items: [{
+      variable_id: {
+        id: 2,
+        name: 'ARZON',
+        label: 'Suncream used',
         variants: [{
           id: 197,
           assessment_id: 1
@@ -167,6 +203,58 @@ describe('actions', () => {
     })
   })
 
+  describe('filterSections', () => {
+    it('loads sections matching search term', async (done) => {
+      const commit = jest.fn()
+      const getters = {
+        searchTermQuery: '*=q=hello'
+      }
+      const action = actions.filterSections({ commit, getters })
+      expect(commit).toHaveBeenCalledWith('updateFilteredSections', null)
+      await action
+      expect(commit).toHaveBeenCalledWith('updateFilteredSections', [1])
+      done()
+    })
+
+    it('does not commit if search term has changed while loading', async (done) => {
+      const commit = jest.fn()
+      const getters = {
+        searchTermQuery: '*=q=hello'
+      }
+      const action = actions.filterSections({ commit, getters })
+      expect(commit).toHaveBeenCalledWith('updateFilteredSections', null)
+      getters.searchTermQuery = '*=q=helloes'
+      await action
+      expect(commit).toHaveBeenCalledTimes(1)
+      done()
+    })
+  })
+
+  describe('filterSubsections', () => {
+    it('loads subsections matching search term', async (done) => {
+      const commit = jest.fn()
+      const getters = {
+        searchTermQuery: '*=q=hello'
+      }
+      const action = actions.filterSubsections({ commit, getters })
+      expect(commit).toHaveBeenCalledWith('updateFilteredSubsections', null)
+      await action
+      expect(commit).toHaveBeenCalledWith('updateFilteredSubsections', [1, 3])
+      done()
+    })
+
+    it('clears filtered subsections if search term is null', async (done) => {
+      const commit = jest.fn()
+      const getters = {
+        searchTermQuery: null
+      }
+      await actions.filterSubsections({ commit, getters })
+      expect(commit).toHaveBeenCalledWith('updateFilteredSubsections', null)
+      expect(commit).toHaveBeenCalledTimes(1)
+      done()
+    })
+  })
+
   describe('loadSubSections', () => {
     it('fetch the sub sections and commits them as a string list', async (done) => {
       const commit = jest.fn()
@@ -202,7 +290,11 @@ describe('actions', () => {
   describe('loadGridVariables', () => {
     it('loads variables for selected subsection', async (done) => {
       const commit = jest.fn()
-      const action = actions.loadGridVariables({ state: { treeSelected: 4 }, commit })
+      const action = actions.loadGridVariables({
+        state: { treeSelected: 4 },
+        getters: { searchTermQuery: null },
+        commit
+      })
       expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
       await action
       const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
@@ -214,12 +306,41 @@ describe('actions', () => {
       ])
       done()
     })
+    it('adds searchTermQuery to query if it is present', async (done) => {
+      const commit = jest.fn()
+      const action = actions.loadGridVariables({
+        state: { treeSelected: 4 },
+        getters: { searchTermQuery: '*=q=cream' },
+        commit
+      })
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
+      await action
+      const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', [
+        { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant] },
+        { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant] }
+      ])
+      done()
+    })
     it('does not commit the grid variables if the tree selection changes during the call', async (done) => {
       const commit = jest.fn()
       const state = { treeSelected: 4 }
-      const action = actions.loadGridVariables({ state, commit })
+      const getters = { searchTermQuery: null }
+      const action = actions.loadGridVariables({ state, commit, getters })
       expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
       state.treeSelected = 6
+      await action
+      expect(commit).toHaveBeenCalledTimes(1)
+      done()
+    })
+
+    it('does not commit the grid variables if the search term query during the call', async (done) => {
+      const commit = jest.fn()
+      const state = { treeSelected: 4 }
+      const getters: any = { searchTermQuery: null }
+      const action = actions.loadGridVariables({ state, commit, getters })
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
+      getters.searchTermQuery = '*=q=test'
       await action
       expect(commit).toHaveBeenCalledTimes(1)
       done()

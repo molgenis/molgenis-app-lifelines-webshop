@@ -16,6 +16,36 @@ describe('mutations', () => {
     })
   })
 
+  describe('updateFilteredSections', () => {
+    it('updates filtered sections', () => {
+      const baseAppState = { ...state }
+      mutations.updateFilteredSections(baseAppState, [1, 2])
+      expect(baseAppState.filteredSections).toEqual([1, 2])
+    })
+  })
+
+  describe('updateFilteredSubsections', () => {
+    it('updates filtered subsections', () => {
+      const baseAppState = { ...state }
+      mutations.updateFilteredSubsections(baseAppState, [1, 2])
+      expect(baseAppState.filteredSubsections).toEqual([1, 2])
+    })
+  })
+
+  describe('updateSearchTerm', () => {
+    it('updates search term', () => {
+      const baseAppState = { ...state }
+      mutations.updateSearchTerm(baseAppState, 'hello')
+      expect(baseAppState.searchTerm).toEqual('hello')
+    })
+
+    it('removes search term', () => {
+      const baseAppState = { ...state }
+      mutations.updateSearchTerm(baseAppState, null)
+      expect(baseAppState.searchTerm).toEqual(null)
+    })
+  })
+
   describe('setToast', () => {
     it('replace the toast with the passed toast', () => {
       let baseAppState = Object.assign({}, state)

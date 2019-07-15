@@ -24,7 +24,7 @@ describe('TreeView.vue', () => {
   beforeEach(() => {
     store = new Vuex.Store({
       getters: {
-        treeStructure: () => [{
+        filteredTreeStructure: () => [{
           name: 'parent',
           open: true,
           children: [
