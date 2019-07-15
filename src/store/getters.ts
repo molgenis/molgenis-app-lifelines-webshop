@@ -148,5 +148,8 @@ export default {
       return result
     }, [])
   },
-  searchTermQuery: (state: ApplicationState) => state.searchTerm && transformToRSQL({ selector: '*', comparison: '=q=', arguments: state.searchTerm })
+  searchTermQuery: (state: ApplicationState) => state.searchTerm && transformToRSQL({ selector: '*', comparison: '=q=', arguments: state.searchTerm }),
+  isSearchResultEmpty: (state: ApplicationState, { filteredTreeStructure }: Getters): boolean => {
+    return !!(state.searchTerm && filteredTreeStructure.length === 0)
+  }
 }

@@ -12,6 +12,7 @@ describe('ContentView.vue', () => {
   const filterSubsections = jest.fn()
   const loadGridVariables = jest.fn()
   const updateSearchTerm = jest.fn()
+  const isSearchResultEmpty = jest.fn()
   const store = new Store({
     state: { treeSelection: 3 },
     actions: {
@@ -21,11 +22,14 @@ describe('ContentView.vue', () => {
     },
     mutations: {
       updateSearchTerm
+    },
+    getters: {
+      isSearchResultEmpty
     }
   })
 
   it('Renders the content', () => {
-    const wrapper = shallowMount(ContentView)
+    const wrapper = shallowMount(ContentView, { store, localVue })
 
     expect(wrapper.exists()).toBeTruthy()
     expect(wrapper.find('#Content-view').exists()).toBeTruthy()
