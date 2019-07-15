@@ -22,7 +22,7 @@
         </table>
         <div :class="{'space-holder':stickyTableHeader}"></div>
 
-        <table class="grid-table col-hover" v-if="!isLoading">
+        <table class="grid-table col-hover" v-if="!isLoading && grid.length">
           <tr>
             <th></th>
             <td>
