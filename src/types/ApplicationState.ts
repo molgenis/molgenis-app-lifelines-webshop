@@ -32,4 +32,5 @@ export default interface ApplicationState {
   searchTerm: string | null
   filteredSubsections: number[] | null
   filteredSections: number[] | null
+  isGridLoading: boolean
 }

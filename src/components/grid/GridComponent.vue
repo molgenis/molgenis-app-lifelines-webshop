@@ -114,6 +114,10 @@ export default Vue.extend({
     gridSelections: {
       type: Array,
       required: true
+    },
+    isLoading: {
+      type: Boolean,
+      required: true
     }
   },
   data: function () {
@@ -164,9 +168,6 @@ export default Vue.extend({
   computed: {
     variableName () {
       return variable => variable.label ? variable.label : variable.name
-    },
-    isLoading () {
-      return this.grid.length === 0
     }
   },
   filters: { formatSI }

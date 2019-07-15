@@ -25,7 +25,8 @@ describe('GridView', () => {
   beforeEach(() => {
     state = {
       treeSelected: -1,
-      gridVariables: []
+      gridVariables: [],
+      isGridLoading: false
     }
     loadGridDataMock = jest.fn()
     loadGridVariables = jest.fn()

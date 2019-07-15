@@ -6,6 +6,7 @@
     :gridAssessments="gridAssessments"
     :gridVariables="gridVariables"
     :gridSelections="gridSelections"
+    :isLoading="isGridLoading"
     @gridRowToggle="handleGridRowToggle"
     @gridColumnToggle="handleGridColumnToggle"
     @gridCellToggle="handleGridCellToggle"
@@ -24,7 +25,10 @@ export default Vue.extend({
   components: { GridComponent },
   computed: {
     ...mapState(['treeSelected', 'gridVariables']),
-    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections'])
+    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections']),
+    isGridLoading () {
+      return this.$store.state.isGridLoading
+    }
   },
   methods: {
     ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),

@@ -86,6 +86,7 @@ export default {
     commit('updateVariables', variableMap)
   }),
   loadGridVariables: tryAction(async ({ state, commit, getters } : { state: ApplicationState, commit: any, getters: Getters}) => {
+    state.isGridLoading = true
     commit('updateGridVariables', [])
     const subsectionId = state.treeSelected
     const searchTermQuery = getters.searchTermQuery
@@ -106,6 +107,7 @@ export default {
             }))
         })))
     }
+    state.isGridLoading = false
   }),
   loadParticipantCount: tryAction(async ({ commit, getters }: any) => {
     commit('updateParticipantCount', null)
