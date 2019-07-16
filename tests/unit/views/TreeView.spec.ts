@@ -26,6 +26,7 @@ describe('TreeView.vue', () => {
       getters: {
         treeStructure: () => [{
           name: 'parent',
+          id: 5,
           open: true,
           children: [
             {
@@ -37,7 +38,7 @@ describe('TreeView.vue', () => {
       },
       state: {
         treeSelected: -1,
-        treeOpenSection: ''
+        treeOpenSection: -1
       },
       actions,
       mutations: {
@@ -64,8 +65,8 @@ describe('TreeView.vue', () => {
   it('Can update state', () => {
     expect(wrapper.exists()).toBeTruthy()
     wrapper.find('[title="parent"]').trigger('click')
-    expect(treeOpenUpdate.mock.calls).toEqual([[{ 'treeOpenSection': '', 'treeSelected': -1 }, 'parent']])
+    expect(treeOpenUpdate.mock.calls).toEqual([[{ 'treeOpenSection': -1, 'treeSelected': -1 }, 5]])
     wrapper.find('[title="child"]').trigger('click')
-    expect(treeUpdate.mock.calls).toEqual([[{ 'treeOpenSection': '', 'treeSelected': -1 }, 10]])
+    expect(treeUpdate.mock.calls).toEqual([[{ 'treeOpenSection': -1, 'treeSelected': -1 }, 10]])
   })
 })

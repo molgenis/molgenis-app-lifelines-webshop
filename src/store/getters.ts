@@ -4,6 +4,7 @@ import { transformToRSQL } from '@molgenis/rsql'
 import Getters from '@/types/Getters'
 import Variant from '@/types/Variant'
 import { Variable, VariableWithVariants } from '@/types/Variable'
+import { TreeChild, TreeParent } from '@/types/Tree'
 import Assessment from '@/types/Assessment'
 
 export default {
@@ -111,20 +112,19 @@ export default {
       )
     }),
   numberOfSelectedItems: (state: ApplicationState, getters: Getters): Number =>
-    getters.gridSelections.reduce((total: number, item: object[]) => {
+    getters.gridSelections.reduce((total: number, item: boolean[]) => {
       return total + item.filter(Boolean).length
     }, 0),
   treeStructure: (state: ApplicationState, getters: Getters) => {
     const loadedSection:Boolean = Object.keys(state.sections).length > 0
     const loadedSubSection:Boolean = state.subSectionList.length > 0
     const loadedTreeStructure:Boolean = state.treeStructure.length > 0
-
     if (loadedSection && loadedSubSection && loadedTreeStructure) {
       // return full tree
       return state.treeStructure.map((item:any) => {
         return {
           ...state.sections[item.key],
-          children: item.list.map((child:object) => {
+          children: item.list.map((child:TreeChild) => {
             return {
               name: state.subSectionList[child.id],
               count: child.count,
@@ -133,7 +133,7 @@ export default {
           })
         }
       }).map((item:any) => { // Add count of all children to parent
-        return { ...item, count: item.children.reduce((total:number, child:object) => (total + child.count), 0) }
+        return { ...item, count: item.children.reduce((total:number, child:TreeChild) => (total + child.count), 0) }
       })
     } else if (loadedSection) {
       // return temporary partial tree

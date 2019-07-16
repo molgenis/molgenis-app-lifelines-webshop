@@ -6,6 +6,7 @@ import Vue from 'vue'
 import GridSelection from '@/types/GridSelection'
 import Filter from '@/types/Filter'
 import { Section } from '@/types/Section.ts'
+import { TreeChild, TreeParentInternal } from '@/types/Tree'
 
 export default {
   setToast (state: ApplicationState, toast: Toast) {
@@ -51,7 +52,7 @@ export default {
   updateSubSections (state: ApplicationState, subSections: string[]) {
     state.subSectionList = subSections
   },
-  updateSectionTree (state: ApplicationState, sections: string[]) {
+  updateSectionTree (state: ApplicationState, sections: TreeParentInternal[]) {
     state.treeStructure = sections
   },
   updateVariables (state: ApplicationState, variables: {[key:number]: Variable}) {
@@ -72,8 +73,9 @@ export default {
   updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
     state.gridSelection = gridSelection
   },
-  setTreeCount (state: ApplicationState, count: Number) {
-    state.treeStructure[state.treeOpenSection - 1].list.find((item:object) => item.id === state.treeSelected).count = count
+  setTreeCount (state: ApplicationState, count: number) {
+    const item:TreeChild|undefined = state.treeStructure[state.treeOpenSection - 1].list.find((item:TreeChild) => item.id === state.treeSelected)
+    if (item) item.count = count
   },
   toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
     const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))
