@@ -9,6 +9,9 @@ export default interface Getters {
   rsql: string
   gridAssessments: Assessment[]
   grid: number[][]
+  gridSelections: boolean[][]
+  treeStructure: TreeNode[],
+  filteredTreeStructure: TreeNode[]
   searchTermQuery: string | null
-  treeStructure: TreeNode[]
+  isSearchResultEmpty: boolean,
 }

@@ -16,7 +16,10 @@ describe('getters', () => {
     grid: [],
     gridAssessments: [],
     searchTermQuery: null,
-    treeStructure: []
+    treeStructure: [],
+    filteredTreeStructure: [],
+    gridSelections: [],
+    isSearchResultEmpty: false
   }
 
   const variant1: Variant = { id: 1, assessmentId: 1 }
@@ -311,6 +314,26 @@ describe('getters', () => {
           { ...emptyState, filteredSections: [1], filteredSubsections: [4] },
           { ...emptyGetters, treeStructure })
         expect(result).toEqual([education, { ...food, children: [lunch] }])
+      })
+    })
+
+    describe('isSearchResultEmpty', () => {
+      it('should be false is no search term is given', () => {
+        expect(getters.isSearchResultEmpty(emptyState, { ...emptyGetters })).toBeFalsy()
+      })
+
+      it('should be false if search term is given but search result in non empty', () => {
+        let searchTermState = { ...emptyState }
+        searchTermState.searchTerm = 'test'
+        let nonEmptyResultGetters = { ...emptyGetters }
+        nonEmptyResultGetters.filteredTreeStructure = [{ id: 1, name: 'name', children: [] }]
+        expect(getters.isSearchResultEmpty(searchTermState, nonEmptyResultGetters)).toBeFalsy()
+      })
+
+      it('should be true if search term is given but search result are empty', () => {
+        let searchTermState = { ...emptyState }
+        searchTermState.searchTerm = 'test'
+        expect(getters.isSearchResultEmpty(searchTermState, { ...emptyGetters })).toBeTruthy()
       })
     })
   })

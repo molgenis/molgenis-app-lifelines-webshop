@@ -16,12 +16,6 @@ import { mapGetters, mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'TreeView',
-  data: function () {
-    return {
-      selection: -1,
-      open: ''
-    }
-  },
   computed: {
     ...mapGetters(['filteredTreeStructure']),
     ...mapState(['treeSelected', 'treeOpenSection'])
