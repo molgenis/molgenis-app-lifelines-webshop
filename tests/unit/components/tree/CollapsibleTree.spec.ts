@@ -38,7 +38,6 @@ describe('CollapsibleTree.vue', () => {
 
   it('can open a section', () => {
     wrapper.find('[title="test-parent"]').trigger('click')
-    console.log(wrapper.emitted())
     expect(wrapper.emitted().updateopensection).toEqual([[5]])
   })
 

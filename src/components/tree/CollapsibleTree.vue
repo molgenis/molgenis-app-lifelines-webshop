@@ -22,9 +22,6 @@
                 class="mr-2"
                 :state="parent.id == opensection"
               />
-              <!--
-              <span v-if="parent.count" class="badge badge-pill badge-light float-right align-self-center">{{parent.count}}</span>
-              -->
             </div>
           </div>
         </li>
@@ -43,11 +40,6 @@
                 <div class="text-truncate col pr-2">
                   {{child.name}}
                 </div>
-                <!--
-                <div v-if="child.count > 0" class="col-md-auto d-flex align-items-center">
-                  <span class="badge badge-pill badge-light float-right align-self-center">{{child.count}}</span>
-                </div>
-                -->
               </div>
             </li>
           </ul>
@@ -150,9 +142,6 @@ export default Vue.extend({
       &.active:before {
         background-color: $light;
       }
-    }
-    &.child-list:before{
-      /* left: 2rem; */
     }
   }
 </style>
