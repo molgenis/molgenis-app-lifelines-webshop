@@ -53,10 +53,7 @@ export default Vue.extend({
 
 <style scoped lang="scss">
   .block-expander {
-    transition: height 0.5s ease-out;
-    &.no-animation{
-      transition: none !important;
-    }
+    transition: height 0.3s ease-out;
     overflow: hidden;
     height: 0;
   }
