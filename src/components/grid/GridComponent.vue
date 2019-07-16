@@ -186,6 +186,7 @@ export default Vue.extend({
   table th:first-child {
     width: 15rem;
     max-width: 15rem;
+    min-width: 15rem;
     overflow: hidden;
   }
   table td,
