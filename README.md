@@ -19,7 +19,55 @@ yarn install
 yarn run serve
 ```
 
-### Compiles and minifies for production
+### Production usage
+You need to configure a couple of things to run this app in production.
+
+- **vue.config.js**
+  Add a public path to specify the path on which the app is served.
+  ```
+  const packageJson = require('./package.json')
+
+  ...
+  module.export
+    ...
+    publicPath: process.env.NODE_ENV === 'production'
+      ? packageJson.name + '/dist/'
+      : '/',
+  ```
+- **package.json**
+  Add a scope for the package name to publish to a organisation scope on NPM. 
+  ```
+  "name": "*scope*/molgenis-app-lifelines-webshop",
+  ```
+  Add the publish config with scope public, otherwise you cannot publish to NPM.
+  ```
+  "publishConfig": {
+    "access": "public"
+  },
+  ```
+  Add a target for webservers to resolve to.
+  ```
+  "main": "dist/index.html",
+  ```
+  Add directories to pick up when building for production.
+  ```
+  "files": [
+    "dist",
+    "src"
+  ],
+  ```
+
+- **route.ts**
+  Change the default base when you want to serve your app on a path other than ```/```
+  ```
+  export default new Router({
+  
+  ...
+
+  base: process.env.NODE_ENV === 'production' ? packageJson.name : process.env.BASE_URL,
+  ```
+
+#### Compile and minify
 ```
 yarn run build
 ```
