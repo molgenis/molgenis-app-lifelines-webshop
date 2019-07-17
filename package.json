@@ -1,6 +1,6 @@
 {
   "name": "@molgenis-experimental/molgenis-app-lifelines-webshop",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "LGPL-3.0",
   "publishConfig": {
     "access": "public"
@@ -63,8 +63,12 @@
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
-      [ "@semantic-release/changelog",
-        {"changelogFile": "CHANGELOG.md" } ],
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
       "@semantic-release/npm",
       "@semantic-release/git",
       "@semantic-release/github"
