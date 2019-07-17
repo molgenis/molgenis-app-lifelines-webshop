@@ -19,7 +19,8 @@ describe('getters', () => {
     treeStructure: [],
     filteredTreeStructure: [],
     gridSelections: [],
-    isSearchResultEmpty: false
+    isSearchResultEmpty: false,
+    numberOfSelectedItems: 0
   }
 
   const variant1: Variant = { id: 1, assessmentId: 1 }
@@ -209,7 +210,16 @@ describe('getters', () => {
         .toEqual([[true, true], [true, false], [false, false]])
     })
   })
-
+  describe('numberOfSelectedItems', () => {
+    it('count the number of "true" grid selections', () => {
+      const state: ApplicationState = { ...emptyState }
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        gridSelections: [[true, true], [true, false], [false, false]]
+      }
+      expect(getters.numberOfSelectedItems(state, gettersParam)).toEqual(3)
+    })
+  })
   describe('treeStructure', () => {
     describe('when section data has not been loaded', () => {
       const state: ApplicationState = {
@@ -251,14 +261,14 @@ describe('getters', () => {
           }
         },
         subSectionList: ['sub-section1'],
-        treeStructure: [{ key: 1, list: [0] }]
+        treeStructure: [{ key: 1, list: [{ id: 0, count: 0 }] }]
       }
 
       const gettersParam: Getters = {
         ...emptyGetters
       }
       it('should return the complete tree structure', () => {
-        expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'children': [{ 'id': 0, 'name': 'sub-section1' }], 'id': 1, 'name': 'section' }])
+        expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'children': [{ 'count': 0, 'id': 0, 'name': 'sub-section1' }], 'count': 0, 'id': 1, 'name': 'section' }])
       })
     })
 
