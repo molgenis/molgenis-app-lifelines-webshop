@@ -17,18 +17,19 @@ export default Vue.extend({
   methods: {
     expand () {
       const height = this.$el.scrollHeight
+      const self = this
+      const test = function () {
+        self.$el.removeEventListener('transitionend', test)
+        self.$el.style.height = null
+      }
       this.$el.style.height = height + 'px'
+      this.$el.addEventListener('transitionend', test)
     },
     collapse () {
       const height = this.$el.scrollHeight
-      const elementTransition = this.$el.style.transition
-      this.$el.style.transition = ''
+      this.$el.style.height = height + 'px'
       requestAnimationFrame(() => {
-        this.$el.style.height = height + 'px'
-        this.$el.style.transition = elementTransition
-        requestAnimationFrame(() => {
-          this.$el.style.height = 0 + 'px'
-        })
+        this.$el.style.height = 0 + 'px'
       })
     }
   },
@@ -50,7 +51,7 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .block-expander {
     transition: height 0.3s ease-out;
     overflow: hidden;
