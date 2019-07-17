@@ -4,7 +4,7 @@ import { transformToRSQL } from '@molgenis/rsql'
 import Getters from '@/types/Getters'
 import Variant from '@/types/Variant'
 import { Variable, VariableWithVariants } from '@/types/Variable'
-import { TreeChild, TreeParent } from '@/types/Tree'
+import { TreeChild, TreeParentInternal } from '@/types/Tree'
 import Assessment from '@/types/Assessment'
 
 export default {
@@ -121,7 +121,7 @@ export default {
     const loadedTreeStructure:Boolean = state.treeStructure.length > 0
     if (loadedSection && loadedSubSection && loadedTreeStructure) {
       // return full tree
-      return state.treeStructure.map((item:any) => {
+      return state.treeStructure.map((item:TreeParentInternal) => {
         return {
           ...state.sections[item.key],
           children: item.list.map((child:TreeChild) => {
@@ -139,7 +139,6 @@ export default {
       // return temporary partial tree
       return Object.values(state.sections)
     }
-
     return []
   }
 }

@@ -75,7 +75,9 @@ export default {
   },
   setTreeCount (state: ApplicationState, count: number) {
     const item:TreeChild|undefined = state.treeStructure[state.treeOpenSection - 1].list.find((item:TreeChild) => item.id === state.treeSelected)
-    if (item) item.count = count
+    if (item) {
+      item.count = count
+    }
   },
   toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
     const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))
