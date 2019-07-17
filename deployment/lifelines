@@ -1,0 +1,38 @@
+# Add group
+add group lifelines
+
+# Create user
+add user ll_admin --set-password xxxxx 
+make ll_admin lifelines_manager
+
+$wait Create custom role LIFELINES_SHOPPER and add group "lifelines" 
+$wait Inherit LIFELINES_SHOPPER role in ANONYMOUSE role
+
+# Give plugin permissions
+give --role LIFELINES_SHOPPER read --plugin app
+
+$wait Please import all the lifelines data
+import lifelines
+
+# Give package permissions
+give --role LIFELINES_SHOPPER readmeta --package lifelines
+give --role LIFELINES_SHOPPER read --package sys_md
+
+# Give count permissions
+give --role LIFELINES_SHOPPER count --entity-type lifelines_who
+give --role LIFELINES_SHOPPER count --entity-type lifelines_who_when
+give --role LIFELINES_SHOPPER count --entity-type lifelines_subsection_variable
+
+# Give read permissions
+give --role LIFELINES_SHOPPER read --entity-type sys_L10nString
+give --role LIFELINES_SHOPPER read --entity-type lifelines_variable
+give --role LIFELINES_SHOPPER read --entity-type lifelines_section 
+give --role LIFELINES_SHOPPER read --entity-type lifelines_assessment
+give --role LIFELINES_SHOPPER read --entity-type lifelines_age_group 
+give --role LIFELINES_SHOPPER read --entity-type lifelines_sub_section
+give --role LIFELINES_SHOPPER read --entity-type lifelines_tree
+give --role LIFELINES_SHOPPER read --entity-type lifelines_variant
+give --role LIFELINES_SHOPPER read --entity-type lifelines_subsection_variable
+
+# Give write permissions to cart
+give --role LIFELINES_SHOPPER write --entity-type lifelines_cart

@@ -3,7 +3,7 @@
 
     <nav class="navbar navbar-light mb-3 px-4">
       <a class="navbar-brand" href="#">
-        <img src="logo.svg" alt="Lifelines" />
+        <img :src="`${publicPath}logo.svg`" alt="Lifelines" />
       </a>
       <ul class="nav justify-content-end">
         <li class="nav-item">
@@ -61,7 +61,8 @@ export default Vue.extend({
   components: { ContentView, SidebarView, CartView, ToastComponent },
   data: () => {
     return {
-      activeTab: 'variables'
+      activeTab: 'variables',
+      publicPath: process.env.BASE_URL
     }
   },
   computed: {
