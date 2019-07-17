@@ -3,7 +3,7 @@
     <h3 class="my-3">2. Select data</h3>
       <div class="row justify-content-center" >
           <div class="col-sm-12 col-md-8 col-lg-6" >
-            <search-component @seachChanged="onSearchChange"></search-component>
+            <search-component :searchTerm="searchTerm" @seachChanged="onSearchChange"></search-component>
           </div>
       </div>
       <div class="row mt-3" >
@@ -35,6 +35,7 @@ export default Vue.extend({
   name: 'ContentView',
   components: { TreeView, GridView, SearchComponent },
   computed: {
+    ...mapState(['searchTerm']),
     isEmptySearchResult () {
       return this.$store.getters.isSearchResultEmpty
     }

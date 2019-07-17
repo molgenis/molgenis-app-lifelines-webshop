@@ -9,13 +9,15 @@ import debounce from 'lodash.debounce'
 export default Vue.extend({
   name: 'SearchComponent',
   props: {
-    value: {
-      type: String
+    searchTerm: {
+      type: String,
+      required: false,
+      default: () => null
     }
   },
   data: function () {
     return {
-      searchValue: this.value
+      searchValue: this.searchTerm
     }
   },
   methods: {
