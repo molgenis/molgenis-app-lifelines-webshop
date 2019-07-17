@@ -10,8 +10,9 @@ export default interface Getters {
   gridAssessments: Assessment[]
   grid: number[][]
   gridSelections: boolean[][]
-  treeStructure: TreeNode[],
+  treeStructure: TreeNode[]
   filteredTreeStructure: TreeNode[]
   searchTermQuery: string | null
-  isSearchResultEmpty: boolean,
+  isSearchResultEmpty: boolean
+  numberOfSelectedItems: Number
 }

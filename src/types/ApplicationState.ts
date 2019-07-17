@@ -5,6 +5,7 @@ import Assessment from '@/types/Assessment'
 import GridSelection from '@/types/GridSelection'
 import Filter from './Filter'
 import { Section } from '@/types/Section.ts'
+import { TreeParentInternal } from '@/types/Tree'
 
 export type Toast = {
   type: 'danger' | 'success',
@@ -22,12 +23,12 @@ export default interface ApplicationState {
   ageGroupOptions: FacetOption[],
   ageAtOptions: FacetOption[],
   facetFilter: Filter,
-  treeStructure: Object[]
+  treeStructure: TreeParentInternal[]
   gridVariables: VariableWithVariants[]
   variantCounts: Count[]
   participantCount: number | null
   treeSelected: number
-  treeOpenSection: string
+  treeOpenSection: number
   gridSelection: GridSelection
   searchTerm: string | null
   filteredSubsections: number[] | null

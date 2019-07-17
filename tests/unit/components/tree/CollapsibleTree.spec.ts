@@ -11,10 +11,11 @@ describe('CollapsibleTree.vue', () => {
         'font-awesome-icon': '<div/>'
       },
       propsData: {
-        opensection: '',
+        opensection: -1,
         selection: -1,
         structure: [
           {
+            id: 5,
             name: 'test-parent',
             children: [
               {
@@ -37,7 +38,7 @@ describe('CollapsibleTree.vue', () => {
 
   it('can open a section', () => {
     wrapper.find('[title="test-parent"]').trigger('click')
-    expect(wrapper.emitted().updateopensection).toEqual([['test-parent']])
+    expect(wrapper.emitted().updateopensection).toEqual([[5]])
   })
 
   it('can select child', () => {
@@ -47,8 +48,8 @@ describe('CollapsibleTree.vue', () => {
   })
 
   it('will close by selecting the same section', () => {
-    wrapper.setProps({ opensection: 'test-parent' })
+    wrapper.setProps({ opensection: 5 })
     wrapper.find('[title="test-parent"]').trigger('click')
-    expect(wrapper.emitted().updateopensection).toEqual([['']])
+    expect(wrapper.emitted().updateopensection).toEqual([[-1]])
   })
 })

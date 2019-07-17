@@ -162,6 +162,25 @@ describe('mutations', () => {
     })
   })
 
+  describe('setTreeCount', () => {
+    it('It can update the count ', () => {
+      const myState = {
+        ...state,
+        treeOpenSection: 1,
+        treeSelected: 2,
+        treeStructure: [{
+          key: 1,
+          list: [{
+            id: 2,
+            count: 0
+          }]
+        }]
+      }
+      mutations.setTreeCount(myState, 10)
+      expect(myState.treeStructure[0].list[0].count).toEqual(10)
+    })
+  })
+
   describe('toggleGridSelection', () => {
     it('selects if none selected', () => {
       const state = {
@@ -198,7 +217,8 @@ describe('mutations', () => {
   describe('toggleGridRow', () => {
     it('selects if none selected', () => {
       const state = {
-        gridSelection: {}
+        gridSelection: {},
+        treeSelected: -1
       }
       mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }] })
       expect(state.gridSelection).toEqual({ 123: [1, 2] })
@@ -206,7 +226,8 @@ describe('mutations', () => {
 
     it('removes if all already selected', () => {
       const state = {
-        gridSelection: { 123: [1, 2, 3], 456: [1] }
+        gridSelection: { 123: [1, 2, 3], 456: [1] },
+        treeSelected: -1
       }
       mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
       expect(state.gridSelection).toEqual({ 456: [1] })
@@ -214,7 +235,8 @@ describe('mutations', () => {
 
     it('selects all if one already selected', () => {
       const state = {
-        gridSelection: { 123: [1] }
+        gridSelection: { 123: [1] },
+        treeSelected: -1
       }
       mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
       expect(state.gridSelection).toEqual({ 123: [1, 2, 3] })
@@ -224,6 +246,7 @@ describe('mutations', () => {
     it('selects if none selected', () => {
       const state = {
         gridSelection: {},
+        treeSelected: -1,
         gridVariables: [
           { id: 1,
             label: 'A',
@@ -325,6 +348,8 @@ describe('mutations', () => {
     it('selects if none selected', () => {
       const state = {
         gridSelection: {},
+        treeSelected: -1,
+        treeStructure: [],
         gridVariables: [
           { id: 1,
             label: 'A',
@@ -355,6 +380,8 @@ describe('mutations', () => {
     it('removes if all already selected', () => {
       const state = {
         gridSelection: { 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] },
+        treeSelected: -1,
+        treeStructure: [],
         gridVariables: [
           { id: 1,
             label: 'A',
@@ -385,6 +412,8 @@ describe('mutations', () => {
     it('selects all if one already selected', () => {
       const state = {
         gridSelection: { 1: [2] },
+        treeSelected: -1,
+        treeStructure: [],
         gridVariables: [
           { id: 1,
             label: 'A',

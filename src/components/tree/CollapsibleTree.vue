@@ -6,29 +6,29 @@
         <li
           :key="parent.name"
           class="list-group-item list-group-item-outline-secondary list-group-item-action text-truncate pr-3 py-2 parent-list"
+          :class="{ selecteditems: parent.count > 0 }"
           :title="parent.name"
           role="button"
-          @click="toggleCollapse(parent.name)"
+          @click="toggleCollapse(parent.id)"
           style="z-index: 1"
         >
           <div class="row">
             <div class="text-truncate col pr-0">
-              {{parent.name}}
+              <strong>{{parent.name}}</strong>
             </div>
             <div class="col-md-auto d-flex align-items-center">
               <collapse-tree-icon
                 v-if="hasChildren(parent)"
                 class="mr-2"
-                :state="parent.name == opensection"
+                :state="parent.id == opensection"
               />
-              <span v-if="parent.count" class="badge badge-pill badge-light float-right align-self-center">{{parent.count}}</span>
             </div>
           </div>
         </li>
-        <block-expand :key="'b-'+ parent.name" :isExpanded="parent.name == opensection && hasChildren(parent)" class="list-group-item p-0" >
+        <block-expand :key="'b-'+ parent.name" :isExpanded="parent.id == opensection && hasChildren(parent)" class="list-group-item p-0" >
           <ul class="list-group list-group-flush">
             <li
-              :class="(selection===child.id)&&'active'"
+              :class="{ active: (selection===child.id), selecteditems: child.count > 0 }"
               class="list-group-item list-group-item-outline-secondary list-group-item-action py-1 child-list"
               role="button"
               v-for="child in parent.children"
@@ -37,11 +37,8 @@
               @click="selectElement(child.id)"
             >
               <div class="row">
-                <div class="text-truncate col pr-0">
+                <div class="text-truncate col pr-2">
                   {{child.name}}
-                </div>
-                <div class="col-md-auto d-flex align-items-center">
-                  <span class="badge badge-pill badge-light float-right align-self-center">{{child.count}}</span>
                 </div>
               </div>
             </li>
@@ -71,7 +68,7 @@ export default Vue.extend({
       required: true
     },
     opensection: {
-      type: String,
+      type: Number,
       required: true
     }
   },
@@ -84,11 +81,11 @@ export default Vue.extend({
     selectElement (id) {
       this.$emit('updateselection', id)
     },
-    toggleCollapse (name) {
-      if (this.opensection === name) {
-        this.$emit('updateopensection', '')
+    toggleCollapse (id) {
+      if (this.opensection === id) {
+        this.$emit('updateopensection', -1)
       } else {
-        this.$emit('updateopensection', name)
+        this.$emit('updateopensection', id)
       }
     }
   },
@@ -98,12 +95,13 @@ export default Vue.extend({
 
 <style scoped lang="scss">
   @import "../../scss/variables";
+
   [role="button"] {
     cursor: pointer;
   }
   .child-list {
     font-weight: lighter;
-    padding-left:2.1rem;
+    padding-left: 3.5rem;
   }
   .child-list.active {
     background-color: $secondary;
@@ -111,11 +109,39 @@ export default Vue.extend({
   }
   .parent-list {
     white-space: nowrap;
+    padding-left: 2.5rem;
   }
   .block-expander.open {
     margin-top: 0px;
   }
   .block-expander {
     margin-top: -1px;
+  }
+
+  .list-group-item{
+    &:before {
+      content: "";
+      border-radius: 50%;
+      position: absolute;
+      display: inline-block;
+      width: 0.5rem;
+      height: 0.5rem;
+      top: 50%;
+      margin-top:-0.25rem;
+      left: 1rem;
+      transition: all 0.3s;
+      transform: scale(2.5);
+      background-color: transparent;
+    }
+    &.selecteditems {
+      position: relative;
+      &:before {
+        transform: scale(1);
+        background-color: $secondary;
+      }
+      &.active:before {
+        background-color: $light;
+      }
+    }
   }
 </style>
