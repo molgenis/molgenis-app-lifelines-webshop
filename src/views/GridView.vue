@@ -61,7 +61,6 @@ export default Vue.extend({
     }
   },
   created: function () {
-    this.loadAssessments()
     this.loadGridData()
   }
 })
