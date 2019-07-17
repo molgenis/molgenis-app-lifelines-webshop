@@ -35,6 +35,8 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
     "@types/jest": "^23.1.4",
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-e2e-nightwatch": "^3.7.0",
@@ -52,8 +54,20 @@
     "geckodriver": "^1.16.2",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
+    "semantic-release": "^15.13.18",
     "ts-jest": "^23.0.0",
     "typescript": "^3.4.3",
     "vue-template-compiler": "^2.5.21"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [ "@semantic-release/changelog",
+        {"changelogFile": "CHANGELOG.md" } ],
+      "@semantic-release/npm",
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ]
   }
 }

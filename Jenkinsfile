@@ -48,6 +48,9 @@ pipeline {
         stage('Install, test and build: [ master ]') {
             when {
                 branch 'master'
+                not { 
+                    changelog '.*\\[skip ci\\]$'
+                }
             }
             steps {
                 milestone 1
@@ -67,38 +70,28 @@ pipeline {
         }
         stage('Release: [ master ]') {
             when {
-                branch 'master'
+                allOf {
+                    branch 'master'
+                    not {
+                        changelog '.*\\[skip ci\\]$'
+                    }
+                }
             }
             environment {
-                REPOSITORY = 'molgenis/molgenis-app-lifelines-webshop'
+                GIT_AUTHOR_EMAIL = 'molgenis+ci@gmail.com'
+                GIT_AUTHOR_NAME = 'molgenis-jenkins'
+                GIT_COMMITTER_EMAIL = 'molgenis+ci@gmail.com'
+                GIT_COMMITTER_NAME = 'molgenis-jenkins'
             }
             steps {
                 timeout(time: 30, unit: 'MINUTES') {
                     script {
-                        env.RELEASE_SCOPE = input(
-                                message: 'Do you want to release?',
-                                ok: 'Release',
-                                parameters: [
-                                        choice(choices: 'patch\nminor\nmajor', description: '', name: 'RELEASE_SCOPE')
-                                ]
-                        )
+                        input(message: 'Do you want to release?', ok: 'Release')
                     }
                 }
                 milestone 2
                 container('node') {
-                    sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
-
-                    sh "git checkout -f ${BRANCH_NAME}"
-
-                    sh "npm config set unsafe-perm true"
-                    sh "npm version ${RELEASE_SCOPE} -m '[ci skip] [npm-version] %s'"
-
-                    sh "git push --tags origin ${BRANCH_NAME}"
-
-                    sh "echo //${env.NPM_REGISTRY}/:_authToken=${NPM_TOKEN} > ~/.npmrc"
-
-                    sh "npm publish"
-                    hubotSend(message: "${env.REPOSITORY} has been successfully deployed on ${env.NPM_REGISTRY}.", status: 'SUCCESS')
+                    sh "npx semantic-release"
                 }
             }
         }
