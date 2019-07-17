@@ -48,8 +48,8 @@ describe('CollapsibleTree.vue', () => {
   })
 
   it('will close by selecting the same section', () => {
-    wrapper.setProps({ opensection: 'test-parent' })
+    wrapper.setProps({ opensection: 5 })
     wrapper.find('[title="test-parent"]').trigger('click')
-    expect(wrapper.emitted().updateopensection).toEqual([[5]])
+    expect(wrapper.emitted().updateopensection).toEqual([[-1]])
   })
 })
