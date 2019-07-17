@@ -132,6 +132,25 @@ describe('mutations', () => {
     })
   })
 
+  describe('setTreeCount', () => {
+    it('It can update the count ', () => {
+      const myState = {
+        ...state,
+        treeOpenSection: 1,
+        treeSelected: 2,
+        treeStructure: [{
+          key: 1,
+          list: [{
+            id: 2,
+            count: 0
+          }]
+        }]
+      }
+      mutations.setTreeCount(myState, 10)
+      expect(myState.treeStructure[0].list[0].count).toEqual(10)
+    })
+  })
+
   describe('toggleGridSelection', () => {
     it('selects if none selected', () => {
       const state = {

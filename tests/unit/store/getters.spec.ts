@@ -204,7 +204,16 @@ describe('getters', () => {
         .toEqual([[true, true], [true, false], [false, false]])
     })
   })
-
+  describe('numberOfSelectedItems', () => {
+    it('count the number of "true" grid selections', () => {
+      const state: ApplicationState = { ...emptyState }
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        gridSelections: [[true, true], [true, false], [false, false]]
+      }
+      expect(getters.numberOfSelectedItems(state, gettersParam)).toEqual(3)
+    })
+  })
   describe('treeStructure', () => {
     describe('when section data has not been loaded', () => {
       const state: ApplicationState = {
