@@ -1,6 +1,15 @@
 // vue.config.js
 const i18n = require('./i18n.schemas.js')
 const packageJson = require('./package.json')
+const BannerPlugin = require('webpack').BannerPlugin
+const pkgVersion = packageJson.version
+const pkgName = packageJson.name
+
+const now = new Date()
+const buildDate = now.toUTCString()
+const bannerText = `package-name: ${pkgName}
+package-version: ${pkgVersion}
+build-date: ${buildDate}`
 
 module.exports = {
   filenameHashing: false,
@@ -8,7 +17,14 @@ module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
     ? packageJson.name + '/dist/'
     : '/',
-  'devServer': {
+  configureWebpack: config => {
+    config.plugins.push(
+      new BannerPlugin({
+        banner: bannerText
+      })
+    )
+  },
+  devServer: {
     // In CI mode, Safari cannot contact "localhost", so as a workaround, run the dev server using the jenkins agent pod dns instead.
     host: process.env.JENKINS_AGENT_NAME || 'localhost',
     proxy: process.env.NODE_ENV === 'production' ? undefined : {
