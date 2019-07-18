@@ -54,9 +54,7 @@
 
           >
             <th>
-              <span class="variable-title">
-                {{variableName(gridVariables[rowIndex])}}
-              </span>
+              <grid-titel-info :info="gridVariables[rowIndex]" />
             </th>
             <td>
               <button class="ll-facet-option btn btn-sm select-row grid-item btn-outline-secondary"
@@ -87,6 +85,7 @@
 import Vue from 'vue'
 // Import component
 import Loading from 'vue-loading-overlay'
+import GridTitelInfo from './GridTitelInfo.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
@@ -98,7 +97,7 @@ library.add(faArrowDown, faArrowRight, faArrowsAlt)
 
 export default Vue.extend({
   name: 'GridComponent',
-  components: { FontAwesomeIcon, Loading },
+  components: { FontAwesomeIcon, Loading, GridTitelInfo },
   props: {
     grid: {
       type: Array,
@@ -167,11 +166,6 @@ export default Vue.extend({
   destroyed: function () {
     window.removeEventListener('scroll', this.scroll)
   },
-  computed: {
-    variableName () {
-      return variable => variable.label ? variable.label : variable.name
-    }
-  },
   filters: { formatSI }
 })
 </script>
@@ -187,7 +181,6 @@ export default Vue.extend({
     width: 15rem;
     max-width: 15rem;
     min-width: 15rem;
-    overflow: hidden;
   }
   table td,
   table th:not(:first-child) {
@@ -233,13 +226,6 @@ export default Vue.extend({
     top: -5000px;
     height: 10000px;
     z-index: -1;
-  }
-  .variable-title {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-right: 1rem;
-    padding-left: 1rem;
   }
   .assessments-title {
     height: 6em;
