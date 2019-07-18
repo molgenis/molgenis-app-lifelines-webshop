@@ -3,7 +3,6 @@ const i18n = require('./i18n.schemas.js')
 const packageJson = require('./package.json')
 
 module.exports = {
-  filenameHashing: false,
   outputDir: 'dist',
   publicPath: process.env.NODE_ENV === 'production'
     ? packageJson.name + '/dist/'
