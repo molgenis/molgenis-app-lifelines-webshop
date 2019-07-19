@@ -14,7 +14,7 @@ build-date: ${buildDate}`
 module.exports = {
   outputDir: 'dist',
   publicPath: process.env.NODE_ENV === 'production'
-    ? packageJson.name + '/dist/'
+    ? pkgName + '/dist/'
     : '/',
   configureWebpack: config => {
     config.plugins.push(
