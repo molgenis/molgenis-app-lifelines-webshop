@@ -12,7 +12,6 @@ package-version: ${pkgVersion}
 build-date: ${buildDate}`
 
 module.exports = {
-  filenameHashing: false,
   outputDir: 'dist',
   publicPath: process.env.NODE_ENV === 'production'
     ? packageJson.name + '/dist/'
