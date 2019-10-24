@@ -88,7 +88,6 @@ export default Vue.extend({
   },
   methods: {
     hide () {
-      console.log('click')
       this.$emit('input', false)
     },
     toggleVisibility () {
