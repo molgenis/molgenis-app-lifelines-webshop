@@ -92,3 +92,27 @@ yarn run test:e2e
 yarn run test:unit
 ```
 
+## Entity Class Permisstions for Users:
+
+### anonymous user:
+
+- sys
+   - sys_md_EntityType = read(View)
+   - sys_md_Package = read(View)
+   - sys_md_Attribute = read(View)
+
+
+- lifelines (read)
+   - lifelines_variable = read(View)
+   - lifelines_section = read(View)
+   - lifelines_assessment = read(View)
+   - lifelines_age_group = read(View)
+   - lifelines_gender_group = read(View)
+   - lifelines_sub_section = read(View)
+   - lifelines_subsection_variable = read(View)
+   - lifelines_variant= = read(View)
+
+- lifelines (count)
+   - lifelines_who = count
+   - lifelines_who_when = count
+
