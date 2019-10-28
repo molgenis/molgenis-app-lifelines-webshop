@@ -24,6 +24,7 @@ describe('GridView', () => {
 
   beforeEach(() => {
     state = {
+      isSignedIn: true,
       treeSelected: -1,
       gridVariables: [],
       isGridLoading: false

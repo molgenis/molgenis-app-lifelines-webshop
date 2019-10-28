@@ -13,6 +13,7 @@ export type Toast = {
 }
 
 export default interface ApplicationState {
+  isSignedIn: boolean
   variables: { [key:number]: Variable },
   assessments: { [key:number]: Assessment },
   sections: { [key:number]: Section },

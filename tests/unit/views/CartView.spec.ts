@@ -17,6 +17,7 @@ describe('CartView.vue', () => {
     }
 
     state = {
+      isSignedIn: true,
       gridSelection: {
         123: [1, 2],
         456: [3]

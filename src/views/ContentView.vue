@@ -3,7 +3,8 @@
       <div class="row flex-nowrap" >
         <template v-if="!isEmptySearchResult">
           <div class="col-sm-auto info-bar" >
-            <h3>{{ 'lifelines-webshop-content-header' | i18n }}</h3>
+            <h3 v-if="isSignedIn">{{ 'lifelines-webshop-content-header' | i18n }}</h3>
+            <h3 v-else>{{ 'lifelines-webshop-signed-out-content-header' | i18n }}</h3>
             <tree-view  />
           </div>
           <div class="col" >
@@ -29,6 +30,7 @@ export default Vue.extend({
   name: 'ContentView',
   components: { TreeView, GridView },
   computed: {
+    ...mapState(['isSignedIn']),
     isEmptySearchResult () {
       return this.$store.getters.isSearchResultEmpty
     }

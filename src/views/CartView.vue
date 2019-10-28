@@ -23,7 +23,8 @@
       </template>
       <template v-else>
         <h5>No variables selected</h5>
-        <p>Use the shop tab to select variables to order</p>
+        <p v-if="isSignedIn">Use the shop tab to select variables to order</p>
+        <p v-else>Sign in to select and order variables</p>
       </template>
     </div>
   </div>
@@ -32,7 +33,7 @@
 <script>
 import Vue from 'vue'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'CartView',
@@ -41,6 +42,7 @@ export default Vue.extend({
     ...mapActions(['save'])
   },
   computed: {
+    ...mapState(['isSignedIn']),
     gridSelection () {
       return this.$store.state.gridSelection
     },

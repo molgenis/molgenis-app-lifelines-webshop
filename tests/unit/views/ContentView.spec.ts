@@ -18,4 +18,32 @@ describe('ContentView.vue', () => {
     expect(wrapper.exists()).toBeTruthy()
     expect(wrapper.find('#content-view').exists()).toBeTruthy()
   })
+
+  describe('when signed in', () => {
+    let wrapper:any
+    let store:any
+    beforeEach(() => {
+      store = new Store({
+        state: { isSignedIn: true }
+      })
+      wrapper = shallowMount(ContentView, { store, localVue })
+    })
+    it('should show the signed in msg', () => {
+      expect(wrapper.find('h3').text()).toEqual('lifelines-webshop-content-header')
+    })
+  })
+
+  describe('when signed out', () => {
+    let wrapper:any
+    let store:any
+    beforeEach(() => {
+      store = new Store({
+        state: { isSignedIn: false }
+      })
+      wrapper = shallowMount(ContentView, { store, localVue })
+    })
+    it('should show the signed out msg', () => {
+      expect(wrapper.find('h3').text()).toEqual('lifelines-webshop-signed-out-content-header')
+    })
+  })
 })

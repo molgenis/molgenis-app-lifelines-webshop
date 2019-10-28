@@ -1,6 +1,7 @@
 import ApplicationState from '@/types/ApplicationState'
 
 const state: ApplicationState = {
+  isSignedIn: false,
   toast: null,
   variables: {},
   gridVariables: [],
