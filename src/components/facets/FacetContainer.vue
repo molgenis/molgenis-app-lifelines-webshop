@@ -65,7 +65,7 @@ export default Vue.extend({
   .facet-container {
     margin-bottom: 1rem;
   }
-  .block-expander{
+  .block-expander {
     margin-left: -1.5rem;
     margin-right: -1.5rem;
     padding-left: 1.5rem;

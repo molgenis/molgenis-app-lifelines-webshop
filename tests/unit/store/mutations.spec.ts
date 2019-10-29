@@ -166,7 +166,7 @@ describe('mutations', () => {
     it('It can update the count ', () => {
       const myState = {
         ...state,
-        treeOpenSection: 1,
+        treeOpenPageSection: 1,
         treeSelected: 2,
         treeStructure: [{
           key: 1,

@@ -118,7 +118,7 @@ export default Vue.extend({
     margin-top: -1px;
   }
 
-  .list-group-item{
+  .list-group-item {
     &:before {
       content: "";
       border-radius: 50%;

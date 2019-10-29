@@ -1,16 +1,23 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import CartView from '@/views/CartView.vue'
 import Vuex from 'vuex'
+import Vue from 'vue'
+Vue.filter('i18n', (value: string) => value) // Add dummy filter for i18n
 
 describe('CartView.vue', () => {
   const localVue = createLocalVue()
   localVue.use(Vuex)
   let store: any
+  let actions: any
 
   beforeEach(() => {
     let state: any
+    actions = {
+      save: jest.fn()
+    }
 
     state = {
+      isSignedIn: true,
       gridSelection: {
         123: [1, 2],
         456: [3]
@@ -44,7 +51,8 @@ describe('CartView.vue', () => {
     }
 
     store = new Vuex.Store({
-      state
+      state,
+      actions
     })
   })
 
@@ -53,5 +61,11 @@ describe('CartView.vue', () => {
     expect(wrapper.find('#cart-view').exists()).toBeTruthy()
     expect(wrapper.findAll('li').at(0).text()).toEqual('var 123 ( assessment1, assessment3 )')
     expect(wrapper.findAll('li').at(1).text()).toEqual('var 456 ( assessment3 )')
+  })
+
+  it('renders an save button that saves the current state', () => {
+    const wrapper = shallowMount(CartView, { store, localVue })
+    wrapper.find('.save').trigger('click')
+    expect(actions.save).toHaveBeenCalled()
   })
 })

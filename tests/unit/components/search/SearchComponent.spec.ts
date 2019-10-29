@@ -18,7 +18,7 @@ describe('Search Component', () => {
   describe('when search prop is passed', () => {
     beforeEach(() => {
       wrapper = shallowMount(SearchComponent, { propsData: {
-        value: 'testing'
+        searchTerm: 'testing'
       } })
     })
 
@@ -36,7 +36,7 @@ describe('Search Component', () => {
 
     it('should emit a search val changed event', (done) => {
       setTimeout(() => {
-        expect(wrapper.emitted().seachChanged[0][0]).toEqual('dem')
+        expect(wrapper.emitted().searchChanged[0][0]).toEqual('dem')
         done()
       }, 300)
     })

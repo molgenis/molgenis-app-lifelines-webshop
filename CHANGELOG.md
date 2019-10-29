@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.3.0...v0.4.0) (2019-07-19)
+
+
+### Features
+
+* file name hashing, put it back so users get the new version ([0519e83](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/0519e83))
+
 # [0.3.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.2.0...v0.3.0) (2019-07-17)
 
 

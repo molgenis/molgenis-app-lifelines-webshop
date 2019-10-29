@@ -1,6 +1,7 @@
 import ApplicationState from '@/types/ApplicationState'
 
 const state: ApplicationState = {
+  isSignedIn: true, // set true during development
   toast: null,
   variables: {},
   gridVariables: [],
@@ -37,6 +38,7 @@ const state: ApplicationState = {
   treeStructure: [],
   treeSelected: -1,
   treeOpenSection: -1,
+  treeOpenPageSection: -1,
   gridSelection: {},
   variantCounts: [],
   participantCount: null,

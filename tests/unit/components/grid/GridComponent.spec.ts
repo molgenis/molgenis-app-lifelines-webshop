@@ -8,7 +8,8 @@ describe('GridComponent.vue', () => {
     gridAssessments: [],
     gridVariables: [],
     gridSelections: [],
-    isLoading: false
+    isLoading: false,
+    isSignedIn: true
   }
 
   describe('when created', () => {
@@ -40,6 +41,49 @@ describe('GridComponent.vue', () => {
     it('should remove the scroll listener', () => {
       wrapper.destroy()
       expect(window.removeEventListener).toHaveBeenCalled()
+    })
+
+    it('should change table header on scroll', () => {
+      const vm:any = wrapper.vm
+      vm.getTableTop = jest.fn().mockReturnValue(10)
+      vm.getHeaderHeight = jest.fn().mockReturnValue(20)
+      expect(vm.$data.stickyTableHeader).toBeFalsy()
+      vm.scroll()
+      expect(vm.$data.stickyTableHeader).toBeTruthy()
+      vm.getTableTop = jest.fn().mockReturnValue(20)
+      vm.getHeaderHeight = jest.fn().mockReturnValue(10)
+      vm.scroll()
+      expect(vm.$data.stickyTableHeader).toBeFalsy()
+    })
+  })
+
+  describe('when not signed in ', () => {
+    let wrapper: Wrapper<Vue>
+    let props
+
+    beforeEach(() => {
+      props = {
+        grid: [[1, 2],[3, 4]],
+        gridAssessments: [],
+        gridVariables: [{
+          name: 'a',
+          id: 101
+        },
+        {
+          name: 'b',
+          id: 102
+        }],
+        gridSelections: [[false, false],[false, false]],
+        isLoading: false,
+        isSignedIn: false
+      }
+      wrapper = shallowMount(GridComponent, {
+        propsData: { ...props }
+      })
+    })
+
+    it('should not show the select all btn', () => {
+      expect(wrapper.find('#grid-toggle-all-btn').isVisible()).toBeFalsy()
     })
   })
 })

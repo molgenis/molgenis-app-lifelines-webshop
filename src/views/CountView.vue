@@ -13,12 +13,6 @@
   </div>
 </template>
 
-<style scoped>
-.count-view {
-  height: 30px
-}
-</style>
-
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
@@ -45,3 +39,9 @@ export default Vue.extend({
   components: { Loading }
 })
 </script>
+
+<style scoped>
+  .count-view {
+    height: 30px
+  }
+</style>

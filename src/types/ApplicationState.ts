@@ -13,6 +13,7 @@ export type Toast = {
 }
 
 export default interface ApplicationState {
+  isSignedIn: boolean
   variables: { [key:number]: Variable },
   assessments: { [key:number]: Assessment },
   sections: { [key:number]: Section },
@@ -29,6 +30,7 @@ export default interface ApplicationState {
   participantCount: number | null
   treeSelected: number
   treeOpenSection: number
+  treeOpenPageSection: number
   gridSelection: GridSelection
   searchTerm: string | null
   filteredSubsections: number[] | null

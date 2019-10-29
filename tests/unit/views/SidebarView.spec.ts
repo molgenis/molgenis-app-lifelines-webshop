@@ -30,7 +30,7 @@ describe('SidebarView.vue', () => {
   })
 
   it('Renders the sidebar', () => {
-    expect(wrapper.find('#Sidebar-view').exists()).toBeTruthy()
+    expect(wrapper.find('#sidebar-view').exists()).toBeTruthy()
   })
 
   it('Renders CountView', () => {

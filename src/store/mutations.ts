@@ -45,6 +45,9 @@ export default {
   },
   updateTreeOpenSection (state: ApplicationState, treeOpenSection: number) {
     state.treeOpenSection = treeOpenSection
+    if (treeOpenSection !== -1) {
+      state.treeOpenPageSection = treeOpenSection
+    }
   },
   updateSections (state: ApplicationState, sections: {[key:number]: Section}) {
     state.sections = sections
@@ -83,7 +86,7 @@ export default {
     state.filteredSubsections = subsections
   },
   setTreeCount (state: ApplicationState, count: number) {
-    const item:TreeChild|undefined = state.treeStructure[state.treeOpenSection - 1].list.find((item:TreeChild) => item.id === state.treeSelected)
+    const item:TreeChild|undefined = state.treeStructure[state.treeOpenPageSection - 1].list.find((item:TreeChild) => item.id === state.treeSelected)
     if (item) {
       item.count = count
     }

@@ -24,6 +24,7 @@ describe('GridView', () => {
 
   beforeEach(() => {
     state = {
+      isSignedIn: true,
       treeSelected: -1,
       gridVariables: [],
       isGridLoading: false
@@ -69,7 +70,7 @@ describe('GridView', () => {
   describe('On creation', () => {
     it('Renders the gridView', () => {
       wrapper = shallowMount(GridView, { store })
-      expect(wrapper.find('#Grid-view').exists()).toBeTruthy()
+      expect(wrapper.find('#grid-view').exists()).toBeTruthy()
     })
   })
 
