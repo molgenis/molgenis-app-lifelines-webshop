@@ -1,7 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import MainView from '@/views/MainView.vue'
 import Vuex from 'vuex'
-import SearchComponent from '@/components/search/SearchComponent.vue'
 
 describe('MainView.vue', () => {
   const localVue = createLocalVue()
@@ -10,11 +9,7 @@ describe('MainView.vue', () => {
   let actions: any
   let state: any
   const mocks: any = { '$route': { params: {} } }
-  const updateSearchTerm = jest.fn()
   const isSearchResultEmpty = jest.fn()
-  const filterSections = jest.fn()
-  const filterSubsections = jest.fn()
-  const loadGridVariables = jest.fn()
 
   beforeEach(() => {
     state = {
@@ -24,18 +19,12 @@ describe('MainView.vue', () => {
     actions = {
       loadVariables: jest.fn(),
       loadAssessments: jest.fn(),
-      filterSections,
-      filterSubsections,
-      loadGridVariables,
       load: jest.fn(),
       save: jest.fn()
     }
     store = new Vuex.Store({
       state,
       actions,
-      mutations: {
-        updateSearchTerm
-      },
       getters: {
         isSearchResultEmpty
       }
@@ -62,21 +51,11 @@ describe('MainView.vue', () => {
     actions.loadAssessments.mockReturnValueOnce(Promise.resolve())
 
     mocks.$route.params.cartId = 'abcde'
-    const wrapper = shallowMount(MainView, { store, localVue, mocks })
+    shallowMount(MainView, { store, localVue, mocks })
 
     setTimeout(() => {
       expect(actions.load).toHaveBeenCalledWith(expect.anything(), 'abcde', undefined)
       done()
     }, 0)
-  })
-  it('updates search term and dispatches filter actions when the search term changes', () => {
-    const wrapper = shallowMount(MainView, { store, localVue, mocks })
-
-    wrapper.find(SearchComponent).vm.$emit('searchChanged', 'mini')
-
-    expect(updateSearchTerm).toHaveBeenCalled()
-    expect(filterSections).toHaveBeenCalled()
-    expect(filterSubsections).toHaveBeenCalled()
-    expect(loadGridVariables).toHaveBeenCalled()
   })
 })

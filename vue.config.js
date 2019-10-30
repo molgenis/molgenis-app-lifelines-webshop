@@ -11,6 +11,8 @@ const bannerText = `package-name: ${pkgName}
 package-version: ${pkgVersion}
 build-date: ${buildDate}`
 
+const PROXY_TARGET = 'https://lifelines.test.molgenis.org'
+
 module.exports = {
   outputDir: 'dist',
   publicPath: process.env.NODE_ENV === 'production'
@@ -28,9 +30,44 @@ module.exports = {
     host: process.env.JENKINS_AGENT_NAME || 'localhost',
     proxy: process.env.NODE_ENV === 'production' ? undefined : {
       '^/api': {
-        // 'target': 'http://localhost:8080'
-        'target': 'https://lifelines.dev.molgenis.org',
+        'target': PROXY_TARGET,
         'keepOrigin': true
+      },
+      '^/menu': {
+        'target': PROXY_TARGET,
+        'keepOrigin': true
+      },
+      '^/app-ui-context': {
+        'target': PROXY_TARGET,
+        'keepOrigin': true
+      },
+      '^/fonts': {
+        'target': PROXY_TARGET,
+        'keepOrigin': true
+      },
+      '^/img': {
+        'target': PROXY_TARGET,
+        'keepOrigin': true
+      },
+      '^/css': {
+        'target': PROXY_TARGET,
+        'changeOrigin': true
+      },
+      '^/js': {
+        'target': PROXY_TARGET,
+        'changeOrigin': true
+      },
+      '^/logo': {
+        'target': PROXY_TARGET,
+        'changeOrigin': true
+      },
+      '^/login': {
+        'target': PROXY_TARGET,
+        'changeOrigin': true
+      },
+      '^/@molgenis-ui': {
+        'target': PROXY_TARGET,
+        'changeOrigin': true
       }
     },
     before: function (app, server) {
@@ -39,6 +76,9 @@ module.exports = {
       })
       app.get('/api/v2/i18n/lifelines-webshop', function (req, res) {
         res.json(i18n.en)
+      })
+      app.get('/app-ui-context', function (req, res) {
+        res.json(require('./tests/e2e/resources/uiContext.js'))
       })
     }
   }

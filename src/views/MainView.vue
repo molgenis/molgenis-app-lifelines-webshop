@@ -1,22 +1,6 @@
 <template>
   <div id="main-view">
-
-    <nav class="navbar navbar-light mb-3 px-4">
-      <a class="navbar-brand" href="#">
-        <img :src="`${publicPath}logo.svg`" alt="Lifelines" />
-      </a>
-      <ul class="nav justify-content-end">
-        <li class="nav-item">
-          <search-component
-            :searchTerm="searchTerm"
-            :searching="isGridLoading"
-            @searchChanged="onSearchChange"
-          ></search-component>
-        </li>
-      </ul>
-    </nav>
-
-    <div class="container-fluid">
+    <div class="container-fluid mt-3">
       <toast-component
         class="toast-component mt-2"
         v-if="toast"
@@ -38,7 +22,6 @@
                     </a>
                 </li>
             </ul>
-
             <div v-if="activeTab === 'variables'" class="row mt-3 flex-nowrap">
               <sidebar-view class="col-sm-auto info-bar" v-model="showSidebar"></sidebar-view>
               <content-view class="col"></content-view>
@@ -60,7 +43,6 @@ import SidebarView from './SidebarView.vue'
 import CartView from './CartView.vue'
 import ToastComponent from '../components/ToastComponent.vue'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import SearchComponent from '../components/search/SearchComponent.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faStore, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
@@ -69,30 +51,20 @@ library.add(faStore, faShoppingCart)
 
 export default Vue.extend({
   name: 'MainView',
-  components: { ContentView, SidebarView, CartView, ToastComponent, SearchComponent, FontAwesomeIcon },
+  components: { ContentView, SidebarView, CartView, ToastComponent, FontAwesomeIcon },
   data: () => {
     return {
       activeTab: 'variables',
       publicPath: process.env.BASE_URL,
-      searching: false,
       showSidebar: true
     }
   },
   computed: {
-    ...mapState(['searchTerm', 'toast', 'isGridLoading'])
+    ...mapState(['toast'])
   },
   methods: {
-    ...mapMutations(['updateSearchTerm', 'clearToast']),
-    ...mapActions(['filterSections', 'filterSubsections', 'loadGridVariables', 'load', 'loadVariables', 'loadAssessments']),
-    onSearchChange (value) {
-      this.searching = true
-      this.updateSearchTerm(value || null)
-      this.filterSections()
-      this.filterSubsections()
-      if (this.treeSelection !== -1) {
-        this.loadGridVariables()
-      }
-    }
+    ...mapMutations(['clearToast']),
+    ...mapActions(['load', 'loadVariables', 'loadAssessments'])
   },
   async created () {
     const promises = Promise.all([this.loadVariables(), this.loadAssessments()])

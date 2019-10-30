@@ -3,6 +3,9 @@
 
 nav.navbar {
   border-bottom: 4px solid $secondary;
+  &.navbar-light{
+    background-color: white !important;
+  }
 }
 
 .facet {

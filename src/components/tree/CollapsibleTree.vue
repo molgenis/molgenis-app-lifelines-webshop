@@ -1,7 +1,6 @@
 <template>
   <div id="tree-component">
-    <spinner-animation v-if="structure.length == 0"/>
-    <ul v-else class="list-group">
+    <ul class="list-group">
       <template v-for="parent in structure">
         <li
           :key="parent.name"
@@ -53,7 +52,6 @@
 <script>
 import Vue from 'vue'
 import CollapseTreeIcon from '../animations/CollapseTreeIcon.vue'
-import SpinnerAnimation from '../animations/SpinnerAnimation.vue'
 import BlockExpand from '../animations/BlockExpand.vue'
 
 export default Vue.extend({
@@ -89,7 +87,7 @@ export default Vue.extend({
       }
     }
   },
-  components: { CollapseTreeIcon, SpinnerAnimation, BlockExpand }
+  components: { CollapseTreeIcon, BlockExpand }
 })
 </script>
 

@@ -1,11 +1,11 @@
 <template>
   <div id="sidebar-view" v-click-outside="hide" :class="{'hide-bar':!value}">
-    <div class="label" @click="toggleVisibility">{{ 'lifelines-webshop-sidebar-header' | i18n }}</div>
+    <div class="label" @click="toggleVisibility">{{ 'lifelines-webshop-sidebar-header' | i18n }}<font-awesome-icon icon="angle-double-down" class="ml-2"></font-awesome-icon></div>
     <div class="overflow-hidden">
       <div class="sidebar-width">
         <h3 class="px-4">{{ 'lifelines-webshop-sidebar-header' | i18n }}</h3>
         <ul class="list-unstyled sidebar-content p-4">
-          <li class="hide-sidebar" @click="hide"><font-awesome-icon icon="minus-circle" size="lg" /></li>
+          <li class="hide-sidebar" @click="hide"><font-awesome-icon icon="angle-double-left" size="lg"></font-awesome-icon></li>
           <li>
             <facet-container
               facetId="age"
@@ -66,9 +66,9 @@ import { mapMutations } from 'vuex'
 import CountView from '@/views/CountView'
 import ClickOutside from 'v-click-outside'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMinusCircle } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDoubleLeft, faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faMinusCircle)
+library.add(faAngleDoubleLeft, faAngleDoubleDown)
 
 export default Vue.extend({
   name: 'SidebarView',

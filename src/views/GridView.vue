@@ -1,17 +1,23 @@
 <template>
   <div id="grid-view">
-    <grid-component
-    v-if="treeSelected != -1"
-    :grid="grid"
-    :gridAssessments="gridAssessments"
-    :gridVariables="gridVariables"
-    :gridSelections="gridSelections"
-    :isLoading="isGridLoading"
-    @gridRowToggle="handleGridRowToggle"
-    @gridColumnToggle="handleGridColumnToggle"
-    @gridCellToggle="handleGridCellToggle"
-    @gridAllToggle="handleGridAllToggle"
-    />
+    <div class="col pt-5 mt-5" v-if="isEmptySearchResult">
+      <h5 class="pt-2">No items were found matching the search term.</h5>
+    </div>
+    <div v-else>
+      <grid-component
+      v-if="treeSelected != -1"
+      :grid="grid"
+      :gridAssessments="gridAssessments"
+      :gridVariables="gridVariables"
+      :gridSelections="gridSelections"
+      :isLoading="isGridLoading"
+      :isSignedIn="isSignedIn"
+      @gridRowToggle="handleGridRowToggle"
+      @gridColumnToggle="handleGridColumnToggle"
+      @gridCellToggle="handleGridCellToggle"
+      @gridAllToggle="handleGridAllToggle"
+      />
+    </div>
   </div>
 </template>
 
@@ -24,8 +30,11 @@ export default Vue.extend({
   name: 'GridView',
   components: { GridComponent },
   computed: {
-    ...mapState(['treeSelected', 'gridVariables', 'isGridLoading']),
-    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections', 'numberOfSelectedItems'])
+    ...mapState(['treeSelected', 'gridVariables', 'isGridLoading', 'isSignedIn']),
+    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections', 'numberOfSelectedItems']),
+    isEmptySearchResult () {
+      return this.$store.getters.isSearchResultEmpty
+    }
   },
   methods: {
     ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll', 'setTreeCount']),

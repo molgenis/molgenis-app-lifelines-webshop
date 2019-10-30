@@ -1,18 +1,14 @@
 <template>
   <div id="content-view">
-      <div class="row flex-nowrap" >
-        <template v-if="!isEmptySearchResult">
+      <div class="row flex-nowrap mb-5" >
+        <template>
           <div class="col-sm-auto info-bar" >
-            <h3>{{ 'lifelines-webshop-content-header' | i18n }}</h3>
+            <h3 v-if="isSignedIn">{{ 'lifelines-webshop-content-header' | i18n }}</h3>
+            <h3 v-else>{{ 'lifelines-webshop-signed-out-content-header' | i18n }}</h3>
             <tree-view  />
           </div>
           <div class="col" >
             <grid-view />
-          </div>
-        </template>
-        <template v-else>
-          <div class="col" >
-            <h5 class="pt-3">No items where found matching the search term.</h5>
           </div>
         </template>
       </div>
@@ -29,9 +25,7 @@ export default Vue.extend({
   name: 'ContentView',
   components: { TreeView, GridView },
   computed: {
-    isEmptySearchResult () {
-      return this.$store.getters.isSearchResultEmpty
-    }
+    ...mapState(['isSignedIn'])
   },
   methods: {
     ...mapMutations(['updateSearchTerm']),

@@ -12,7 +12,7 @@
           <tr>
             <th>
             </th>
-            <td></td>
+            <td v-show="isSignedIn" ></td>
             <td
               v-for="assessment in gridAssessments"
               :key="assessment.id"
@@ -27,14 +27,17 @@
           <tr>
             <th></th>
             <td>
-              <button class="ll-facet-option btn btn-sm select-all grid-item btn-outline-secondary"
-                      @click.prevent="toggleGrid"
-                      @mouseenter="onMouseEnter('grid-item')"
-                      @mouseleave="onMouseLeave('grid-item')">
+              <button
+                id="grid-toggle-all-btn"
+                v-show="isSignedIn"
+                class="ll-facet-option btn btn-sm select-all grid-item btn-outline-secondary"
+                @click.prevent="isSignedIn && toggleGrid"
+                @mouseenter="onMouseEnter('grid-item')"
+                @mouseleave="onMouseLeave('grid-item')">
                 All
               </button>
             </td>
-            <td v-for="(assessment, colIndex) in gridAssessments"
+            <td v-show="isSignedIn" v-for="(assessment, colIndex) in gridAssessments"
                 :key="assessment.id"
             >
               <button class="ll-facet-option btn btn-sm select-col grid-item btn-outline-secondary"
@@ -58,7 +61,7 @@
                 {{variableName(gridVariables[rowIndex])}}
               </span>
             </th>
-            <td>
+            <td v-show="isSignedIn">
               <button class="ll-facet-option btn btn-sm select-row grid-item btn-outline-secondary"
                       @click.prevent="toggleRow(gridVariables[rowIndex].id)"
                       @mouseenter="onMouseEnter('grid-button-row-'+rowIndex)"
@@ -70,7 +73,7 @@
                 v-for="(count,colIndex) in row"
             >
               <button
-                @click.prevent="toggleCell(rowIndex, colIndex)"
+                @click.prevent="isSignedIn && toggleCell(rowIndex, colIndex)"
                 :class="getGridCellClass(rowIndex, colIndex)"
                 class="ll-facet-option btn btn-sm select-item grid-item">
                 {{count | formatSI}}
@@ -119,6 +122,10 @@ export default Vue.extend({
     isLoading: {
       type: Boolean,
       required: true
+    },
+    isSignedIn: {
+      type: Boolean,
+      required: true
     }
   },
   data: function () {
@@ -131,7 +138,7 @@ export default Vue.extend({
       const table = this.getTableTop()
       const header = this.getHeaderHeight()
       if (table && header) {
-        this.stickyTableHeader = table - header < 0
+        this.stickyTableHeader = table - header < 60
       }
     },
     getTableTop () {
@@ -210,10 +217,10 @@ export default Vue.extend({
   .sticky {
     pointer-events: none;
     position: fixed;
-    top: 0;
+    top: 60px;
     background-color: white;
     background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%);
-    z-index: 1030;
+    z-index: 1020;
   }
   .sticky .assessments-title {
     height: 8rem;
@@ -297,8 +304,5 @@ export default Vue.extend({
     color: white;
     background-color: $secondary;
     border-color: $secondary;
-  }
-  .grid-col {
-    height: 90vh;
   }
 </style>
