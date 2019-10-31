@@ -130,7 +130,7 @@ export default Vue.extend({
         this.isSaving = true
         await this.submitOrder({ formData: this.formData, formFields: this.formFields }).catch(() => {
           this.isSaving = false
-          this.setToast({ type: 'warning', message: 'Failed to sumbmit order' })
+          this.setToast({ type: 'warning', message: 'Failed to submit order' })
         })
         this.$router.push('/')
       }
