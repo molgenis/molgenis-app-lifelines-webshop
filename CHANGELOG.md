@@ -1,3 +1,10 @@
+## [0.6.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.6.0...v0.6.1) (2019-10-31)
+
+
+### Bug Fixes
+
+* production build base url path ([#97](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/97)) ([58f4c57](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/58f4c57))
+
 # [0.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.5.0...v0.6.0) (2019-10-31)
 
 
