@@ -47,7 +47,7 @@
               </button>
 
               <span v-if="!isSaving && formState.$invalid && formState.$touched" class="alert text-danger">
-                Invalid
+                Please make sure all required flieds are filled out correctly.
               </span>
 
             </div>
