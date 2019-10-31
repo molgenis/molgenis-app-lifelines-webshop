@@ -22,6 +22,7 @@ yarn run serve
 ### Production usage
 You need to configure a couple of things to run this app in production.
 
+
 - **vue.config.js**
   Add a public path to specify the path on which the app is served.
   ```
