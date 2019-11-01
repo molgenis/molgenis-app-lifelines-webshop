@@ -495,8 +495,9 @@ describe('actions', () => {
         done()
       })
 
-      it('should resturn error', () => {
-        expect(result).toEqual('error')
+      it('should retrun undefined and set the error msg', () => {
+        expect(result).toBeUndefined()
+        expect(commit).toHaveBeenCalledWith('setToast', { type: 'danger', message: 'Could not submit order' })
       })
     })
   })

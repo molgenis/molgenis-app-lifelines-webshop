@@ -179,16 +179,16 @@ export default {
     let reTryCount = 0
 
     const trySubmission = () => {
-      reTryCount++
       options.body.set('orderNumber', generateOderId().toString())
       return api.post('/api/v1/lifelines_cart', options, true).then(() => {
         return 'success'
       }, (error:any) => {
         // OrderNumber must be unique, just guess untill we find one
         if (reTryCount < 10) {
+          reTryCount++
           return trySubmission()
         } else {
-          return error
+          return Promise.reject({message: 'Could not submit order'})
         }
       })
     }
