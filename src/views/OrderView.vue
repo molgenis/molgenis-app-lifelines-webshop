@@ -13,8 +13,8 @@
             <form-component
               id="order-form"
               :options="options"
-              :formFields="formFields"
-              :initialFormData="initialFormData"
+              :formFields="orderFormFields"
+              :initialFormData="orderDetails"
               :formState="formState"
               @valueChange="onValueChanged">
             </form-component>
@@ -74,61 +74,26 @@ export default Vue.extend({
         showEyeButton: false,
         allowAddingOptions: false
       },
-      formFields: [
-        {
-          type: 'text',
-          id: 'projectNumber',
-          label: 'Project number',
-          description: 'The OV number.',
-          required: () => true,
-          disabled: false,
-          readOnly: false,
-          visible: () => true,
-          validate: () => true
-        },
-        {
-          type: 'text',
-          id: 'name',
-          label: 'Name',
-          description: 'Optional name',
-          required: () => false,
-          disabled: false,
-          readOnly: false,
-          visible: () => true,
-          validate: () => true
-        },
-        {
-          type: 'file',
-          id: 'applicationForm',
-          label: 'Application form ',
-          description: 'Word or text file to describe the request.',
-          required: () => false,
-          disabled: false,
-          readOnly: false,
-          visible: () => true,
-          validate: () => true
-        }
-      ],
-      initialFormData: {},
       formState: {}
     }
   },
   computed: {
-    ...mapState(['toast'])
+    ...mapState(['toast', 'orderFormFields', 'orderDetails'])
   },
   methods: {
     ...mapActions(['submitOrder']),
-    ...mapMutations(['setToast', 'clearToast']),
+    ...mapMutations(['setToast', 'clearToast', 'setOrderDetails']),
     onValueChanged (updatedFormData) {
       this.formData = updatedFormData
+      this.setOrderDetails(updatedFormData)
     },
     async onSubmit () {
       const formState = this.formState
       // trigger field to show validation result to user
-      this.formFields.forEach((field) => (formState[field.id].$touched = true))
+      this.orderFormFields.forEach((field) => (formState[field.id].$touched = true))
       if (this.formState.$valid) {
         this.isSaving = true
-        await this.submitOrder({ formData: this.formData, formFields: this.formFields }).catch(() => {
+        await this.submitOrder().catch(() => {
           this.isSaving = false
           this.setToast({ type: 'warning', message: 'Failed to submit order' })
         })

@@ -6,6 +6,8 @@ import GridSelection from '@/types/GridSelection'
 import Filter from './Filter'
 import { Section } from '@/types/Section.ts'
 import { TreeParentInternal } from '@/types/Tree'
+import OrderDetails from '@/types/OrderDetails'
+import FormField from './FormField'
 
 export type Toast = {
   type: 'danger' | 'success',
@@ -14,6 +16,8 @@ export type Toast = {
 
 export default interface ApplicationState {
   isSignedIn: boolean
+  orderDetails: OrderDetails,
+  orderFormFields: FormField[]
   variables: { [key:number]: Variable },
   assessments: { [key:number]: Assessment },
   sections: { [key:number]: Section },

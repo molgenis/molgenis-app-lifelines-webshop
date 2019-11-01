@@ -3,6 +3,47 @@ import ApplicationState from '@/types/ApplicationState'
 const state: ApplicationState = {
   isSignedIn: true, // set true during development
   toast: null,
+  orderDetails: {
+    orderNumber: null,
+    name: null,
+    projectNumber: null,
+    applicationForm: null
+  },
+  orderFormFields: [
+    {
+      type: 'text',
+      id: 'projectNumber',
+      label: 'Project number',
+      description: 'The OV number.',
+      required: () => true,
+      disabled: false,
+      readOnly: false,
+      visible: () => true,
+      validate: () => true
+    },
+    {
+      type: 'text',
+      id: 'name',
+      label: 'Name',
+      description: 'Optional name',
+      required: () => false,
+      disabled: false,
+      readOnly: false,
+      visible: () => true,
+      validate: () => true
+    },
+    {
+      type: 'file',
+      id: 'applicationForm',
+      label: 'Application form ',
+      description: 'Word or text file to describe the request.',
+      required: () => false,
+      disabled: false,
+      readOnly: false,
+      visible: () => true,
+      validate: () => true
+    }
+  ],
   variables: {},
   gridVariables: [],
   genderOptions: [

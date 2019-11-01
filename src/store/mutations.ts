@@ -7,6 +7,7 @@ import GridSelection from '@/types/GridSelection'
 import Filter from '@/types/Filter'
 import { Section } from '@/types/Section.ts'
 import { TreeChild, TreeParentInternal } from '@/types/Tree'
+import OrderDetails from '@/types/OrderDetails'
 
 export default {
   setToast (state: ApplicationState, toast: Toast) {
@@ -14,6 +15,14 @@ export default {
   },
   clearToast (state: ApplicationState) {
     state.toast = null
+  },
+  setOrderDetails (state: ApplicationState, orderDetails: OrderDetails) {
+    state.orderDetails.name = orderDetails.name
+    state.orderDetails.projectNumber = orderDetails.projectNumber
+    state.orderDetails.applicationForm = orderDetails.applicationForm
+  },
+  setOrderNumber (state: ApplicationState, orderNumber: string) {
+    state.orderDetails.orderNumber = orderNumber
   },
   updateFacetFilter (state: ApplicationState, facetFilter: Filter) {
     state.facetFilter = facetFilter

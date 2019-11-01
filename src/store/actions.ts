@@ -9,8 +9,57 @@ import ApplicationState from '@/types/ApplicationState'
 import router from '@/router'
 import Getters from '@/types/Getters'
 import { buildFormData } from '@/services/orderService.ts'
+import FormField from '@/types/FormField'
 
-const generateOderId = () => Math.floor(Math.random() * 1000000)
+const generateOrderNumber = () => Math.floor(Math.random() * 1000000).toString()
+
+const buildPostOptions = (formData: any, formFields: FormField[]) => {
+  return {
+    headers: {
+      'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: buildFormData(formData, formFields),
+    method: 'POST',
+    credentials: 'same-origin'
+  }
+}
+
+const createOrder = async (formData: any, formFields:any) => {
+  // Generate 'unique' order number
+  formData.orderNumber = generateOrderNumber()
+  formFields.push({ id: 'orderNumber', type: 'text' })
+
+  const options = buildPostOptions(formData, formFields)
+
+  let reTryCount = 0
+
+  const trySubmission = () => {
+    reTryCount++
+    const orderNumber = generateOrderNumber().toString()
+    options.body.set('orderNumber', orderNumber)
+    return api.post('/api/v1/lifelines_cart', options, true).then(() => {
+      return orderNumber
+    }, (error:any) => {
+      // OrderNumber must be unique, just guess untill we find one
+      if (reTryCount < 10) {
+        return trySubmission()
+      } else {
+        return error
+      }
+    })
+  }
+
+  return trySubmission()
+}
+
+const updateOrder = async (formData: any, formFields:any) => {
+  const options = buildPostOptions(formData, formFields)
+
+  return api.post(`/api/v1/lifelines_cart/${formData.orderNumber}`, options, true).then(() => {
+    return formData.orderNumber
+  })
+}
 
 export default {
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -141,12 +190,17 @@ export default {
     }
   }),
   save: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
-    const body = { contents: JSON.stringify(toCart(state)) }
-    const response = await api.post('/api/v1/lifelines_cart', { body: JSON.stringify(body) })
-    const location: string = response.headers.get('Location')
-    const id: string = location.substring(location.lastIndexOf('/') + 1)
-    commit('setToast', { type: 'success', message: 'Saved order with id ' + id })
-    router.push({ name: 'load', params: { cartId: id } })
+    const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
+    const formData = { ...state.orderDetails, ...{ contents: JSON.stringify(toCart(state)) } }
+
+    if (state.orderDetails.orderNumber) {
+      return updateOrder(formData, formFields)
+    } else {
+      const orderNumber = await createOrder(formData, formFields)
+      commit('setOrderNumber', orderNumber)
+      // commit('setToast', { type: 'success', message: 'Saved order with id ' + orderNumber })
+      router.push({ name: 'load', params: { cartId: orderNumber } })
+    }
   }),
   load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, id: string) => {
     const response = await api.get(`/api/v2/lifelines_cart/${id}`)
@@ -155,44 +209,5 @@ export default {
     commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
     commit('setToast', { type: 'success', message: 'Loaded order with id ' + id })
-  }),
-  submitOrder: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderFormData: {formData: any, formFields:any }) => {
-    const { formData, formFields } = { ...orderFormData }
-    const fields = [...formFields]
-    fields.push({ id: 'contents', type: 'text' })
-    formData.contents = JSON.stringify(toCart(state))
-
-    // Generate 'unique' order number
-    formData.orderNumber = generateOderId()
-    fields.push({ id: 'orderNumber', type: 'text' })
-
-    const options = {
-      headers: {
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: buildFormData(formData, fields),
-      method: 'POST',
-      credentials: 'same-origin'
-    }
-
-    let reTryCount = 0
-
-    const trySubmission = () => {
-      reTryCount++
-      options.body.set('orderNumber', generateOderId().toString())
-      return api.post('/api/v1/lifelines_cart', options, true).then(() => {
-        return 'success'
-      }, (error:any) => {
-        // OrderNumber must be unique, just guess untill we find one
-        if (reTryCount < 10) {
-          return trySubmission()
-        } else {
-          return error
-        }
-      })
-    }
-
-    return trySubmission()
   })
 }

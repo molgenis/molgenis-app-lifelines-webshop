@@ -468,36 +468,36 @@ describe('actions', () => {
     })
   })
 
-  describe('submitOrder', () => {
-    const commit = jest.fn()
-    const state: ApplicationState = { ...emptyState }
-    const formData = { a: 'a' }
-    const formFields = [{ id: 'a', type: 'text' }]
+  // describe('submitOrder', () => {
+  //   const commit = jest.fn()
+  //   const state: ApplicationState = { ...emptyState }
+  //   const formData = { a: 'a' }
+  //   const formFields = [{ id: 'a', type: 'text' }]
 
-    describe('when the submission is succesfull', () => {
-      let result: any
-      beforeEach(async (done) => {
-        post.mockResolvedValue('success')
-        result = await actions.submitOrder({ commit, state }, { formData, formFields })
-        done()
-      })
+  //   describe('when the submission is succesfull', () => {
+  //     let result: any
+  //     beforeEach(async (done) => {
+  //       post.mockResolvedValue('success')
+  //       result = await actions.submitOrder({ commit, state }, { formData, formFields })
+  //       done()
+  //     })
 
-      it('should return success', () => {
-        expect(result).toEqual('success')
-      })
-    })
+  //     it('should return success', () => {
+  //       expect(result).toEqual('success')
+  //     })
+  //   })
 
-    describe('when the submission not succesfull', () => {
-      let result: any
-      beforeEach(async (done) => {
-        post.mockRejectedValue('error')
-        result = await actions.submitOrder({ commit, state }, { formData, formFields })
-        done()
-      })
+  //   describe('when the submission not succesfull', () => {
+  //     let result: any
+  //     beforeEach(async (done) => {
+  //       post.mockRejectedValue('error')
+  //       result = await actions.submitOrder({ commit, state }, { formData, formFields })
+  //       done()
+  //     })
 
-      it('should resturn error', () => {
-        expect(result).toEqual('error')
-      })
-    })
-  })
+  //     it('should resturn error', () => {
+  //       expect(result).toEqual('error')
+  //     })
+  //   })
+  // })
 })
