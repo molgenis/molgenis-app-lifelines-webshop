@@ -12,11 +12,11 @@ export interface File {
 }
 
 export interface Order {
-    id: string
-    name?: string
-    submissionDate: string
-    projectNumber?: string
-    orderId?: string
-    applicationForm?: File
+    orderNumber: string
     state: OrderState
+    contents?: string
+    name?: string
+    submissionDate?: string
+    projectNumber?: string
+    applicationForm?: File
 }

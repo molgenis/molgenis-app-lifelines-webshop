@@ -10,7 +10,7 @@ import router from '@/router'
 import Getters from '@/types/Getters'
 import { buildFormData } from '@/services/orderService.ts'
 
-const generateOderId = () => Math.floor(Math.random() * 1000000)
+const generateOrderNumber = () => Math.floor(Math.random() * 1000000)
 
 export default {
   loadOrders: tryAction(async ({ commit }: any) => {
@@ -18,9 +18,9 @@ export default {
     const response = await api.get('/api/v2/lifelines_order?num=10000')
     commit('setOrders', response.items)
   }),
-  deleteOrder: tryAction(async ({ dispatch, commit }: any, orderId: string) => {
+  deleteOrder: tryAction(async ({ dispatch, commit }: any, orderNumber: string) => {
     commit('setOrders', null)
-    await api.delete_(`/api/v2/lifelines_order/${orderId}`)
+    await api.delete_(`/api/v2/lifelines_order/${orderNumber}`)
     dispatch('loadOrders')
   }),
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -155,17 +155,17 @@ export default {
     const body = { contents: JSON.stringify(toCart(state)) }
     const response = await api.post('/api/v1/lifelines_order', { body: JSON.stringify(body) })
     const location: string = response.headers.get('Location')
-    const id: string = location.substring(location.lastIndexOf('/') + 1)
-    commit('setToast', { type: 'success', message: 'Saved order with id ' + id })
-    router.push({ name: 'load', params: { cartId: id } })
+    const orderNumber: string = location.substring(location.lastIndexOf('/') + 1)
+    commit('setToast', { type: 'success', message: 'Saved order with orderNumber ' + orderNumber })
+    router.push({ name: 'load', params: { cartId: orderNumber } })
   }),
-  load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, id: string) => {
-    const response = await api.get(`/api/v2/lifelines_order/${id}`)
+  load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderNumber: string) => {
+    const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     const cart: Cart = JSON.parse(response.contents)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
-    commit('setToast', { type: 'success', message: 'Loaded order with id ' + id })
+    commit('setToast', { type: 'success', message: 'Loaded order with orderNumber ' + orderNumber })
   }),
   submitOrder: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderFormData: {formData: any, formFields:any }) => {
     const { formData, formFields } = { ...orderFormData }
@@ -174,7 +174,7 @@ export default {
     formData.contents = JSON.stringify(toCart(state))
 
     // Generate 'unique' order number
-    formData.orderNumber = generateOderId()
+    formData.orderNumber = generateOrderNumber()
     fields.push({ id: 'orderNumber', type: 'text' })
 
     const options = {
@@ -191,11 +191,11 @@ export default {
 
     const trySubmission = () => {
       reTryCount++
-      options.body.set('orderNumber', generateOderId().toString())
+      options.body.set('orderNumber', generateOrderNumber().toString())
       return api.post('/api/v1/lifelines_order', options, true).then(() => {
         return 'success'
       }, (error:any) => {
-        // OrderNumber must be unique, just guess untill we find one
+        // OrderNumber must be unique, just guess until we find one
         if (reTryCount < 10) {
           return trySubmission()
         } else {
