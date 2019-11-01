@@ -15,12 +15,12 @@ const generateOderId = () => Math.floor(Math.random() * 1000000)
 export default {
   loadOrders: tryAction(async ({ commit }: any) => {
     commit('setOrders', null)
-    const response = await api.get('/api/v2/lifelines_cart?num=10000')
+    const response = await api.get('/api/v2/lifelines_order?num=10000')
     commit('setOrders', response.items)
   }),
   deleteOrder: tryAction(async ({ dispatch, commit }: any, orderId: string) => {
     commit('setOrders', null)
-    await api.delete_(`/api/v2/lifelines_cart/${orderId}`)
+    await api.delete_(`/api/v2/lifelines_order/${orderId}`)
     dispatch('loadOrders')
   }),
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -153,14 +153,14 @@ export default {
   }),
   save: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
     const body = { contents: JSON.stringify(toCart(state)) }
-    const response = await api.post('/api/v1/lifelines_cart', { body: JSON.stringify(body) })
+    const response = await api.post('/api/v1/lifelines_order', { body: JSON.stringify(body) })
     const location: string = response.headers.get('Location')
     const id: string = location.substring(location.lastIndexOf('/') + 1)
     commit('setToast', { type: 'success', message: 'Saved order with id ' + id })
     router.push({ name: 'load', params: { cartId: id } })
   }),
   load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, id: string) => {
-    const response = await api.get(`/api/v2/lifelines_cart/${id}`)
+    const response = await api.get(`/api/v2/lifelines_order/${id}`)
     const cart: Cart = JSON.parse(response.contents)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('updateFacetFilter', facetFilter)
@@ -192,7 +192,7 @@ export default {
     const trySubmission = () => {
       reTryCount++
       options.body.set('orderNumber', generateOderId().toString())
-      return api.post('/api/v1/lifelines_cart', options, true).then(() => {
+      return api.post('/api/v1/lifelines_order', options, true).then(() => {
         return 'success'
       }, (error:any) => {
         // OrderNumber must be unique, just guess untill we find one
