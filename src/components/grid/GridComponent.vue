@@ -31,7 +31,7 @@
                 id="grid-toggle-all-btn"
                 v-show="isSignedIn"
                 class="ll-facet-option btn btn-sm select-all grid-item btn-outline-secondary"
-                @click.prevent="isSignedIn && toggleGrid"
+                @click.prevent="isSignedIn && toggleGrid()"
                 @mouseenter="onMouseEnter('grid-item')"
                 @mouseleave="onMouseLeave('grid-item')">
                 All
