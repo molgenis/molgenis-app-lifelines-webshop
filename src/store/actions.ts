@@ -38,7 +38,7 @@ const createOrder = async (formData: any, formFields:any) => {
     reTryCount++
     const orderNumber = generateOrderNumber().toString()
     options.body.set('orderNumber', orderNumber)
-    return api.post('/api/v1/lifelines_cart', options, true).then(() => {
+    return api.post('/api/v1/lifelines_order', options, true).then(() => {
       return orderNumber
     }, (error:any) => {
       // OrderNumber must be unique, just guess untill we find one
@@ -56,7 +56,7 @@ const createOrder = async (formData: any, formFields:any) => {
 const updateOrder = async (formData: any, formFields:any) => {
   const options = buildPostOptions(formData, formFields)
 
-  return api.post(`/api/v1/lifelines_cart/${formData.orderNumber}`, options, true).then(() => {
+  return api.post(`/api/v1/lifelines_order/${formData.orderNumber}`, options, true).then(() => {
     return formData.orderNumber
   })
 }
