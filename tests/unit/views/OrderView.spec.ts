@@ -10,6 +10,7 @@ describe('OrderView', () => {
   let actions: any
   let state: any
   let saveMock: any
+  let mutations: any
 
   beforeEach(() => {
     localVue = createLocalVue()
@@ -18,16 +19,21 @@ describe('OrderView', () => {
     saveMock = jest.fn()
     state = {
       toast: null,
-      orderFormFields: [
-        
-      ]
+      order: {},
+      orderFormFields: []
     }
     actions = {
       save: saveMock
     }
+    mutations = {
+      setToast: jest.fn(),
+      clearToast: jest.fn(),
+      setOrderDetails: jest.fn()
+    }
     store = new Vuex.Store({
       state,
-      actions
+      actions,
+      mutations
     })
     wrapper = shallowMount(OrderView, { store, localVue })
   })
