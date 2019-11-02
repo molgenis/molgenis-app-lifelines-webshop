@@ -20,10 +20,10 @@ const cart: Cart = {
 const cartContents = JSON.stringify(cart)
 
 const mockResponses: {[key:string]: Object} = {
-  '/api/v2/lifelines_cart?num=10000': {
+  '/api/v2/lifelines_order?num=10000': {
     items: orders
   },
-  '/api/v2/lifelines_cart/fghij': {
+  '/api/v2/lifelines_order/fghij': {
     contents: cartContents
   },
   '/api/v2/lifelines_section?num=10000': {
@@ -210,7 +210,7 @@ describe('actions', () => {
       const action = actions.deleteOrder({ commit, dispatch }, 'abcde')
       expect(commit).toHaveBeenCalledWith('setOrders', null)
       await action
-      expect(mockDelete).toHaveBeenCalledWith('/api/v2/lifelines_cart/abcde')
+      expect(mockDelete).toHaveBeenCalledWith('/api/v2/lifelines_order/abcde')
       expect(dispatch).toHaveBeenCalledWith('loadOrders')
       done()
     })
@@ -464,7 +464,7 @@ describe('actions', () => {
       const headers = { get: jest.fn() }
       const commit = jest.fn()
       post.mockReturnValueOnce({ headers })
-      headers.get.mockReturnValueOnce('https://lifelines.dev.molgenis.org/api/v1/lifelines_cart/fghij')
+      headers.get.mockReturnValueOnce('https://lifelines.dev.molgenis.org/api/v1/lifelines_order/fghij')
       const state: ApplicationState = {
         ...emptyState,
         assessments: { 1: { id: 1, name: '1A' } },
@@ -477,7 +477,7 @@ describe('actions', () => {
       }
       await actions.save({ state, commit })
       expect(headers.get).toHaveBeenCalledWith('Location')
-      expect(post).toHaveBeenCalledWith('/api/v1/lifelines_cart', { body: JSON.stringify({ contents: cartContents }) })
+      expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', { body: JSON.stringify({ contents: cartContents }) })
       expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Saved order with id fghij' })
       expect(router.push).toHaveBeenCalledWith({ name: 'load', params: { cartId: 'fghij' } })
       done()

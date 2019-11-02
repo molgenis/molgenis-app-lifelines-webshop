@@ -64,12 +64,12 @@ const updateOrder = async (formData: any, formFields:any) => {
 export default {
   loadOrders: tryAction(async ({ commit }: any) => {
     commit('setOrders', null)
-    const response = await api.get('/api/v2/lifelines_cart?num=10000')
+    const response = await api.get('/api/v2/lifelines_order?num=10000')
     commit('setOrders', response.items)
   }),
   deleteOrder: tryAction(async ({ dispatch, commit }: any, orderId: string) => {
     commit('setOrders', null)
-    await api.delete_(`/api/v2/lifelines_cart/${orderId}`)
+    await api.delete_(`/api/v2/lifelines_order/${orderId}`)
     dispatch('loadOrders')
   }),
   loadSections: tryAction(async ({ commit, state } : any) => {
@@ -214,7 +214,7 @@ export default {
     }
   }),
   load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, id: string) => {
-    const response = await api.get(`/api/v2/lifelines_cart/${id}`)
+    const response = await api.get(`/api/v2/lifelines_order/${id}`)
     const cart: Cart = JSON.parse(response.contents)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('updateFacetFilter', facetFilter)

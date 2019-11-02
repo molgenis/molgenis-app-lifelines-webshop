@@ -11,7 +11,6 @@ describe('mutations', () => {
     })
   })
 
-
   describe('setIsSignedIn', () => {
     it('sets isSignedIn bool to value passed', () => {
       const baseAppState = { ...state }

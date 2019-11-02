@@ -65,5 +65,4 @@ describe('OrdersView.vue', () => {
     store.commit('setOrders', orders)
     expect(wrapper.find('table')).toMatchSnapshot()
   })
-
 })

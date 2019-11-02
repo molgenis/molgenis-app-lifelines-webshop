@@ -34,4 +34,5 @@ give --role ANONYMOUS read --entity-type lifelines_variant
 give --role ANONYMOUS read --entity-type lifelines_subsection_variable
 
 # Give write LIFELINES_SHOPPER permissions to cart
-give --role LIFELINES_SHOPPER write --entity-type lifelines_cart
+enable rls lifelines_order
+give --role LIFELINES_SHOPPER write --entity-type lifelines_order
