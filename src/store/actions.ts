@@ -53,10 +53,10 @@ const createOrder = async (formData: any, formFields:any) => {
   return trySubmission()
 }
 
-const updateOrder = async (formData: any, formFields:any) => {
+const updateOrder = async (formData: any, formFields:FormField[]) => {
   const options = buildPostOptions(formData, formFields)
 
-  return api.post(`/api/v1/lifelines_order/${formData.orderNumber}`, options, true).then(() => {
+  return api.post(`/api/v1/lifelines_order/${formData.orderNumber}?_method=PUT`, options, true).then(() => {
     return formData.orderNumber
   })
 }
@@ -210,7 +210,8 @@ export default {
       return state.order.orderNumber
     } else {
       const orderNumber = await createOrder(formData, formFields)
-      commit('setOrderNumber', orderNumber)
+      const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
+      commit('restoreOrderState', newOrderResponse)
       commit('setToast', { type: 'success', message: 'Saved order with orderNumber ' + orderNumber })
       router.push({ name: 'load', params: { orderNumber: orderNumber } })
     }
