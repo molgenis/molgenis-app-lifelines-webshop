@@ -85,7 +85,7 @@ export default {
   loadSubSections: tryAction(async ({ commit, state } : any) => {
     if (state.subSectionList.length === 0) {
       const response = await api.get('/api/v2/lifelines_sub_section?num=10000')
-      let subSections:String[] = []
+      let subSections:string[] = []
       response.items.map((item:any) => { subSections[item.id] = item.name })
       commit('updateSubSections', subSections)
     }
