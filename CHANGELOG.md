@@ -1,3 +1,17 @@
+# [0.8.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.7.0...v0.8.0) (2019-11-01)
+
+
+### Features
+
+* add orders view ([2577201](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/2577201))
+
+# [0.7.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.6.2...v0.7.0) (2019-11-01)
+
+
+### Features
+
+* sigin status in store ([89cfbbf](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/89cfbbf))
+
 ## [0.6.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.6.1...v0.6.2) (2019-10-31)
 
 

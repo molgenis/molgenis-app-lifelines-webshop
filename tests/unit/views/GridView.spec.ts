@@ -2,7 +2,6 @@ import { shallowMount, Wrapper } from '@vue/test-utils'
 import GridView from '@/views/GridView.vue'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import mutations from '@/store/mutations'
 
 Vue.use(Vuex)
 

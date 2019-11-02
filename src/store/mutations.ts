@@ -8,8 +8,12 @@ import Filter from '@/types/Filter'
 import { Section } from '@/types/Section.ts'
 import { TreeChild, TreeParentInternal } from '@/types/Tree'
 import OrderDetails from '@/types/OrderDetails'
+import { Order } from '@/types/Order'
 
 export default {
+  setIsSignedIn (state: ApplicationState, isSignedIn: boolean) {
+    state.isSignedIn = isSignedIn
+  },
   setToast (state: ApplicationState, toast: Toast) {
     state.toast = toast
   },
@@ -23,6 +27,9 @@ export default {
   },
   setOrderNumber (state: ApplicationState, orderNumber: string) {
     state.orderDetails.orderNumber = orderNumber
+  },
+  setOrders (state: ApplicationState, orders: Order[]) {
+    state.orders = orders
   },
   updateFacetFilter (state: ApplicationState, facetFilter: Filter) {
     state.facetFilter = facetFilter

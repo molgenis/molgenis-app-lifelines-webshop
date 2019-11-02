@@ -2,6 +2,7 @@ import actions from '@/store/actions'
 import router from '@/router'
 import { Cart } from '@/types/Cart'
 import emptyState from '@/store/state'
+import orders from '../fixtures/orders'
 
 // @ts-ignore
 import { post } from '@molgenis/molgenis-api-client'
@@ -17,7 +18,11 @@ const cart: Cart = {
   }
 }
 const cartContents = JSON.stringify(cart)
+
 const mockResponses: {[key:string]: Object} = {
+  '/api/v2/lifelines_cart?num=10000': {
+    items: orders
+  },
   '/api/v2/lifelines_cart/fghij': {
     contents: cartContents
   },
@@ -173,10 +178,13 @@ const mockResponses: {[key:string]: Object} = {
     }
   }
 }
+
+const mockDelete = jest.fn()
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
     get: (url: string) => Promise.resolve(mockResponses[url]),
-    post: jest.fn()
+    post: jest.fn(),
+    delete_: function () { mockDelete(...arguments) }
   }
 })
 jest.mock('@/router', () => ({
@@ -184,6 +192,30 @@ jest.mock('@/router', () => ({
 }))
 
 describe('actions', () => {
+  describe('loadOrders', () => {
+    it('loads the orders and commits them', async (done) => {
+      const commit = jest.fn()
+      const action = actions.loadOrders({ commit })
+      expect(commit).toHaveBeenCalledWith('setOrders', null)
+      await action
+      expect(commit).toHaveBeenCalledWith('setOrders', orders)
+      done()
+    })
+  })
+
+  describe('deleteOrder', () => {
+    it('deletes the order and loads the orders again', async (done) => {
+      const commit = jest.fn()
+      const dispatch = jest.fn()
+      const action = actions.deleteOrder({ commit, dispatch }, 'abcde')
+      expect(commit).toHaveBeenCalledWith('setOrders', null)
+      await action
+      expect(mockDelete).toHaveBeenCalledWith('/api/v2/lifelines_cart/abcde')
+      expect(dispatch).toHaveBeenCalledWith('loadOrders')
+      done()
+    })
+  })
+
   describe('loadSections', () => {
     it('fetch the sections and commits them', async (done) => {
       const commit = jest.fn()

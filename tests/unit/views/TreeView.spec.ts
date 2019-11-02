@@ -2,8 +2,6 @@ import { mount, createLocalVue, Wrapper, shallowMount } from '@vue/test-utils'
 import TreeView from '@/views/TreeView.vue'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import ApplicationState from '@/types/ApplicationState'
-import emptyState from '@/store/state'
 import SearchComponent from '@/components/search/SearchComponent.vue'
 
 const localVue = createLocalVue()

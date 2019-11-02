@@ -93,3 +93,7 @@ yarn run test:e2e
 yarn run test:unit
 ```
 
+## Workflow
+
+### Order process
+![order states](https://github.com/molgenis/molgenis-app-lifelines-webshop/master/docs/img/order-states.png)

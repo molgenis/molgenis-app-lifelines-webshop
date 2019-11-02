@@ -8,6 +8,7 @@ import { Section } from '@/types/Section.ts'
 import { TreeParentInternal } from '@/types/Tree'
 import OrderDetails from '@/types/OrderDetails'
 import FormField from './FormField'
+import { Order } from './Order'
 
 export type Toast = {
   type: 'danger' | 'success',
@@ -39,5 +40,6 @@ export default interface ApplicationState {
   searchTerm: string | null
   filteredSubsections: number[] | null
   filteredSections: number[] | null
-  isGridLoading: boolean
+  isGridLoading: boolean,
+  orders: Order[] | null
 }

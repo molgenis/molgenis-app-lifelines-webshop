@@ -62,13 +62,24 @@ const updateOrder = async (formData: any, formFields:any) => {
 }
 
 export default {
+  loadOrders: tryAction(async ({ commit }: any) => {
+    commit('setOrders', null)
+    const response = await api.get('/api/v2/lifelines_cart?num=10000')
+    commit('setOrders', response.items)
+  }),
+  deleteOrder: tryAction(async ({ dispatch, commit }: any, orderId: string) => {
+    commit('setOrders', null)
+    await api.delete_(`/api/v2/lifelines_cart/${orderId}`)
+    dispatch('loadOrders')
+  }),
   loadSections: tryAction(async ({ commit, state } : any) => {
     if (!Object.keys(state.sections).length) {
       const response = await api.get('/api/v2/lifelines_section?num=10000')
-      commit('updateSections', response.items.reduce((sections: { [key:number]: Section }, item:any) => {
-        sections[item.id] = item
-        return sections
-      }, {}))
+      commit('updateSections'
+        , response.items.reduce((sections: { [key:number]: Section }, item:any) => {
+          sections[item.id] = item
+          return sections
+        }, {}))
     }
   }),
   loadSubSections: tryAction(async ({ commit, state } : any) => {

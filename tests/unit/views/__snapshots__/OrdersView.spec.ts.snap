@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrdersView.vue checks content of order tables 1`] = `
+<table aria-describedby="orders-title" class="table">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col">Title</th>
+      <th scope="col">Submitted</th>
+      <th scope="col">Project</th>
+      <th scope="col">Order</th>
+      <th scope="col">Application form</th>
+      <th scope="col">State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <!---->
+      </td>
+      <td>
+        <!---->
+      </td>
+      <td></td>
+      <td>Thursday, October 31, 2019 1:48 PM</td>
+      <td></td>
+      <td></td>
+      <td>
+        <!---->
+      </td>
+      <td><span class="badge badge-pill">3</span></td>
+    </tr>
+    <tr>
+      <td>
+        <!---->
+      </td>
+      <td>
+        <!---->
+      </td>
+      <td>My draft order</td>
+      <td>Wednesday, October 30, 2019 1:25 PM</td>
+      <td></td>
+      <td></td>
+      <td><span><a href="https://lifelines.test.molgenis.org/files/aaaac3rcetmgfmudsodb3laaay">Motivation.pdf<font-awesome-icon-stub icon="download" aria-label="download"></font-awesome-icon-stub></a></span></td>
+      <td><span class="badge badge-pill">0</span></td>
+    </tr>
+  </tbody>
+</table>
+`;

@@ -87,7 +87,8 @@ const state: ApplicationState = {
   searchTerm: null,
   filteredSubsections: null, // contains the IDs of subsections that either match the search term or contain variables that match the search term
   filteredSections: null, // contains the IDs of sections that match the search term
-  isGridLoading: false
+  isGridLoading: false,
+  orders: null
 }
 
 export default state
