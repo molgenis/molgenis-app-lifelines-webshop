@@ -14,7 +14,7 @@
               id="order-form"
               :options="options"
               :formFields="orderFormFields"
-              :initialFormData="orderDetails"
+              :initialFormData="order"
               :formState="formState"
               @valueChange="onValueChanged">
             </form-component>
@@ -78,10 +78,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['toast', 'orderFormFields', 'orderDetails'])
+    ...mapState(['toast', 'orderFormFields', 'order'])
   },
   methods: {
-    ...mapActions(['submitOrder']),
+    ...mapActions(['save']),
     ...mapMutations(['setToast', 'clearToast', 'setOrderDetails']),
     onValueChanged (updatedFormData) {
       this.formData = updatedFormData
@@ -93,7 +93,7 @@ export default Vue.extend({
       this.orderFormFields.forEach((field) => (formState[field.id].$touched = true))
       if (this.formState.$valid) {
         this.isSaving = true
-        await this.submitOrder().catch(() => {
+        await this.save().catch(() => {
           this.isSaving = false
           this.setToast({ type: 'warning', message: 'Failed to submit order' })
         })

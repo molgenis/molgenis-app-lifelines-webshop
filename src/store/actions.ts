@@ -202,23 +202,26 @@ export default {
   }),
   save: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
-    const formData = { ...state.orderDetails, ...{ contents: JSON.stringify(toCart(state)) } }
+    const formData = { ...state.order, ...{ contents: JSON.stringify(toCart(state)) } }
 
-    if (state.orderDetails.orderNumber) {
-      return updateOrder(formData, formFields)
+    if (state.order.orderNumber) {
+      await updateOrder(formData, formFields)
+      commit('setToast', { type: 'success', message: 'Saved order with orderNumber ' + state.order.orderNumber })
+      return state.order.orderNumber
     } else {
       const orderNumber = await createOrder(formData, formFields)
       commit('setOrderNumber', orderNumber)
-      // commit('setToast', { type: 'success', message: 'Saved order with id ' + orderNumber })
-      router.push({ name: 'load', params: { cartId: orderNumber } })
+      commit('setToast', { type: 'success', message: 'Saved order with orderNumber ' + orderNumber })
+      router.push({ name: 'load', params: { orderNumber: orderNumber } })
     }
   }),
-  load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, id: string) => {
-    const response = await api.get(`/api/v2/lifelines_order/${id}`)
+  load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderNumber: string) => {
+    const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     const cart: Cart = JSON.parse(response.contents)
     const { facetFilter, gridSelection } = fromCart(cart, state)
+    commit('restoreOrderState', response)
     commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
-    commit('setToast', { type: 'success', message: 'Loaded order with id ' + id })
+    commit('setToast', { type: 'success', message: 'Loaded order with orderNumber ' + orderNumber })
   })
 }

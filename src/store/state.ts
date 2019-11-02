@@ -3,11 +3,13 @@ import ApplicationState from '@/types/ApplicationState'
 const state: ApplicationState = {
   isSignedIn: true, // set true during development
   toast: null,
-  orderDetails: {
+  order: {
     orderNumber: null,
     name: null,
     projectNumber: null,
-    applicationForm: null
+    applicationForm: null,
+    submissionDate: null,
+    state: null
   },
   orderFormFields: [
     {

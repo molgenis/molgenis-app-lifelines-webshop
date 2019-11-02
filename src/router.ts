@@ -13,17 +13,17 @@ export default new Router({
   base: process.env.NODE_ENV === 'production' ? packageJson.name + '/dist/index.html' : process.env.BASE_URL,
   routes: [
     {
-      path: '/orders',
-      name: 'orders',
-      component: OrdersView
-    },
-    {
       path: '/',
       name: 'home',
       component: MainView
     },
     {
-      path: '/shop/:cartId',
+      path: '/orders',
+      name: 'orders',
+      component: OrdersView
+    },
+    {
+      path: '/shop/:orderNumber',
       name: 'load',
       component: MainView
     },

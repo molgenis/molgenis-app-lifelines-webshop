@@ -24,12 +24,12 @@
         </thead>
         <tbody >
           <tr v-for="order in orders" :key="order.id">
-            <td><router-link v-if="order.state === 'Draft'" class="btn btn-primary btn-sm" :to="`/shop/${order.id}`"><font-awesome-icon icon="edit" aria-label="edit"/></router-link></td>
-            <td><button v-if="order.state === 'Draft'" class="btn btn-danger btn-sm" @click="deleteOrder(order.id)"><font-awesome-icon icon="trash" aria-label="delete"/></button></td>
+            <td><router-link v-if="order.state === 'Draft'" class="btn btn-primary btn-sm" :to="`/shop/${order.orderNumber}`"><font-awesome-icon icon="edit" aria-label="edit"/></router-link></td>
+            <td><button v-if="order.state === 'Draft'" class="btn btn-danger btn-sm" @click="deleteOrder(order.orderNumber)"><font-awesome-icon icon="trash" aria-label="delete"/></button></td>
             <td>{{ order.name }}</td>
             <td>{{ order.submissionDate | moment("LLLL") }}</td>
             <td>{{ order.projectNumber }}</td>
-            <td>{{ order.orderId }}</td>
+            <td>{{ order.orderNumber }}</td>
             <td><span v-if="order.applicationForm"><a :href="order.applicationForm.url">{{ order.applicationForm.filename }}<font-awesome-icon icon="download" aria-label="download"/></a></span></td>
             <td><span class="badge badge-pill" :class="badgeClass[order.state]">{{ order.state }}</span></td>
           </tr>

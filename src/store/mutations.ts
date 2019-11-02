@@ -7,7 +7,6 @@ import GridSelection from '@/types/GridSelection'
 import Filter from '@/types/Filter'
 import { Section } from '@/types/Section.ts'
 import { TreeChild, TreeParentInternal } from '@/types/Tree'
-import OrderDetails from '@/types/OrderDetails'
 import { Order } from '@/types/Order'
 
 export default {
@@ -20,13 +19,23 @@ export default {
   clearToast (state: ApplicationState) {
     state.toast = null
   },
-  setOrderDetails (state: ApplicationState, orderDetails: OrderDetails) {
-    state.orderDetails.name = orderDetails.name
-    state.orderDetails.projectNumber = orderDetails.projectNumber
-    state.orderDetails.applicationForm = orderDetails.applicationForm
+  setOrderDetails (state: ApplicationState, order: Order) {
+    state.order.name = order.name
+    state.order.projectNumber = order.projectNumber
+    state.order.applicationForm = order.applicationForm
+  },
+  restoreOrderState (state: ApplicationState, loadOrderResponse: any) {
+    state.order = {
+      orderNumber: loadOrderResponse.orderNumber,
+      name: loadOrderResponse.name,
+      submissionDate: loadOrderResponse.submissionDate,
+      projectNumber: loadOrderResponse.projectNumber,
+      applicationForm: loadOrderResponse.applicationForm,
+      state: loadOrderResponse.state
+    }
   },
   setOrderNumber (state: ApplicationState, orderNumber: string) {
-    state.orderDetails.orderNumber = orderNumber
+    state.order.orderNumber = orderNumber
   },
   setOrders (state: ApplicationState, orders: Order[]) {
     state.orders = orders

@@ -69,8 +69,8 @@ export default Vue.extend({
   async created () {
     const promises = Promise.all([this.loadVariables(), this.loadAssessments()])
     await promises
-    if (this.$route.params.cartId) {
-      this.load(this.$route.params.cartId)
+    if (this.$route.params.orderNumber) {
+      this.load(this.$route.params.orderNumber)
     }
   }
 })

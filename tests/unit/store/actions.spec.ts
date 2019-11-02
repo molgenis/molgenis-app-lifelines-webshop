@@ -479,7 +479,7 @@ describe('actions', () => {
       expect(headers.get).toHaveBeenCalledWith('Location')
       expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', { body: JSON.stringify({ contents: cartContents }) })
       expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Saved order with id fghij' })
-      expect(router.push).toHaveBeenCalledWith({ name: 'load', params: { cartId: 'fghij' } })
+      expect(router.push).toHaveBeenCalledWith({ name: 'load', params: { orderNumber: 'fghij' } })
       done()
     })
   })

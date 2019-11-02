@@ -46,11 +46,11 @@ describe('MainView.vue', () => {
     expect(wrapper.find('toast-component-stub').attributes('message')).toEqual('i am not a message')
   })
 
-  it('loads an order, after loading variables and assessments, if a cartId route param is present', (done) => {
+  it('loads an order, after loading variables and assessments, if a orderNumber route param is present', (done) => {
     actions.loadVariables.mockReturnValueOnce(Promise.resolve())
     actions.loadAssessments.mockReturnValueOnce(Promise.resolve())
 
-    mocks.$route.params.cartId = 'abcde'
+    mocks.$route.params.orderNumber = 'abcde'
     shallowMount(MainView, { store, localVue, mocks })
 
     setTimeout(() => {
