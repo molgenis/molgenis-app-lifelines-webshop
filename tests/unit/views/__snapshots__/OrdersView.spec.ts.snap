@@ -25,7 +25,7 @@ exports[`OrdersView.vue checks content of order tables 1`] = `
       <td></td>
       <td>Thursday, October 31, 2019 1:48 PM</td>
       <td></td>
-      <td></td>
+      <td>edcba</td>
       <td>
         <!---->
       </td>
@@ -41,7 +41,7 @@ exports[`OrdersView.vue checks content of order tables 1`] = `
       <td>My draft order</td>
       <td>Wednesday, October 30, 2019 1:25 PM</td>
       <td></td>
-      <td></td>
+      <td>abcde</td>
       <td><span><a href="https://lifelines.test.molgenis.org/files/aaaac3rcetmgfmudsodb3laaay">Motivation.pdf<font-awesome-icon-stub icon="download" aria-label="download"></font-awesome-icon-stub></a></span></td>
       <td><span class="badge badge-pill">0</span></td>
     </tr>
