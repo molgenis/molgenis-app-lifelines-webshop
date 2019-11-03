@@ -43,7 +43,7 @@ const createOrder = async (formData: any, formFields:any) => {
         reTryCount++
         return trySubmission()
       } else {
-        return error
+        return Promise.reject(error)
       }
     })
   }
@@ -207,7 +207,9 @@ export default {
       commit('setToast', { type: 'success', message: 'Saved order with order number ' + state.order.orderNumber })
       return state.order.orderNumber
     } else {
-      const orderNumber = await createOrder(formData, formFields)
+      const orderNumber = await createOrder(formData, formFields).catch(() => {
+        return Promise.reject('Failed to create order')
+      })
       const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
       commit('restoreOrderState', newOrderResponse)
       commit('setToast', { type: 'success', message: 'Saved order with order number ' + orderNumber })
