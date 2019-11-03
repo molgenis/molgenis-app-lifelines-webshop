@@ -92,12 +92,12 @@ describe('mutations', () => {
           id: 'fileId',
           filename: 'fileName',
           url: 'fileUrl'
-      },
+        },
         submissionDate: 'edit',
         state: OrderState.Draft
       }
       mutations.setOrderDetails(baseAppState, order)
-      
+
       expect(baseAppState.order).toEqual({
         orderNumber: null,
         name: 'name',
@@ -106,9 +106,9 @@ describe('mutations', () => {
           id: 'fileId',
           filename: 'fileName',
           url: 'fileUrl'
-      },
+        },
         submissionDate: null,
-        state: null,
+        state: null
       })
     })
   })
@@ -126,12 +126,12 @@ describe('mutations', () => {
           id: 'fileId',
           filename: 'fileName',
           url: 'fileUrl'
-      },
+        },
         submissionDate: 'edit',
         state: OrderState.Draft
       }
       mutations.restoreOrderState(baseAppState, response)
-      
+
       expect(baseAppState.order).toEqual({
         orderNumber: 'edit',
         name: 'name',
@@ -140,9 +140,9 @@ describe('mutations', () => {
           id: 'fileId',
           filename: 'fileName',
           url: 'fileUrl'
-      },
+        },
         submissionDate: 'edit',
-        state: OrderState.Draft,
+        state: OrderState.Draft
       })
     })
   })

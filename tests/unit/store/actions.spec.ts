@@ -481,7 +481,6 @@ describe('actions', () => {
 
   describe('save', () => {
     describe('if orderNumber is set', () => {
-
       it('saves grid selection', async (done) => {
         const commit = jest.fn()
         const state: ApplicationState = {
@@ -504,7 +503,6 @@ describe('actions', () => {
     })
 
     describe('if orderNumber not set', () => {
-      
       it('saves grid selection', async (done) => {
         const commit = jest.fn()
         const state: ApplicationState = {
@@ -518,7 +516,7 @@ describe('actions', () => {
             submissionDate: null
           }
         }
-        jest.spyOn(orderService,'generateOrderNumber').mockImplementation(() => '12345');
+        jest.spyOn(orderService, 'generateOrderNumber').mockImplementation(() => '12345')
         post.mockResolvedValue('success')
         await actions.save({ state, commit })
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', expect.anything(), true)
@@ -554,7 +552,5 @@ describe('actions', () => {
         expect(commit).not.toHaveBeenCalledWith('setToast', { type: 'success', message: 'Saved order with order number 12345' })
       })
     })
-    
   })
-
 })

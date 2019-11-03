@@ -208,7 +208,7 @@ export default {
       return state.order.orderNumber
     } else {
       const orderNumber = await createOrder(formData, formFields).catch(() => {
-        return Promise.reject('Failed to create order')
+        return Promise.reject(new Error('Failed to create order'))
       })
       const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
       commit('restoreOrderState', newOrderResponse)
