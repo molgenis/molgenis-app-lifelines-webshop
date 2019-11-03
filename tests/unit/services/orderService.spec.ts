@@ -1,4 +1,4 @@
-import { isFileIncluded, buildFormData } from '@/services/orderService.ts'
+import { isFileIncluded, buildFormData, generateOrderNumber } from '@/services/orderService.ts'
 
 describe('orderService', () => {
   describe('when a file type field is included', () => {
@@ -61,4 +61,9 @@ describe('buildFormData', () => {
     expect(keys).toContain('b')
     expect(keys).toContain('c')
   })
+})
+
+describe('generateOrderNumber', () => {
+  const orderNumber = parseInt(generateOrderNumber())
+  expect(orderNumber > 0 && orderNumber <= 1000000).toBeTruthy()
 })

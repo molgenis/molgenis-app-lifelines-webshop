@@ -24,3 +24,5 @@ export const buildFormData = (data: any, fields: FromField[]) => {
   Object.entries(data).forEach((pair) => appendToForm(fields, formData, pair))
   return formData
 }
+
+export const generateOrderNumber = () => Math.floor(Math.random() * 1000000).toString()

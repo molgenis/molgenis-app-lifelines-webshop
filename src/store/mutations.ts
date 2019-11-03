@@ -24,7 +24,7 @@ export default {
     state.order.projectNumber = order.projectNumber
     state.order.applicationForm = order.applicationForm
   },
-  restoreOrderState (state: ApplicationState, loadOrderResponse: any) {
+  restoreOrderState (state: ApplicationState, loadOrderResponse: Order) {
     state.order = {
       orderNumber: loadOrderResponse.orderNumber,
       name: loadOrderResponse.name,
@@ -33,9 +33,6 @@ export default {
       applicationForm: loadOrderResponse.applicationForm,
       state: loadOrderResponse.state
     }
-  },
-  setOrderNumber (state: ApplicationState, orderNumber: string) {
-    state.order.orderNumber = orderNumber
   },
   setOrders (state: ApplicationState, orders: Order[]) {
     state.orders = orders

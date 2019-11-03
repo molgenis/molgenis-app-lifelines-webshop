@@ -8,10 +8,8 @@ import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
 import router from '@/router'
 import Getters from '@/types/Getters'
-import { buildFormData } from '@/services/orderService.ts'
+import { buildFormData, generateOrderNumber } from '@/services/orderService.ts'
 import FormField from '@/types/FormField'
-
-const generateOrderNumber = () => Math.floor(Math.random() * 1000000).toString()
 
 const buildPostOptions = (formData: any, formFields: FormField[]) => {
   return {
@@ -35,7 +33,6 @@ const createOrder = async (formData: any, formFields:any) => {
   let reTryCount = 0
 
   const trySubmission = () => {
-    reTryCount++
     const orderNumber = generateOrderNumber().toString()
     options.body.set('orderNumber', orderNumber)
     return api.post('/api/v1/lifelines_order', options, true).then(() => {
@@ -43,6 +40,7 @@ const createOrder = async (formData: any, formFields:any) => {
     }, (error:any) => {
       // OrderNumber must be unique, just guess untill we find one
       if (reTryCount < 10) {
+        reTryCount++
         return trySubmission()
       } else {
         return error
@@ -206,13 +204,13 @@ export default {
 
     if (state.order.orderNumber) {
       await updateOrder(formData, formFields)
-      commit('setToast', { type: 'success', message: 'Saved order with orderNumber ' + state.order.orderNumber })
+      commit('setToast', { type: 'success', message: 'Saved order with order number ' + state.order.orderNumber })
       return state.order.orderNumber
     } else {
       const orderNumber = await createOrder(formData, formFields)
       const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
       commit('restoreOrderState', newOrderResponse)
-      commit('setToast', { type: 'success', message: 'Saved order with orderNumber ' + orderNumber })
+      commit('setToast', { type: 'success', message: 'Saved order with order number ' + orderNumber })
       router.push({ name: 'load', params: { orderNumber: orderNumber } })
     }
   }),

@@ -1,6 +1,7 @@
 import mutations from '@/store/mutations'
 import state from '@/store/state'
 import orders from '../fixtures/orders'
+import { OrderState } from '@/types/Order'
 
 describe('mutations', () => {
   describe('setOrders', () => {
@@ -77,6 +78,72 @@ describe('mutations', () => {
       mutations.setToast(baseAppState, { type: 'danger', message: 'message' })
       mutations.clearToast(baseAppState)
       expect(baseAppState.toast).toEqual(null)
+    })
+  })
+
+  describe('setOrderDetails', () => {
+    it('sets the order form values', () => {
+      let baseAppState = Object.assign({}, state)
+      const order = {
+        orderNumber: 'edit',
+        name: 'name',
+        projectNumber: 'projectNumber',
+        applicationForm: {
+          id: 'fileId',
+          filename: 'fileName',
+          url: 'fileUrl'
+      },
+        submissionDate: 'edit',
+        state: OrderState.Draft
+      }
+      mutations.setOrderDetails(baseAppState, order)
+      
+      expect(baseAppState.order).toEqual({
+        orderNumber: null,
+        name: 'name',
+        projectNumber: 'projectNumber',
+        applicationForm: {
+          id: 'fileId',
+          filename: 'fileName',
+          url: 'fileUrl'
+      },
+        submissionDate: null,
+        state: null,
+      })
+    })
+  })
+
+  describe('restoreOrderState', () => {
+    it('sets the order fields from the response', () => {
+      let baseAppState = Object.assign({}, state)
+      const response = {
+        href: 'href',
+        meta: 'meta',
+        orderNumber: 'edit',
+        name: 'name',
+        projectNumber: 'projectNumber',
+        applicationForm: {
+          id: 'fileId',
+          filename: 'fileName',
+          url: 'fileUrl'
+      },
+        submissionDate: 'edit',
+        state: OrderState.Draft
+      }
+      mutations.restoreOrderState(baseAppState, response)
+      
+      expect(baseAppState.order).toEqual({
+        orderNumber: 'edit',
+        name: 'name',
+        projectNumber: 'projectNumber',
+        applicationForm: {
+          id: 'fileId',
+          filename: 'fileName',
+          url: 'fileUrl'
+      },
+        submissionDate: 'edit',
+        state: OrderState.Draft,
+      })
     })
   })
 
