@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Order varibles</h1>
+        <h1>Order variables</h1>
         <toast-component
           class="toast-component mt-2"
           v-if="toast"
