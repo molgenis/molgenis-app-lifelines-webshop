@@ -34,16 +34,16 @@
                 type="submit"
                 @click.prevent="onSubmit"
                 :disabled="(formState.$invalid && formState.$touched) || formState.$pending">
-                Submit
+                Save
               </button>
 
               <button
                 v-else
                 id="save-btn-saving"
-                class="btn btn-primary"
+                class="btn btn-primary ml-1"
                 type="button"
                 disabled="disabled">
-                Submitting
+                Saving
               </button>
 
               <span v-if="!isSaving && formState.$invalid && formState.$touched" class="alert text-danger">
