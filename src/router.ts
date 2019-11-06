@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import MainView from './views/MainView.vue'
 import OrdersView from './views/OrdersView.vue'
 import OrderView from './views/OrderView.vue'
+import HomeView from './views/HomeView.vue'
 
 Vue.use(Router)
 
@@ -14,12 +15,17 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: MainView
+      component: HomeView
     },
     {
       path: '/orders',
       name: 'orders',
       component: OrdersView
+    },
+    {
+      path: '/shop',
+      name: 'shop',
+      component: MainView
     },
     {
       path: '/shop/:orderNumber',
