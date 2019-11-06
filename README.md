@@ -102,5 +102,9 @@ mcmd run lifelines -i
 
 ## Workflow
 
+### Workflow of the catalogue
+![order states](docs/img/catalogue-work-flow.svg)
+
 ### Order process
-![order states](https://github.com/molgenis/molgenis-app-lifelines-webshop/master/docs/img/order-states.png)
+![order states](docs/img/order-states.png)
+
