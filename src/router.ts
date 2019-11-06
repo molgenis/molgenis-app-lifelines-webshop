@@ -9,7 +9,6 @@ Vue.use(Router)
 const packageJson = require('../package.json')
 
 export default new Router({
-  mode: 'history',
   base: process.env.NODE_ENV === 'production' ? packageJson.name + '/dist/index.html' : process.env.BASE_URL,
   routes: [
     {
