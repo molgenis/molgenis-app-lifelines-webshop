@@ -7,13 +7,10 @@ add group lifelines
 add user ll_admin --set-password xxxxx
 make ll_admin lifelines_manager
 
-$wait Create custom role LIFELINES_SHOPPER and add group "lifelines"
+$wait Create custom role LIFELINES_SHOPPER and add group "lifelines" to role
 
 # Give plugin permissions
 give --role ANONYMOUS read --plugin app
-
-# Import the lifelines data
-$wait Please import all the lifelines data (by executing 'import -p ~/lifelines.zip')
 
 # Give ANONYMOUS package permissions
 give --role ANONYMOUS readmeta --package lifelines
@@ -35,9 +32,12 @@ give --role ANONYMOUS read --entity-type lifelines_tree
 give --role ANONYMOUS read --entity-type lifelines_variant
 give --role ANONYMOUS read --entity-type lifelines_subsection_variable
 
-# Import order data model and i18n labels
-import order_emx
+# Import data model and i18n labels
+import attributes
 import sys_L10nString
+
+# Import the lifelines data
+$wait Please import all the lifelines data
 
 # Give write LIFELINES_SHOPPER permissions to cart
 enable rls lifelines_order
@@ -52,6 +52,11 @@ enable theme bootstrap3_lifelines
 add logo ll-logo.png
 set app title LifeLines
 
+# Set signup true
+set auth signup true
+set auth signup_moderation false
+
 $wait Add LIFELINES_SHOPPER to includes of USER role
 $wait Add via the menu manager the "Catalogue" and "My Orders" menu items by using the redirect plugin
+$wait Copy the contents of homepage.html to the home plugin
 $wait Delete password of user from this script

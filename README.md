@@ -101,8 +101,8 @@ Add the `deployment/datasets` folder of this repository to the `dataset_folders`
 `deployment/resources` folder to the `resource_folders` section, or alternatively copy the files in 
 `deployment/datasets` to one of your configured `dataset_folders` and the contents of `deployment/resources` to one of 
 your configured `resource_folders`.  
-Now configure your molgenis commander to run on the lifelines server using `mcmd add host` and `mcmd set host`.
-Then you can run the commander script to setup the server:
+Now configure your molgenis commander to run on the lifelines server using `mcmd config add host` and 
+`mcmd config set host`. Then you can run the commander script to setup the server:
 ```
 cp ~/molgenis-app-lifelines-webshop/deployment/lifelines ~/.mcmd/scripts/
 mcmd run lifelines -i
