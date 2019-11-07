@@ -20,6 +20,14 @@ describe('mutations', () => {
     })
   })
 
+  describe('setContextLoaded', () => {
+    it('sets isContextLoaded to true', () => {
+      const baseAppState = { ...state }
+      mutations.setContextLoaded(baseAppState)
+      expect(baseAppState.isContextLoaded).toEqual(true)
+    })
+  })
+
   describe('updateParticipantCount', () => {
     it('updates participant count', () => {
       const baseAppState = { ...state }
