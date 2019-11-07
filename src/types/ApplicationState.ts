@@ -15,6 +15,7 @@ export type Toast = {
 }
 
 export default interface ApplicationState {
+  isContextLoaded: boolean,
   isSignedIn: boolean
   order: Order,
   orderFormFields: FormField[]

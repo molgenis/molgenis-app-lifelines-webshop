@@ -14,9 +14,10 @@ export default Vue.extend({
   name: 'app',
   components: { PageComponent },
   methods: {
-    ...mapMutations(['setIsSignedIn']),
+    ...mapMutations(['setIsSignedIn', 'setContextLoaded']),
     handleContextLoaded (context) {
       this.setIsSignedIn(context.authenticated)
+      this.setContextLoaded()
     }
   }
 })
