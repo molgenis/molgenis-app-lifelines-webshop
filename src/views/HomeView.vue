@@ -21,8 +21,7 @@ export default Vue.extend({
     isContextLoaded: {
       handler: function (newValue, oldValue) {
         if (newValue) {
-          const nextRouteName = this.isSignedIn ? 'orders' : 'shop'
-          router.push({ name: nextRouteName })
+          router.push({ name: this.isSignedIn ? 'orders' : 'shop' })
         }
       },
       immediate: true
