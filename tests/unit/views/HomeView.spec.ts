@@ -71,7 +71,7 @@ describe('HomeView', () => {
     })
   
     it('should render the HomeView', () => {
-      expect(wrapper.find('h3').text()).toEqual('Loading catelog context data')
+      expect(wrapper.find('h3').text()).toEqual('Loading')
     })
   
   })
