@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h3>Loading catelog context data</h3>
+      <h3>Loading</h3>
       <spinner-animation  />
     </div>
 </template>
