@@ -28,10 +28,12 @@ export default {
     state.order = {
       orderNumber: loadOrderResponse.orderNumber,
       name: loadOrderResponse.name,
-      submissionDate: loadOrderResponse.submissionDate,
       projectNumber: loadOrderResponse.projectNumber,
       applicationForm: loadOrderResponse.applicationForm,
-      state: loadOrderResponse.state
+      state: loadOrderResponse.state,
+      creationDate: loadOrderResponse.creationDate,
+      updateDate: loadOrderResponse.updateDate,
+      submissionDate: loadOrderResponse.submissionDate
     }
   },
   setOrders (state: ApplicationState, orders: Order[]) {

@@ -11,6 +11,7 @@ import Getters from '@/types/Getters'
 import { buildFormData, generateOrderNumber } from '@/services/orderService.ts'
 import FormField from '@/types/FormField'
 import { OrderState } from '@/types/Order'
+import moment from 'moment'
 
 const buildPostOptions = (formData: any, formFields: FormField[]) => {
   return {
@@ -24,7 +25,7 @@ const buildPostOptions = (formData: any, formFields: FormField[]) => {
   }
 }
 
-const createOrder = async (formData: any, formFields:any) => {
+const createOrder = async (formData: any, formFields:FormField[]) => {
   // Generate 'unique' order number
   formData.orderNumber = generateOrderNumber()
   formFields.push({ id: 'orderNumber', type: 'text' })
@@ -201,14 +202,21 @@ export default {
   }),
   save: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
-    const formData = { ...state.order, ...{ contents: JSON.stringify(toCart(state)) } }
+    // const formData = { ...state.order, ...{ contents: JSON.stringify(toCart(state)) } }
+
+    const formData = {
+      ...state.order,
+      ...{ contents: JSON.stringify(toCart(state)) },
+      ...{ updateDate: moment().toISOString() }
+    }
 
     if (state.order.orderNumber) {
       await updateOrder(formData, formFields)
       commit('setToast', { type: 'success', message: 'Saved order with order number ' + state.order.orderNumber })
       router.push({ name: 'load', params: { orderNumber: state.order.orderNumber } })
     } else {
-      const orderNumber = await createOrder(formData, formFields).catch(() => {
+      const creationDateField = { id: 'creationDate', type: 'date' }
+      const orderNumber = await createOrder(formData, [ ...formFields, creationDateField ]).catch(() => {
         return Promise.reject(new Error('Failed to create order'))
       })
       const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
@@ -219,7 +227,13 @@ export default {
   }),
   submit: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
-    const formData = { ...state.order, ...{ contents: JSON.stringify(toCart(state)) } }
+    const now = moment().toISOString()
+    const formData = {
+      ...state.order,
+      ...{ contents: JSON.stringify(toCart(state)) },
+      ...{ updateDate: now },
+      ...{ submissionDate: now }
+    }
     // ts enums are numbers, the backends expects strings
     // @ts-ignore
     formData.state = OrderState[OrderState.Submitted]

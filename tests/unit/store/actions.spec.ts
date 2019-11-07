@@ -491,7 +491,9 @@ describe('actions', () => {
             projectNumber: null,
             applicationForm: null,
             state: OrderState.Draft,
-            submissionDate: 'submissionDate'
+            submissionDate: 'submissionDate',
+            creationDate: 'creationDate',
+            updateDate: 'updateDate'
           }
         }
         post.mockResolvedValue('success')
@@ -513,9 +515,12 @@ describe('actions', () => {
             projectNumber: null,
             applicationForm: null,
             state: null,
-            submissionDate: null
+            submissionDate: null,
+            creationDate: null,
+            updateDate: null
           }
         }
+        jest.spyOn(orderService, 'buildFormData').mockImplementation(() => new FormData())
         jest.spyOn(orderService, 'generateOrderNumber').mockImplementation(() => '12345')
         post.mockResolvedValue('success')
         await actions.save({ state, commit })
@@ -539,7 +544,9 @@ describe('actions', () => {
             projectNumber: null,
             applicationForm: null,
             state: OrderState.Draft,
-            submissionDate: 'submissionDate'
+            submissionDate: 'submissionDate',
+            creationDate: 'creationDate',
+            updateDate: 'updateDate'
           }
         }
         post.mockRejectedValue('error')
@@ -566,7 +573,9 @@ describe('actions', () => {
             projectNumber: null,
             applicationForm: null,
             state: OrderState.Draft,
-            submissionDate: 'submissionDate'
+            submissionDate: 'submissionDate',
+            creationDate: 'creationDate',
+            updateDate: 'updateDate'
           }
         }
         post.mockResolvedValue('success')
@@ -586,7 +595,9 @@ describe('actions', () => {
             projectNumber: null,
             applicationForm: null,
             state: OrderState.Draft,
-            submissionDate: 'submissionDate'
+            submissionDate: 'submissionDate',
+            creationDate: 'creationDate',
+            updateDate: 'updateDate'
           }
         }
         post.mockResolvedValue('success')
@@ -595,6 +606,7 @@ describe('actions', () => {
         done()
       })
     })
+
     describe('when the submission not succesfull', () => {
       let result: any
       let commit: any
@@ -609,7 +621,9 @@ describe('actions', () => {
             projectNumber: null,
             applicationForm: null,
             state: OrderState.Draft,
-            submissionDate: 'submissionDate'
+            submissionDate: 'submissionDate',
+            creationDate: 'creationDate',
+            updateDate: 'updateDate'
           }
         }
         post.mockRejectedValue('error')

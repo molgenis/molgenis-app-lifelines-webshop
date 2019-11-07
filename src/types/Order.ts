@@ -18,4 +18,6 @@ export interface Order {
     projectNumber: string | null
     applicationForm: File | null
     state: OrderState | null
+    creationDate: string | null
+    updateDate: string | null
 }
