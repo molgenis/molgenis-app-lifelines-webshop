@@ -7,7 +7,16 @@
       :message="toast.message"
       @toastCloseBtnClicked="clearToast">
     </toast-component>
-    <h1 id="orders-title">{{'lifelines-webshop-orders-title' | i18n}}</h1>
+
+    <ConfirmationModal
+      v-if="intent.type === 'delete'"
+      v-model="intent"
+      :title="$t('lifelines-webshop-modal-delete-header', {order: intent.target.orderNumber})"
+      :proceed="$t('lifelines-webshop-modal-button-delete')">
+      {{$t('lifelines-webshop-modal-delete-body', {order: intent.target.orderNumber})}}
+    </ConfirmationModal>
+
+    <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
       <spinner-animation v-if="orders === null"/>
       <table v-else class="table" aria-describedby="orders-title">
         <thead>
@@ -25,7 +34,7 @@
         <tbody >
           <tr v-for="order in orders" :key="order.id">
             <td><router-link v-if="order.state === 'Draft'" class="btn btn-primary btn-sm" :to="`/shop/${order.orderNumber}`"><font-awesome-icon icon="edit" aria-label="edit"/></router-link></td>
-            <td><button v-if="order.state === 'Draft'" class="btn btn-danger btn-sm" @click="deleteOrder(order.orderNumber)"><font-awesome-icon icon="trash" aria-label="delete"/></button></td>
+            <td><button v-if="order.state === 'Draft'" class="btn btn-danger btn-sm" @click="confirmDeleteOrder(order)"><font-awesome-icon icon="trash" aria-label="delete"/></button></td>
             <td>{{ order.name }}</td>
             <td>{{ order.submissionDate | dataString }}</td>
             <td>{{ order.projectNumber }}</td>
@@ -45,13 +54,16 @@ import { faEdit, faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
 import ToastComponent from '../components/ToastComponent.vue'
+import ConfirmationModal from '../components/ConfirmationModal.vue'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import moment from 'moment'
 
 library.add(faEdit, faDownload, faTrash)
 
+const emptyIntent = { method: null, type: null }
+
 export default Vue.extend({
-  components: { FontAwesomeIcon, SpinnerAnimation, ToastComponent },
+  components: { ConfirmationModal, FontAwesomeIcon, SpinnerAnimation, ToastComponent },
   mounted () {
     this.loadOrders()
   },
@@ -62,10 +74,22 @@ export default Vue.extend({
         'Submitted': 'badge-primary',
         'Approved': 'badge-success',
         'Rejected': 'badge-danger'
-      }
+      },
+      intent: emptyIntent
     }
   },
   methods: {
+    confirmDeleteOrder: function (order) {
+      // Setting the intent prepares the confirmation modal.
+      this.intent = {
+        method: () => {
+          this.deleteOrder(order.orderNumber)
+          this.intent = emptyIntent
+        },
+        target: order,
+        type: 'delete'
+      }
+    },
     ...mapActions(['loadOrders', 'deleteOrder']),
     ...mapMutations(['clearToast'])
   },
