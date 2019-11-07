@@ -27,7 +27,7 @@
             <td><router-link v-if="order.state === 'Draft'" class="btn btn-primary btn-sm" :to="`/shop/${order.orderNumber}`"><font-awesome-icon icon="edit" aria-label="edit"/></router-link></td>
             <td><button v-if="order.state === 'Draft'" class="btn btn-danger btn-sm" @click="deleteOrder(order.orderNumber)"><font-awesome-icon icon="trash" aria-label="delete"/></button></td>
             <td>{{ order.name }}</td>
-            <td>{{ order.submissionDate | moment("LLLL") }}</td>
+            <td>{{ order.submissionDate | dataString }}</td>
             <td>{{ order.projectNumber }}</td>
             <td>{{ order.orderNumber }}</td>
             <td><span v-if="order.applicationForm"><a :href="order.applicationForm.url">{{ order.applicationForm.filename }}<font-awesome-icon icon="download" aria-label="download"/></a></span></td>
@@ -46,6 +46,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
 import ToastComponent from '../components/ToastComponent.vue'
 import { mapActions, mapState, mapMutations } from 'vuex'
+import moment from 'moment'
 
 library.add(faEdit, faDownload, faTrash)
 
@@ -70,6 +71,9 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['orders', 'toast'])
+  },
+  filters: {
+    dataString: (dateValue) => dateValue ? moment(dateValue).format('LLLL') : ''
   }
 })
 </script>
