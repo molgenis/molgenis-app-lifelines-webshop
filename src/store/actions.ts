@@ -203,8 +203,6 @@ export default {
   }),
   save: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
-    // const formData = { ...state.order, ...{ contents: JSON.stringify(toCart(state)) } }
-
     const formData = {
       ...state.order,
       ...{ contents: JSON.stringify(toCart(state)) },
