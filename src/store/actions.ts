@@ -12,6 +12,7 @@ import { buildFormData, generateOrderNumber } from '@/services/orderService.ts'
 import FormField from '@/types/FormField'
 import { OrderState } from '@/types/Order'
 import moment from 'moment'
+import { TreeParent } from '@/types/Tree'
 
 const buildPostOptions = (formData: any, formFields: FormField[]) => {
   return {
@@ -93,17 +94,17 @@ export default {
   loadSectionTree: tryAction(async ({ commit, state } : any) => {
     if (state.treeStructure.length === 0) {
       const response = await api.get('/api/v2/lifelines_tree?num=10000')
-      let structure: any = {}
+      let structure: {[id: number]: number[]} = {}
       response.items.map((item: any) => {
         if (item.section_id.id in structure) {
-          structure[item.section_id.id].push({ id: item.subsection_id.id, count: 0 })
+          structure[item.section_id.id].push(item.subsection_id.id)
         } else {
-          structure[item.section_id.id] = [{ id: item.subsection_id.id, count: 0 }]
+          structure[item.section_id.id] = [item.subsection_id.id]
         }
       })
-      let treeStructure: Array<Object> = []
+      let treeStructure: TreeParent[] = []
       for (let [key, value] of Object.entries(structure)) {
-        treeStructure.push({ key: key, list: value })
+        treeStructure.push({ key: (key as unknown) as number, list: value })
       }
       commit('updateSectionTree', treeStructure)
     }

@@ -5,7 +5,7 @@ import Assessment from '@/types/Assessment'
 import GridSelection from '@/types/GridSelection'
 import Filter from './Filter'
 import { Section } from '@/types/Section.ts'
-import { TreeParentInternal } from '@/types/Tree'
+import { TreeParent } from '@/types/Tree'
 import FormField from './FormField'
 import { Order } from './Order'
 
@@ -15,6 +15,7 @@ export type Toast = {
 }
 
 export default interface ApplicationState {
+  isContextLoaded: boolean,
   isSignedIn: boolean
   order: Order,
   orderFormFields: FormField[]
@@ -28,7 +29,7 @@ export default interface ApplicationState {
   ageGroupOptions: FacetOption[],
   ageAtOptions: FacetOption[],
   facetFilter: Filter,
-  treeStructure: TreeParentInternal[]
+  treeStructure: TreeParent[]
   gridVariables: VariableWithVariants[]
   variantCounts: Count[]
   participantCount: number | null

@@ -20,6 +20,14 @@ describe('mutations', () => {
     })
   })
 
+  describe('setContextLoaded', () => {
+    it('sets isContextLoaded to true', () => {
+      const baseAppState = { ...state }
+      mutations.setContextLoaded(baseAppState)
+      expect(baseAppState.isContextLoaded).toEqual(true)
+    })
+  })
+
   describe('updateParticipantCount', () => {
     it('updates participant count', () => {
       const baseAppState = { ...state }
@@ -251,25 +259,6 @@ describe('mutations', () => {
       }
       mutations.updateGridSelection(myState, { 1: [2, 3] })
       expect(myState.gridSelection).toEqual({ 1: [2, 3] })
-    })
-  })
-
-  describe('setTreeCount', () => {
-    it('It can update the count ', () => {
-      const myState = {
-        ...state,
-        treeOpenPageSection: 1,
-        treeSelected: 2,
-        treeStructure: [{
-          key: 1,
-          list: [{
-            id: 2,
-            count: 0
-          }]
-        }]
-      }
-      mutations.setTreeCount(myState, 10)
-      expect(myState.treeStructure[0].list[0].count).toEqual(10)
     })
   })
 

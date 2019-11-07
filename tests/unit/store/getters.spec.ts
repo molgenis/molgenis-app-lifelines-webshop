@@ -261,14 +261,14 @@ describe('getters', () => {
           }
         },
         subSectionList: ['sub-section1'],
-        treeStructure: [{ key: 1, list: [{ id: 0, count: 0 }] }]
+        treeStructure: [{ key: 1, list: [0] }]
       }
 
       const gettersParam: Getters = {
         ...emptyGetters
       }
       it('should return the complete tree structure', () => {
-        expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'children': [{ 'count': 0, 'id': 0, 'name': 'sub-section1' }], 'count': 0, 'id': 1, 'name': 'section' }])
+        expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'children': [{ 'id': 0, 'name': 'sub-section1' }], 'id': 1, 'name': 'section' }])
       })
     })
 

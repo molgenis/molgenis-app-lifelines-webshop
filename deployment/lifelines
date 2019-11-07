@@ -1,17 +1,16 @@
+$wait If you haven't set the password for the user in this script, kill it now and alter it
+
 # Add group
 add group lifelines
 
 # Create user
-add user ll_admin --set-password xxxxx 
+add user ll_admin --set-password xxxxx
 make ll_admin lifelines_manager
 
-$wait Create custom role LIFELINES_SHOPPER and add group "lifelines" 
+$wait Create custom role LIFELINES_SHOPPER and add group "lifelines" to role
 
 # Give plugin permissions
 give --role ANONYMOUS read --plugin app
-
-# Import the lifelines data
-$wait Please import all the lifelines data (i18n translations included) by executing 'import -p ~/lifelines.zip'
 
 # Give ANONYMOUS package permissions
 give --role ANONYMOUS readmeta --package lifelines
@@ -25,14 +24,40 @@ give --role ANONYMOUS count --entity-type lifelines_subsection_variable
 # Give read ANONYMOUS permissions
 give --role ANONYMOUS read --entity-type sys_L10nString
 give --role ANONYMOUS read --entity-type lifelines_variable
-give --role ANONYMOUS read --entity-type lifelines_section 
+give --role ANONYMOUS read --entity-type lifelines_section
 give --role ANONYMOUS read --entity-type lifelines_assessment
-give --role ANONYMOUS read --entity-type lifelines_age_group 
+give --role ANONYMOUS read --entity-type lifelines_age_group
 give --role ANONYMOUS read --entity-type lifelines_sub_section
 give --role ANONYMOUS read --entity-type lifelines_tree
 give --role ANONYMOUS read --entity-type lifelines_variant
 give --role ANONYMOUS read --entity-type lifelines_subsection_variable
 
+# Import data model and i18n labels
+import attributes
+import sys_L10nString
+
+# Import the lifelines data
+$wait Please import all the lifelines data
+
 # Give write LIFELINES_SHOPPER permissions to cart
 enable rls lifelines_order
 give --role LIFELINES_SHOPPER write --entity-type lifelines_order
+give --role LIFELINES_SHOPPER write --entity-type sys_FileMeta
+
+# Set aggregate threshold
+set app aggregate_threshold 15
+
+# Set styling
+add theme --bootstrap3 bootstrap3_lifelines.min.css --bootstrap4 bootstrap4_lifelines.min.css
+enable theme bootstrap3_lifelines
+add logo ll-logo.png
+set app title LifeLines
+
+# Set signup true
+set auth signup true
+set auth signup_moderation false
+
+$wait Add LIFELINES_SHOPPER to includes of USER role
+$wait Add via the menu manager the "Catalogue" and "My Orders" menu items by using the redirect plugin
+$wait Copy the contents of homepage.html to the home plugin
+$wait Delete password of user from this script

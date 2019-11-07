@@ -92,10 +92,18 @@ yarn run test:e2e
 yarn run test:unit
 ```
 
-## Deployment
-You need to run the commander script to setup the server:
+## Data
+To transform the raw data to a format that can be used by this app, use the 
+[molgenis-py-lifelines-transform](https://github.com/molgenis/molgenis-py-lifelines-transform) tool.
 
-```python3.6
+## Deployment using molgenis commander
+Add the `deployment/datasets` folder of this repository to the `dataset_folders` section of `~/.mcmd/mcmc.yaml` and the 
+`deployment/resources` folder to the `resource_folders` section, or alternatively copy the files in 
+`deployment/datasets` to one of your configured `dataset_folders` and the contents of `deployment/resources` to one of 
+your configured `resource_folders`.  
+Now configure your molgenis commander to run on the lifelines server using `mcmd config add host` and 
+`mcmd config set host`. Then you can run the commander script to setup the server:
+```
 cp ~/molgenis-app-lifelines-webshop/deployment/lifelines ~/.mcmd/scripts/
 mcmd run lifelines -i
 ```

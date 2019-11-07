@@ -6,10 +6,13 @@ import Vue from 'vue'
 import GridSelection from '@/types/GridSelection'
 import Filter from '@/types/Filter'
 import { Section } from '@/types/Section.ts'
-import { TreeChild, TreeParentInternal } from '@/types/Tree'
+import { TreeParent } from '@/types/Tree'
 import { Order } from '@/types/Order'
 
 export default {
+  setContextLoaded (state: ApplicationState) {
+    state.isContextLoaded = true
+  },
   setIsSignedIn (state: ApplicationState, isSignedIn: boolean) {
     state.isSignedIn = isSignedIn
   },
@@ -79,7 +82,7 @@ export default {
   updateSubSections (state: ApplicationState, subSections: string[]) {
     state.subSectionList = subSections
   },
-  updateSectionTree (state: ApplicationState, sections: TreeParentInternal[]) {
+  updateSectionTree (state: ApplicationState, sections: TreeParent[]) {
     state.treeStructure = sections
   },
   updateVariables (state: ApplicationState, variables: {[key:number]: Variable}) {
@@ -108,12 +111,6 @@ export default {
   },
   updateFilteredSubsections (state: ApplicationState, subsections: number[]) {
     state.filteredSubsections = subsections
-  },
-  setTreeCount (state: ApplicationState, count: number) {
-    const item:TreeChild|undefined = state.treeStructure[state.treeOpenPageSection - 1].list.find((item:TreeChild) => item.id === state.treeSelected)
-    if (item) {
-      item.count = count
-    }
   },
   toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
     const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))

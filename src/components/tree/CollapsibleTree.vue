@@ -5,7 +5,6 @@
         <li
           :key="parent.name"
           class="list-group-item list-group-item-outline-secondary list-group-item-action text-truncate pr-3 py-2 parent-list"
-          :class="{ selecteditems: parent.count > 0 }"
           :title="parent.name"
           role="button"
           @click="toggleCollapse(parent.id)"
@@ -27,7 +26,7 @@
         <block-expand :key="'b-'+ parent.name" :isExpanded="parent.id == opensection && hasChildren(parent)" class="list-group-item p-0" >
           <ul class="list-group list-group-flush">
             <li
-              :class="{ active: (selection===child.id), selecteditems: child.count > 0 }"
+              :class="{ active: (selection===child.id) }"
               class="list-group-item list-group-item-outline-secondary list-group-item-action py-1 child-list"
               role="button"
               v-for="child in parent.children"
@@ -130,16 +129,6 @@ export default Vue.extend({
       transition: all 0.3s;
       transform: scale(2.5);
       background-color: transparent;
-    }
-    &.selecteditems {
-      position: relative;
-      &:before {
-        transform: scale(1);
-        background-color: $secondary;
-      }
-      &.active:before {
-        background-color: $light;
-      }
     }
   }
 </style>
