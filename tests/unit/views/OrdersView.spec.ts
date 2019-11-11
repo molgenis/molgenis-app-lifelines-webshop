@@ -39,7 +39,7 @@ describe('OrdersView.vue', () => {
 
   it('shows title', () => {
     const wrapper = shallowMount(OrdersView, { store, localVue })
-    expect(wrapper.find('#orders-title').text()).toBe('#lifelines-webshop-orders-title#')
+    expect(wrapper.find('#orders-title').text()).toBe('lifelines-webshop-orders-title')
   })
 
   it('fetches orders when mounted', () => {

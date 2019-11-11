@@ -1,3 +1,7 @@
+// Force modules (vscode-jest).
+process.env.VUE_CLI_BABEL_TARGET_NODE = true
+process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = true
+
 module.exports = {
   moduleFileExtensions: [
     'js',
@@ -20,6 +24,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^.+.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub'
   },
+  setupFiles: ['<rootDir>/tests/unit/setup.js'],
   snapshotSerializers: [
     'jest-serializer-vue'
   ],
@@ -36,5 +41,8 @@ module.exports = {
       babelConfig: true
     }
   },
-  collectCoverage: true
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{ts,jsx}'
+  ]
 }

@@ -11,7 +11,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "test:watch": "jest --watchAll"
   },
   "files": [
     "dist",
@@ -30,6 +31,7 @@
     "core-js": "2.6.8",
     "fetch-ponyfill": "^6.1.0",
     "format-si-prefix": "^0.3.2",
+    "glob": "^7.1.6",
     "install": "^0.13.0",
     "jquery": "3.3",
     "lodash.debounce": "^4.0.8",

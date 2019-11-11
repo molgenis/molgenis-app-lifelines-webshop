@@ -1,7 +1,7 @@
 <template>
   <div id="cart-view" class="row">
     <div class="col">
-      <h3>{{ 'lifelines-webshop-cart-header' | i18n }}</h3>
+      <h3>{{$t('lifelines-webshop-cart-header')}}</h3>
       <template v-if="selectedVariableIds.length">
         <div class="mb-3" v-if="selectedVariableIds.length > 0">
           <button type="button" class="btn btn-primary save" @click="save">Save</button>

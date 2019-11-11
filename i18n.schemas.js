@@ -7,7 +7,8 @@ const en = {
   "lifelines-webshop-modal-button-cancel": "Cancel",
   "lifelines-webshop-modal-button-delete": "Delete",
   "lifelines-webshop-modal-delete-header": "Delete order {{order}}",
-  "lifelines-webshop-modal-delete-body": "You are about to delete order {{order}}. Is this really what you would like to do?",
+  "lifelines-webshop-modal-delete-body": "You are about to delete order {{order}}. Are you sure?",
+  "lifelines-webshop-orders-title": "Orders",
   "ui-form:form_file_change": "Change",
   "ui-form:form_file_browse": "Browse",
 }

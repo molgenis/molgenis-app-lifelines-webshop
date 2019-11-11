@@ -4,17 +4,19 @@
       <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{title}}</h5>
-                <button type="button" class="close" @click="closeModal">
-                <span>&times;</span>
-                </button>
+                <h5 class="modal-title">{{modalTitle}}</h5>
+                <router-link type="button" class="close" :to="backRoute" tag="button">
+                  <span>&times;</span>
+                </router-link>
             </div>
             <div class="modal-body">
                   <slot></slot>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @click="closeModal">{{$t('lifelines-webshop-modal-button-cancel')}}</button>
-                <button type="button" class="btn btn-primary" @click="value.method">{{proceed}}</button>
+                <router-link class="btn btn-secondary" :to="backRoute">
+                  {{$t('lifelines-webshop-modal-button-cancel')}}
+                </router-link>
+                <button type="button" class="btn btn-primary" @click="confirmMethod()">{{confirmButton}}</button>
             </div>
           </div>
       </div>
@@ -26,19 +28,8 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  props: ['proceed', 'title', 'value'],
   name: 'ConfirmationModal',
-  methods: {
-    /**
-     * Close the modal without executing the action
-     * by unsetting the action at parent's v-model.
-     */
-    closeModal: function () {
-      this.$emit('input', {
-        type: null
-      })
-    }
-  }
+  props: ['backRoute', 'confirmButton', 'confirmMethod', 'modalTitle']
 })
 </script>
 

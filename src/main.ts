@@ -23,7 +23,7 @@ Vue.use(i18n, {
   fallbackLng: 'en',
   namespace: ['lifelines-webshop', 'ui-form'],
   callback () {
-    new Vue({
+    global.app = new Vue({
       store,
       router,
       render: h => h(App)

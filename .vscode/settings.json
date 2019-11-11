@@ -9,5 +9,8 @@
         "extensions": [".ts", ".js"]
     },
     "vetur.validation.template": false,
-    "eslint.autoFixOnSave": true
+    "eslint.autoFixOnSave": true,
+    "jest.showCoverageOnLoad": true,
+    "jest.debugMode": false,
+    "jest.runAllTestsFirst": false
   }

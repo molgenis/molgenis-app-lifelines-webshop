@@ -9,11 +9,12 @@
     </toast-component>
 
     <ConfirmationModal
-      v-if="intent.type === 'delete'"
-      v-model="intent"
-      :title="$t('lifelines-webshop-modal-delete-header', {order: intent.target.orderNumber})"
-      :proceed="$t('lifelines-webshop-modal-button-delete')">
-      {{$t('lifelines-webshop-modal-delete-body', {order: intent.target.orderNumber})}}
+      v-if="$route.name === 'orderDelete'"
+      :backRoute="$router.resolve({name: 'orders'}).route"
+      :confirmButton="$t('lifelines-webshop-modal-button-delete')"
+      :confirmMethod="deleteOrderConfirmed.bind(this, $route.params.order)"
+      :modalTitle="$t('lifelines-webshop-modal-delete-header', {order: $route.params.order})">
+      {{$t('lifelines-webshop-modal-delete-body', {order: $route.params.order})}}
     </ConfirmationModal>
 
     <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
@@ -33,8 +34,22 @@
         </thead>
         <tbody >
           <tr v-for="order in orders" :key="order.id">
-            <td><router-link v-if="order.state === 'Draft'" class="btn btn-primary btn-sm" :to="`/shop/${order.orderNumber}`"><font-awesome-icon icon="edit" aria-label="edit"/></router-link></td>
-            <td><button v-if="order.state === 'Draft'" class="btn btn-danger btn-sm" @click="confirmDeleteOrder(order)"><font-awesome-icon icon="trash" aria-label="delete"/></button></td>
+            <td>
+              <router-link
+                v-if="order.state === 'Draft'"
+                class="btn btn-primary btn-sm"
+                :to="`/shop/${order.orderNumber}`">
+                  <font-awesome-icon icon="edit" aria-label="edit"/>
+                </router-link>
+            </td>
+            <td>
+              <router-link
+                v-if="order.state === 'Draft'"
+                :to="{ name: 'orderDelete', params: {order: order.orderNumber}}"
+                class="btn btn-danger btn-sm">
+              <font-awesome-icon icon="trash" aria-label="delete"/>
+              </router-link>
+            </td>
             <td>{{ order.name }}</td>
             <td>{{ order.submissionDate | dataString }}</td>
             <td>{{ order.projectNumber }}</td>
@@ -79,16 +94,9 @@ export default Vue.extend({
     }
   },
   methods: {
-    confirmDeleteOrder: function (order) {
-      // Setting the intent prepares the confirmation modal.
-      this.intent = {
-        method: () => {
-          this.deleteOrder(order.orderNumber)
-          this.intent = emptyIntent
-        },
-        target: order,
-        type: 'delete'
-      }
+    deleteOrderConfirmed: function (orderNumber) {
+      this.deleteOrder(orderNumber)
+      this.$router.push({ name: 'orders' })
     },
     ...mapActions(['loadOrders', 'deleteOrder']),
     ...mapMutations(['clearToast'])
