@@ -11,7 +11,11 @@ const bannerText = `package-name: ${pkgName}
 package-version: ${pkgVersion}
 build-date: ${buildDate}`
 
-const config = require('rc')('lifelines')
+const config = require('rc')('lifelines', {
+  development: {
+    proxy: 'https://lifelines.test.molgenis.org'
+  }
+})
 
 module.exports = {
   outputDir: 'dist',
