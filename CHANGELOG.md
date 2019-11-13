@@ -1,3 +1,10 @@
+## [0.10.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.10.5...v0.10.6) (2019-11-13)
+
+
+### Bug Fixes
+
+* fix [#139](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/139) remove call to removed mutation ([7eb8e29](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/7eb8e29))
+
 ## [0.10.5](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.10.4...v0.10.5) (2019-11-13)
 
 

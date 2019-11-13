@@ -54,8 +54,7 @@ describe('GridView', () => {
       toggleGridRow: toggleGridRowMock,
       toggleGridColumn: toggleGridColumnMock,
       toggleGridSelection: toggleGridSelectionMock,
-      toggleAll: toggleAllMock,
-      setTreeCount: jest.fn()
+      toggleAll: toggleAllMock
     }
 
     store = new Vuex.Store({

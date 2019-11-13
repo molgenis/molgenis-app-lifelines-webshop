@@ -37,29 +37,25 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll', 'setTreeCount']),
+    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
     ...mapActions(['loadGridVariables', 'loadGridData', 'loadAssessments']),
     handleGridRowToggle (variableId) {
       this.toggleGridRow({
         variableId,
         gridAssessments: this.gridAssessments
       })
-      this.setTreeCount(this.numberOfSelectedItems)
     },
     handleGridColumnToggle (assessmentId) {
       this.toggleGridColumn({ assessmentId })
-      this.setTreeCount(this.numberOfSelectedItems)
     },
     handleGridCellToggle (rowIndex, colIndex) {
       this.toggleGridSelection({
         variableId: this.gridVariables[rowIndex].id,
         assessmentId: this.gridAssessments[colIndex].id
       })
-      this.setTreeCount(this.numberOfSelectedItems)
     },
     handleGridAllToggle () {
       this.toggleAll({ gridAssessments: this.gridAssessments })
-      this.setTreeCount(this.numberOfSelectedItems)
     }
   },
   watch: {

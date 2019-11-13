@@ -89,6 +89,14 @@ describe('mutations', () => {
     })
   })
 
+  describe('updateTreeSelection', () => {
+    it('updates the treeSelected number with the give number', () => {
+      let baseAppState = Object.assign({}, state)
+      mutations.updateTreeSelection(baseAppState, 99)
+      expect(baseAppState.treeSelected).toEqual(99)
+    })
+  })
+
   describe('setOrderDetails', () => {
     it('sets the order form values', () => {
       let baseAppState = Object.assign({}, state)
