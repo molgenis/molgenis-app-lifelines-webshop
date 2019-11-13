@@ -69,7 +69,7 @@ describe('MainView.vue', () => {
     shallowMount(MainView, { store, localVue, mocks })
 
     setTimeout(() => {
-      expect(actions.load).toHaveBeenCalledWith(expect.anything(), 'abcde', undefined)
+      expect(actions.load).toHaveBeenCalledWith(expect.anything(), 'abcde')
       done()
     }, 0)
   })
