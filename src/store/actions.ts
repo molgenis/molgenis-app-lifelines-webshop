@@ -55,6 +55,9 @@ const createOrder = async (formData: any, formFields:FormField[]) => {
 }
 
 const updateOrder = async (formData: any, formFields:FormField[]) => {
+  if (formData.applicationForm && (typeof formData.applicationForm.filename === 'string')) {
+    formData.applicationForm = formData.applicationForm.filename
+  }
   const options = buildPostOptions(formData, formFields)
 
   return api.post(`/api/v1/lifelines_order/${formData.orderNumber}?_method=PUT`, options, true).then(() => {

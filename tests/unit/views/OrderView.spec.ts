@@ -62,6 +62,20 @@ describe('OrderView', () => {
     expect(wrapper.find('#order-form')).toBeDefined()
   })
 
+  describe('when the order application form is a fileReference', () => {
+    beforeEach(() => {
+      wrapper.setData({ order: {
+        applicationForm: {
+          filename: 'my file'
+        }
+      } })
+    })
+
+    it('should use the filename as applicationForm value', () => {
+      expect(wrapper.vm.orderFormData).toEqual({ applicationForm: 'my file' })
+    })
+  })
+
   describe('on form value changed', () => {
     beforeEach(() => {
       wrapper.vm.onValueChanged({ key1: 'new val' })

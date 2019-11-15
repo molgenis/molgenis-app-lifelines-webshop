@@ -14,7 +14,7 @@
               id="order-form"
               :options="options"
               :formFields="orderFormFields"
-              :initialFormData="order"
+              :initialFormData="orderFormData"
               :formState="formState"
               @valueChange="onValueChanged">
             </form-component>
@@ -98,7 +98,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['toast', 'orderFormFields', 'order'])
+    ...mapState(['toast', 'orderFormFields', 'order']),
+    orderFormData () {
+      if (this.order && this.order.applicationForm && typeof this.order.applicationForm.filename === 'string') {
+        // Form field of type file expects just the filename in update mode
+        return {
+          ...this.order, ...{ applicationForm: this.order.applicationForm.filename }
+        }
+      } else {
+        return this.order
+      }
+    }
   },
   methods: {
     ...mapActions(['save', 'submit']),

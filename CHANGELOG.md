@@ -1,3 +1,10 @@
+## [0.10.7](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.10.6...v0.10.7) (2019-11-14)
+
+
+### Bug Fixes
+
+* Update order with file data ([4224cde](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4224cde))
+
 ## [0.10.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.10.5...v0.10.6) (2019-11-13)
 
 

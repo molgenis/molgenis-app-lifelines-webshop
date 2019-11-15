@@ -530,6 +530,35 @@ describe('actions', () => {
       })
     })
 
+    describe('if applicationForm is a fileRef', () => {
+      it('saves order', async (done) => {
+        const commit = jest.fn()
+        const state: ApplicationState = {
+          ...emptyState,
+          order: {
+            orderNumber: '12345',
+            name: null,
+            projectNumber: null,
+            applicationForm: {
+              id: 'id',
+              url: 'url',
+              filename: 'my file'
+            },
+            state: null,
+            submissionDate: null,
+            creationDate: null,
+            updateDate: null
+          }
+        }
+        jest.spyOn(orderService, 'buildFormData').mockImplementation(() => new FormData())
+        post.mockResolvedValue('success')
+        await actions.save({ state, commit })
+        expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order/12345?_method=PUT', expect.anything(), true)
+        expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Saved order with order number 12345' })
+        done()
+      })
+    })
+
     describe('when the submission not succesfull', () => {
       let result: any
       let commit: any
