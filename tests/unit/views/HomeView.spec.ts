@@ -7,18 +7,22 @@ describe('HomeView', () => {
   let localVue: any
   let store: any
   let state: any
+  let getters: any
 
-  describe('when the context is not loaded', () => {
+  describe('when the user is not signed in', () => {
     beforeEach(() => {
       localVue = createLocalVue()
       localVue.use(Vuex)
 
       state = {
-        isContextLoaded: false,
-        isSignedIn: false
+        isContextLoaded: true
+      }
+      getters = {
+        isSignedIn: () => false
       }
       store = new Vuex.Store({
-        state
+        state,
+        getters
       })
 
       wrapper = shallowMount(HomeView, { store, localVue })
@@ -29,38 +33,20 @@ describe('HomeView', () => {
     })
   })
 
-  describe('when the context is loaded', () => {
+  describe('when the user is signed in', () => {
     beforeEach(() => {
       localVue = createLocalVue()
       localVue.use(Vuex)
 
       state = {
-        isContextLoaded: true,
-        isSignedIn: false
+        isContextLoaded: true
+      }
+      getters = {
+        isSignedIn: () => true
       }
       store = new Vuex.Store({
-        state
-      })
-
-      wrapper = shallowMount(HomeView, { store, localVue })
-    })
-
-    it('should render the HomeView', () => {
-      expect(wrapper.find('h3').text()).toEqual('Loading')
-    })
-  })
-
-  describe('when the context is loaded and user is sigend in', () => {
-    beforeEach(() => {
-      localVue = createLocalVue()
-      localVue.use(Vuex)
-
-      state = {
-        isContextLoaded: true,
-        isSignedIn: true
-      }
-      store = new Vuex.Store({
-        state
+        state,
+        getters
       })
 
       wrapper = shallowMount(HomeView, { store, localVue })

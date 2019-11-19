@@ -12,22 +12,6 @@ describe('mutations', () => {
     })
   })
 
-  describe('setIsSignedIn', () => {
-    it('sets isSignedIn bool to value passed', () => {
-      const baseAppState = { ...state }
-      mutations.setIsSignedIn(baseAppState, false)
-      expect(baseAppState.isSignedIn).toEqual(false)
-    })
-  })
-
-  describe('setContextLoaded', () => {
-    it('sets isContextLoaded to true', () => {
-      const baseAppState = { ...state }
-      mutations.setContextLoaded(baseAppState)
-      expect(baseAppState.isContextLoaded).toEqual(true)
-    })
-  })
-
   describe('updateParticipantCount', () => {
     it('updates participant count', () => {
       const baseAppState = { ...state }

@@ -769,10 +769,10 @@
     i18next-xhr-backend "^1.4.1"
     moment "^2.18.1"
 
-"@molgenis/molgenis-ui-context@^1.4.1":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@molgenis/molgenis-ui-context/-/molgenis-ui-context-1.4.2.tgz#f0bdc1cf12fe34cc25aec6808589978e6c1b4aab"
-  integrity sha512-2sBy30FizstdC14LafCntgYlHw9jIvpYqkUWElcUqiGQZLaiTZOHkJ6CXCkmrg3GImWIRoqyp/MMG2PIbiMeNA==
+"@molgenis/molgenis-ui-context@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@molgenis/molgenis-ui-context/-/molgenis-ui-context-1.5.0.tgz#0cdb25c35f788cea8fadce906bd960470fc0414f"
+  integrity sha512-S2NBN3lc64bcDm5l00IrbL0E6dsxQeu2IDYjIZvKqWUpcxGWLGL3ZMTVuqdXr+i8rpN6lzWGz+/dzRETnDB8Bw==
   dependencies:
     "@molgenis/molgenis-api-client" "^3.1.0"
 
@@ -1368,7 +1368,7 @@
   resolved "https://registry.yarnpkg.com/@vue/preload-webpack-plugin/-/preload-webpack-plugin-1.1.0.tgz#d768dba004261c029b53a77c5ea2d5f9ee4f3cce"
   integrity sha512-rcn2KhSHESBFMPj5vc5X2pI9bcBNQQixvJXhD5gZ4rN2iym/uH2qfDSQfUS5+qwiz0a85TCkeUs6w6jxFDudbw==
 
-"@vue/test-utils@1.0.0-beta.29":
+"@vue/test-utils@^1.0.0-beta.29":
   version "1.0.0-beta.29"
   resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.0.0-beta.29.tgz#c942cf25e891cf081b6a03332b4ae1ef430726f0"
   integrity sha512-yX4sxEIHh4M9yAbLA/ikpEnGKMNBCnoX98xE1RwxfhQVcn0MaXNSj1Qmac+ZydTj6VBSEVukchBogXBTwc+9iA==
@@ -5663,6 +5663,18 @@ glob@^7.0.0, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, gl
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.4.tgz#aa608a2f6c577ad357e1ae5a5c26d9a8d1969255"
   integrity sha512-hkLPepehmnKk41pUGm3sYxoFs/umurYfYJCerbXEyFIWcAzvpipAgVkBqqT9RBKMGjnq6kMuyYwha6csxbiM1A==
+  dependencies:
+    fs.realpath "^1.0.0"
+    inflight "^1.0.4"
+    inherits "2"
+    minimatch "^3.0.4"
+    once "^1.3.0"
+    path-is-absolute "^1.0.0"
+
+glob@^7.1.6:
+  version "7.1.6"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
+  integrity sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
   dependencies:
     fs.realpath "^1.0.0"
     inflight "^1.0.4"

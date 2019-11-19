@@ -1,5 +1,5 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import VueRouter from 'vue-router'
+import { shallowMount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
+
 import CartView from '@/views/CartView.vue'
 import Vuex from 'vuex'
 import Vue from 'vue'
@@ -8,7 +8,11 @@ Vue.filter('i18n', (value: string) => value) // Add dummy filter for i18n
 describe('CartView.vue', () => {
   const localVue = createLocalVue()
   localVue.use(Vuex)
-  localVue.use(VueRouter)
+
+  let stubs = {
+    RouterLink: RouterLinkStub
+  }
+
   let store: any
   let actions: any
 
@@ -19,7 +23,6 @@ describe('CartView.vue', () => {
     }
 
     state = {
-      isSignedIn: true,
       gridSelection: {
         123: [1, 2],
         456: [3]
@@ -59,14 +62,14 @@ describe('CartView.vue', () => {
   })
 
   it('renders cart view', () => {
-    const wrapper = shallowMount(CartView, { store, localVue })
+    const wrapper = shallowMount(CartView, { stubs, store, localVue })
     expect(wrapper.find('#cart-view').exists()).toBeTruthy()
     expect(wrapper.findAll('li').at(0).text()).toEqual('var 123 ( assessment1, assessment3 )')
     expect(wrapper.findAll('li').at(1).text()).toEqual('var 456 ( assessment3 )')
   })
 
   it('renders an save button that saves the current state', () => {
-    const wrapper = shallowMount(CartView, { store, localVue })
+    const wrapper = shallowMount(CartView, { stubs, store, localVue })
     wrapper.find('.save').trigger('click')
     expect(actions.save).toHaveBeenCalled()
   })

@@ -10,6 +10,7 @@ import { TreeNode } from '@/types/TreeNode'
 import { Section } from '@/types/Section'
 
 export default {
+  isSignedIn: (state: ApplicationState): boolean => !!state.context && !!state.context.context && state.context.context.authenticated,
   variants: (state: ApplicationState): Variant[] =>
     state.gridVariables.reduce((result: Variant[], variable: VariableWithVariants): Variant[] =>
       variable.variants.reduce((accumulator: Variant[], variant: Variant) =>

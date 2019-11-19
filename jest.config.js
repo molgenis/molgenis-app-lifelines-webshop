@@ -1,3 +1,8 @@
+// Force use of modules in Babel when running tests
+// with an external tool like vscode-jest.
+process.env.VUE_CLI_BABEL_TARGET_NODE = true
+process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = true
+
 module.exports = {
   moduleFileExtensions: [
     'js',
@@ -11,7 +16,7 @@ module.exports = {
     '^.+\\.vue$': 'vue-jest',
     '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
     '^.+\\.tsx?$': 'ts-jest',
-    '^.+\\.es.js$': 'babel-jest'
+    '^.+\\.esm?.js$': 'babel-jest'
   },
   transformIgnorePatterns: [
     '/node_modules/(?!(@molgenis/molgenis-api-client.*))'
@@ -36,5 +41,6 @@ module.exports = {
       babelConfig: true
     }
   },
-  collectCoverage: true
+  collectCoverage: true,
+  setupFiles: ['<rootDir>/tests/unit/setup.js']
 }

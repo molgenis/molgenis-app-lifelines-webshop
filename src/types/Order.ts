@@ -1,8 +1,8 @@
 export enum OrderState {
-    Submitted,
-    Approved,
-    Rejected,
-    Draft
+    Submitted = 'Submitted',
+    Approved = 'Approved',
+    Rejected = 'Rejected',
+    Draft = 'Draft'
 }
 
 export interface File {

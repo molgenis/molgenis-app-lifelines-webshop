@@ -10,12 +10,6 @@ import { TreeParent } from '@/types/Tree'
 import { Order } from '@/types/Order'
 
 export default {
-  setContextLoaded (state: ApplicationState) {
-    state.isContextLoaded = true
-  },
-  setIsSignedIn (state: ApplicationState, isSignedIn: boolean) {
-    state.isSignedIn = isSignedIn
-  },
   setToast (state: ApplicationState, toast: Toast) {
     state.toast = toast
   },

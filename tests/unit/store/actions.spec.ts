@@ -1,5 +1,4 @@
 import actions from '@/store/actions'
-import router from '@/router'
 import { Cart } from '@/types/Cart'
 import emptyState from '@/store/state'
 import orders from '../fixtures/orders'
@@ -190,10 +189,6 @@ jest.mock('@molgenis/molgenis-api-client', () => {
     delete_: function () { mockDelete(...arguments) }
   }
 })
-
-jest.mock('@/router', () => ({
-  push: jest.fn()
-}))
 
 describe('actions', () => {
   describe('loadOrders', () => {

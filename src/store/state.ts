@@ -1,8 +1,6 @@
-import ApplicationState from '@/types/ApplicationState'
+import { AppState } from '@/types/ApplicationState'
 
-const state: ApplicationState = {
-  isContextLoaded: false,
-  isSignedIn: true, // set true during development
+const state: AppState = {
   toast: null,
   order: {
     orderNumber: null,

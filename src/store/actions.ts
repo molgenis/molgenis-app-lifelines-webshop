@@ -6,7 +6,7 @@ import Assessment from '@/types/Assessment'
 import { Section } from '@/types/Section.ts'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
-import router from '@/router'
+import { router } from '@/router'
 import Getters from '@/types/Getters'
 import { buildFormData, generateOrderNumber } from '@/services/orderService.ts'
 import FormField from '@/types/FormField'
@@ -74,6 +74,7 @@ export default {
   deleteOrder: tryAction(async ({ dispatch, commit }: any, orderId: string) => {
     commit('setOrders', null)
     await api.delete_(`/api/v2/lifelines_order/${orderId}`)
+    commit('setToast', { type: 'success', message: `Deleted order with order number ${orderId}` })
     dispatch('loadOrders')
   }),
   loadSections: tryAction(async ({ commit, state } : any) => {

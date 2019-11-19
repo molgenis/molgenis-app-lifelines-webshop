@@ -3,8 +3,8 @@
       <div class="row flex-nowrap mb-5" >
         <template>
           <div class="col-sm-auto info-bar" >
-            <h3 v-if="isSignedIn">{{ 'lifelines-webshop-content-header' | i18n }}</h3>
-            <h3 v-else>{{ 'lifelines-webshop-signed-out-content-header' | i18n }}</h3>
+            <h3 v-if="isSignedIn">{{$t('lifelines-webshop-content-header')}}</h3>
+            <h3 v-else>{{$t('lifelines-webshop-signed-out-content-header')}}</h3>
             <tree-view  />
           </div>
           <div class="col" >
@@ -19,13 +19,13 @@
 import Vue from 'vue'
 import TreeView from './TreeView.vue'
 import GridView from './GridView.vue'
-import { mapMutations, mapActions, mapState } from 'vuex'
+import { mapMutations, mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
   name: 'ContentView',
   components: { TreeView, GridView },
   computed: {
-    ...mapState(['isSignedIn'])
+    ...mapGetters(['isSignedIn'])
   },
   methods: {
     ...mapMutations(['updateSearchTerm']),

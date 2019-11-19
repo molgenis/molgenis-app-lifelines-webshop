@@ -1,6 +1,6 @@
 {
   "name": "@molgenis-experimental/molgenis-app-lifelines-webshop",
-  "version": "0.10.7",
+  "version": "0.13.0",
   "license": "LGPL-3.0",
   "publishConfig": {
     "access": "public"
@@ -11,7 +11,9 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "test:watch": "jest --watchAll",
+    "test:update-snapshot": "jest --updateSnapshot"
   },
   "files": [
     "dist",
@@ -23,13 +25,14 @@
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "@molgenis/molgenis-api-client": "^3.1.0",
     "@molgenis/molgenis-i18n-js": "^0.1.1",
-    "@molgenis/molgenis-ui-context": "^1.4.1",
+    "@molgenis/molgenis-ui-context": "^1.5.0",
     "@molgenis/molgenis-ui-form": "^4.0.3",
     "@molgenis/rsql": "^0.1.4",
     "bootstrap": "^4.3.1",
     "core-js": "2.6.8",
     "fetch-ponyfill": "^6.1.0",
     "format-si-prefix": "^0.3.2",
+    "glob": "^7.1.6",
     "install": "^0.13.0",
     "jquery": "3.3",
     "lodash.debounce": "^4.0.8",
@@ -54,7 +57,7 @@
     "@vue/cli-service": "^3.7.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
-    "@vue/test-utils": "1.0.0-beta.29",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "banner-webpack-plugin": "^0.2.3",

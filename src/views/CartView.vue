@@ -1,7 +1,7 @@
 <template>
   <div id="cart-view" class="row">
     <div class="col">
-      <h3>{{ 'lifelines-webshop-cart-header' | i18n }}</h3>
+      <h3>{{$t('lifelines-webshop-cart-header')}}</h3>
       <template v-if="selectedVariableIds.length">
         <div class="mb-3" v-if="selectedVariableIds.length > 0">
           <button type="button" class="btn btn-primary save" @click="save">Save</button>
@@ -45,7 +45,7 @@
 <script>
 import Vue from 'vue'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
   name: 'CartView',
@@ -54,7 +54,7 @@ export default Vue.extend({
     ...mapActions(['save'])
   },
   computed: {
-    ...mapState(['isSignedIn']),
+    ...mapGetters(['isSignedIn']),
     gridSelection () {
       return this.$store.state.gridSelection
     },

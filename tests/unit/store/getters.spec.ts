@@ -10,6 +10,7 @@ import { TreeNode } from '@/types/TreeNode'
 
 describe('getters', () => {
   const emptyGetters: Getters = {
+    isSignedIn: false,
     variants: [],
     variantIds: [],
     rsql: '',
@@ -50,6 +51,18 @@ describe('getters', () => {
     name: 'VAR13',
     variants: [variant3]
   }
+
+  describe('isSignedIn', () => {
+    it('is false when context is not loaded', () => {
+      expect(getters.isSignedIn({ ...emptyState, context: { context: null } })).toBe(false)
+    })
+    it('is false when context is not authenticated', () => {
+      expect(getters.isSignedIn({ ...emptyState, context: { context: { authenticated: false } } as any })).toBe(false)
+    })
+    it('is true when context is authenticated', () => {
+      expect(getters.isSignedIn({ ...emptyState, context: { context: { authenticated: true } } as any })).toBe(true)
+    })
+  })
 
   describe('variants', () => {
     it('determines unique variants from variables', () => {

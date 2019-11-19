@@ -7,25 +7,18 @@
 
 <script>
 import Vue from 'vue'
-import router from '@/router'
-import { mapState } from 'vuex'
+import { router } from '@/router'
+import { mapGetters } from 'vuex'
 import SpinnerAnimation from '@/components/animations/SpinnerAnimation.vue'
 
 export default Vue.extend({
   name: 'HomeView',
   components: { SpinnerAnimation },
   computed: {
-    ...mapState(['isContextLoaded', 'isSignedIn'])
+    ...mapGetters(['isSignedIn'])
   },
-  watch: {
-    isContextLoaded: {
-      handler: function (newValue, oldValue) {
-        if (newValue) {
-          router.push({ name: this.isSignedIn ? 'orders' : 'shop' })
-        }
-      },
-      immediate: true
-    }
+  mounted () {
+    router.push({ name: this.isSignedIn ? 'orders' : 'shop' })
   }
 })
 </script>

@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import MainView from '@/views/MainView.vue'
+import state from '@/store/state'
 import Vuex from 'vuex'
 
 describe('MainView.vue', () => {
@@ -7,17 +8,19 @@ describe('MainView.vue', () => {
   localVue.use(Vuex)
   let store: any
   let actions: any
-  let state: any
+
   let mutations: any
   const mocks: any = { '$route': { params: {} } }
   const isSearchResultEmpty = jest.fn()
+  const isSignedIn = jest.fn()
   let setToastMock = jest.fn()
 
   beforeEach(() => {
-    state = {
+    Object.assign(state, {
       state: { treeSelection: 3 },
       toast: { type: 'danger', message: 'i am not a message' }
-    }
+    })
+
     actions = {
       loadVariables: jest.fn(),
       loadAssessments: jest.fn(),
@@ -31,7 +34,8 @@ describe('MainView.vue', () => {
       state,
       actions,
       getters: {
-        isSearchResultEmpty
+        isSearchResultEmpty,
+        isSignedIn
       },
       mutations
     })
@@ -54,7 +58,6 @@ describe('MainView.vue', () => {
 
   it('should show a toast telling the user to signin to select/order if the user is not signed in an no other toest is shown', () => {
     state.toast = null
-    state.isSignedIn = false
 
     shallowMount(MainView, { store, localVue, mocks })
 

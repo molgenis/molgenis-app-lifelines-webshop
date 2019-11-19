@@ -7,7 +7,17 @@
       :message="toast.message"
       @toastCloseBtnClicked="clearToast">
     </toast-component>
-    <h1 id="orders-title">{{'lifelines-webshop-orders-title' | i18n}}</h1>
+
+    <ConfirmationModal
+      v-if="$route && $route.name === 'orderDelete'"
+      :backRoute="$router.resolve({name: 'orders'}).route"
+      :confirmButton="$t('lifelines-webshop-modal-button-delete')"
+      :confirmMethod="deleteOrderConfirmed.bind(this, $route.params.orderNumber)"
+      :modalTitle="$t('lifelines-webshop-modal-delete-header', {order: $route.params.orderNumber})">
+      {{$t('lifelines-webshop-modal-delete-body', {order: $route.params.orderNumber})}}
+    </ConfirmationModal>
+
+    <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
       <spinner-animation v-if="orders === null"/>
       <table v-else class="table" aria-describedby="orders-title">
         <thead>
@@ -24,8 +34,22 @@
         </thead>
         <tbody >
           <tr v-for="order in orders" :key="order.id">
-            <td><router-link v-if="order.state === 'Draft'" class="btn btn-primary btn-sm" :to="`/shop/${order.orderNumber}`"><font-awesome-icon icon="edit" aria-label="edit"/></router-link></td>
-            <td><button v-if="order.state === 'Draft'" class="btn btn-danger btn-sm" @click="deleteOrder(order.orderNumber)"><font-awesome-icon icon="trash" aria-label="delete"/></button></td>
+            <td>
+              <router-link
+                v-if="order.state === 'Draft'"
+                class="btn btn-primary btn-sm"
+                :to="`/shop/${order.orderNumber}`">
+                  <font-awesome-icon icon="edit" aria-label="edit"/>
+                </router-link>
+            </td>
+            <td>
+              <router-link
+                v-if="order.state === 'Draft'"
+                :to="{ name: 'orderDelete', params: {orderNumber: order.orderNumber}}"
+                class="btn btn-danger btn-sm t-btn-order-delete">
+              <font-awesome-icon icon="trash" aria-label="delete"/>
+              </router-link>
+            </td>
             <td>{{ order.name }}</td>
             <td>{{ order.submissionDate | dataString }}</td>
             <td>{{ order.projectNumber }}</td>
@@ -45,13 +69,14 @@ import { faEdit, faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
 import ToastComponent from '../components/ToastComponent.vue'
+import ConfirmationModal from '../components/ConfirmationModal.vue'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import moment from 'moment'
 
 library.add(faEdit, faDownload, faTrash)
 
 export default Vue.extend({
-  components: { FontAwesomeIcon, SpinnerAnimation, ToastComponent },
+  components: { ConfirmationModal, FontAwesomeIcon, SpinnerAnimation, ToastComponent },
   mounted () {
     this.loadOrders()
   },
@@ -66,6 +91,10 @@ export default Vue.extend({
     }
   },
   methods: {
+    deleteOrderConfirmed: function (orderNumber) {
+      this.deleteOrder(orderNumber)
+      this.$router.push({ name: 'orders' })
+    },
     ...mapActions(['loadOrders', 'deleteOrder']),
     ...mapMutations(['clearToast'])
   },
