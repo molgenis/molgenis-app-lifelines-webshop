@@ -39,10 +39,11 @@ give --role ANONYMOUS read --entity-type lifelines_subsection_variable
 # Import the lifelines data
 $wait Please import all the lifelines data
 
-# Give write LIFELINES_SHOPPER permissions to cart
+# Give write LIFELINES_SHOPPER permissions to cart and read on roles
 enable rls lifelines_order
 give --role LIFELINES_SHOPPER write --entity-type lifelines_order
 give --role LIFELINES_SHOPPER write --entity-type sys_FileMeta
+give --role LIFELINES_SHOPPER read --entity-type sys_sec_Role
 
 # Set aggregate threshold
 set app aggregate_threshold 15

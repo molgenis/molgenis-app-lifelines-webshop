@@ -589,6 +589,7 @@ describe('actions', () => {
     describe('if orderNumber is set', () => {
       it('submits the order', async (done) => {
         const commit = jest.fn()
+        const dispatch = jest.fn()
         const state: ApplicationState = {
           ...emptyState,
           order: {
@@ -603,7 +604,7 @@ describe('actions', () => {
           }
         }
         post.mockResolvedValue('success')
-        await actions.submit({ state, commit })
+        await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
         done()
       })
@@ -611,6 +612,7 @@ describe('actions', () => {
     describe('if orderNumber not yet set', () => {
       it('submits the order', async (done) => {
         const commit = jest.fn()
+        const dispatch = jest.fn()
         const state: ApplicationState = {
           ...emptyState,
           order: {
@@ -625,7 +627,7 @@ describe('actions', () => {
           }
         }
         post.mockResolvedValue('success')
-        await actions.submit({ state, commit })
+        await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
         done()
       })
@@ -637,6 +639,7 @@ describe('actions', () => {
       let state: ApplicationState
       beforeEach(async (done) => {
         commit = jest.fn()
+        const dispatch = jest.fn()
         state = {
           ...emptyState,
           order: {
@@ -651,7 +654,7 @@ describe('actions', () => {
           }
         }
         post.mockRejectedValue('error')
-        result = await actions.submit({ commit, state })
+        result = await actions.submit({ commit, state, dispatch })
         done()
       })
 
@@ -659,6 +662,22 @@ describe('actions', () => {
         expect(result).toBeUndefined()
         expect(commit).not.toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
       })
+    })
+  })
+
+  describe('givePermissionToOrder', () => {
+    let state: any
+    beforeEach(async (done) => {
+      state = {
+        order: {
+          orderNumber: '3333'
+        }
+      }
+      await actions.givePermissionToOrder({ state, commit: jest.fn() })
+      done()
+    })
+    it('should resturn undefined', () => {
+      expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', expect.anything(), true)
     })
   })
 })
