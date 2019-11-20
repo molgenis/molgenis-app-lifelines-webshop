@@ -150,7 +150,7 @@ export default Vue.extend({
       return this.$refs.grid ? this.$refs.grid.getBoundingClientRect().top : null
     },
     getHeaderHeight () {
-      return this.$refs.gridheader ? this.$refs.gridheader.getBoundingClientRect().height : null
+      return this.$refs.gridheader ? (this.$refs.gridheader.getBoundingClientRect().height + 50) : null
     },
     onMouseEnter (className) {
       const collection = Array.from(document.getElementsByClassName(className))
@@ -215,7 +215,7 @@ export default Vue.extend({
   .sticky {
     pointer-events: none;
     position: fixed;
-    top: 60px;
+    top: 110px;
     background-color: white;
     background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%);
     z-index: 1020;

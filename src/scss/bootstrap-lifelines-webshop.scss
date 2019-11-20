@@ -1,8 +1,16 @@
 @import "variables";
 @import "node_modules/bootstrap/scss/bootstrap";
 
+main{
+  padding-top: 60px;
+}
+
+.fixed-top{
+  height: 60px;
+  background-color: white;
+}
+
 nav.navbar {
-  border-bottom: 4px solid $secondary;
   &.navbar-light{
     background-color: white !important;
   }

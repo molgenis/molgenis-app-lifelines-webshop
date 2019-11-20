@@ -202,7 +202,7 @@ export default Vue.extend({
       top: 4rem;
       background-color: $light;
       display: inline-block;
-      z-index: 1050;
+      z-index: 1019;
       overflow: hidden;
       transition: height 0.3s;
       height: 0;
