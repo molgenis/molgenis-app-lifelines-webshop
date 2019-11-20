@@ -3,6 +3,8 @@ import { shallowMount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
 import CartView from '@/views/CartView.vue'
 import Vuex from 'vuex'
 import Vue from 'vue'
+import flushPromises from 'flush-promises'
+
 Vue.filter('i18n', (value: string) => value) // Add dummy filter for i18n
 
 describe('CartView.vue', () => {
@@ -11,6 +13,12 @@ describe('CartView.vue', () => {
 
   let stubs = {
     RouterLink: RouterLinkStub
+  }
+
+  let mocks = {
+    $router: {
+      push: jest.fn()
+    }
   }
 
   let store: any
@@ -68,9 +76,11 @@ describe('CartView.vue', () => {
     expect(wrapper.findAll('li').at(1).text()).toEqual('var 456 ( assessment3 )')
   })
 
-  it('renders an save button that saves the current state', () => {
-    const wrapper = shallowMount(CartView, { stubs, store, localVue })
+  it('renders a save button that saves the current state', async () => {
+    actions.save.mockResolvedValue('12345')
+    const wrapper = shallowMount(CartView, { stubs, store, localVue, mocks })
     wrapper.find('.save').trigger('click')
-    expect(actions.save).toHaveBeenCalled()
+    await flushPromises()
+    expect(mocks.$router.push).toHaveBeenCalledWith({ name: 'load', params: { orderNumber: '12345' } })
   })
 })

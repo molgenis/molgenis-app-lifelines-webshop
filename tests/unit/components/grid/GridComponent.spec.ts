@@ -81,8 +81,8 @@ describe('GridComponent.vue', () => {
       })
     })
 
-    it('should not show the select all btn', () => {
-      expect(wrapper.find('#grid-toggle-all-btn').isVisible()).toBeFalsy()
+    it('should show a disabled select-all toggle', () => {
+      expect(wrapper.find('.t-btn-all-toggle').attributes('disabled')).toBeTruthy()
     })
   })
 
@@ -110,23 +110,23 @@ describe('GridComponent.vue', () => {
       })
     })
 
-    it('.select-all should trigger gridAllToggle event', () => {
-      wrapper.find('.select-all').trigger('click')
+    it('.t-btn-all-toggle should trigger gridAllToggle event', () => {
+      wrapper.find('.t-btn-all-toggle').trigger('click')
       expect(wrapper.emitted()).toEqual({ gridAllToggle: [ [] ] })
     })
 
-    it('.select-row should trigger gridRowToggle event', () => {
-      wrapper.find('.select-row').trigger('click')
+    it('.t-btn-row-toggle should trigger gridRowToggle event', () => {
+      wrapper.find('.t-btn-row-toggle').trigger('click')
       expect(wrapper.emitted()).toEqual({ gridRowToggle: [ [101] ] })
     })
 
-    it('.select-col should trigger gridColumnToggle event', () => {
-      wrapper.find('.select-col').trigger('click')
+    it('.t-btn-column-toggle should trigger gridColumnToggle event', () => {
+      wrapper.find('.t-btn-column-toggle').trigger('click')
       expect(wrapper.emitted()).toEqual({ gridColumnToggle: [ ['c1'] ] })
     })
 
-    it('.select-item should trigger gridCellToggle event', () => {
-      wrapper.find('.select-item').trigger('click')
+    it('.t-btn-cell-toggle should trigger gridCellToggle event', () => {
+      wrapper.find('.t-btn-cell-toggle').trigger('click')
       expect(wrapper.emitted()).toEqual({ gridCellToggle: [ [0, 0] ] })
     })
   })

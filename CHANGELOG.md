@@ -1,3 +1,15 @@
+# [0.15.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.14.0...v0.15.0) (2019-11-20)
+
+
+### Bug Fixes
+
+* remove empty variables list from grid selection model ([a7d33e9](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/a7d33e9)), closes [#152](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/152)
+
+
+### Features
+
+* expose app global during development ([0154568](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/0154568))
+
 # [0.14.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.13.0...v0.14.0) (2019-11-19)
 
 

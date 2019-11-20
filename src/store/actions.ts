@@ -6,7 +6,6 @@ import Assessment from '@/types/Assessment'
 import { Section } from '@/types/Section.ts'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
-import { router } from '@/router'
 import Getters from '@/types/Getters'
 import { buildFormData, generateOrderNumber } from '@/services/orderService.ts'
 import FormField from '@/types/FormField'
@@ -216,7 +215,7 @@ export default {
     if (state.order.orderNumber) {
       await updateOrder(formData, formFields)
       commit('setToast', { type: 'success', message: 'Saved order with order number ' + state.order.orderNumber })
-      router.push({ name: 'load', params: { orderNumber: state.order.orderNumber } })
+      return state.order.orderNumber
     } else {
       const creationDateField = { id: 'creationDate', type: 'date' }
       const orderNumber = await createOrder(formData, [ ...formFields, creationDateField ]).catch(() => {
@@ -225,7 +224,7 @@ export default {
       const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
       commit('restoreOrderState', newOrderResponse)
       commit('setToast', { type: 'success', message: 'Saved order with order number ' + orderNumber })
-      router.push({ name: 'load', params: { orderNumber: orderNumber } })
+      return orderNumber
     }
   }),
   submit: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
@@ -252,7 +251,6 @@ export default {
     const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     commit('restoreOrderState', newOrderResponse)
     commit('setToast', { type: 'success', message: 'Submitted order with order number ' + orderNumber })
-    router.push({ name: 'orders' })
   }),
   load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderNumber: string) => {
     const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)

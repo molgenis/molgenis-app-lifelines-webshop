@@ -106,19 +106,29 @@ export default {
   updateFilteredSubsections (state: ApplicationState, subsections: number[]) {
     state.filteredSubsections = subsections
   },
-  toggleGridColumn ({ gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]}, { assessmentId } : {assessmentId: number}) {
-    const allSelected = gridVariables.every((variable) => gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId))
-    if (allSelected) {
+  toggleGridColumn (
+    { gridSelection, gridVariables }: {gridSelection: GridSelection, gridVariables: Variable[]},
+    { assessmentId } : {assessmentId: number}
+  ) {
+    // Check if all variables(rows) for this column are already selected.
+    const columnSelected = gridVariables.every((variable) => {
+      return gridSelection.hasOwnProperty(variable.id) && gridSelection[variable.id].includes(assessmentId)
+    })
+
+    if (columnSelected) {
+      // Deselect all variables in this column.
       gridVariables.forEach((variable) => {
-        const selectedAssessments = gridSelection[variable.id]
-        const assessmentIndex = selectedAssessments.indexOf(assessmentId)
+        const assessmentIndex = gridSelection[variable.id].indexOf(assessmentId)
         if (assessmentIndex >= 0) {
-          selectedAssessments.splice(assessmentIndex, 1)
+          gridSelection[variable.id].splice(assessmentIndex, 1)
+          if (gridSelection[variable.id].length === 0) {
+            Vue.delete(gridSelection, variable.id)
+          }
         }
       })
     } else {
       gridVariables.forEach((variable) => {
-        if (!gridSelection.hasOwnProperty(variable.id)) {
+        if (!gridSelection[variable.id]) {
           Vue.set(gridSelection, variable.id, [assessmentId])
         } else {
           const selectedAssessments = gridSelection[variable.id]

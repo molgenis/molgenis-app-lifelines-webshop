@@ -492,7 +492,8 @@ describe('actions', () => {
           }
         }
         post.mockResolvedValue('success')
-        await actions.save({ state, commit })
+        const response = await actions.save({ state, commit })
+        expect(response).toBe('12345')
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order/12345?_method=PUT', expect.anything(), true)
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Saved order with order number 12345' })
         done()
@@ -518,7 +519,8 @@ describe('actions', () => {
         jest.spyOn(orderService, 'buildFormData').mockImplementation(() => new FormData())
         jest.spyOn(orderService, 'generateOrderNumber').mockImplementation(() => '12345')
         post.mockResolvedValue('success')
-        await actions.save({ state, commit })
+        const response = await actions.save({ state, commit })
+        expect(response).toBe('12345')
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', expect.anything(), true)
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Saved order with order number 12345' })
         done()
