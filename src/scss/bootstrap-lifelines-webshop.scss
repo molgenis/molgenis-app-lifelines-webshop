@@ -3,8 +3,9 @@
 
 nav.navbar {
   border-bottom: 4px solid $secondary;
-  &.navbar-light{
-    background-color: white !important;
+
+  &.navbar-light {
+    background-color: #fff !important;
   }
 }
 
@@ -13,9 +14,9 @@ nav.navbar {
 }
 
 h3 {
-  padding-top: 1.5rem;
   height: 6rem;
   margin: 0;
+  padding-top: 1.5rem;
 }
 
 .info-bar {

@@ -8,7 +8,7 @@
           :title="parent.name"
           role="button"
           @click="toggleCollapse(parent.id)"
-          style="z-index: 1"
+          style="z-index: 1;"
         >
           <div class="row">
             <div class="text-truncate col pr-0">
@@ -90,45 +90,50 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   @import "../../scss/variables";
 
   [role="button"] {
     cursor: pointer;
   }
+
   .child-list {
     font-weight: lighter;
     padding-left: 3.5rem;
+
+    &.active {
+      background-color: $secondary;
+      border-color: $secondary;
+    }
   }
-  .child-list.active {
-    background-color: $secondary;
-    border-color: $secondary;
-  }
+
   .parent-list {
-    white-space: nowrap;
     padding-left: 2.5rem;
+    white-space: nowrap;
   }
+
   .block-expander.open {
-    margin-top: 0px;
+    margin-top: 0;
   }
+
   .block-expander {
     margin-top: -1px;
   }
 
   .list-group-item {
-    &:before {
-      content: "";
-      border-radius: 50%;
-      position: absolute;
-      display: inline-block;
-      width: 0.5rem;
-      height: 0.5rem;
-      top: 50%;
-      margin-top:-0.25rem;
-      left: 1rem;
-      transition: all 0.3s;
-      transform: scale(2.5);
+    &::before {
       background-color: transparent;
+      border-radius: 50%;
+      content: "";
+      display: inline-block;
+      height: 0.5rem;
+      left: 1rem;
+      margin-top: -0.25rem;
+      position: absolute;
+      top: 50%;
+      transform: scale(2.5);
+      transition: all 0.3s;
+      width: 0.5rem;
     }
   }
 </style>

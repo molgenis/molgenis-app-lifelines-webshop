@@ -1,3 +1,15 @@
+# [0.14.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.13.0...v0.14.0) (2019-11-19)
+
+
+### Bug Fixes
+
+* cleanup stylelint violations ([ef537d2](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/ef537d2))
+
+
+### Features
+
+* add stylelint scss linting ([aa5e8dc](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/aa5e8dc))
+
 # [0.13.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.12.0...v0.13.0) (2019-11-19)
 
 

@@ -189,111 +189,132 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   @import "../../scss/variables";
 
   table {
     overflow: hidden;
     position: relative;
+
+    td,
+    th {
+      padding: 0 1px;
+      position: relative;
+    }
+
+    th {
+      font-weight: normal;
+      vertical-align: middle;
+      white-space: nowrap;
+
+      &:first-child {
+        max-width: 15rem;
+        min-width: 15rem;
+        width: 15rem;
+      }
+    }
+
+    td,
+    th:not(:first-child) {
+      max-width: 4rem;
+      min-width: 4rem;
+      width: 4rem;
+    }
+
   }
-  table th:first-child {
-    width: 15rem;
-    max-width: 15rem;
-    min-width: 15rem;
-  }
-  table td,
-  table th:not(:first-child) {
-    width: 4rem;
-    max-width: 4rem;
-    min-width: 4rem;
-  }
-  table th {
-    white-space: nowrap;
-    vertical-align: middle;
-    font-weight: normal;
-  }
+
   .sticky {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
+    background-color: #fff;
     pointer-events: none;
     position: fixed;
     top: 60px;
-    background-color: white;
-    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%);
     z-index: 1020;
+
+    .assessments-title {
+      height: 8rem;
+
+      span {
+        bottom: 1rem;
+      }
+    }
   }
-  .sticky .assessments-title {
-    height: 8rem;
-  }
-  .sticky .assessments-title span {
-    bottom: 1rem;
-  }
+
   .space-holder {
     height: 6em;
   }
-  table td, th {
-    padding: 0 1px;
-    position: relative;
-  }
+
   .row-hover:hover {
     background-color: $light;
   }
+
   .col-hover td:hover::after {
-    content: "";
-    left: 0;
-    right: 0;
-    display: inline-block;
-    position: absolute;
     background-color: $light;
-    top: -5000px;
+    content: "";
+    display: inline-block;
     height: 10000px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: -5000px;
     z-index: -1;
   }
+
   .assessments-title {
     height: 6em;
-    width: auto;
     position: relative;
+    width: auto;
+
+    span {
+      bottom: -1rem;
+      display: inline-block;
+      left: 1.3rem;
+      max-width: 7rem;
+      overflow: hidden;
+      padding-left: 0.7rem;
+      position: absolute;
+      text-align: right;
+      text-overflow: ellipsis;
+      transform: rotate(-60deg);
+      transform-origin: 0% 50%;
+      white-space: nowrap;
+    }
   }
-  .assessments-title span {
-    white-space: nowrap;
-    position: absolute;
-    bottom: -1rem;
-    left: 1.3rem;
-    max-width: 7rem;
-    padding-left: 0.7rem;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: right;
-    transform: rotate(-60deg);
-    transform-origin: 0% 50%;
-  }
+
   .w-0 {
     width: 0;
   }
+
   button.select-all {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
   }
+
   button.select-item {
     border-radius: 0;
   }
+
   button.select-row {
-    border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
   }
+
   button.select-col {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+
   .grid-item {
     display: block;
-    width: 100%;
     height: 100%;
     margin: 1px;
+    width: 100%;
   }
+
   .grid-hover {
-    color: white;
     background-color: $secondary;
     border-color: $secondary;
+    color: #fff;
   }
 </style>

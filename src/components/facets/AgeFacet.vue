@@ -71,7 +71,7 @@ export default Vue.extend({
 })
 </script>
 
-<style>
+<style lang="scss">
   .age-at-label {
     margin-right: 1rem;
   }

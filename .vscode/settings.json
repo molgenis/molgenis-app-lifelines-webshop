@@ -9,5 +9,6 @@
         "extensions": [".ts", ".js"]
     },
     "vetur.validation.template": false,
-    "eslint.autoFixOnSave": true
+    "eslint.autoFixOnSave": true,
+    "stylelint.autoFixOnSave": true
 }

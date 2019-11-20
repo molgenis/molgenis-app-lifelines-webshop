@@ -61,16 +61,18 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .facet-container {
     margin-bottom: 1rem;
   }
+
   .block-expander {
     margin-left: -1.5rem;
     margin-right: -1.5rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
+
   label {
     cursor: grab;
   }
