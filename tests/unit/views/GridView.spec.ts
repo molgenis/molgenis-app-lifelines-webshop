@@ -24,8 +24,7 @@ describe('GridView', () => {
   beforeEach(() => {
     state = {
       treeSelected: -1,
-      gridVariables: [],
-      isGridLoading: false
+      gridVariables: []
     }
     loadGridDataMock = jest.fn()
     loadGridVariables = jest.fn()
@@ -42,7 +41,8 @@ describe('GridView', () => {
       grid: () => [],
       gridSelections: () => [],
       numberOfSelectedItems: () => 0,
-      isSignedIn: () => true
+      isSignedIn: () => true,
+      isGridLoading: () => false
     }
 
     toggleGridRowMock = jest.fn()

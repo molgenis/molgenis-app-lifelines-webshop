@@ -194,7 +194,7 @@ describe('getters', () => {
       }
       expect(getters.grid(state, gettersParam)).toEqual([[10, 100], [10, 0]])
     })
-    it('returns zero if counts are missing', () => {
+    it('returns NaN if counts are missing', () => {
       const state: ApplicationState = {
         ...emptyState,
         gridVariables: [variable11, variable12]
@@ -204,7 +204,7 @@ describe('getters', () => {
         gridAssessments: [ assessment1A, assessment2A ],
         variants: [variant1, variant2, variant3]
       }
-      expect(getters.grid(state, gettersParam)).toEqual([[0, 0], [0, 0]])
+      expect(getters.grid(state, gettersParam)).toEqual([[NaN, NaN], [NaN, NaN]])
     })
   })
 
@@ -298,7 +298,31 @@ describe('getters', () => {
         expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'a==b' })).toBe('*=q=\'a==b\'')
       })
     })
-
+    describe('isFilterdSubsectionLoading', () => {
+      it('is initially false', () => {
+        expect(getters.isFilterdSubsectionLoading(emptyState)).toBe(false)
+      })
+      it('is true while loading', () => {
+        expect(getters.isFilterdSubsectionLoading({ ...emptyState, searchTerm: 'hello world' })).toBe(true)
+      })
+      it('is false when loaded', () => {
+        expect(getters.isFilterdSubsectionLoading({ ...emptyState, searchTerm: 'hello world', filteredSections: [] })).toBe(false)
+      })
+    })
+    describe('isGridLoading', () => {
+      it('is initially false', () => {
+        expect(getters.isGridLoading(emptyState)).toBe(false)
+      })
+      it('is true while loading variantCounts', () => {
+        expect(getters.isGridLoading({ ...emptyState, gridVariables: [], treeSelected: 1 })).toBe(true)
+      })
+      it('is true while loading gridVariables', () => {
+        expect(getters.isGridLoading({ ...emptyState, variantCounts: [], treeSelected: 1 })).toBe(true)
+      })
+      it('is false when loaded', () => {
+        expect(getters.isGridLoading({ ...emptyState, gridVariables: [], variantCounts: [], treeSelected: 1 })).toBe(false)
+      })
+    })
     describe('filteredTreeStructure', () => {
       const education: TreeNode = {
         id: 1,

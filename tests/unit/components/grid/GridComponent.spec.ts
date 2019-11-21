@@ -4,10 +4,10 @@ import GridComponent from '@/components/grid/GridComponent.vue'
 
 describe('GridComponent.vue', () => {
   const emptyProps = {
-    grid: [],
+    grid: null,
     gridAssessments: [],
-    gridVariables: [],
-    gridSelections: [],
+    gridVariables: null,
+    gridSelections: null,
     isLoading: false,
     isSignedIn: true
   }

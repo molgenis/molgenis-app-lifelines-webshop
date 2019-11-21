@@ -30,8 +30,8 @@ export default Vue.extend({
   name: 'GridView',
   components: { GridComponent },
   computed: {
-    ...mapState(['treeSelected', 'gridVariables', 'isGridLoading']),
-    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections', 'numberOfSelectedItems', 'isSignedIn']),
+    ...mapState(['treeSelected', 'gridVariables']),
+    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections', 'numberOfSelectedItems', 'isSignedIn', 'isGridLoading']),
     isEmptySearchResult () {
       return this.$store.getters.isSearchResultEmpty
     }

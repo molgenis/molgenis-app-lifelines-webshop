@@ -32,6 +32,8 @@ describe('TreeView.vue', () => {
   beforeEach(() => {
     store = new Vuex.Store({
       getters: {
+        isGridLoading: () => false,
+        isFilterdSubsectionLoading: () => false,
         filteredTreeStructure: () => [{
           name: 'parent',
           id: 5,

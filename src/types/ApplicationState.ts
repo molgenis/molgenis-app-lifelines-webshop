@@ -29,8 +29,8 @@ export interface AppState {
   ageAtOptions: FacetOption[],
   facetFilter: Filter,
   treeStructure: TreeParent[]
-  gridVariables: VariableWithVariants[]
-  variantCounts: Count[]
+  gridVariables: VariableWithVariants[] | null
+  variantCounts: Count[] | null
   participantCount: number | null
   treeSelected: number
   treeOpenSection: number
@@ -39,7 +39,6 @@ export interface AppState {
   searchTerm: string | null
   filteredSubsections: number[] | null
   filteredSections: number[] | null
-  isGridLoading: boolean,
   orders: Order[] | null
 }
 

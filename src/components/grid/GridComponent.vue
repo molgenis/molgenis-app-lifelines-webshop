@@ -1,17 +1,8 @@
 <template>
   <div id="grid">
     <div class="row">
-      <div class="col">
-        <loading
-          :active="isLoading"
-          loader="dots"
-          :is-full-page="false"
-          color="var(--secondary)"
-          background-color="var(--light)"
-        ></loading>
-
+      <div class="col vld-parent">
         <table
-          v-if="!isLoading"
           ref="gridheader"
           class="grid-header-table"
           :class="{'sticky':stickyTableHeader}">
@@ -26,70 +17,77 @@
             </th>
           </tr>
         </table>
+        <div :class="{'space-holder':stickyTableHeader || !grid}"></div>
+        <div class="table-holder">
+          <loading
+            :active="isLoading"
+            loader="dots"
+            :is-full-page="false"
+            color="var(--secondary)"
+            background-color="var(--light)"
+          ></loading>
+          <table
+            v-if="grid"
+            ref="grid"
+            class="grid-table"
+            @click.stop="clickGridDelegate"
+            :class="{'hover-all-cells': hoverAllCells}">
+            <tr>
+              <th></th>
+              <th class="all-toggle grid-toggle">
+                <button
+                  :disabled="!isSignedIn"
+                  class="btn btn-sm btn-outline-secondary t-btn-all-toggle"
+                  :class="classes('allSelect')"
+                  @click="$emit('gridAllToggle')"
+                  @mouseenter="hoverAllCells = true"
+                  @mouseleave="hoverAllCells = false">
+                  All
+                </button>
+              </th>
+              <th
+                v-for="(assessment, colIndex) in gridAssessments"
+                :key="assessment.id"
+                class="column-toggle grid-toggle"
+              >
+                <button
+                  :disabled="!isSignedIn"
+                  class="btn btn-sm btn-outline-secondary t-btn-column-toggle"
+                  :data-col="colIndex"
+                  :class="classes('columnSelect', {colIndex})">
+                  <font-awesome-icon icon="arrow-down"/>
+                </button>
+              </th>
+            </tr>
 
-        <div :class="{'space-holder':stickyTableHeader}"></div>
-
-        <table
-          v-if="!isLoading && grid.length"
-          ref="grid"
-          class="grid-table"
-          @click.stop="clickGridDelegate"
-          :class="{'hover-all-cells': hoverAllCells}">
-          <tr>
-            <th></th>
-            <th class="all-toggle grid-toggle">
-              <button
-                :disabled="!isSignedIn"
-                class="btn btn-sm btn-outline-secondary t-btn-all-toggle"
-                :class="classes('allSelect')"
-                @click="$emit('gridAllToggle')"
-                @mouseenter="hoverAllCells = true"
-                @mouseleave="hoverAllCells = false">
-                All
-              </button>
-            </th>
-            <th
-              v-for="(assessment, colIndex) in gridAssessments"
-              :key="assessment.id"
-              class="column-toggle grid-toggle"
-            >
-              <button
-                :disabled="!isSignedIn"
-                class="btn btn-sm btn-outline-secondary t-btn-column-toggle"
-                :data-col="colIndex"
-                :class="classes('columnSelect', {colIndex})">
-                <font-awesome-icon icon="arrow-down"/>
-              </button>
-            </th>
-          </tr>
-
-          <tr
-            v-for="(row, rowIndex) in grid"
-            :key="rowIndex">
-            <th>
-              <grid-titel-info :info="gridVariables[rowIndex]" />
-            </th>
-            <th class="row-toggle grid-toggle">
-              <button
-                :disabled="!isSignedIn"
-                class="btn btn-sm select-row btn-outline-secondary t-btn-row-toggle"
-                :data-row="rowIndex"
-                :class="classes('rowSelect', {rowIndex})">
-                <font-awesome-icon icon="arrow-right"/>
-              </button>
-            </th>
-            <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
-              <button
-                :disabled="!isSignedIn"
-                :data-col="colIndex"
-                :data-row="rowIndex"
-                :class="classes('cell', {rowIndex, colIndex})"
-                class="btn btn-sm t-btn-cell-toggle">
-                {{count | formatCount}}
-              </button>
-            </td>
-          </tr>
-        </table>
+            <tr
+              v-for="(row, rowIndex) in grid"
+              :key="rowIndex">
+              <th>
+                <grid-titel-info :info="gridVariables[rowIndex]" />
+              </th>
+              <th class="row-toggle grid-toggle">
+                <button
+                  :disabled="!isSignedIn"
+                  class="btn btn-sm select-row btn-outline-secondary t-btn-row-toggle"
+                  :data-row="rowIndex"
+                  :class="classes('rowSelect', {rowIndex})">
+                  <font-awesome-icon icon="arrow-right"/>
+                </button>
+              </th>
+              <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
+                <button
+                  :disabled="!isSignedIn"
+                  :data-col="colIndex"
+                  :data-row="rowIndex"
+                  :class="classes('cell', {rowIndex, colIndex})"
+                  class="btn btn-sm t-btn-cell-toggle">
+                  {{count | formatCount}}
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -118,6 +116,7 @@ export default Vue.extend({
      */
     selected: function () {
       const selected = { all: true, row: [], col: [] }
+      if (this.grid === null) return selected
       selected.col = this.grid[0].map((i) => true)
 
       this.grid.forEach((row, i) => {
@@ -136,7 +135,7 @@ export default Vue.extend({
   props: {
     grid: {
       type: Array,
-      required: true
+      required: false
     },
     gridAssessments: {
       type: Array,
@@ -144,11 +143,11 @@ export default Vue.extend({
     },
     gridVariables: {
       type: Array,
-      required: true
+      required: false
     },
     gridSelections: {
       type: Array,
-      required: true
+      required: false
     },
     isLoading: {
       type: Boolean,
@@ -169,6 +168,8 @@ export default Vue.extend({
     formatCount: function (value) {
       if (value === -1) {
         return '1-15'
+      } else if (isNaN(value)) {
+        return '-'
       } else if (value > 0) {
         return formatSI(value)
       }
@@ -263,9 +264,19 @@ export default Vue.extend({
     }
   }
 
+  .vld-overlay.is-active {
+    margin: -1rem;
+  }
+
+  .table-holder {
+    display: inline-block;
+    min-height: 300px;
+    min-width: 500px;
+    position: relative;
+  }
+
   .sticky {
     background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 75%, rgba(255, 255, 255, 0) 100%);
-    background-color: #fff;
     pointer-events: none;
     position: fixed;
     top: 60px;

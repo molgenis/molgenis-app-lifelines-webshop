@@ -1,3 +1,20 @@
+## [0.15.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.15.1...v0.15.2) (2019-11-21)
+
+
+### Bug Fixes
+
+* add loading state to facet use ([44b5bb8](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/44b5bb8))
+* normalize the state ([beb0b4c](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/beb0b4c))
+* scss linting ([8c7031f](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/8c7031f))
+* use formatCount ([f0998e3](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/f0998e3))
+
+## [0.15.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.15.0...v0.15.1) (2019-11-20)
+
+
+### Bug Fixes
+
+* **router:** add anonymous navigation guard ([491ae05](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/491ae05)), closes [#129](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/129)
+
 # [0.15.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.14.0...v0.15.0) (2019-11-20)
 
 
