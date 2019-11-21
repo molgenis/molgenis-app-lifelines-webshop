@@ -629,6 +629,7 @@ describe('actions', () => {
         post.mockResolvedValue('success')
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
+        expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
         done()
       })
     })
@@ -652,6 +653,7 @@ describe('actions', () => {
         post.mockResolvedValue('success')
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
+        expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
         done()
       })
     })
@@ -659,10 +661,11 @@ describe('actions', () => {
     describe('when the submission not succesfull', () => {
       let result: any
       let commit: any
+      let dispatch: any
       let state: ApplicationState
       beforeEach(async (done) => {
         commit = jest.fn()
-        const dispatch = jest.fn()
+        dispatch = jest.fn()
         state = {
           ...emptyState,
           order: {
@@ -684,6 +687,7 @@ describe('actions', () => {
       it('should resturn undefined', () => {
         expect(result).toBeUndefined()
         expect(commit).not.toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
+        expect(dispatch).not.toHaveBeenCalledWith('givePermissionToOrder')
       })
     })
   })

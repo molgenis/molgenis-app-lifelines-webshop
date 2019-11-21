@@ -246,9 +246,9 @@ export default {
         return Promise.reject(new Error('Failed to submit order'))
       })
     }
+    dispatch('givePermissionToOrder')
     const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     commit('restoreOrderState', newOrderResponse)
-    dispatch('givePermissionToOrder')
     commit('setToast', { type: 'success', message: 'Submitted order with order number ' + orderNumber })
   }),
   load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderNumber: string) => {
@@ -270,8 +270,7 @@ export default {
             permission: 'WRITE'
           }
         ]
-      }
-      ]
+      }]
     }
     const options = {
       body: JSON.stringify(data)
