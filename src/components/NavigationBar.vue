@@ -2,12 +2,12 @@
   <div class="fixed-top">
     <ul class="nav nav-tabs">
       <li class="nav-item pl-4">
-        <a class="nav-link" :class="{active: (value === 'variables')}" href="#" @click="this.$emit('input', 'variables')">
+        <a class="nav-link" :class="{active: (value === 'variables')}" href="#" @click="$emit('input', 'variables')">
           <font-awesome-icon icon="store"></font-awesome-icon> Shop
         </a>
       </li>
       <li class="nav-item pl-2">
-        <a class="nav-link" :class="{active: (value === 'selection')}" href="#" @click="this.$emit('input', 'selection')">
+        <a class="nav-link" :class="{active: (value === 'selection')}" href="#" @click="$emit('input', 'selection')">
           <font-awesome-icon icon="shopping-cart"></font-awesome-icon> Cart
           <span class="badge badge-secondary">{{selectedVariables}}</span>
         </a>
@@ -40,8 +40,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-  @import "../scss/variables";
-
   .fixed-top {
     background-color: #fff;
     padding-top: 1.5rem;
