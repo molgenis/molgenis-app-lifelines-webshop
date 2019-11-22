@@ -49,7 +49,7 @@ describe('GridComponent.vue', () => {
       expect(vm.$data.stickyTableHeader).toBeFalsy()
       vm.scroll()
       expect(vm.$data.stickyTableHeader).toBeTruthy()
-      vm.getTableTop = jest.fn().mockReturnValue(80)
+      vm.getTableTop = jest.fn().mockReturnValue(140)
       vm.getHeaderHeight = jest.fn().mockReturnValue(10)
       vm.scroll()
       expect(vm.$data.stickyTableHeader).toBeFalsy()
