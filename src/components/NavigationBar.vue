@@ -32,7 +32,7 @@ export default Vue.extend({
       required: true
     },
     selectedVariables: {
-      type: String,
+      type: Number,
       required: true
     }
   },
@@ -47,28 +47,8 @@ export default Vue.extend({
 <style scoped lang="scss">
   @import "../scss/variables";
   .fixed-top{
-    top: 60px;
-    padding-top: 17px;
-    .nav-tabs{
-      border-bottom: 4px solid $secondary;
-      .nav-link:hover, .nav-link:focus {
-        border-bottom: 1px solid transparent;
-      }
-      .nav-item{
-        margin-bottom: -4px;
-      }
-    }
-  }
-  .badge.badge-secondary:before{
-    display: inline-block;
-    content: '';
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-left: -27px;
-    margin-top:-25px;
-    border: 3px solid $secondary;
-    position: absolute;
-    filter: blur(3px);
+    top: 3.95rem;
+    padding-top: 0.6rem;
+    background-color: #fff;
   }
 </style>
