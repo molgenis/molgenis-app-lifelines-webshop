@@ -2,12 +2,12 @@
   <div class="fixed-top">
     <ul class="nav nav-tabs">
       <li class="nav-item pl-4">
-        <a class="nav-link" :class="{active: (value === 'variables')}" href="#" @click="setActiveTab('variables')">
+        <a class="nav-link" :class="{active: (value === 'variables')}" href="#" @click="this.$emit('input', 'variables')">
           <font-awesome-icon icon="store"></font-awesome-icon> Shop
         </a>
       </li>
       <li class="nav-item pl-2">
-        <a class="nav-link" :class="{active: (value === 'selection')}" href="#" @click="setActiveTab('selection')">
+        <a class="nav-link" :class="{active: (value === 'selection')}" href="#" @click="this.$emit('input', 'selection')">
           <font-awesome-icon icon="shopping-cart"></font-awesome-icon> Cart
           <span class="badge badge-secondary">{{selectedVariables}}</span>
         </a>
@@ -34,11 +34,6 @@ export default Vue.extend({
     selectedVariables: {
       type: Number,
       required: true
-    }
-  },
-  methods: {
-    setActiveTab (tab) {
-      this.$emit('input', tab)
     }
   }
 })
