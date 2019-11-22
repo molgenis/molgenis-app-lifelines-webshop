@@ -217,7 +217,6 @@ export default Vue.extend({
     scroll () {
       const table = this.getTableTop()
       const header = this.getHeaderHeight()
-      console.log(table - header)
       if (table && header) {
         this.stickyTableHeader = table - header < 112 // 7rem @ 16px basesize
       }
