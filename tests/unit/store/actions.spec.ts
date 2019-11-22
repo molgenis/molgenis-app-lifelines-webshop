@@ -52,6 +52,12 @@ const mockResponses: {[key:string]: Object} = {
       { id: 2, name: 'sub_section2' }
     ]
   },
+  '/api/v2/lifelines_tree?num=10000': {
+    items: [
+      { id: 1, section_id: { id: 1 }, subsection_id: { id: 1 } },
+      { id: 2, section_id: { id: 1 }, subsection_id: { id: 2 } }
+    ]
+  },
   '/api/v2/lifelines_assessment': {
     items: [
       { id: 1, name: '1A' },
@@ -306,6 +312,21 @@ describe('actions', () => {
     })
   })
 
+  describe('loadSectionTree', () => {
+    it('fetches the sections in tree form', async (done) => {
+      const commit = jest.fn()
+      await actions.loadSectionTree({ state: { treeStructure: [] }, commit })
+      expect(commit).toHaveBeenCalledWith('updateSectionTree', [{ 'key': '1', 'list': [1, 2] }])
+      done()
+    })
+    it('wont fetch if data is loaded already', async (done) => {
+      const commit = jest.fn()
+      await actions.loadSectionTree({ state: { treeStructure: [0, 1] }, commit })
+      expect(commit).toHaveBeenCalledTimes(0)
+      done()
+    })
+  })
+
   describe('loadAssessments', () => {
     it('loads the assessments and commits them', async (done) => {
       const commit = jest.fn()
@@ -326,7 +347,7 @@ describe('actions', () => {
         getters: { searchTermQuery: null },
         commit
       })
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
       await action
       const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
       expect(commit).toHaveBeenCalledWith('updateGridVariables', [
@@ -344,7 +365,7 @@ describe('actions', () => {
         getters: { searchTermQuery: '*=q=cream' },
         commit
       })
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
       await action
       const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
       expect(commit).toHaveBeenCalledWith('updateGridVariables', [
@@ -358,7 +379,7 @@ describe('actions', () => {
       const state = { treeSelected: 4 }
       const getters = { searchTermQuery: null }
       const action = actions.loadGridVariables({ state, commit, getters })
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
       state.treeSelected = 6
       await action
       expect(commit).toHaveBeenCalledTimes(1)
@@ -370,7 +391,7 @@ describe('actions', () => {
       const state = { treeSelected: 4 }
       const getters: any = { searchTermQuery: null }
       const action = actions.loadGridVariables({ state, commit, getters })
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', [])
+      expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
       getters.searchTermQuery = '*=q=test'
       await action
       expect(commit).toHaveBeenCalledTimes(1)
@@ -426,7 +447,7 @@ describe('actions', () => {
     it('loads new variant counts if rsql is empty', async (done) => {
       const commit = jest.fn()
       const response = actions.loadGridData({ commit, getters: { rsql: '' } })
-      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', null)
       await response
       expect(commit).toHaveBeenCalledWith('updateVariantCounts', [
         { 'count': 12340, 'variantId': 1 },
@@ -438,7 +459,7 @@ describe('actions', () => {
     it('loads new variant counts if rsql is nonempty', async (done) => {
       const commit = jest.fn()
       await actions.loadGridData({ commit, getters: { rsql: 'll_nr.yob=le=1970' } })
-      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', null)
       expect(commit).toHaveBeenCalledWith('updateVariantCounts', [
         { 'count': 1234, 'variantId': 1 },
         { 'count': 5678, 'variantId': 10 }
@@ -450,7 +471,7 @@ describe('actions', () => {
       const commit = jest.fn()
       const getters = { rsql: 'll_nr.yob=le=1970' }
       const action = actions.loadGridData({ commit, getters })
-      expect(commit).toHaveBeenCalledWith('updateVariantCounts', [])
+      expect(commit).toHaveBeenCalledWith('updateVariantCounts', null)
       getters.rsql = ''
       await action
       expect(commit).toHaveBeenCalledTimes(1)
@@ -492,7 +513,8 @@ describe('actions', () => {
           }
         }
         post.mockResolvedValue('success')
-        await actions.save({ state, commit })
+        const response = await actions.save({ state, commit })
+        expect(response).toBe('12345')
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order/12345?_method=PUT', expect.anything(), true)
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Saved order with order number 12345' })
         done()
@@ -518,7 +540,8 @@ describe('actions', () => {
         jest.spyOn(orderService, 'buildFormData').mockImplementation(() => new FormData())
         jest.spyOn(orderService, 'generateOrderNumber').mockImplementation(() => '12345')
         post.mockResolvedValue('success')
-        await actions.save({ state, commit })
+        const response = await actions.save({ state, commit })
+        expect(response).toBe('12345')
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', expect.anything(), true)
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Saved order with order number 12345' })
         done()
@@ -589,6 +612,7 @@ describe('actions', () => {
     describe('if orderNumber is set', () => {
       it('submits the order', async (done) => {
         const commit = jest.fn()
+        const dispatch = jest.fn()
         const state: ApplicationState = {
           ...emptyState,
           order: {
@@ -603,14 +627,16 @@ describe('actions', () => {
           }
         }
         post.mockResolvedValue('success')
-        await actions.submit({ state, commit })
+        await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
+        expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
         done()
       })
     })
     describe('if orderNumber not yet set', () => {
       it('submits the order', async (done) => {
         const commit = jest.fn()
+        const dispatch = jest.fn()
         const state: ApplicationState = {
           ...emptyState,
           order: {
@@ -625,8 +651,9 @@ describe('actions', () => {
           }
         }
         post.mockResolvedValue('success')
-        await actions.submit({ state, commit })
+        await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
+        expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
         done()
       })
     })
@@ -634,9 +661,11 @@ describe('actions', () => {
     describe('when the submission not succesfull', () => {
       let result: any
       let commit: any
+      let dispatch: any
       let state: ApplicationState
       beforeEach(async (done) => {
         commit = jest.fn()
+        dispatch = jest.fn()
         state = {
           ...emptyState,
           order: {
@@ -651,14 +680,31 @@ describe('actions', () => {
           }
         }
         post.mockRejectedValue('error')
-        result = await actions.submit({ commit, state })
+        result = await actions.submit({ commit, state, dispatch })
         done()
       })
 
       it('should resturn undefined', () => {
         expect(result).toBeUndefined()
         expect(commit).not.toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
+        expect(dispatch).not.toHaveBeenCalledWith('givePermissionToOrder')
       })
+    })
+  })
+
+  describe('givePermissionToOrder', () => {
+    let state: any
+    beforeEach(async (done) => {
+      state = {
+        order: {
+          orderNumber: '3333'
+        }
+      }
+      await actions.givePermissionToOrder({ state, commit: jest.fn() })
+      done()
+    })
+    it('should resturn undefined', () => {
+      expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', expect.anything(), true)
     })
   })
 })

@@ -23,8 +23,8 @@ export default Vue.extend({
 })
 </script>
 
-<style>
+<style lang="scss">
   .ll-facet-option {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 </style>

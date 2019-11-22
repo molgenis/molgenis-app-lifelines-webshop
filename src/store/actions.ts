@@ -6,7 +6,6 @@ import Assessment from '@/types/Assessment'
 import { Section } from '@/types/Section.ts'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
-import { router } from '@/router'
 import Getters from '@/types/Getters'
 import { buildFormData, generateOrderNumber } from '@/services/orderService.ts'
 import FormField from '@/types/FormField'
@@ -154,8 +153,7 @@ export default {
     commit('updateVariables', variableMap)
   }),
   loadGridVariables: tryAction(async ({ state, commit, getters } : { state: ApplicationState, commit: any, getters: Getters}) => {
-    state.isGridLoading = true
-    commit('updateGridVariables', [])
+    commit('updateGridVariables', null)
     const subsectionId = state.treeSelected
     const searchTermQuery = getters.searchTermQuery
     let q = `subsection_id==${subsectionId}`
@@ -175,7 +173,6 @@ export default {
             }))
         })))
     }
-    state.isGridLoading = false
   }),
   loadParticipantCount: tryAction(async ({ commit, getters }: any) => {
     commit('updateParticipantCount', null)
@@ -190,7 +187,7 @@ export default {
     }
   }),
   loadGridData: tryAction(async ({ commit, getters }: any) => {
-    commit('updateVariantCounts', [])
+    commit('updateVariantCounts', null)
     let url = '/api/v2/lifelines_who_when?aggs=x==variant_id'
     const rsql = getters.rsql
     if (rsql) {
@@ -216,7 +213,7 @@ export default {
     if (state.order.orderNumber) {
       await updateOrder(formData, formFields)
       commit('setToast', { type: 'success', message: 'Saved order with order number ' + state.order.orderNumber })
-      router.push({ name: 'load', params: { orderNumber: state.order.orderNumber } })
+      return state.order.orderNumber
     } else {
       const creationDateField = { id: 'creationDate', type: 'date' }
       const orderNumber = await createOrder(formData, [ ...formFields, creationDateField ]).catch(() => {
@@ -225,10 +222,10 @@ export default {
       const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
       commit('restoreOrderState', newOrderResponse)
       commit('setToast', { type: 'success', message: 'Saved order with order number ' + orderNumber })
-      router.push({ name: 'load', params: { orderNumber: orderNumber } })
+      return orderNumber
     }
   }),
-  submit: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
+  submit: tryAction(async ({ state, commit, dispatch }: {state: ApplicationState, commit: any, dispatch: any}) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
     const now = moment().toISOString()
     const formData = {
@@ -251,8 +248,8 @@ export default {
     }
     const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     commit('restoreOrderState', newOrderResponse)
+    dispatch('givePermissionToOrder')
     commit('setToast', { type: 'success', message: 'Submitted order with order number ' + orderNumber })
-    router.push({ name: 'orders' })
   }),
   load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderNumber: string) => {
     const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
@@ -262,5 +259,23 @@ export default {
     commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
     commit('setToast', { type: 'success', message: 'Loaded order with orderNumber ' + orderNumber })
+  }),
+  givePermissionToOrder: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderNumber: string) => {
+    const data = {
+      objects: [{
+        objectId: state.order.orderNumber,
+        permissions: [
+          {
+            role: 'LIFELINES_MANAGER',
+            permission: 'WRITE'
+          }
+        ]
+      }]
+    }
+    const options = {
+      body: JSON.stringify(data)
+    }
+
+    return api.post('/api/permissions/entity-lifelines_order', options)
   })
 }

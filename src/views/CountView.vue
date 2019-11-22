@@ -40,8 +40,8 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .count-view {
-    height: 30px
+    height: 30px;
   }
 </style>

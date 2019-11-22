@@ -119,8 +119,9 @@ export default Vue.extend({
     },
     async onSave () {
       this.isSaving = true
-      await this.save()
+      const orderNumber = await this.save()
       this.isSaving = false
+      this.$router.push({ name: 'load', params: { orderNumber } })
     },
     async onSubmit () {
       const formState = this.formState
@@ -130,6 +131,7 @@ export default Vue.extend({
         this.isSubmitting = true
         await this.submit()
         this.isSubmitting = false
+        this.$router.push({ name: 'orders' })
       }
     }
   }

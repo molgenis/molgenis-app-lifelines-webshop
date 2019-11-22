@@ -48,7 +48,7 @@ const state: AppState = {
     }
   ],
   variables: {},
-  gridVariables: [],
+  gridVariables: null,
   genderOptions: [
     { value: '1', text: 'Male' },
     { value: '2', text: 'Female' }
@@ -84,13 +84,12 @@ const state: AppState = {
   treeOpenSection: -1,
   treeOpenPageSection: -1,
   gridSelection: {},
-  variantCounts: [],
+  variantCounts: null,
   participantCount: null,
   assessments: {},
   searchTerm: null,
   filteredSubsections: null, // contains the IDs of subsections that either match the search term or contain variables that match the search term
   filteredSections: null, // contains the IDs of sections that match the search term
-  isGridLoading: false,
   orders: null
 }
 

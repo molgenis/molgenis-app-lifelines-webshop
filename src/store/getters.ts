@@ -12,7 +12,7 @@ import { Section } from '@/types/Section'
 export default {
   isSignedIn: (state: ApplicationState): boolean => !!state.context && !!state.context.context && state.context.context.authenticated,
   variants: (state: ApplicationState): Variant[] =>
-    state.gridVariables.reduce((result: Variant[], variable: VariableWithVariants): Variant[] =>
+    state.gridVariables === null ? [] : state.gridVariables.reduce((result: Variant[], variable: VariableWithVariants): Variant[] =>
       variable.variants.reduce((accumulator: Variant[], variant: Variant) =>
         accumulator.some((candidate: Variant): boolean => candidate.id === variant.id)
           ? accumulator
@@ -96,19 +96,21 @@ export default {
       acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
     return Object.values(state.assessments).filter(assessment => assessmentIds.includes(assessment.id))
   },
-  grid: (state: ApplicationState, getters: Getters): number[][] =>
-    state.gridVariables.map((variable: VariableWithVariants) =>
+  grid: (state: ApplicationState, getters: Getters): number[][] | null =>
+    state.gridVariables === null ? null : state.gridVariables.map((variable: VariableWithVariants) =>
       getters.gridAssessments.map((assessment: Assessment) => {
+        if (state.variantCounts === null) return NaN
         const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
         const count: number = variants.reduce((sum: number, variant: Variant) => {
+          // @ts-ignore
           const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
           return sum + (variantCount ? variantCount.count : 0)
         }, 0)
         return count
       })
     ),
-  gridSelections: (state: ApplicationState, getters: Getters): boolean[][] =>
-    state.gridVariables.map(variable => {
+  gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null =>
+    state.gridVariables === null ? null : state.gridVariables.map(variable => {
       const variableSelections = state.gridSelection[variable.id]
       return getters.gridAssessments.map(assessment =>
         !!variableSelections && variableSelections.includes(assessment.id)
@@ -141,6 +143,8 @@ export default {
     }
     return []
   },
+  isFilterdSubsectionLoading: (state: ApplicationState): boolean => (state.searchTerm !== null && state.filteredSections === null),
+  isGridLoading: (state: ApplicationState): boolean => (state.gridVariables === null || state.variantCounts === null) && state.treeSelected !== -1,
   filteredTreeStructure: ({ filteredSections, filteredSubsections }: ApplicationState, { treeStructure }: Getters) => {
     if (filteredSections === null || filteredSubsections === null) {
       return treeStructure

@@ -2,7 +2,7 @@
   <div id="tree-view">
     <search-component
       :searchTerm="searchTerm"
-      :searching="isGridLoading"
+      :searching="isGridLoading || isFilterdSubsectionLoading"
       @searchChanged="onSearchChange"
       class="mb-2"
     ></search-component>
@@ -25,8 +25,8 @@ import SearchComponent from '../components/search/SearchComponent.vue'
 export default Vue.extend({
   name: 'TreeView',
   computed: {
-    ...mapGetters(['filteredTreeStructure']),
-    ...mapState(['searchTerm', 'isGridLoading', 'treeSelected', 'treeOpenSection'])
+    ...mapGetters(['filteredTreeStructure', 'isGridLoading', 'isFilterdSubsectionLoading']),
+    ...mapState(['searchTerm', 'treeSelected', 'treeOpenSection'])
   },
   methods: {
     ...mapMutations(['updateSearchTerm']),

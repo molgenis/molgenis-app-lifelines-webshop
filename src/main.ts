@@ -15,16 +15,13 @@ const contextPromise = store.dispatch('fetchContext').catch(() => {
   window.location.href = '/login'
 })
 
-const app:Vue = new Vue({ store, router, render: h => h(App) })
-
 Vue.use(i18n, {
   lng: 'en',
   fallbackLng: 'en',
   namespace: ['lifelines-webshop', 'ui-form'],
   async callback () {
     await contextPromise
+    const app:Vue = new Vue({ store, router, render: h => h(App) })
     app.$mount('#app')
   }
 })
-
-export default app

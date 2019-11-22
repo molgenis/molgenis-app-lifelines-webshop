@@ -31,9 +31,9 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="scss">
-  @import "node_modules/bootstrap/scss/_functions";
-  @import "node_modules/bootstrap/scss/_variables";
+<style lang="scss" scoped>
+  @import "node_modules/bootstrap/scss/functions";
+  @import "node_modules/bootstrap/scss/variables";
 
   .modal {
     &.open {
@@ -47,7 +47,7 @@ export default Vue.extend({
         z-index: $zindex-modal-backdrop;
       }
 
-      .modal-dialog  {
+      .modal-dialog {
         z-index: $zindex-modal;
       }
     }

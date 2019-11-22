@@ -380,7 +380,7 @@ describe('mutations', () => {
               { assessmentId: 6, assessment_id: 6, id: 66 }] } ]
       }
       mutations.toggleGridColumn(state, { assessmentId: 2 })
-      expect(state.gridSelection).toEqual({ 1: [3], 2: [], 3: [] })
+      expect(state.gridSelection).toEqual({ 1: [3] })
     })
 
     it('selects all if one already selected', () => {
