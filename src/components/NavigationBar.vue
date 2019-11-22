@@ -46,9 +46,11 @@ export default Vue.extend({
 
 <style scoped lang="scss">
   @import "../scss/variables";
-  .fixed-top{
-    top: 3.95rem;
-    padding-top: 0.6rem;
+
+  .fixed-top {
     background-color: #fff;
+    padding-top: 1.5rem;
+    top: 3.95rem;
+    z-index: 1029; // zindex-fixed - 1 to fix collision with other fixed menu on mobile / tablet
   }
 </style>
