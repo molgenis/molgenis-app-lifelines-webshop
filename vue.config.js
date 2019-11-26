@@ -13,7 +13,7 @@ build-date: ${buildDate}`
 
 const config = require('rc')('lifelines', {
   development: {
-    proxy: 'https://lifelines.test.molgenis.org'
+    proxy: 'https://lifelines.dev.molgenis.org'
   }
 })
 

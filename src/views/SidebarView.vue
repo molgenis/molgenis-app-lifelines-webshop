@@ -1,9 +1,9 @@
 <template>
   <div id="sidebar-view" v-click-outside="hide" :class="{'hide-bar':!value}">
-    <div class="label" @click="toggleVisibility">{{ 'lifelines-webshop-sidebar-header' | i18n }}<font-awesome-icon icon="angle-double-down" class="ml-2"></font-awesome-icon></div>
+    <div class="label" @click="toggleVisibility">{{$t('lifelines-webshop-sidebar-header')}}<font-awesome-icon icon="angle-double-down" class="ml-2"></font-awesome-icon></div>
     <div class="overflow-hidden">
       <div class="sidebar-width">
-        <h3 class="px-4">{{ 'lifelines-webshop-sidebar-header' | i18n }}</h3>
+        <h3 class="px-4">{{$t('lifelines-webshop-sidebar-header')}}</h3>
         <ul class="list-unstyled sidebar-content p-4">
           <li class="hide-sidebar" @click="hide"><font-awesome-icon icon="angle-double-left" size="lg"></font-awesome-icon></li>
           <li>
@@ -179,54 +179,61 @@ export default Vue.extend({
 
 <style scoped lang="scss">
   @import "../scss/variables";
+
   #sidebar-view {
-    padding: 0rem;
+    padding: 0;
     position: relative;
     transition: max-width 0.3s, padding 0.3s;
+
     .sidebar-content {
       background-color: $light;
       position: relative;
     }
+
     .sidebar-width {
       min-width: 19rem;
     }
-    .overflow-hidden {
-    }
+
     .label {
+      background-color: $light;
+      cursor: pointer;
+      display: inline-block;
+      height: 0;
+      line-height: 2rem;
+      overflow: hidden;
+      padding: 0 1rem;
       position: absolute;
       right: 0;
-      padding: 0 1rem;
-      line-height: 2rem;
-      transform-origin: 100% 100%;
-      transform: rotate(-90deg) translate(0, 1rem);
       top: 4rem;
-      background-color: $light;
-      display: inline-block;
-      z-index: 1050;
-      overflow: hidden;
+      transform: rotate(-90deg) translate(0, 1rem);
+      transform-origin: 100% 100%;
       transition: height 0.3s;
-      height: 0;
       white-space: nowrap;
-      cursor: pointer;
+      z-index: 1000; // zindex-dropdown
     }
+
     &.hide-bar {
-      .label{
-        height: 2rem;
-      }
       max-width: 1rem;
       padding: 0;
-    }
-    .hide-sidebar {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 1.25rem;
-      display: inline-block;
-      cursor: pointer;
-      path {
-        transition: fill 0.1s;
-        fill: $secondary;
+
+      .label {
+        height: 2rem;
       }
+    }
+
+    .hide-sidebar {
+      cursor: pointer;
+      display: inline-block;
+      padding: 1.25rem;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      path {
+        fill: $secondary;
+        transition: fill 0.1s;
+      }
+
       &:hover path {
         fill: $warning;
       }

@@ -17,10 +17,14 @@ exports[`OrdersView.vue checks content of order tables 1`] = `
   <tbody>
     <tr>
       <td>
-        <!---->
+        <router-link-stub to="/shop/edcba" tag="a" event="click" class="btn btn-primary btn-sm">
+          <font-awesome-icon-stub icon="edit" aria-label="edit"></font-awesome-icon-stub>
+        </router-link-stub>
       </td>
       <td>
-        <!---->
+        <router-link-stub to="[object Object]" tag="a" event="click" class="btn btn-danger btn-sm t-btn-order-delete">
+          <font-awesome-icon-stub icon="trash" aria-label="delete"></font-awesome-icon-stub>
+        </router-link-stub>
       </td>
       <td></td>
       <td></td>
@@ -29,7 +33,7 @@ exports[`OrdersView.vue checks content of order tables 1`] = `
       <td>
         <!---->
       </td>
-      <td><span class="badge badge-pill">3</span></td>
+      <td><span class="badge badge-pill badge-info">Draft</span></td>
     </tr>
     <tr>
       <td>
@@ -43,7 +47,7 @@ exports[`OrdersView.vue checks content of order tables 1`] = `
       <td></td>
       <td>abcde</td>
       <td><span><a href="https://lifelines.test.molgenis.org/files/aaaac3rcetmgfmudsodb3laaay">Motivation.pdf<font-awesome-icon-stub icon="download" aria-label="download"></font-awesome-icon-stub></a></span></td>
-      <td><span class="badge badge-pill">0</span></td>
+      <td><span class="badge badge-pill badge-primary">Submitted</span></td>
     </tr>
   </tbody>
 </table>

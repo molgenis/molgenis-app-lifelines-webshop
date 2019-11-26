@@ -8,15 +8,14 @@ import { Section } from '@/types/Section.ts'
 import { TreeParent } from '@/types/Tree'
 import FormField from './FormField'
 import { Order } from './Order'
+import { ContextState } from '@molgenis/molgenis-ui-context/src/types'
 
 export type Toast = {
   type: 'danger' | 'success',
   message: string
 }
 
-export default interface ApplicationState {
-  isContextLoaded: boolean,
-  isSignedIn: boolean
+export interface AppState {
   order: Order,
   orderFormFields: FormField[]
   variables: { [key:number]: Variable },
@@ -30,8 +29,8 @@ export default interface ApplicationState {
   ageAtOptions: FacetOption[],
   facetFilter: Filter,
   treeStructure: TreeParent[]
-  gridVariables: VariableWithVariants[]
-  variantCounts: Count[]
+  gridVariables: VariableWithVariants[] | null
+  variantCounts: Count[] | null
   participantCount: number | null
   treeSelected: number
   treeOpenSection: number
@@ -40,6 +39,9 @@ export default interface ApplicationState {
   searchTerm: string | null
   filteredSubsections: number[] | null
   filteredSections: number[] | null
-  isGridLoading: boolean,
   orders: Order[] | null
+}
+
+export default interface ApplicationState extends AppState {
+  context?: ContextState
 }

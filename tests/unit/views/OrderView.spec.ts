@@ -1,7 +1,7 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import VueRouter from 'vue-router'
+import { shallowMount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
 import OrderView from '@/views/OrderView.vue'
 import Vuex from 'vuex'
+import flushPromises from 'flush-promises'
 
 describe('OrderView', () => {
   let wrapper: any
@@ -9,9 +9,8 @@ describe('OrderView', () => {
   let store: any
   let actions: any
   let state: any
-  let saveMock: any
-  let submitMock: any
   let mutations: any
+  let mocks: any
 
   const touchedState = {
     projectNumber: {
@@ -28,9 +27,7 @@ describe('OrderView', () => {
   beforeEach(() => {
     localVue = createLocalVue()
     localVue.use(Vuex)
-    localVue.use(VueRouter)
-    saveMock = jest.fn()
-    submitMock = jest.fn()
+
     state = {
       toast: null,
       order: {},
@@ -41,8 +38,8 @@ describe('OrderView', () => {
       ]
     }
     actions = {
-      save: saveMock,
-      submit: submitMock
+      save: jest.fn(),
+      submit: jest.fn()
     }
     mutations = {
       setToast: jest.fn(),
@@ -54,12 +51,37 @@ describe('OrderView', () => {
       actions,
       mutations
     })
-    wrapper = shallowMount(OrderView, { store, localVue })
+
+    const stubs = {
+      RouterLink: RouterLinkStub
+    }
+
+    mocks = {
+      $router: {
+        push: jest.fn()
+      }
+    }
+
+    wrapper = shallowMount(OrderView, { stubs, store, localVue, mocks })
   })
 
   it('should render the component', () => {
     expect(wrapper).toBeDefined()
     expect(wrapper.find('#order-form')).toBeDefined()
+  })
+
+  describe('when the order application form is a fileReference', () => {
+    beforeEach(() => {
+      wrapper.setData({ order: {
+        applicationForm: {
+          filename: 'my file'
+        }
+      } })
+    })
+
+    it('should use the filename as applicationForm value', () => {
+      expect(wrapper.vm.orderFormData).toEqual({ applicationForm: 'my file' })
+    })
   })
 
   describe('on form value changed', () => {
@@ -87,7 +109,7 @@ describe('OrderView', () => {
       })
 
       it('should call the save action', () => {
-        expect(saveMock).toHaveBeenCalled()
+        expect(actions.save).toHaveBeenCalled()
       })
     })
 
@@ -95,12 +117,18 @@ describe('OrderView', () => {
       beforeEach((done) => {
         formState.$valid = false
         wrapper.setData({ formState: formState })
+        actions.save.mockResolvedValue('12345')
         wrapper.vm.onSave()
         done()
       })
 
       it('should still call the save action', () => {
-        expect(saveMock).toHaveBeenCalled()
+        expect(actions.save).toHaveBeenCalled()
+      })
+
+      it('should push the cart view to the router with the orderNumber', async () => {
+        await flushPromises()
+        expect(mocks.$router.push).toHaveBeenCalledWith({ name: 'load', params: { orderNumber: '12345' } })
       })
     })
   })
@@ -120,13 +148,18 @@ describe('OrderView', () => {
       })
 
       it('should call the save action', () => {
-        expect(submitMock).toHaveBeenCalled()
+        expect(actions.submit).toHaveBeenCalled()
+      })
+
+      it('should push the orders view into the router', async () => {
+        await flushPromises()
+        expect(mocks.$router.push).toHaveBeenCalledWith({ name: 'orders' })
       })
     })
 
     describe('when the form is invalid', () => {
       beforeEach((done) => {
-        submitMock.mockReset()
+        actions.submit.mockReset()
         formState.$valid = false
         wrapper.setData({ formState: formState })
         wrapper.vm.onSubmit()
@@ -134,7 +167,7 @@ describe('OrderView', () => {
       })
 
       it('should not call the submit action', () => {
-        expect(submitMock).not.toHaveBeenCalled()
+        expect(actions.submit).not.toHaveBeenCalled()
       })
     })
   })

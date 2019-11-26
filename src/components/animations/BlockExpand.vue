@@ -51,12 +51,13 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .block-expander {
-    transition: height 0.3s ease-out;
-    overflow: hidden;
     height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease-out;
   }
+
   .open {
     height: auto;
   }

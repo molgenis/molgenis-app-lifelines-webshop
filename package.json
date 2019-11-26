@@ -1,6 +1,6 @@
 {
   "name": "@molgenis-experimental/molgenis-app-lifelines-webshop",
-  "version": "0.10.6",
+  "version": "0.17.0",
   "license": "LGPL-3.0",
   "publishConfig": {
     "access": "public"
@@ -9,27 +9,33 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint",
+    "lint:scss": "stylelint 'src/**/*.{vue,scss}'",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "test:unit": "vue-cli-service test:unit",
+    "test:watch": "jest --watchAll",
+    "test:update-snapshot": "jest --updateSnapshot"
   },
   "files": [
     "dist",
     "src"
   ],
   "dependencies": {
+    "@babel/polyfill": "^7.7.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "@molgenis/molgenis-api-client": "^3.1.0",
     "@molgenis/molgenis-i18n-js": "^0.1.1",
-    "@molgenis/molgenis-ui-context": "^1.4.1",
+    "@molgenis/molgenis-ui-context": "^1.5.0",
     "@molgenis/molgenis-ui-form": "^4.0.3",
     "@molgenis/rsql": "^0.1.4",
+    "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "core-js": "^3.3.2",
     "fetch-ponyfill": "^6.1.0",
     "format-si-prefix": "^0.3.2",
+    "glob": "^7.1.6",
     "install": "^0.13.0",
     "jquery": "3.3",
     "lodash.debounce": "^4.0.8",
@@ -54,7 +60,7 @@
     "@vue/cli-service": "^4.0.5",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
-    "@vue/test-utils": "1.0.0-beta.29",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "banner-webpack-plugin": "^0.2.3",
@@ -62,9 +68,13 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "geckodriver": "^1.19.1",
+    "flush-promises": "^1.0.2",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
     "semantic-release": "^15.13.18",
+    "stylelint": "^12.0.0",
+    "stylelint-order": "^3.1.1",
+    "stylelint-scss": "^3.12.1",
     "ts-jest": "^23.0.0",
     "typescript": "^3.4.3",
     "vue-template-compiler": "^2.5.21"

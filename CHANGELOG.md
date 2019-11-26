@@ -1,3 +1,112 @@
+# [0.17.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.16.2...v0.17.0) (2019-11-25)
+
+
+### Features
+
+* call edge server for trigger on submit ([e6b8cc3](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/e6b8cc3))
+
+## [0.16.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.16.1...v0.16.2) (2019-11-22)
+
+
+### Bug Fixes
+
+* add polyfills for closest and findindex to IE11 ([#164](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/164)) ([f43e46a](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/f43e46a))
+
+## [0.16.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.16.0...v0.16.1) (2019-11-22)
+
+
+### Bug Fixes
+
+* Closes [#158](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/158) Set orderNumber to state before using it ([ef02076](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/ef02076))
+
+# [0.16.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.15.2...v0.16.0) (2019-11-21)
+
+
+### Features
+
+* give admin write perm on submit order ([41313d2](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/41313d2))
+
+## [0.15.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.15.1...v0.15.2) (2019-11-21)
+
+
+### Bug Fixes
+
+* add loading state to facet use ([44b5bb8](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/44b5bb8))
+* normalize the state ([beb0b4c](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/beb0b4c))
+* scss linting ([8c7031f](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/8c7031f))
+* use formatCount ([f0998e3](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/f0998e3))
+
+## [0.15.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.15.0...v0.15.1) (2019-11-20)
+
+
+### Bug Fixes
+
+* **router:** add anonymous navigation guard ([491ae05](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/491ae05)), closes [#129](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/129)
+
+# [0.15.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.14.0...v0.15.0) (2019-11-20)
+
+
+### Bug Fixes
+
+* remove empty variables list from grid selection model ([a7d33e9](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/a7d33e9)), closes [#152](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/152)
+
+
+### Features
+
+* expose app global during development ([0154568](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/0154568))
+
+# [0.14.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.13.0...v0.14.0) (2019-11-19)
+
+
+### Bug Fixes
+
+* cleanup stylelint violations ([ef537d2](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/ef537d2))
+
+
+### Features
+
+* add stylelint scss linting ([aa5e8dc](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/aa5e8dc))
+
+# [0.13.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.12.0...v0.13.0) (2019-11-19)
+
+
+### Bug Fixes
+
+* **main:** don't chain the calls ([d3898d9](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/d3898d9))
+* import umd instead of sources ([07efd35](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/07efd35))
+
+
+### Features
+
+* show version in footer ([8a936fd](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/8a936fd))
+
+# [0.12.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.11.0...v0.12.0) (2019-11-19)
+
+
+### Features
+
+* add selected variables badge to Cart tab ([0e47789](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/0e47789)), closes [#150](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/150)
+
+# [0.11.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.10.7...v0.11.0) (2019-11-18)
+
+
+### Bug Fixes
+
+* vscode eslint validation & autofix ([54279b1](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/54279b1))
+
+
+### Features
+
+* add ConfirmationModal component for order delete ([ec2a6f3](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/ec2a6f3))
+* ConfirmationModal unit & integration test ([a90354c](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/a90354c))
+
+## [0.10.7](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.10.6...v0.10.7) (2019-11-14)
+
+
+### Bug Fixes
+
+* Update order with file data ([4224cde](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4224cde))
+
 ## [0.10.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.10.5...v0.10.6) (2019-11-13)
 
 

@@ -28,32 +28,37 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   @import "../../scss/variables";
+
   .detail-info-hover {
     position: relative;
+
     .detail-info {
-      position: absolute;
-      opacity: 0;
-      padding-right: 1rem;
-      padding-left: 1rem;
-      display: block;
       background-color: $light;
+      display: block;
+      opacity: 0;
+      padding-left: 1rem;
+      padding-right: 1rem;
       pointer-events: none;
+      position: absolute;
       z-index: 1;
-      path{
+
+      path {
         fill: $secondary;
       }
     }
+
     .variable-title {
       display: block;
       overflow: hidden;
-      text-overflow: ellipsis;
-      padding-right: 1rem;
       padding-left: 1rem;
+      padding-right: 1rem;
+      text-overflow: ellipsis;
     }
-    &:hover .detail-info{
-     opacity: 1;
+
+    &:hover .detail-info {
+      opacity: 1;
     }
   }
 </style>

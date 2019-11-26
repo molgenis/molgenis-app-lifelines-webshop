@@ -1,10 +1,10 @@
 <template>
   <div id="cart-view" class="row">
     <div class="col">
-      <h3>{{ 'lifelines-webshop-cart-header' | i18n }}</h3>
+      <h3>{{$t('lifelines-webshop-cart-header')}}</h3>
       <template v-if="selectedVariableIds.length">
         <div class="mb-3" v-if="selectedVariableIds.length > 0">
-          <button type="button" class="btn btn-primary save" @click="save">Save</button>
+          <button type="button" class="btn btn-primary save" @click="onSave">Save</button>
           <router-link
                 class="btn btn-warning ml-2"
                 type="button"
@@ -23,7 +23,7 @@
           </li>
         </ul>
         <div class="mb-3" v-if="selectedVariableIds.length > 10">
-          <button type="button" class="btn btn-primary save" @click="save">Save</button>
+          <button type="button" class="btn btn-primary save" @click="onSave">Save</button>
           <router-link
                 class="btn btn-warning ml-2"
                 type="button"
@@ -45,16 +45,20 @@
 <script>
 import Vue from 'vue'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
   name: 'CartView',
   components: { SpinnerAnimation },
   methods: {
-    ...mapActions(['save'])
+    ...mapActions(['save']),
+    async onSave () {
+      const orderNumber = await this.save()
+      this.$router.push({ name: 'load', params: { orderNumber } })
+    }
   },
   computed: {
-    ...mapState(['isSignedIn']),
+    ...mapGetters(['isSignedIn']),
     gridSelection () {
       return this.$store.state.gridSelection
     },
