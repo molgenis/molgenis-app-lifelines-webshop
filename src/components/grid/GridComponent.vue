@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col vld-parent">
         <table
+          v-if="grid && grid.length"
           ref="gridheader"
           class="grid-header-table"
           :class="{'sticky':stickyTableHeader}">
@@ -17,8 +18,10 @@
             </th>
           </tr>
         </table>
+
         <div :class="{'space-holder':stickyTableHeader || !grid}"></div>
-        <div class="table-holder">
+
+        <div class="table-holder" v-if="isLoading || grid && grid.length">
           <loading
             :active="isLoading"
             loader="dots"
@@ -26,8 +29,9 @@
             color="var(--secondary)"
             background-color="var(--light)"
           ></loading>
+
           <table
-            v-if="grid"
+            v-if="grid && grid.length && !isLoading"
             ref="grid"
             class="grid-table"
             @click.stop="clickGridDelegate"
@@ -88,6 +92,10 @@
             </tr>
           </table>
         </div>
+        <div class="no-results" v-else>
+          No results found
+        </div>
+
       </div>
     </div>
   </div>
@@ -116,7 +124,7 @@ export default Vue.extend({
      */
     selected: function () {
       const selected = { all: true, row: [], col: [] }
-      if (this.grid === null) return selected
+      if (!this.grid.length) return selected
       selected.col = this.grid[0].map((i) => true)
 
       this.grid.forEach((row, i) => {
@@ -381,6 +389,14 @@ export default Vue.extend({
     button {
       border-bottom-left-radius: 0;
     }
+  }
+
+  .no-results {
+    color: $secondary;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 150px;
+    text-align: center;
   }
 
 </style>
