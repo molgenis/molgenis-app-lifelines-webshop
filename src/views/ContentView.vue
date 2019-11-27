@@ -19,25 +19,13 @@
 import Vue from 'vue'
 import TreeView from './TreeView.vue'
 import GridView from './GridView.vue'
-import { mapMutations, mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default Vue.extend({
   name: 'ContentView',
   components: { TreeView, GridView },
   computed: {
     ...mapGetters(['isSignedIn'])
-  },
-  methods: {
-    ...mapMutations(['updateSearchTerm']),
-    ...mapActions(['filterSections', 'filterSubsections', 'loadGridVariables']),
-    onSearchChange (value) {
-      this.updateSearchTerm(value || null)
-      this.filterSections()
-      this.filterSubsections()
-      if (this.treeSelection !== -1) {
-        this.loadGridVariables()
-      }
-    }
   }
 })
 </script>
