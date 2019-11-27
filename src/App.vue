@@ -1,5 +1,5 @@
 <template>
-  <div class="mg-page">
+  <div class="mg-page container-fluid">
     <loading
       :active="Boolean(loading)"
       loader="spinner"
@@ -9,7 +9,7 @@
     />
     <cookie-wall v-if="context.context.showCookieWall"/>
     <header-component :molgenis-menu="molgenisMenu"/>
-    <main class="mg-page-content">
+    <main class="mg-page-content row">
       <router-view/>
     </main>
     <footer-component :molgenis-footer="molgenisFooter" />

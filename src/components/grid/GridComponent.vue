@@ -1,122 +1,123 @@
 <template>
-  <div id="grid">
-    <div class="row">
-      <div class="col vld-parent">
-        <table
-          ref="gridheader"
-          class="grid-header-table"
-          :class="{'sticky':stickyTableHeader}">
-          <tr>
-            <th></th>
-            <th></th>
-            <th
-              v-for="assessment in gridAssessments"
-              :key="assessment.id"
-              class="text-center">
-              <div class="assessments-title"><span>{{assessment.name}}</span></div>
-            </th>
-          </tr>
-        </table>
-        <div :class="{'space-holder':stickyTableHeader || !grid}"></div>
-        <div class="table-holder">
-          <loading
-            :active="isLoading"
-            loader="dots"
-            :is-full-page="false"
-            color="var(--secondary)"
-            background-color="var(--light)"
-          ></loading>
-          <table
-            v-if="grid"
-            ref="grid"
-            class="grid-table"
-            @click.stop="clickGridDelegate"
-            :class="{'hover-all-cells': hoverAllCells}">
-            <tr>
-              <th></th>
-              <th class="all-toggle grid-toggle">
-                <button
-                  :disabled="!isSignedIn"
-                  class="btn btn-sm btn-outline-secondary t-btn-all-toggle"
-                  :class="classes('allSelect')"
-                  @click="$emit('gridAllToggle')"
-                  @mouseenter="hoverAllCells = true"
-                  @mouseleave="hoverAllCells = false">
-                  All
-                </button>
-              </th>
-              <th
-                v-for="(assessment, colIndex) in gridAssessments"
-                :key="assessment.id"
-                class="column-toggle grid-toggle"
-              >
-                <button
-                  :disabled="!isSignedIn"
-                  class="btn btn-sm btn-outline-secondary t-btn-column-toggle"
-                  :data-col="colIndex"
-                  :class="classes('columnSelect', {colIndex})">
-                  <font-awesome-icon icon="arrow-down"/>
-                </button>
-              </th>
-            </tr>
+  <div id="component-grid" class="col">
 
-            <tr
-              v-for="(row, rowIndex) in grid"
-              :key="rowIndex">
-              <th>
-                <grid-titel-info :info="gridVariables[rowIndex]" />
-              </th>
-              <th class="row-toggle grid-toggle">
-                <button
-                  :disabled="!isSignedIn"
-                  class="btn btn-sm select-row btn-outline-secondary t-btn-row-toggle"
-                  :data-row="rowIndex"
-                  :class="classes('rowSelect', {rowIndex})">
-                  <font-awesome-icon icon="arrow-right"/>
-                </button>
-              </th>
-              <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
-                <button
-                  :disabled="!isSignedIn"
-                  :data-col="colIndex"
-                  :data-row="rowIndex"
-                  :class="classes('cell', {rowIndex, colIndex})"
-                  class="btn btn-sm t-btn-cell-toggle">
-                  {{count | formatCount}}
-                </button>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+    <table
+      v-if="!isGridLoading && grid.length > 0"
+      ref="gridheader"
+      class="grid-header-table"
+      :class="{'sticky':stickyTableHeader}">
+      <tr>
+        <th></th>
+        <th></th>
+        <th
+          v-for="assessment in gridAssessments"
+          :key="assessment.id"
+          class="text-center">
+          <div class="assessments-title"><span>{{assessment.name}}</span></div>
+        </th>
+      </tr>
+    </table>
+
+    <div :class="{'space-holder':stickyTableHeader || !grid}"></div>
+
+    <div class="table-holder" v-if="isGridLoading || (grid && grid.length > 0)">
+      <table
+        v-if="!isGridLoading && grid.length > 0"
+        ref="grid"
+        class="grid-table"
+        @click.stop="clickGridDelegate"
+        :class="{'hover-all-cells': hoverAllCells}">
+        <tr>
+          <th></th>
+          <th class="all-toggle grid-toggle">
+            <button
+              :disabled="!isSignedIn"
+              class="btn btn-sm btn-outline-secondary t-btn-all-toggle"
+              :class="classes('allSelect')"
+              @click="$emit('gridAllToggle')"
+              @mouseenter="hoverAllCells = true"
+              @mouseleave="hoverAllCells = false">
+              All
+            </button>
+          </th>
+          <th
+            v-for="(assessment, colIndex) in gridAssessments"
+            :key="assessment.id"
+            class="column-toggle grid-toggle"
+          >
+            <button
+              :disabled="!isSignedIn"
+              class="btn btn-sm btn-outline-secondary t-btn-column-toggle"
+              :data-col="colIndex"
+              :class="classes('columnSelect', {colIndex})">
+              <font-awesome-icon icon="arrow-down"/>
+            </button>
+          </th>
+        </tr>
+
+        <tr v-for="(row, rowIndex) in grid" :key="rowIndex">
+          <th>
+            <grid-titel-info :info="gridVariables[rowIndex]" />
+          </th>
+          <th class="row-toggle grid-toggle">
+            <button
+              :disabled="!isSignedIn"
+              class="btn btn-sm select-row btn-outline-secondary t-btn-row-toggle"
+              :data-row="rowIndex"
+              :class="classes('rowSelect', {rowIndex})">
+              <font-awesome-icon icon="arrow-right"/>
+            </button>
+          </th>
+          <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
+            <button
+              :disabled="!isSignedIn"
+              :data-col="colIndex"
+              :data-row="rowIndex"
+              :class="classes('cell', {rowIndex, colIndex})"
+              class="btn btn-sm t-btn-cell-toggle">
+              {{count | formatCount}}
+            </button>
+          </td>
+        </tr>
+      </table>
     </div>
+    <div class="no-results" v-else>
+      <font-awesome-icon icon="search"/>
+      <p class="lead">{{$t('lifelines-webshop-no-results')}}</p>
+    </div>
+
   </div>
+
 </template>
 
 <script>
 import Vue from 'vue'
-import Loading from 'vue-loading-overlay'
 import GridTitelInfo from './GridTitelInfo.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faArrowDown, faArrowRight, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowRight, faArrowsAlt, faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // @ts-ignore
 import { formatSI } from 'format-si-prefix'
+import { mapState, mapGetters } from 'vuex'
 
 library.add(faArrowDown, faArrowRight, faArrowsAlt)
 
 export default Vue.extend({
   name: 'GridComponent',
-  components: { FontAwesomeIcon, Loading, GridTitelInfo },
+  components: { FontAwesomeIcon, GridTitelInfo },
   computed: {
+    ...mapGetters(['isGridLoading', 'isSignedIn']),
+    ...mapState(['searchTerm', 'treeSelected', 'treeOpenSection']),
     /**
      * Provides visual feedback for grid selection helpers,
      * e.g. All/Column/Row select.
      */
     selected: function () {
       const selected = { all: true, row: [], col: [] }
-      if (this.grid === null) return selected
+      if (!this.grid.length) {
+        return selected
+      }
       selected.col = this.grid[0].map((i) => true)
 
       this.grid.forEach((row, i) => {
@@ -148,14 +149,6 @@ export default Vue.extend({
     gridSelections: {
       type: Array,
       required: false
-    },
-    isLoading: {
-      type: Boolean,
-      required: true
-    },
-    isSignedIn: {
-      type: Boolean,
-      required: true
     }
   },
   data: function () {
@@ -383,4 +376,11 @@ export default Vue.extend({
     }
   }
 
+  .no-results {
+    color: $secondary;
+    font-size: 2rem;
+    font-weight: 600;
+    padding: 5rem;
+    text-align: center;
+  }
 </style>

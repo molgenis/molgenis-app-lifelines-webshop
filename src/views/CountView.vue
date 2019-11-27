@@ -2,6 +2,7 @@
   <div class="vld-parent count-view">
     <loading
       v-if="participantCount === null"
+      color="var(--secondary)"
       :active="true"
       loader="dots"
       :isFullPage="false"

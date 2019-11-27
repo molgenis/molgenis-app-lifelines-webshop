@@ -8,5 +8,6 @@
 "lifelines-webshop-modal-button-delete","lifelines-webshop-modal-button-delete","lifelines-webshop",,"Delete","Verwijder",,,,,,
 "lifelines-webshop-modal-delete-header","lifelines-webshop-modal-delete-header","lifelines-webshop",,"Delete order {{order}}","Verwijder aanvraag {{order}}",,,,,,
 "lifelines-webshop-modal-delete-body","lifelines-webshop-modal-delete-body","lifelines-webshop",,"You are about to delete order {{order}}. Are you sure?","Je staat op het punt om aanvraag {{order}} te verwijderen. Weet je het zeker?",,,,,,
+"lifelines-webshop-no-results","lifelines-webshop-no-results","lifelines-webshop",,"No items were found matching the search term.","Geen resultaten gevonden voor de huidige zoekopdracht.",,,,,,
 "ui-form:form_file_change","ui-form:form_file_change","ui-form",,"Change","Aanpassen",,,,,,
 "ui-form:form_file_browse","ui-form:form_file_browse","ui-form",,"Browse","Browse",,,,,,

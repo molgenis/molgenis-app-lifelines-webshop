@@ -68,7 +68,7 @@ describe('GridView', () => {
   describe('On creation', () => {
     it('Renders the gridView', () => {
       wrapper = shallowMount(GridView, { store })
-      expect(wrapper.find('#grid-view').exists()).toBeTruthy()
+      expect(wrapper.find('#component-grid-view').exists()).toBeTruthy()
     })
   })
 

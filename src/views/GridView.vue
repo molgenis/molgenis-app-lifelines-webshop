@@ -1,40 +1,38 @@
 <template>
-  <div id="grid-view">
-    <div class="col pt-5 mt-5" v-if="isEmptySearchResult">
-      <h5 class="pt-2">No items were found matching the search term.</h5>
-    </div>
-    <div v-else>
-      <grid-component
-      v-if="treeSelected != -1"
+    <loading
+      id="component-grid-view"
+      v-if="isGridLoading"
+      :active="true"
+      loader="dots"
+      :is-full-page="false"
+      color="var(--secondary)"
+    />
+    <grid-component
+      id="component-grid-view"
+      v-else
       :grid="grid"
       :gridAssessments="gridAssessments"
       :gridVariables="gridVariables"
       :gridSelections="gridSelections"
-      :isLoading="isGridLoading"
-      :isSignedIn="isSignedIn"
       @gridRowToggle="handleGridRowToggle"
       @gridColumnToggle="handleGridColumnToggle"
       @gridCellToggle="handleGridCellToggle"
       @gridAllToggle="handleGridAllToggle"
-      />
-    </div>
-  </div>
+    />
 </template>
 
 <script>
 import Vue from 'vue'
 import GridComponent from '../components/grid/GridComponent.vue'
+import Loading from 'vue-loading-overlay'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 
 export default Vue.extend({
   name: 'GridView',
-  components: { GridComponent },
+  components: { GridComponent, Loading },
   computed: {
     ...mapState(['treeSelected', 'gridVariables']),
-    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections', 'numberOfSelectedItems', 'isSignedIn', 'isGridLoading']),
-    isEmptySearchResult () {
-      return this.$store.getters.isSearchResultEmpty
-    }
+    ...mapGetters(['rsql', 'gridAssessments', 'grid', 'gridSelections', 'numberOfSelectedItems', 'isSignedIn', 'isGridLoading'])
   },
   methods: {
     ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
@@ -71,3 +69,9 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.vld-overlay {
+  max-height: 600px;
+}
+</style>

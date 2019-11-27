@@ -47,7 +47,7 @@ describe('MainView.vue', () => {
     const wrapper = shallowMount(MainView, { store, localVue, mocks })
 
     expect(wrapper.exists()).toBeTruthy()
-    expect(wrapper.find('#main-view').exists()).toBeTruthy()
+    expect(wrapper.find('#component-main-view').exists()).toBeTruthy()
   })
 
   it('has a toast component that gets passed a type and message', () => {

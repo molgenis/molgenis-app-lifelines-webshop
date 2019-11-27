@@ -183,7 +183,9 @@ export default Vue.extend({
   #sidebar-view {
     padding: 0;
     position: relative;
+    transform: translateZ(0);
     transition: max-width 0.3s, padding 0.3s;
+    z-index: 1000;
 
     .sidebar-content {
       background-color: $light;
@@ -196,8 +198,9 @@ export default Vue.extend({
 
     .label {
       background-color: $light;
-      cursor: pointer;
+      color: $primary;
       display: inline-block;
+      font-weight: bold;
       height: 0;
       line-height: 2rem;
       overflow: hidden;
@@ -210,6 +213,10 @@ export default Vue.extend({
       transition: height 0.3s;
       white-space: nowrap;
       z-index: 1000; // zindex-dropdown
+
+      &:hover {
+        cursor: pointer;
+      }
     }
 
     &.hide-bar {

@@ -4,20 +4,20 @@
       <template v-for="parent in structure">
         <li
           :key="parent.name"
-          class="list-group-item list-group-item-outline-secondary list-group-item-action text-truncate pr-3 py-2 parent-list"
+          class="list-group-item list-group-item-outline-secondary list-group-item-action text-truncate parent-list"
           :title="parent.name"
           role="button"
           @click="toggleCollapse(parent.id)"
           style="z-index: 1;"
         >
           <div class="row">
-            <div class="text-truncate col pr-0">
-              <strong>{{parent.name}}</strong>
+            <div class="text text-truncate col font-weight-bold">
+              {{parent.name}}
             </div>
-            <div class="col-md-auto d-flex align-items-center">
+            <div class="d-flex align-items-center">
               <collapse-tree-icon
                 v-if="hasChildren(parent)"
-                class="mr-2"
+                class="mr-3"
                 :state="parent.id == opensection"
               />
             </div>
@@ -99,7 +99,7 @@ export default Vue.extend({
 
   .child-list {
     font-weight: lighter;
-    padding-left: 3.5rem;
+    padding-left: 1rem;
 
     &.active {
       background-color: $secondary;
@@ -108,7 +108,6 @@ export default Vue.extend({
   }
 
   .parent-list {
-    padding-left: 2.5rem;
     white-space: nowrap;
   }
 
@@ -121,6 +120,12 @@ export default Vue.extend({
   }
 
   .list-group-item {
+    padding: 0 1.25rem;
+
+    .text {
+      line-height: 2.75rem;
+    }
+
     &::before {
       background-color: transparent;
       border-radius: 50%;

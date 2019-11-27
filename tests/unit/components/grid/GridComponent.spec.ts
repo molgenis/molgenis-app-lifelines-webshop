@@ -1,28 +1,41 @@
 import { shallowMount, Wrapper } from '@vue/test-utils'
 import Vue from 'vue'
+import Vuex from 'vuex'
 import GridComponent from '@/components/grid/GridComponent.vue'
+
+Vue.use(Vuex)
+
+let getters = {
+  rsql: jest.fn(),
+  gridAssessments: () => [],
+  grid: () => [],
+  gridSelections: () => [],
+  numberOfSelectedItems: () => 0,
+  isSignedIn: () => true,
+  isGridLoading: () => false
+}
 
 describe('GridComponent.vue', () => {
   const emptyProps = {
-    grid: null,
+    grid: [],
     gridAssessments: [],
     gridVariables: null,
-    gridSelections: null,
-    isLoading: false,
-    isSignedIn: true
+    gridSelections: null
   }
+
   describe('when created', () => {
     let wrapper: Wrapper<Vue>
 
     beforeEach(() => {
       window.addEventListener = jest.fn()
       wrapper = shallowMount(GridComponent, {
-        propsData: { ...emptyProps }
+        propsData: { ...emptyProps },
+        store: new Vuex.Store({ getters })
       })
     })
 
     it('should render the grid', () => {
-      expect(wrapper.find('#grid')).toBeTruthy()
+      expect(wrapper.find('#component-grid')).toBeTruthy()
       expect(window.addEventListener).toHaveBeenCalled()
     })
   })
@@ -33,7 +46,8 @@ describe('GridComponent.vue', () => {
     beforeEach(() => {
       window.removeEventListener = jest.fn()
       wrapper = shallowMount(GridComponent, {
-        propsData: { ...emptyProps }
+        propsData: { ...emptyProps },
+        store: new Vuex.Store({ getters })
       })
     })
 
@@ -72,12 +86,16 @@ describe('GridComponent.vue', () => {
           name: 'b',
           id: 102
         }],
-        gridSelections: [[false, false], [false, false]],
-        isLoading: false,
-        isSignedIn: false
+        gridSelections: [[false, false], [false, false]]
       }
+
+      const _getters = Object.assign({}, getters)
+      _getters.isSignedIn = () => false
+      let store = new Vuex.Store({ getters: _getters })
+
       wrapper = shallowMount(GridComponent, {
-        propsData: { ...props }
+        propsData: { ...props },
+        store
       })
     })
 
@@ -101,12 +119,12 @@ describe('GridComponent.vue', () => {
           name: 'b',
           id: 102
         }],
-        gridSelections: [[false, false], [false, false]],
-        isLoading: false,
-        isSignedIn: true
+        gridSelections: [[false, false], [false, false]]
       }
+
       wrapper = shallowMount(GridComponent, {
-        propsData: { ...props }
+        propsData: { ...props },
+        store: new Vuex.Store({ getters })
       })
     })
 
