@@ -130,6 +130,11 @@ export default Vue.extend({
       const formState = this.formState
       if (this.formData.projectNumber === null || this.formData.projectNumber === '') {
         this.formInvalid = true
+      } else {
+        this.isSubmitting = true
+        await this.submit()
+        this.isSubmitting = false
+        this.$router.push({ name: 'orders' })
       }
     }
   }
@@ -137,8 +142,8 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-  >>> .formInvalid #projectNumber{
-    border-color: red;
-    border-color:var(--danger);
+  >>> .formInvalid #projectNumber {
+    border-color: #f00;
+    border-color: var(--danger);
   }
 </style>

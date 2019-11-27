@@ -8,7 +8,7 @@ describe('state', () => {
   it('projectNumber should be required, visible and valid', () => {
     expect(state.orderFormFields[0].id).toEqual('projectNumber')
     // @ts-ignore
-    expect(state.orderFormFields[0].required()).toBeTruthy()
+    expect(state.orderFormFields[0].required()).toBeFalsy()
     // @ts-ignore
     expect(state.orderFormFields[0].visible()).toBeTruthy()
     // @ts-ignore
