@@ -1,7 +1,7 @@
 <template>
     <div class="container mb-5">
         <div class="row">
-          <div class="col-md-6 mx-auto">
+          <div class="col-md-6">
             <toast-component
               class="toast-component mt-2"
               v-if="toast"
@@ -19,7 +19,7 @@
               :formState="formState"
               @valueChange="onValueChanged">
             </form-component>
-            <div v-if="!isSaving && formInvalid" class="alert text-danger px-0">
+            <div v-if="!isSaving && formState.$invalid && formState.$touched" class="alert text-danger px-0">
               Please enter a project number before submitting a order.
             </div>
             <div>
@@ -88,6 +88,7 @@ export default Vue.extend({
   },
   data () {
     return {
+      isSubmittingState: false,
       isSaving: false,
       isSubmitting: false,
       formInvalid: false,
@@ -112,25 +113,29 @@ export default Vue.extend({
       }
     }
   },
+  mounted () {
+    this.setProjectNumberRequiredFunction(() => this.isSubmittingState)
+    // this.orderFormFields[0].required = () => this.isSubmittingState
+  },
   methods: {
     ...mapActions(['save', 'submit']),
-    ...mapMutations(['setToast', 'clearToast', 'setOrderDetails']),
+    ...mapMutations(['setToast', 'clearToast', 'setOrderDetails', 'setProjectNumberRequiredFunction']),
     onValueChanged (updatedFormData) {
       if (updatedFormData.projectNumber !== null && updatedFormData.projectNumber !== '') this.formInvalid = false
       this.formData = updatedFormData
       this.setOrderDetails(updatedFormData)
     },
     async onSave () {
+      this.isSubmittingState = false
       this.isSaving = true
       const orderNumber = await this.save()
       this.isSaving = false
       this.$router.push({ name: 'load', params: { orderNumber } })
     },
     async onSubmit () {
-      const formState = this.formState
-      if (this.formData.projectNumber === null || this.formData.projectNumber === '') {
-        this.formInvalid = true
-      } else {
+      this.isSubmittingState = true
+      this.orderFormFields.forEach((field) => (this.formState[field.id].$touched = true))
+      if (!(this.formData.projectNumber === null || this.formData.projectNumber === '')) {
         this.isSubmitting = true
         await this.submit()
         this.isSubmitting = false
@@ -140,10 +145,3 @@ export default Vue.extend({
   }
 })
 </script>
-
-<style scoped>
-  >>> .formInvalid #projectNumber {
-    border-color: #f00;
-    border-color: var(--danger);
-  }
-</style>

@@ -43,7 +43,8 @@ describe('OrderView', () => {
     mutations = {
       setToast: jest.fn(),
       clearToast: jest.fn(),
-      setOrderDetails: jest.fn()
+      setOrderDetails: jest.fn(),
+      setProjectNumberRequiredFunction: jest.fn()
     }
     store = new Vuex.Store({
       state,

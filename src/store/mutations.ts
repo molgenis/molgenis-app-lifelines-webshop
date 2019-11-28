@@ -13,6 +13,12 @@ export default {
   setToast (state: ApplicationState, toast: Toast) {
     state.toast = toast
   },
+  setProjectNumberRequiredFunction (state: ApplicationState, required: () => boolean) {
+    const projectNumber = state.orderFormFields.find((item) => item.id === 'projectNumber')
+    if (projectNumber) {
+      projectNumber.required = required
+    }
+  },
   clearToast (state: ApplicationState) {
     state.toast = null
   },
