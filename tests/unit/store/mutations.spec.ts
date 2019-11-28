@@ -12,6 +12,15 @@ describe('mutations', () => {
     })
   })
 
+  describe('setProjectNumberRequiredFunction', () => {
+    it('sets projectNumber required function', () => {
+      const baseAppState = { ...state }
+      const requiredFunction = () => true
+      mutations.setProjectNumberRequiredFunction(baseAppState, requiredFunction)
+      expect(baseAppState.orderFormFields[0].required).toBe(requiredFunction)
+    })
+  })
+
   describe('updateParticipantCount', () => {
     it('updates participant count', () => {
       const baseAppState = { ...state }
