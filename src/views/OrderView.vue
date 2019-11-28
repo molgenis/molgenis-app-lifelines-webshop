@@ -11,7 +11,6 @@
             </toast-component>
             <h1>Order variables</h1>
             <form-component
-              :class="{formInvalid}"
               id="order-form"
               :options="options"
               :formFields="orderFormFields"
@@ -115,7 +114,6 @@ export default Vue.extend({
   },
   mounted () {
     this.setProjectNumberRequiredFunction(() => this.isSubmittingState)
-    // this.orderFormFields[0].required = () => this.isSubmittingState
   },
   methods: {
     ...mapActions(['save', 'submit']),
