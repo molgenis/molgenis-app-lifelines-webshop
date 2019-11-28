@@ -1,11 +1,11 @@
 import state from '@/store/state'
 
 describe('state', () => {
-  it('should contain the ordrFormFields', () => {
+  it('should contain the orderFormFields', () => {
     expect(state.orderFormFields).toBeDefined()
   })
 
-  it('projectNumber should be required, visible and valid', () => {
+  it('projectNumber should be optional, visible and valid', () => {
     expect(state.orderFormFields[0].id).toEqual('projectNumber')
     // @ts-ignore
     expect(state.orderFormFields[0].required()).toBeFalsy()
@@ -15,7 +15,7 @@ describe('state', () => {
     expect(state.orderFormFields[0].validate()).toBeTruthy()
   })
 
-  it('name should be required, visible and valid', () => {
+  it('name should be optional, visible and valid', () => {
     expect(state.orderFormFields[1].id).toEqual('name')
     // @ts-ignore
     expect(state.orderFormFields[1].required()).toBeFalsy()
@@ -25,7 +25,7 @@ describe('state', () => {
     expect(state.orderFormFields[1].validate()).toBeTruthy()
   })
 
-  it('applicationForm should be required, visible and valid', () => {
+  it('applicationForm should be optional, visible and valid', () => {
     expect(state.orderFormFields[2].id).toEqual('applicationForm')
     // @ts-ignore
     expect(state.orderFormFields[2].required()).toBeFalsy()
