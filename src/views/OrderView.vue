@@ -119,7 +119,9 @@ export default Vue.extend({
     ...mapActions(['save', 'submit']),
     ...mapMutations(['setToast', 'clearToast', 'setOrderDetails', 'setProjectNumberRequiredFunction']),
     onValueChanged (updatedFormData) {
-      if (updatedFormData.projectNumber !== null && updatedFormData.projectNumber !== '') this.formInvalid = false
+      if (updatedFormData.projectNumber !== null && updatedFormData.projectNumber !== '') {
+        this.formInvalid = false
+      }
       this.formData = updatedFormData
       this.setOrderDetails(updatedFormData)
     },
