@@ -8,8 +8,12 @@ import Filter from '@/types/Filter'
 import { Section } from '@/types/Section.ts'
 import { TreeParent } from '@/types/Tree'
 import { Order } from '@/types/Order'
+import FormField from '@/types/FormField'
 
 export default {
+  setOrderFormFields (state: ApplicationState, formFields: FormField[]) {
+    state.orderFormFields = formFields
+  },
   setLoading (state: ApplicationState, toggle: boolean) {
     if (toggle) {
       state.loading += 1

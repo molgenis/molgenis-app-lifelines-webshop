@@ -9,7 +9,13 @@ const en = {
   'lifelines-webshop-modal-delete-header': 'Delete order {{order}}',
   'lifelines-webshop-modal-delete-body': 'You are about to delete order {{order}}. Are you sure?',
   'ui-form:form_file_change': 'Change',
-  'ui-form:form_file_browse': 'Browse'
+  'ui-form:form_file_browse': 'Browse',
+  'lifelines-webshop-order-projectnumber-label': 'Project number',
+  'lifelines-webshop-order-projectnumber-description': 'The OV number.',
+  'lifelines-webshop-order-name-label': 'Label',
+  'lifelines-webshop-order-name-description': 'Optional label for ease of identification',
+  'lifelines-webshop-order-applicationform-label': 'Application form ',
+  'lifelines-webshop-order-applicationform-description': 'Word or text file to describe the request.'
 }
 
 module.exports = {
