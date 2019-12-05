@@ -44,7 +44,8 @@ describe('OrderView', () => {
       setToast: jest.fn(),
       clearToast: jest.fn(),
       setOrderDetails: jest.fn(),
-      setProjectNumberRequiredFunction: jest.fn()
+      setProjectNumberRequiredFunction: jest.fn(),
+      setOrderFormFields: jest.fn()
     }
     store = new Vuex.Store({
       state,

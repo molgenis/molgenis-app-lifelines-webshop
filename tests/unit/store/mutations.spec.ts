@@ -4,6 +4,14 @@ import orders from '../fixtures/orders'
 import { OrderState } from '@/types/Order'
 
 describe('mutations', () => {
+  describe('setOrderFormFields', () => {
+    it('sets the orderFormFields', () => {
+      const baseAppState = { ...state }
+      mutations.setOrderFormFields(baseAppState, [{ id: 'test', type: 'demo' }])
+      expect(baseAppState.orderFormFields).toEqual([{ id: 'test', type: 'demo' }])
+    })
+  })
+
   describe('setOrders', () => {
     it('sets the orders', () => {
       const baseAppState = { ...state }
