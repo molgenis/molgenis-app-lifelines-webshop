@@ -29,16 +29,31 @@ describe('Search Component', () => {
   })
 
   describe('when a search value is entered', () => {
+    let wrapper:any
     beforeEach(() => {
       wrapper = shallowMount(SearchComponent)
-      wrapper.find('input').setValue('dem')
     })
 
-    it('should emit a search val changed event', (done) => {
-      setTimeout(() => {
-        expect(wrapper.emitted().searchChanged[0][0]).toEqual('dem')
-        done()
-      }, 300)
+    describe('and types chars are 3 or more, dem', () => {
+      beforeEach(() => wrapper.find('input').setValue('dem'))
+
+      it('should emit a search val changed event with value dem', (done) => {
+        setTimeout(() => {
+          expect(wrapper.emitted().searchChanged[0][0]).toEqual('dem')
+          done()
+        }, 300)
+      })
+    })
+
+    describe('and only a single char is entered', () => {
+      beforeEach(() => wrapper.find('input').setValue('d'))
+
+      it('should emit a empty search invent, clearing the search', (done) => {
+        setTimeout(() => {
+          expect(wrapper.emitted().searchChanged[0][0]).toEqual('')
+          done()
+        }, 300)
+      })
     })
   })
 })
