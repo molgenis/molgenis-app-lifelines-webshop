@@ -1,6 +1,6 @@
 {
   "name": "@molgenis-experimental/molgenis-app-lifelines-webshop",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "license": "LGPL-3.0",
   "publishConfig": {
     "access": "public"
@@ -34,6 +34,7 @@
     "@molgenis/rsql": "^0.1.4",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.1.0",
     "core-js": "2.6.8",
     "fetch-ponyfill": "^6.1.0",
     "format-si-prefix": "^0.3.2",

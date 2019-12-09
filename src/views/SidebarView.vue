@@ -3,7 +3,7 @@
     <div class="label" @click="toggleVisibility">{{$t('lifelines-webshop-sidebar-header')}}<font-awesome-icon icon="angle-double-down" class="ml-2"></font-awesome-icon></div>
     <div class="overflow-hidden">
       <div class="sidebar-width">
-        <h3 class="px-4">{{$t('lifelines-webshop-sidebar-header')}}</h3>
+        <h3 class="px-4 mg-header">{{$t('lifelines-webshop-sidebar-header')}}</h3>
         <ul class="list-unstyled sidebar-content p-4">
           <li class="hide-sidebar" @click="hide"><font-awesome-icon icon="angle-double-left" size="lg"></font-awesome-icon></li>
           <li>
@@ -13,6 +13,11 @@
               :collapsable="true"
               :collapsed="activeAgeFacetId !== 'age'"
               @facetToggle="handleAgeToggle">
+                <template v-slot:label-slot>
+                  <info-icon id="age-info-icon">
+                    {{$t('lifelines-webshop-sidebar-age-info')}}<b-badge pill>{{$t('lifelines-webshop-sidebar-optional')}}</b-badge>
+                    </info-icon>
+                </template>
                 <age-facet
                 facetId="age"
                 :ageGroupOptions="ageGroupOptions"
@@ -43,6 +48,11 @@
           </li>
           <li>
             <facet-container facetId="cohort" :label="$t('lifelines-webshop-subcohort-facet-label')">
+              <template v-slot:label-slot>
+                <info-icon id="cohort-info-icon">
+                  {{$t('lifelines-webshop-sidebar-cohort-info')}}<b-badge pill>{{$t('lifelines-webshop-sidebar-optional')}}</b-badge>
+                </info-icon>
+              </template>
               <toggle-facet
               facetId="cohort"
               :options="subcohortOptions"
@@ -62,16 +72,18 @@ import FacetContainer from '../components/facets/FacetContainer.vue'
 import ToggleFacet from '../components/facets/ToggleFacet.vue'
 import AgeFacet from '../components/facets/AgeFacet.vue'
 import RangeFacet from '../components/facets/RangeFacet.vue'
+import { mapMutations } from 'vuex'
 import CountView from '@/views/CountView'
 import ClickOutside from 'v-click-outside'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAngleDoubleLeft, faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import InfoIcon from '../components/InfoIcon'
 library.add(faAngleDoubleLeft, faAngleDoubleDown)
 
 export default Vue.extend({
   name: 'SidebarView',
-  components: { FacetContainer, ToggleFacet, AgeFacet, RangeFacet, CountView, FontAwesomeIcon },
+  components: { FacetContainer, ToggleFacet, AgeFacet, RangeFacet, CountView, FontAwesomeIcon, InfoIcon },
   props: {
     value: {
       type: Boolean,
@@ -177,8 +189,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-  @import "../scss/variables";
-
   #sidebar-view {
     padding: 0;
     position: relative;

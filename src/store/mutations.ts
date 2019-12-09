@@ -180,8 +180,7 @@ export default {
       })
     }
   },
-  toggleGridSelection ({ gridSelection }: { gridSelection: GridSelection },
-    { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
+  toggleGridSelection ({ gridSelection }: { gridSelection: GridSelection }, { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
     if (!gridSelection.hasOwnProperty(variableId)) {
       Vue.set(gridSelection, variableId, [assessmentId])
     } else {

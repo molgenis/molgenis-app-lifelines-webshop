@@ -1,3 +1,23 @@
+# [0.23.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.22.0...v0.23.0) (2019-12-06)
+
+
+### Bug Fixes
+
+* **popover:** more accessible, less omipresent ([955afda](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/955afda))
+* add missing localisation ([18892d6](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/18892d6))
+* Added i18n ([f9ca578](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/f9ca578))
+* disabled popup component on table ([fa3b06c](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/fa3b06c))
+* linting ([29fea4e](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/29fea4e))
+* missing unit tests ([eb01eb9](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/eb01eb9))
+
+
+### Features
+
+* Add info icon with popover ([22d6364](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/22d6364))
+* **GridTitelInfo:** add popover ([1f118bf](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/1f118bf))
+* **GridTitelInfo:** show label in popover ([a355baa](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/a355baa))
+* **SidebarView:** add info icon for subcohorts ([4324172](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4324172))
+
 # [0.22.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.21.2...v0.22.0) (2019-12-05)
 
 

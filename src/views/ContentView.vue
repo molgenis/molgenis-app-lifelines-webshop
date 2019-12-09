@@ -3,8 +3,8 @@
       <div class="row flex-nowrap mb-5" >
         <template>
           <div class="col-sm-auto info-bar" >
-            <h3 v-if="isSignedIn">{{$t('lifelines-webshop-content-header')}}</h3>
-            <h3 v-else>{{$t('lifelines-webshop-signed-out-content-header')}}</h3>
+            <h3 class="mg-header" v-if="isSignedIn">{{$t('lifelines-webshop-content-header')}}</h3>
+            <h3 class="mg-header" v-else>{{$t('lifelines-webshop-signed-out-content-header')}}</h3>
             <tree-view  />
           </div>
           <div class="col" >

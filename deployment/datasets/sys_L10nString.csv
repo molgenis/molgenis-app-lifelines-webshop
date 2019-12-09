@@ -37,3 +37,8 @@
 "lifelines-webshop-order-name-description","lifelines-webshop-order-name-description","lifelines-webshop",,"Optional label for ease of identification","",,,,,,
 "lifelines-webshop-order-applicationform-label","lifelines-webshop-order-applicationform-label","lifelines-webshop",,"Application form","",,,,,,
 "lifelines-webshop-order-applicationform-description","lifelines-webshop-order-applicationform-description","lifelines-webshop",,"Word or text file to describe the request.","",,,,,,
+"lifelines-webshop-order-header","lifelines-webshop-order-header","lifelines-webshop",,"Order variables.","Order variabelen",,,,,,
+"lifelines-webshop-order-submit-error-project-nummber","lifelines-webshop-order-submit-error-project-nummber",,"Please enter a project number before submitting a order.","",,,,,,
+"lifelines-webshop-sidebar-age-info","lifelines-webshop-sidebar-age-info",,"Please make a selection if you want to limit your study population to specific age groups.","",,,,,,
+"lifelines-webshop-sidebar-cohort-info","lifelines-webshop-sidebar-cohort-info",,"Please make a selection if you want to limit your study population to specific subcohorts.","",,,,,,
+"lifelines-webshop-sidebar-optional","lifelines-webshop-sidebar-optional",,"optional","",,,,,,

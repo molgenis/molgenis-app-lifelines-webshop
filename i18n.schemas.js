@@ -36,7 +36,12 @@ const en = {
   'lifelines-webshop-order-name-label': 'Label',
   'lifelines-webshop-order-name-description': 'Optional label for ease of identification',
   'lifelines-webshop-order-applicationform-label': 'Application form ',
-  'lifelines-webshop-order-applicationform-description': 'Word or text file to describe the request.'
+  'lifelines-webshop-order-applicationform-description': 'Word or text file to describe the request.',
+  'lifelines-webshop-order-header': 'Order variables',
+  'lifelines-webshop-order-submit-error-project-nummber': 'Please enter a project number before submitting a order.',
+  'lifelines-webshop-sidebar-age-info': 'Please make a selection if you want to limit your study population to specific age groups.',
+  'lifelines-webshop-sidebar-cohort-info': 'Please make a selection if you want to limit your study population to specific subcohorts.',
+  'lifelines-webshop-sidebar-optional': 'optional'
 }
 
 module.exports = {

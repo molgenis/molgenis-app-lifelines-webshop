@@ -64,7 +64,7 @@
               v-for="(row, rowIndex) in grid"
               :key="rowIndex">
               <th>
-                <grid-titel-info :info="gridVariables[rowIndex]" />
+                <grid-titel-info v-bind="gridVariables[rowIndex]" />
               </th>
               <th class="row-toggle grid-toggle">
                 <button
@@ -241,8 +241,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-  @import "../../scss/variables";
-
   table {
     overflow: hidden;
     position: relative;

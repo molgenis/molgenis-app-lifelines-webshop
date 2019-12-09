@@ -1,8 +1,4 @@
 @import "variables";
-@import "node_modules/bootstrap/scss/bootstrap";
-
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
 
 main {
   padding-top: 3.6rem;
@@ -20,7 +16,7 @@ nav.navbar {
   margin-top: 0.5rem;
 }
 
-h3 {
+.mg-header {
   height: 6rem;
   margin: 0;
   padding-top: 1.5rem;
@@ -34,4 +30,14 @@ h3 {
 .vld-overlay.is-active.is-full-page {
   transition: opacity 0.5s;
   z-index: $zindex-modal-backdrop;
+}
+
+.popover[role="tooltip"] {
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+  outline: none;
+
+  .popover-header,
+  .popover-body {
+    padding: 0.5rem 1rem;
+  }
 }

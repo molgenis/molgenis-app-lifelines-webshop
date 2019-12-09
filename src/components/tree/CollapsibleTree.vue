@@ -91,9 +91,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-  @import "../../scss/variables";
-
-  [role="button"] {
+  .list-group-item[role="button"] {
     cursor: pointer;
   }
 

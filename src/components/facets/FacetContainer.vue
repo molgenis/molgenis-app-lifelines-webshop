@@ -10,6 +10,7 @@
         :state="collapsed"
       />
     </label>
+    <slot name="label-slot"></slot>
     <block-expand :isExpanded="!collapsed" class="facet-container-content">
       <slot></slot>
     </block-expand>

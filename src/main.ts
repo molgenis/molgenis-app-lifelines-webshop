@@ -1,5 +1,6 @@
 import '@babel/polyfill'
 import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
 import App from './App.vue'
 import store from './store/store'
 // @ts-ignore
@@ -8,7 +9,9 @@ import { router } from './router'
 // Import stylesheet
 import 'vue-loading-overlay/dist/vue-loading.css'
 import 'bootstrap'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
 const contextPromise = store.dispatch('fetchContext').catch(() => {

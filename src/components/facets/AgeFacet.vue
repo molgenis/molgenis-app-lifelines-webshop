@@ -1,7 +1,7 @@
 <template>
   <div class="facet">
-      <label class="age-at-label"  v-if="label" for="age-at-select">{{$t('lifelines-webshop-age-facet-label')}}</label>
-      <select
+    <label class="age-at-label"  v-if="label" for="age-at-select">{{$t('lifelines-webshop-age-facet-label')}}</label>
+    <select
       id="age-at-select"
       class="custom-select custom-select-sm"
       v-model="selectedAgeAt"

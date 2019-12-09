@@ -7,13 +7,14 @@ describe('GridTitelInfo', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(GridTitelInfo, {
-      propsData: { info: { name: 'name' } }
+      propsData: { name: 'name' },
+      stubs: ['b-popover']
     })
   })
 
   it('should render the label (if it exists) else it will fall back to name', () => {
     expect(wrapper.find('.variable-title').text()).toBe('name')
-    wrapper.setProps({ info: { name: 'name', label: 'label' } })
+    wrapper.setProps({ name: 'name', label: 'label' })
     expect(wrapper.find('.variable-title').text()).toBe('label')
   })
 })
