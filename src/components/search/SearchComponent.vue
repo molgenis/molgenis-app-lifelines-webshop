@@ -40,7 +40,13 @@ export default Vue.extend({
   },
   methods: {
     handleSearchValueChange: debounce(function () {
-      this.$emit('searchChanged', this.searchValue)
+      if (!this.searchValue || this.searchValue.length >= 3) {
+        this.lastSearched = this.searchTerm
+        this.$emit('searchChanged', this.searchValue)
+      } else if (this.searchValue.length > 0 && this.searchValue.length < 3) {
+        this.lastSearched = ''
+        this.$emit('searchChanged', '')
+      }
     }, 300)
   }
 })
