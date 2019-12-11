@@ -11,9 +11,7 @@
     <b-popover :target="id" triggers="hover blur focus click" placement="right" :title="title">
       <div class="popover-content">
         <slot></slot>
-      </div>
-      <div v-if="href">
-        <a :href="href" target="_blank" rel="noopener noreferrer">{{linkTitle || href}}</a>
+        <span v-if="href"><a :href="href" target="_blank" rel="noopener noreferrer">More info <font-awesome-icon icon="caret-right" /></a></span>
       </div>
     </b-popover>
   </span>
@@ -21,9 +19,9 @@
 
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle, faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faInfoCircle)
+library.add(faInfoCircle, faCaretRight)
 
 export default {
   components: { FontAwesomeIcon },

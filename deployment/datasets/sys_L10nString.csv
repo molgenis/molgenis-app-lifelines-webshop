@@ -36,5 +36,6 @@
 "lifelines-webshop-cart-not-signedin-msg","lifelines-webshop-cart-not-signedin-msg","lifelines-webshop",,"Sign in to select and order variables",,,,,,,
 "lifelines-webshop-cart-info-msg","lifelines-webshop-cart-info-msg","lifelines-webshop",,"Use the shop tab to select variables to order",,,,,,,
 "lifelines-webshop-modal-delete-body","lifelines-webshop-modal-delete-body","lifelines-webshop",,"You are about to delete order {{order}}. Are you sure?","Je staat op het punt om aanvraag {{order}} te verwijderen. Weet je het zeker?",,,,,,
-"lifelines-webshop-sidebar-cohort-info","lifelines-webshop-sidebar-cohort-info","lifelines-webshop",,"Please make a selection if you want to limit your study population to specific subcohorts.",,,,,,,
-"lifelines-webshop-sidebar-age-info","lifelines-webshop-sidebar-age-info","lifelines-webshop",,"Please make a selection if you want to limit your study population to specific age groups.<br /><a href=""#"" target=""_blank"">More info &rarr;</a>",,,,,,,
+"lifelines-webshop-sidebar-cohort-info","lifelines-webshop-sidebar-cohort-info","lifelines-webshop",,"Use this filter to limit your study population to one or more specific subcohorts (OPTIONAL)",,,,,,,
+"lifelines-webshop-sidebar-age-info","lifelines-webshop-sidebar-age-info","lifelines-webshop",,"Use this filter to limit your study population to one or more specific age groups (OPTIONAL)",,,,,,,
+"lifelines-webshop-sidebar-gender-info","lifelines-webshop-sidebar-gender-info","lifelines-webshop",,"Use this filter to limit your study population to a specific gender (OPTIONAL)",,,,,,,
