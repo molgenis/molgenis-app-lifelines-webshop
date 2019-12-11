@@ -45,12 +45,30 @@ describe('Search Component', () => {
       })
     })
 
-    describe('and only a single char is entered', () => {
-      beforeEach(() => wrapper.find('input').setValue('d'))
+    describe('and only a single char is entered, while the previous search was more then 3 chars', () => {
+      beforeEach(() => {
+        wrapper.setData({ lastSearched: '1234' })
+        wrapper.find('input').setValue('d')
+      })
 
       it('should emit a empty search invent, clearing the search', (done) => {
         setTimeout(() => {
           expect(wrapper.emitted().searchChanged[0][0]).toEqual('')
+          done()
+        }, 300)
+      })
+    })
+
+    describe('and only a single char is entered, while the previous search was less then 3 chars', () => {
+      beforeEach(() => {
+        wrapper.setData({ lastSearched: '12' })
+        wrapper.find('input').setValue('d')
+      })
+
+      it('should emit a empty search invent, clearing the search', (done) => {
+        setTimeout(() => {
+          console.log(wrapper.emitted())
+          expect(wrapper.emitted()).toEqual({})
           done()
         }, 300)
       })
