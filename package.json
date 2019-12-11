@@ -1,6 +1,6 @@
 {
   "name": "@molgenis-experimental/molgenis-app-lifelines-webshop",
-  "version": "0.23.0",
+  "version": "0.23.2",
   "license": "LGPL-3.0",
   "publishConfig": {
     "access": "public"
@@ -9,9 +9,9 @@
   "scripts": {
     "build": "vue-cli-service build",
     "fix:js": "eslint --fix src/**/*.{js,ts,vue}",
-    "lint": "yarn run lint:js;yarn run lint:scss",
+    "lint": "vue-cli-service lint;yarn run lint:scss",
     "lint:js": "eslint src/**/*.{js,ts,vue}",
-    "lint:scss": "stylelint 'src/**/*.{vue,scss}'",
+    "lint:scss": "stylelint src/**/*.{vue,scss}",
     "serve": "vue-cli-service serve",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",

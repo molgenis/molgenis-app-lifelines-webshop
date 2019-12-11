@@ -6,15 +6,16 @@
       aria-label="info"
       focusable="true"
       tabindex="0"
-      :id="id"/>
-    <b-popover
-        :target="id"
-        triggers="hover blur focus click"
-        placement="right"
-        :title="title">
+      :id="id"
+    />
+    <b-popover :target="id" triggers="hover blur focus click" placement="right" :title="title">
+      <div class="popover-content">
         <slot></slot>
-        <div v-if="href"><a :href="href" target="_blank" rel="noopener noreferrer">{{linkTitle || href}}</a></div>
-      </b-popover>
+      </div>
+      <div v-if="href">
+        <a :href="href" target="_blank" rel="noopener noreferrer">{{linkTitle || href}}</a>
+      </div>
+    </b-popover>
   </span>
 </template>
 
@@ -47,23 +48,38 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .mg-info-icon {
-    cursor: pointer;
+.mg-info-icon {
+  cursor: pointer;
 
-    svg {
-      &:focus,
-      &:active {
-        outline: none;
+  svg {
+    &:focus,
+    &:active {
+      outline: none;
 
-        path {
-          fill: $primary;
-          transition: fill 0.2s;
-        }
+      path {
+        fill: $primary;
+        transition: fill 0.2s;
       }
     }
   }
+}
 
-  .popover {
-    z-index: $zindex-sticky;
+.popover {
+  z-index: $zindex-sticky;
+}
+
+.popover-content {
+  // this is styling for html inside database
+  /deep/ span > a {
+    display: block;
+    float: right;
+
+    &::after {
+      clear: both;
+      content: "";
+      display: block;
+      height: 0.3rem;
+    }
   }
+}
 </style>

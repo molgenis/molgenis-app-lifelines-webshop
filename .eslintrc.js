@@ -21,7 +21,7 @@ module.exports = {
         delimiter: 'comma',
         requireLast: false
       }
-    }],
+    }]
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',

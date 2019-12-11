@@ -1,4 +1,4 @@
-import { mount, Wrapper, TransitionStub } from '@vue/test-utils'
+import { mount, Wrapper } from '@vue/test-utils'
 import Vue from 'vue'
 import BlockExpand from '@/components/animations/BlockExpand.vue'
 
