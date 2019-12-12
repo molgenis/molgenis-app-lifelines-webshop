@@ -45,6 +45,7 @@ nav.navbar {
 .trailing-link > a {
   display: block;
   float: right;
+
   &::after {
     clear: both;
     content: "";

@@ -64,7 +64,7 @@
             >
               <template v-slot:label-slot>
                 <info-icon id="cohort-info-icon" :title="$t('lifelines-webshop-subcohort-facet-label')"  href="http://wiki-lifelines.web.rug.nl/doku.php?id=cohort#subcohorts">
-                  <span v-html="$t('lifelines-webshop-sidebar-subcohorts-info')"></span>
+                  <span v-html="$t('lifelines-webshop-sidebar-cohort-info')"></span>
                 </info-icon>
               </template>
               <toggle-facet

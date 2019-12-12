@@ -14,7 +14,21 @@ const translationMatch = /\$t\([\s]*'([a-zA-Z0-9_\s{}.,!?%\-:;"]+)'[(),)?]/g
 // Please try to keep this list empty.
 const translationUnmatchable = [
   'ui-form:form_file_browse',
-  'ui-form:form_file_change'
+  'ui-form:form_file_change',
+  'lifelines-webshop-sidebar-gwas-info',
+  'lifelines-webshop-sidebar-gwas-link',
+  'lifelines-webshop-sidebar-ugli-info',
+  'lifelines-webshop-sidebar-ugli-link',
+  'lifelines-webshop-sidebar-deep-info',
+  'lifelines-webshop-sidebar-deep-link',
+  'lifelines-webshop-sidebar-dag3-info',
+  'lifelines-webshop-sidebar-dag3-link',
+  'lifelines-webshop-sidebar-child-info',
+  'lifelines-webshop-sidebar-child-link',
+  'lifelines-webshop-sidebar-adult-info',
+  'lifelines-webshop-sidebar-adult-link',
+  'lifelines-webshop-sidebar-elderly-info',
+  'lifelines-webshop-sidebar-elderly-link'
 ]
 
 // Keep unique translation tags as key here.
