@@ -11,7 +11,7 @@
     <b-popover :target="id" triggers="hover blur focus click" placement="right" :title="title">
       <div class="popover-content">
         <slot></slot>
-        <span v-if="href"><a :href="href" target="_blank" rel="noopener noreferrer">More info <font-awesome-icon icon="caret-right" /></a></span>
+        <span class="trailing-link" v-if="href"><a :href="href" target="_blank" rel="noopener noreferrer">More info <font-awesome-icon icon="caret-right" /></a></span>
       </div>
     </b-popover>
   </span>
@@ -64,20 +64,5 @@ export default {
 
 .popover {
   z-index: $zindex-sticky;
-}
-
-.popover-content {
-  // this is styling for html inside database
-  /deep/ span > a {
-    display: block;
-    float: right;
-
-    &::after {
-      clear: both;
-      content: "";
-      display: block;
-      height: 0.3rem;
-    }
-  }
 }
 </style>
