@@ -1,6 +1,6 @@
 <template>
   <div id="grid">
-    <grid-info-dialog v-if="showInfoDialog" @close="closeInfoDialog"></grid-info-dialog>
+    <grid-info-dialog v-if="dialogInfo !== null" :data="dialogInfo" @close="closeInfoDialog"></grid-info-dialog>
     <div class="row">
       <div class="col vld-parent">
         <table ref="gridheader" class="grid-header-table" :class="{'sticky':stickyTableHeader}">
@@ -167,7 +167,7 @@ export default Vue.extend({
     return {
       hoverAllCells: false,
       stickyTableHeader: false,
-      showInfoDialog: false,
+      dialogInfo: null,
       selectedRowIndex: ''
     }
   },
@@ -185,12 +185,12 @@ export default Vue.extend({
   },
   methods: {
     closeInfoDialog () {
-      this.showInfoDialog = false
+      this.dialogInfo = null
       this.selectedRowIndex = ''
     },
-    openInfoDialog (row) {
-      this.selectedRowIndex = row
-      this.showInfoDialog = true
+    openInfoDialog (rowIndex) {
+      this.selectedRowIndex = rowIndex
+      this.dialogInfo = this.gridVariables[rowIndex]
     },
     classes (target, context) {
       const classes = {}

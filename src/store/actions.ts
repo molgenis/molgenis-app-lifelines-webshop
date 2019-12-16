@@ -162,7 +162,7 @@ export default {
     if (searchTermQuery !== null) {
       q = `${q};${searchTermQuery}`
     }
-    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=${encodeURIComponent(q)}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id`)
+    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=${encodeURIComponent(q)}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id),definition_en,definition_nl,options(label-en))&num=10000&sort=variable_id`)
     if ((state.treeSelected === subsectionId) && (searchTermQuery === getters.searchTermQuery)) {
       commit('updateGridVariables', response.items
       // map assessment_id to assessmentId somewhere deep in the structure
