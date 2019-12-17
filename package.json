@@ -42,7 +42,7 @@
     "format-si-prefix": "^0.3.2",
     "glob": "^7.1.6",
     "install": "^0.13.0",
-    "jquery": "3.3",
+    "jquery": "3.4",
     "lodash.debounce": "^4.0.8",
     "lodash.groupby": "^4.6.0",
     "lodash.property": "^4.4.2",
