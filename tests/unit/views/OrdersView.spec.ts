@@ -10,7 +10,6 @@ import mutations from '@/store/mutations'
 import { OrderState } from '@/types/Order'
 
 describe('OrdersView.vue', () => {
-
   let localVue: any
   let store: any
 
@@ -117,6 +116,7 @@ describe('OrdersView.vue', () => {
 
     it('approve order success', () => {
       sendApproveTrigger.mockResolvedValue('200')
+      console.log(wrapper.html())
 
       const approveBtn = wrapper.find('.btn.btn-success')
       expect(approveBtn.find('span').text()).toEqual('Approve')
