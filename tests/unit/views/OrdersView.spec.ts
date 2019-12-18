@@ -17,8 +17,6 @@ describe('OrdersView.vue', () => {
   const hasManagerRole = jest.fn()
   const sendApproveTrigger = jest.fn()
 
-  let getters: any
-
   let actions = {
     deleteOrder: jest.fn(),
     loadOrders: jest.fn(),
