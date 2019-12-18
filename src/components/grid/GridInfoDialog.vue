@@ -32,7 +32,7 @@
                 class="badge badge-pill badge-secondary mr-2"
                 v-for="(option, index) in data.options"
                 :key="`GridInfoDialog-${index}`"
-              >{{option['label-en']}}</span>
+              >{{option['label_en']}}</span>
             </span>
           </p>
         </div>
