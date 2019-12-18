@@ -31,7 +31,7 @@
 "lifelines-webshop-modal-delete-header","lifelines-webshop-modal-delete-header","lifelines-webshop",,"Delete order {{order}}","Verwijder aanvraag {{order}}",,,,,,
 "lifelines-webshop-order-name-description","lifelines-webshop-order-name-description","lifelines-webshop",,"Optional label for ease of identification",,,,,,,
 "lifelines-webshop-order-applicationform-description","lifelines-webshop-order-applicationform-description","lifelines-webshop",,"Word or text file to describe the request.",,,,,,,
-"lifelines-webshop-order-projectnumber-label","lifelines-webshop-order-projectnumber-label","lifelines-webshop",,"Max en de maxi monsters","Project nummer",,,,,,
+"lifelines-webshop-order-projectnumber-label","lifelines-webshop-order-projectnumber-label","lifelines-webshop",,"Project number","Project nummer",,,,,,
 "lifelines-webshop-empty-search-msg","lifelines-webshop-empty-search-msg","lifelines-webshop",,"No items were found matching the search term.",,,,,,,
 "lifelines-webshop-cart-not-signedin-msg","lifelines-webshop-cart-not-signedin-msg","lifelines-webshop",,"Sign in to select and order variables",,,,,,,
 "lifelines-webshop-cart-info-msg","lifelines-webshop-cart-info-msg","lifelines-webshop",,"Use the shop tab to select variables to order",,,,,,,
