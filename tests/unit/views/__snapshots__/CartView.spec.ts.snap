@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CartView.vue renders cart view 1`] = `
+<div id="cart-view">
+  <h3 class="h4">lifelines-webshop-cart-header</h3>
+  <!---->
+  <div role="tablist" class="mt-3 mb-3"><button type="button" class="btn btn-primary save">lifelines-webshop-save-btn-label</button> <button type="button" class="btn btn-warning ml-2">
+      lifelines-webshop-order-btn-label
+    </button>
+    <h4 class="h5 mt-3">lifelines-webshop-cart-selected-list-header</h4>
+    <div class="card mb-1">
+      <!---->
+      <!---->
+      <header role="tab" class="card-header p-1"><a target="_self" href="#" class="btn btn-info btn-block" aria-controls="accordion-0" aria-expanded="false" role="button">Section 1</a></header>
+      <div id="accordion-0" class="collapse show" role="tabpanel">
+        <div class="card-body">
+          <!---->
+          <!---->
+          <div>
+            <h5 class="h6">Subsection 1</h5>
+            <ul>
+              <li><span>var 123 ( assessment1, assessment3 )</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <!---->
+    </div>
+    <div class="card mb-1">
+      <!---->
+      <!---->
+      <header role="tab" class="card-header p-1"><a target="_self" href="#" class="btn btn-info btn-block" aria-controls="accordion-1" aria-expanded="false" role="button">Section 2</a></header>
+      <div id="accordion-1" class="collapse" style="display: none;" role="tabpanel">
+        <div class="card-body">
+          <!---->
+          <!---->
+          <div>
+            <h5 class="h6">Subsection 2</h5>
+            <ul>
+              <li><span>var 456 ( assessment3 )</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <!---->
+    </div>
+  </div>
+  <!---->
+</div>
+`;

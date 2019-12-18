@@ -27,7 +27,7 @@ const buildPostOptions = (formData: any, formFields: FormField[]) => {
   }
 }
 
-const createOrder = async (formData: any, formFields:FormField[]) => {
+const createOrder = async (formData: any, formFields: FormField[]) => {
   // Generate 'unique' order number
   formData.orderNumber = generateOrderNumber()
   formFields.push({ id: 'orderNumber', type: 'text' })
@@ -41,7 +41,7 @@ const createOrder = async (formData: any, formFields:FormField[]) => {
     options.body.set('orderNumber', orderNumber)
     return api.post('/api/v1/lifelines_order', options, true).then(() => {
       return orderNumber
-    }, (error:any) => {
+    }, (error: any) => {
       // OrderNumber must be unique, just guess untill we find one
       if (reTryCount < 10) {
         reTryCount++
@@ -55,7 +55,7 @@ const createOrder = async (formData: any, formFields:FormField[]) => {
   return trySubmission()
 }
 
-const updateOrder = async (formData: any, formFields:FormField[]) => {
+const updateOrder = async (formData: any, formFields: FormField[]) => {
   if (formData.applicationForm && (typeof formData.applicationForm.filename === 'string')) {
     formData.applicationForm = formData.applicationForm.filename
   }
@@ -78,28 +78,28 @@ export default {
     commit('setToast', { type: 'success', message: `Deleted order with order number ${orderId}` })
     dispatch('loadOrders')
   }),
-  loadSections: tryAction(async ({ commit, state } : any) => {
+  loadSections: tryAction(async ({ commit, state }: any) => {
     if (!Object.keys(state.sections).length) {
       const response = await api.get('/api/v2/lifelines_section?num=10000')
       commit('updateSections'
-        , response.items.reduce((sections: { [key:number]: Section }, item:any) => {
+        , response.items.reduce((sections: { [key: number]: Section }, item: any) => {
           sections[item.id] = item
           return sections
         }, {}))
     }
   }),
-  loadSubSections: tryAction(async ({ commit, state } : any) => {
+  loadSubSections: tryAction(async ({ commit, state }: any) => {
     if (state.subSectionList.length === 0) {
       const response = await api.get('/api/v2/lifelines_sub_section?num=10000')
-      let subSections:string[] = []
-      response.items.map((item:any) => { subSections[item.id] = item.name })
+      let subSections: string[] = []
+      response.items.map((item: any) => { subSections[item.id] = item.name })
       commit('updateSubSections', subSections)
     }
   }),
-  loadSectionTree: tryAction(async ({ commit, state } : any) => {
+  loadSectionTree: tryAction(async ({ commit, state }: any) => {
     if (state.treeStructure.length === 0) {
       const response = await api.get('/api/v2/lifelines_tree?num=10000')
-      let structure: {[id: number]: number[]} = {}
+      let structure: { [id: number]: number[] } = {}
       response.items.map((item: any) => {
         if (item.section_id.id in structure) {
           structure[item.section_id.id].push(item.subsection_id.id)
@@ -114,7 +114,7 @@ export default {
       commit('updateSectionTree', treeStructure)
     }
   }),
-  filterSections: tryAction(async ({ getters, commit }: {getters: Getters, commit: any}) => {
+  filterSections: tryAction(async ({ getters, commit }: { getters: Getters, commit: any }) => {
     const q = getters.searchTermQuery
     commit('updateFilteredSections', null)
     if (q !== null) {
@@ -124,7 +124,7 @@ export default {
       }
     }
   }),
-  filterSubsections: tryAction(async ({ getters, commit }: {getters: Getters, commit: any}) => {
+  filterSubsections: tryAction(async ({ getters, commit }: { getters: Getters, commit: any }) => {
     const q = getters.searchTermQuery
     commit('updateFilteredSubsections', null)
     if (q !== null) {
@@ -136,33 +136,32 @@ export default {
   }),
   loadAssessments: tryAction(async ({ commit }: any) => {
     const response = await api.get('/api/v2/lifelines_assessment')
-    commit('updateAssessments', response.items.reduce((accum: { [key:number]: Assessment }, assessment: Assessment) => {
+    commit('updateAssessments', response.items.reduce((accum: { [key: number]: Assessment }, assessment: Assessment) => {
       accum[assessment.id] = assessment
       return accum
     }, {}))
   }),
-  loadVariables: tryAction(async ({ state, commit } : any) => {
+  loadVariables: tryAction(async ({ state, commit }: any) => {
     const [response0, response1] = await Promise.all([
       api.get('/api/v2/lifelines_variable?attrs=id,name,label,subsections&num=10000&sort=id'),
       api.get('/api/v2/lifelines_variable?attrs=id,name,label,subsections&num=10000&start=10000&sort=id')
     ])
     const variables = [...response0.items, ...response1.items]
 
-    const variableMap: {[key:number]: Variable} =
-      variables.reduce((soFar: {[key:number]: Variable}, variable) => {
+    const variableMap: { [key: number]: Variable } =
+      variables.reduce((soFar: { [key: number]: Variable }, variable) => {
         if (!variable.subsections) {
           variable.subsections = []
         } else {
           variable.subsections = variable.subsections.split(',').map((i:string) => parseInt(i, 10))
         }
-
         soFar[variable.id] = variable
         return soFar
       }, {})
 
     commit('updateVariables', variableMap)
   }),
-  loadGridVariables: tryAction(async ({ state, commit, getters } : { state: ApplicationState, commit: any, getters: Getters}) => {
+  loadGridVariables: tryAction(async ({ state, commit, getters }: { state: ApplicationState, commit: any, getters: Getters }) => {
     commit('updateGridVariables', null)
     const subsectionId = state.treeSelected
     const searchTermQuery = getters.searchTermQuery
@@ -170,17 +169,20 @@ export default {
     if (searchTermQuery !== null) {
       q = `${q};${searchTermQuery}`
     }
-    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=${encodeURIComponent(q)}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id`)
+    const response = await api.get(`/api/v2/lifelines_subsection_variable?q=${encodeURIComponent(q)}&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id),definition_en,definition_nl,options(label-en))&num=10000&sort=variable_id`)
     if ((state.treeSelected === subsectionId) && (searchTermQuery === getters.searchTermQuery)) {
       commit('updateGridVariables', response.items
-      // map assessment_id to assessmentId somewhere deep in the structure
+        // map assessment_id to assessmentId somewhere deep in the structure
         .map((sv: any) => ({
           ...sv.variable_id,
           variants: sv.variable_id.variants
             .map((variant: any) => ({
               ...variant,
               assessmentId: variant.assessment_id
-            }))
+            })),
+          options: sv.variable_id.options.map((option: any) => ({
+            label_en: option['label-en']
+          }))
         })))
     }
   }),
@@ -212,7 +214,7 @@ export default {
       commit('updateVariantCounts', variantCounts)
     }
   }),
-  save: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
+  save: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
 
     const { context: { email, username } } = state.context
@@ -231,7 +233,7 @@ export default {
       return state.order.orderNumber
     } else {
       const creationDateField = { id: 'creationDate', type: 'date' }
-      const orderNumber = await createOrder(formData, [ ...formFields, creationDateField ]).catch(() => {
+      const orderNumber = await createOrder(formData, [...formFields, creationDateField]).catch(() => {
         return Promise.reject(new Error('Failed to create order'))
       })
       const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
@@ -240,7 +242,7 @@ export default {
       return orderNumber
     }
   }),
-  submit: tryAction(async ({ state, commit, dispatch }: {state: ApplicationState, commit: any, dispatch: any}) => {
+  submit: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
 
     const { context: { email, username } } = state.context
@@ -272,7 +274,7 @@ export default {
     dispatch('sendSubmissionTrigger')
     commit('setToast', { type: 'success', message: 'Submitted order with order number ' + orderNumber })
   }),
-  load: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}, orderNumber: string) => {
+  load: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
     const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     const cart: Cart = JSON.parse(response.contents)
     const { facetFilter, gridSelection } = fromCart(cart, state)
@@ -281,7 +283,7 @@ export default {
     commit('updateGridSelection', gridSelection)
     commit('setToast', { type: 'success', message: 'Loaded order with orderNumber ' + orderNumber })
   }),
-  givePermissionToOrder: tryAction(async ({ state, commit }: {state: ApplicationState, commit: any}) => {
+  givePermissionToOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {
     if (state.order.orderNumber === null) {
       throw new Error('Can not set permission if orderNumber is not set')
     }

@@ -21,7 +21,7 @@ const cart: Cart = {
 }
 const cartContents = JSON.stringify(cart)
 
-const mockResponses: {[key:string]: Object} = {
+const mockResponses: { [key: string]: Object } = {
   '/api/v2/lifelines_order?num=10000': {
     items: orders
   },
@@ -91,7 +91,7 @@ const mockResponses: {[key:string]: Object} = {
       subsections: null
     }]
   },
-  '/api/v2/lifelines_subsection_variable?q=subsection_id%3D%3D4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
+  '/api/v2/lifelines_subsection_variable?q=subsection_id%3D%3D4&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id),definition_en,definition_nl,options(label-en))&num=10000&sort=variable_id': {
     items: [{
       variable_id: {
         id: 2,
@@ -100,7 +100,8 @@ const mockResponses: {[key:string]: Object} = {
         variants: [{
           id: 197,
           assessment_id: 1
-        }]
+        }],
+        options: []
       }
     }, {
       variable_id: {
@@ -110,7 +111,8 @@ const mockResponses: {[key:string]: Object} = {
         variants: [{
           id: 197,
           assessment_id: 1
-        }]
+        }],
+        options: []
       }
     }, {
       variable_id: {
@@ -120,7 +122,8 @@ const mockResponses: {[key:string]: Object} = {
         variants: [{
           id: 197,
           assessment_id: 1
-        }]
+        }],
+        options: []
       }
     }, {
       variable_id: {
@@ -130,11 +133,12 @@ const mockResponses: {[key:string]: Object} = {
         variants: [{
           id: 197,
           assessment_id: 1
-        }]
+        }],
+        options: []
       }
     }]
   },
-  '/api/v2/lifelines_subsection_variable?q=subsection_id%3D%3D4%3B*%3Dq%3Dcream&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id))&num=10000&sort=variable_id': {
+  '/api/v2/lifelines_subsection_variable?q=subsection_id%3D%3D4%3B*%3Dq%3Dcream&attrs=~id,id,subsection_id,variable_id(id,name,label,variants(id,assessment_id),definition_en,definition_nl,options(label-en))&num=10000&sort=variable_id': {
     items: [{
       variable_id: {
         id: 2,
@@ -143,7 +147,8 @@ const mockResponses: {[key:string]: Object} = {
         variants: [{
           id: 197,
           assessment_id: 1
-        }]
+        }],
+        options: []
       }
     }, {
       variable_id: {
@@ -153,7 +158,8 @@ const mockResponses: {[key:string]: Object} = {
         variants: [{
           id: 197,
           assessment_id: 1
-        }]
+        }],
+        options: []
       }
     }]
   },
@@ -354,12 +360,13 @@ describe('actions', () => {
       })
       expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
       await action
+
       const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
       expect(commit).toHaveBeenCalledWith('updateGridVariables', [
-        { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant] },
-        { 'id': 3, 'label': 'SAF', 'name': 'SAF', 'variants': [variant] },
-        { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT', 'variants': [variant] },
-        { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant] }
+        { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant], options: [] },
+        { 'id': 3, 'label': 'SAF', 'name': 'SAF', 'variants': [variant], options: [] },
+        { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT', 'variants': [variant], options: [] },
+        { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant], options: [] }
       ])
       done()
     })
@@ -374,8 +381,8 @@ describe('actions', () => {
       await action
       const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
       expect(commit).toHaveBeenCalledWith('updateGridVariables', [
-        { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant] },
-        { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant] }
+        { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant], options: [] },
+        { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant], options: [] }
       ])
       done()
     })

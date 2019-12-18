@@ -1,16 +1,18 @@
-import { shallowMount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
+import { mount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
 
 import CartSection from '@/types/CartSection'
 import CartView from '@/views/CartView.vue'
 import Vuex from 'vuex'
 import Vue from 'vue'
 import flushPromises from 'flush-promises'
+import BootstrapVue from 'bootstrap-vue'
 
 Vue.filter('i18n', (value: string) => value) // Add dummy filter for i18n
 
 describe('CartView.vue', () => {
   const localVue = createLocalVue()
   localVue.use(Vuex)
+  localVue.use(BootstrapVue)
 
   let stubs = {
     RouterLink: RouterLinkStub
@@ -28,7 +30,8 @@ describe('CartView.vue', () => {
   let cartTree: CartSection[]
 
   const getters = {
-    cartTree: () => cartTree
+    cartTree: () => cartTree,
+    isSignedIn: () => true
   }
 
   beforeEach(() => {
@@ -106,15 +109,15 @@ describe('CartView.vue', () => {
   })
 
   it('renders cart view', () => {
-    const wrapper = shallowMount(CartView, { stubs, store, localVue })
-    expect(wrapper.find('#cart-view').exists()).toBeTruthy()
+    const wrapper = mount(CartView, { stubs, store, localVue })
     expect(wrapper.findAll('li').at(0).text()).toEqual('var 123 ( assessment1, assessment3 )')
     expect(wrapper.findAll('li').at(1).text()).toEqual('var 456 ( assessment3 )')
+    expect(wrapper.find('#cart-view')).toMatchSnapshot()
   })
 
   it('renders a save button that saves the current state', async () => {
     actions.save.mockResolvedValue('12345')
-    const wrapper = shallowMount(CartView, { stubs, store, localVue, mocks })
+    const wrapper = mount(CartView, { stubs, store, localVue, mocks })
     wrapper.find('.save').trigger('click')
     await flushPromises()
     expect(mocks.$router.push).toHaveBeenCalledWith({ name: 'load', params: { orderNumber: '12345' } })

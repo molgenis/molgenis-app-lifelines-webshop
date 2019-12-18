@@ -1,3 +1,17 @@
+## [0.27.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.27.0...v0.27.1) (2019-12-18)
+
+
+### Bug Fixes
+
+* add live data ([917f40a](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/917f40a))
+
+# [0.27.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.26.0...v0.27.0) (2019-12-18)
+
+
+### Features
+
+* add cart accordion ([72605a5](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/72605a5))
+
 # [0.26.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v0.25.0...v0.26.0) (2019-12-17)
 
 

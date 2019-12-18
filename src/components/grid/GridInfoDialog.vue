@@ -3,13 +3,38 @@
     <div class="info-overlay"></div>
     <div class="info-dialog" v-click-outside="onClickOutside">
       <div class="info-dialog-container rounded-sm overflow-hidden box-shadow">
-        <div class="info-dialog-header d-flex align-items-center"> <h4>Smoking habits <span>SMKDRVHABIT</span></h4> <span class="close btn btn-outline-light btn-sm ml-auto"><font-awesome-icon color="white" size="sm" icon="times" @click="$emit('close')" /></span></div>
+        <div class="info-dialog-header d-flex align-items-center">
+          <h4 class="pr-4">
+            {{ headerText }}
+            <span v-if="data.label">{{data.name}}</span>
+          </h4>
+          <span class="close btn btn-outline-light btn-sm ml-auto">
+            <font-awesome-icon color="white" size="sm" icon="times" @click="$emit('close')" />
+          </span>
+        </div>
         <div class="info-dialog-content">
           <slot></slot>
-          <p><strong>Found in set:</strong><br />Smoking/tobacco use, Exposure to smoking</p>
-          <p><strong>Description (en):</strong><br />Smoking habits (excl. recent starters, exsmokers who smoked less than a year, current/exsmokers without info on duration)</p>
-          <p><strong>Description (nl):</strong><br />Rookgewoonten (excl. recente starters, exsmokers die minder dan een jaar rookten, huidige / exsmokers zonder info over duur)</p>
-          <p><strong>Categorical values:</strong><br />Never smoker, Exsmoker, Current smoker</p>
+          <p>
+            <strong>Description (en):</strong>
+            <br />
+            {{data.definition_en}}
+            <span v-if="!data.definition_en">No description found.</span>
+          </p>
+          <p v-if="data.definition_nl">
+            <strong>Description (nl):</strong>
+            <br />
+            {{data.definition_nl}}
+          </p>
+          <p v-if="data.options.length > 0">
+            <strong>Categorical values (en):</strong>
+            <span class="d-block">
+              <span
+                class="badge badge-pill badge-secondary mr-2"
+                v-for="(option, index) in data.options"
+                :key="`GridInfoDialog-${index}`"
+              >{{option['label_en']}}</span>
+            </span>
+          </p>
         </div>
       </div>
     </div>
@@ -27,6 +52,12 @@ library.add(faTimes)
 
 export default Vue.extend({
   name: 'GridInfoDialog',
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
   components: { FontAwesomeIcon },
   directives: { clickOutside: ClickOutside.directive },
   created () {
@@ -38,6 +69,15 @@ export default Vue.extend({
   methods: {
     onClickOutside () {
       this.$emit('close')
+    }
+  },
+  computed: {
+    headerText () {
+      if ((this.data.label !== null && this.data.label !== undefined) && this.data.label.length > 0) {
+        return this.data.label
+      } else {
+        return this.data.name
+      }
     }
   }
 })
