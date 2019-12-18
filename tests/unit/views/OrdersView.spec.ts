@@ -36,10 +36,6 @@ describe('OrdersView.vue', () => {
       orders: null
     }
 
-    getters = {
-      hasManagerRole: jest.fn()
-    }
-
     store = new Vuex.Store({
       state,
       actions,
