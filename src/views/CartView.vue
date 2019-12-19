@@ -4,7 +4,9 @@
     <toast-component
       class="toast-component mt-2"
       type="warning"
-      :message="$t('lifelines-webshop-cart-empty-variables-warning')">
+      :message="$t('lifelines-webshop-cart-empty-variables-warning')"
+      v-if="showWarning"
+      @toastCloseBtnClicked="showWarning=!showWarning">
     </toast-component>
 
     <h3 class="h4">{{$t('lifelines-webshop-cart-header')}}</h3>
@@ -68,10 +70,14 @@ import Vue from 'vue'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ToastComponent } from '@molgenis-ui/components/src/components'
-
 export default Vue.extend({
   name: 'CartView',
   components: { SpinnerAnimation, ToastComponent },
+  data: () => {
+    return {
+      showWarning: true
+    }
+  },
   methods: {
     ...mapActions(['save']),
     async onSave () {
