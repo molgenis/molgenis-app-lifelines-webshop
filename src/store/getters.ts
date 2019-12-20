@@ -200,18 +200,29 @@ export default {
   },
   searchTermQuery: (state: ApplicationState) => {
     const operands = []
-    if (state.treeSelected >= 0) {
+    const subsectionFiltered = state.treeSelected >= 0
+
+    if (subsectionFiltered) {
       operands.push({ selector: 'subsection_id', comparison: '==', arguments: state.treeSelected })
     }
+
     if (state.searchTerm) {
       const prefix = state.treeSelected >= 0 ? 'variable_id.' : ''
-      operands.push({
-        operator: 'OR',
-        operands: [
-          { selector: `${prefix}name`, comparison: '=q=', arguments: state.searchTerm },
-          { selector: `${prefix}label`, comparison: '=q=', arguments: state.searchTerm }
-        ]
-      })
+      let searchTermoperands:any = [
+        { selector: `${prefix}name`, comparison: '=like=', arguments: state.searchTerm },
+        { selector: `${prefix}label`, comparison: '=like=', arguments: state.searchTerm }
+      ]
+
+      if (!state.searchExact) {
+        searchTermoperands = searchTermoperands.concat([
+          { selector: `${prefix}definition_en`, comparison: '=q=', arguments: state.searchTerm },
+          { selector: `${prefix}definition_nl`, comparison: '=q=', arguments: state.searchTerm },
+          { selector: `${prefix}options.label_en`, comparison: '=like=', arguments: state.searchTerm },
+          { selector: `${prefix}options.label_nl`, comparison: '=like=', arguments: state.searchTerm }
+        ])
+      }
+
+      operands.push({ operator: 'OR', operands: searchTermoperands })
     }
     if (operands.length > 0) {
       return transformToRSQL({ operator: 'AND', operands })

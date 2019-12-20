@@ -46,8 +46,8 @@ describe('getters', () => {
     subvariables: [],
     subvariableOf: null,
     options: [],
-    definitionNl: '',
-    definitionEn: ''
+    definitionEn: '',
+    definitionNl: ''
   }
   const variable12: VariableWithVariants = {
     id: 12,
@@ -58,8 +58,8 @@ describe('getters', () => {
     subvariables: [],
     subvariableOf: null,
     options: [],
-    definitionNl: '',
-    definitionEn: ''
+    definitionEn: '',
+    definitionNl: ''
   }
   const variable13: VariableWithVariants = {
     id: 13,
@@ -70,8 +70,8 @@ describe('getters', () => {
     subvariables: [],
     subvariableOf: null,
     options: [],
-    definitionNl: '',
-    definitionEn: ''
+    definitionEn: '',
+    definitionNl: ''
   }
 
   describe('cartTree', () => {
@@ -262,7 +262,7 @@ describe('getters', () => {
     it('determines assessments for selected variants', () => {
       const state: ApplicationState = {
         ...emptyState,
-        assessments: [assessment1A, assessment2A, assessment3A, assessment1B]
+        assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ]
       }
       const gettersParam: Getters = {
         ...emptyGetters,
@@ -281,7 +281,7 @@ describe('getters', () => {
       }
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [assessment1A, assessment2A],
+        gridAssessments: [ assessment1A, assessment2A ],
         variants: [variant1, variant2, variant3]
       }
       expect(getters.grid(state, gettersParam)).toEqual([[10, 100], [10, 0]])
@@ -293,7 +293,7 @@ describe('getters', () => {
       }
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [assessment1A, assessment2A],
+        gridAssessments: [ assessment1A, assessment2A ],
         variants: [variant1, variant2, variant3]
       }
       expect(getters.grid(state, gettersParam)).toEqual([[NaN, NaN], [NaN, NaN]])
@@ -397,7 +397,7 @@ describe('getters', () => {
       }
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [assessment1A, assessment2A]
+        gridAssessments: [ assessment1A, assessment2A ]
       }
       expect(getters.gridSelections(state, gettersParam))
         .toEqual([[true, true], [true, false], [false, false]])
@@ -472,11 +472,14 @@ describe('getters', () => {
     })
 
     it('should give rsql that searches variable name and label for the search term', () => {
-      expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'hello' })).toBe('name=q=hello,label=q=hello')
+      expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'hello' })).toBe(
+        'name=like=hello,label=like=hello,definition_en=q=hello,definition_nl=q=hello,options.label_en=like=hello,options.label_nl=like=hello'
+      )
     })
 
     it('should escape rsql characters', () => {
-      expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'a==b' })).toBe('name=q=\'a==b\',label=q=\'a==b\'')
+      expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'a==b' })).toBe(
+        'name=like=\'a==b\',label=like=\'a==b\',definition_en=q=\'a==b\',definition_nl=q=\'a==b\',options.label_en=like=\'a==b\',options.label_nl=like=\'a==b\'')
     })
 
     it('should give rsql that filters subsection', () => {
@@ -484,7 +487,9 @@ describe('getters', () => {
     })
 
     it('should give rsql that searches within subsection', () => {
-      expect(getters.searchTermQuery({ ...emptyState, treeSelected: 3, searchTerm: 'hello' })).toBe('subsection_id==3;(variable_id.name=q=hello,variable_id.label=q=hello)')
+      expect(getters.searchTermQuery({ ...emptyState, treeSelected: 3, searchTerm: 'hello' })).toBe(
+        'subsection_id==3;(variable_id.name=like=hello,variable_id.label=like=hello,variable_id.definition_en=q=hello,variable_id.definition_nl=q=hello,variable_id.options.label_en=like=hello,variable_id.options.label_nl=like=hello)'
+      )
     })
   })
   describe('isGridLoading', () => {

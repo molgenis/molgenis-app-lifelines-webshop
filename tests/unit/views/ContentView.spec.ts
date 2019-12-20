@@ -90,7 +90,19 @@ describe('ContentView.vue', () => {
         store.commit('updateSearchTerm', 'searchMe')
       })
       it('should show the search term in the i18n message', () => {
-        expect(wrapper.find('.search-info').text()).toEqual('3 variable found using search term "searchMe" in subsection "mySelectedSubsection". Search all sections')
+        expect(wrapper.find('.search-info').text()).toEqual('3 variable found using search term "searchMe" in subsection "mySelectedSubsection".')
+      })
+
+      // This test exists because we made an explicit computed getter/setter
+      // to a Vuex store property. It can be removed once we automated
+      // this getter/setter mapping pattern.
+      it('computed vuex state getter/setter is bound to v-model', () => {
+        // Default state in the store false.
+        expect(store.state.searchExact).toBe(false)
+        const elemWrapper = wrapper.find('input[name=exact-match]')
+        elemWrapper.setChecked()
+        expect(elemWrapper.element.checked).toBe(true)
+        expect(store.state.searchExact).toBe(true)
       })
     })
   })

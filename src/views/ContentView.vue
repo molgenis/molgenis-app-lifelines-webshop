@@ -2,8 +2,8 @@
   <div id="content-view">
     <div class="row">
       <div class="col-sm-auto info-bar">
-        <h3 class="mg-header" v-if="isSignedIn">{{$t('lifelines-webshop-content-header')}}</h3>
-        <h3 class="mg-header" v-else>{{$t('lifelines-webshop-signed-out-content-header')}}</h3>
+          <h3 class="mg-header" v-if="isSignedIn">{{$t('lifelines-webshop-content-header')}}</h3>
+          <h3 class="mg-header" v-else>{{$t('lifelines-webshop-signed-out-content-header')}}</h3>
       </div>
     </div>
 
@@ -12,19 +12,29 @@
 
       <div class="col">
         <toast-component v-if="!this.isSignedIn" :value="toast" :fixed="false" class="my-3"></toast-component>
+
         <search-component
           :searchTerm="searchTerm"
           :searching="isGridLoading"
           @searchChanged="onSearchChange"
-          class="mb-2"
-        ></search-component>
-        <div class="row no-gutters search-info">
-          <div class="col-8">
-            <span>{{searchMessage}}</span>
-          </div>
-          <div class="col-4 text-right">
-            <button type="button" class="btn btn-link p-0" v-if="selectedSubsection && searchTerm && searchMessage" @click="handleClearSubsection">{{$t('lifelines-webshop-search-variables-search-all')}}</button>
-          </div>
+          class="textsearch-box mb-2"
+        />
+
+        <div v-if="searchTerm" class="exact-toggle">
+          <input type="checkbox" name="exact-match" class="mr-1" v-model="searchExact">
+          <label class="form-check-label" for="exact-match">{{$t('lifelines-webshop-textsearch-label')}}</label>
+          <info-icon id="textsearch-info-icon" :title="$t('lifelines-webshop-textsearch-info-title')">
+            <span v-html="$t('lifelines-webshop-textsearch-info-text')"></span>
+          </info-icon>
+        </div>
+        <div>
+            <button v-if="selectedSubsection && searchTerm && searchMessage"
+              type="button" class="btn btn-link p-0" @click="handleClearSubsection"
+            >{{$t('lifelines-webshop-search-variables-search-all')}}</button>
+        </div>
+
+        <div class="no-gutters search-info">
+          <span>{{searchMessage}}</span>
         </div>
         <grid-view />
       </div>
@@ -39,10 +49,11 @@ import GridView from './GridView.vue'
 import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 import SearchComponent from '../components/search/SearchComponent.vue'
 import ToastComponent from '@molgenis-ui/components/src/components/ToastComponent.vue'
+import InfoIcon from '../components/InfoIcon'
 
 export default Vue.extend({
   name: 'ContentView',
-  components: { TreeView, GridView, SearchComponent, ToastComponent },
+  components: { TreeView, GridView, InfoIcon, SearchComponent, ToastComponent },
   data: () => {
     return {
       toast: [
@@ -62,6 +73,14 @@ export default Vue.extend({
       'treeSelected',
       'subSectionList'
     ]),
+    searchExact: {
+      get: function () {
+        return this.$store.state.searchExact
+      },
+      set: function (value) {
+        this.$store.state.searchExact = value
+      }
+    },
     searchMessage: function () {
       if (!this.gridVariables) {
         return ''
@@ -112,8 +131,8 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
-.col.tree {
-  max-width: 22rem;
-}
+<style lang="scss" scoped>
+  .col.tree {
+    max-width: 22rem;
+  }
 </style>
