@@ -281,7 +281,7 @@ export default {
       console.log(err)
     })
   },
-  sendApproveTrigger: (orderNumber: any) => {
+  sendApproveTrigger: tryAction(async ({ state }: { state: ApplicationState }, orderNumber: string) => {
     return axios.post(`/edge-server/trigger?type=approve&ordernumber=${orderNumber}`)
-  }
+  })
 }
