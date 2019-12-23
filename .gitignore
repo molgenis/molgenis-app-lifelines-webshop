@@ -2,6 +2,7 @@
 node_modules
 /dist
 .lifelinesrc
+deployment/datasets/sys_L10nString.csv
 
 /tests/e2e/reports/
 selenium-debug.log

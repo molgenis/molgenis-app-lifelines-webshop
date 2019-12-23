@@ -1,3 +1,4 @@
+$wait Run the l10n.js script to generate sys_L10nString.csv
 $wait If you haven't set the password for the user in this script, kill it now and alter it
 
 # Add group
