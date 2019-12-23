@@ -82,6 +82,10 @@ module.exports = {
       '^/@molgenis-ui': {
         'target': config.development.proxy,
         'changeOrigin': true
+      },
+      '^/files': {
+        'target': config.development.proxy,
+        'changeOrigin': true
       }
     },
     before: process.env.NODE_ENV === 'development' ? undefined : function (app, server) {

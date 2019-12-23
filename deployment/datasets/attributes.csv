@@ -1,6 +1,6 @@
 name,label,description,entity,dataType,refEntity,nillable,unique,visible,idAttribute,labelAttribute,readOnly,aggregateable,lookupAttribute,enumOptions,partOfAttribute,rangeMax,rangeMin,mappedBy,expression,validationExpression,defaultValue,tags,auto,label-en,description-en,label-nl
 orderNumber,orderNumber,,order,string,,false,true,true,true,true,true,false,true,,,,,,,,,,false,,,
-contents,contents,,order,text,,false,false,true,false,false,false,false,false,,,,,,,,"{""selection"":[],""filters"":{}}",,false,,,
+contents,contents,,order,file,sys_FileMeta,false,false,true,false,false,false,false,false,,,,,,,,,,false,,,
 submissionDate,submissionDate,,order,datetime,,true,false,true,false,,false,false,false,,,,,,,,,,false,,,
 creationDate,creationDate,,order,datetime,,false,false,true,false,,true,false,false,,,,,,,,,,true,,,
 updateDate,updateDate,,order,datetime,,true,false,true,false,,false,false,false,,,,,,,,,,false,,,

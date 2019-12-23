@@ -29,6 +29,14 @@ const buildPostOptions = (formData: any, formFields: FormField[]) => {
   }
 }
 
+const cartToBlob = (cart: Cart) => {
+  const cartDataString = JSON.stringify(cart)
+  const blob = new Blob([cartDataString], { type: 'application/json' })
+  // @ts-ignore just add name to blob so molgenis knows its a json file
+  blob.name = 'cart.json'
+  return blob
+}
+
 const createOrder = async (formData: any, formFields: FormField[]) => {
   // Generate 'unique' order number
   formData.orderNumber = generateOrderNumber()
@@ -206,16 +214,17 @@ export default {
     }
   }),
   save: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {
-    const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
-
+    const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
     const { context: { email, username } } = state.context
+    const cart = toCart(state)
+    const contents = cartToBlob(cart)
 
     const formData = {
       ...state.order,
-      contents: JSON.stringify(toCart(state)),
       updateDate: moment().toISOString(),
       email,
-      user: username
+      user: username,
+      contents
     }
 
     if (state.order.orderNumber) {
@@ -235,17 +244,18 @@ export default {
   }),
   submit: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
-
     const { context: { email, username } } = state.context
-
+    const cart = toCart(state)
     const now = moment().toISOString()
+    const contents = cartToBlob(cart)
+
     const formData = {
       ...state.order,
-      contents: JSON.stringify(toCart(state)),
       updateDate: now,
       submissionDate: now,
       email,
-      user: username
+      user: username,
+      contents
     }
     // ts enums are numbers, the backends expects strings
     // @ts-ignore
@@ -267,7 +277,7 @@ export default {
   }),
   load: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
     const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
-    const cart: Cart = JSON.parse(response.contents)
+    const cart: Cart = await api.get(`/files/${response.contents.id}`)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('restoreOrderState', response)
     commit('updateFacetFilter', facetFilter)

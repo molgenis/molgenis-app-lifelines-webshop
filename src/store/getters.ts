@@ -118,7 +118,7 @@ export default {
         !!variableSelections && variableSelections.includes(assessment.id)
       )
     }),
-  numberOfSelectedItems: (state: ApplicationState, getters: Getters): Number =>
+  numberOfSelectedItems: (state: ApplicationState, getters: Getters): number =>
     getters.gridSelections.reduce((total: number, item: boolean[]) => {
       return total + item.filter(Boolean).length
     }, 0),
