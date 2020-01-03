@@ -243,10 +243,10 @@ export default {
     }
   }),
   submit: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
-    const formFields = [...state.orderFormFields, { id: 'contents', type: 'text' }]
+    const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
     const { context: { email, username } } = state.context
-    const cart = toCart(state)
     const now = moment().toISOString()
+    const cart = toCart(state)
     const contents = cartToBlob(cart)
 
     const formData = {
