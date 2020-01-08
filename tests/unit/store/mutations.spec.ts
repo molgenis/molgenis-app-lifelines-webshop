@@ -159,7 +159,10 @@ describe('mutations', () => {
         submissionDate: 'ignore',
         creationDate: 'ignore',
         updateDate: 'ignore',
-        state: OrderState.Draft
+        state: OrderState.Draft,
+        contents: null,
+        email: null,
+        user: null
       }
       mutations.setOrderDetails(baseAppState, order)
 
@@ -175,7 +178,10 @@ describe('mutations', () => {
         state: null,
         submissionDate: null,
         creationDate: null,
-        updateDate: null
+        updateDate: null,
+        contents: null,
+        email: null,
+        user: null
       })
     })
   })
@@ -197,7 +203,10 @@ describe('mutations', () => {
         submissionDate: 'edit',
         creationDate: 'creationDate',
         updateDate: 'updateDate',
-        state: OrderState.Draft
+        state: OrderState.Draft,
+        contents: null,
+        email: null,
+        user: null
       }
       mutations.restoreOrderState(baseAppState, response)
 
@@ -213,7 +222,10 @@ describe('mutations', () => {
         submissionDate: 'edit',
         creationDate: 'creationDate',
         updateDate: 'updateDate',
-        state: OrderState.Draft
+        state: OrderState.Draft,
+        contents: null,
+        email: null,
+        user: null
       })
     })
   })

@@ -46,13 +46,16 @@ export default {
   restoreOrderState (state: ApplicationState, loadOrderResponse: Order) {
     state.order = {
       orderNumber: loadOrderResponse.orderNumber,
+      email: loadOrderResponse.email,
       name: loadOrderResponse.name,
       projectNumber: loadOrderResponse.projectNumber,
       applicationForm: loadOrderResponse.applicationForm,
       state: loadOrderResponse.state,
       creationDate: loadOrderResponse.creationDate,
       updateDate: loadOrderResponse.updateDate,
-      submissionDate: loadOrderResponse.submissionDate
+      submissionDate: loadOrderResponse.submissionDate,
+      contents: loadOrderResponse.contents,
+      user: loadOrderResponse.user
     }
   },
   setOrders (state: ApplicationState, orders: Order[]) {

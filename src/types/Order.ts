@@ -20,4 +20,7 @@ export interface Order {
     state: OrderState | null
     creationDate: string | null
     updateDate: string | null
+    contents: File | null
+    user: string | null
+    email: string | null
 }

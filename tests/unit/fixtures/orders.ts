@@ -8,7 +8,10 @@ const orders: Order[] = [{
   updateDate: null,
   projectNumber: null,
   applicationForm: null,
-  state: OrderState.Draft
+  state: OrderState.Draft,
+  contents: null,
+  email: null,
+  user: null
 }, {
   orderNumber: 'abcde',
   name: 'My draft order',
@@ -21,7 +24,10 @@ const orders: Order[] = [{
     id: 'aaaac3rcetmgfmudsodb3laaay',
     url: 'https://lifelines.test.molgenis.org/files/aaaac3rcetmgfmudsodb3laaay'
   },
-  state: OrderState.Submitted
+  state: OrderState.Submitted,
+  contents: null,
+  email: null,
+  user: null
 }]
 
 export default orders

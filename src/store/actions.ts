@@ -13,7 +13,7 @@ import { OrderState } from '@/types/Order'
 import moment from 'moment'
 import { TreeParent } from '@/types/Tree'
 import axios from 'axios'
-import { setPermission } from '@/services/permissionService'
+import { setRolePermission, setUserPermission } from '@/services/permissionService'
 // @ts-ignore
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -221,26 +221,43 @@ export default {
       commit('updateVariantCounts', variantCounts)
     }
   }),
-  save: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {
+  save: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
-    const { context: { email, username } } = state.context
+    const { context } = state.context
     const cart = toCart(state)
-    const contents = cartToBlob(cart)
 
-    const formData = {
-      ...state.order,
+    const formData:any = {
+      name: state.order.name,
+      orderNumber: state.order.orderNumber,
+      projectNumber: state.order.projectNumber,
+      applicationForm: state.order.applicationForm,
       updateDate: moment().toISOString(),
-      email,
-      user: username,
-      contents
+      contents: cartToBlob(cart),
+      creationDate: state.order.creationDate,
+      submissionDate: state.order.submissionDate,
+      state: state.order.state
     }
 
     if (state.order.orderNumber) {
+      formData.user = state.order.user
+      formData.email = state.order.email
+
       await updateOrder(formData, formFields)
+
+      // Assume admin edits the user's order.
+      if (context.username !== state.order.user) {
+        const newOrderResponse = await api.get(`/api/v2/lifelines_order/${state.order.orderNumber}`)
+        commit('restoreOrderState', newOrderResponse)
+        await dispatch('fixUserPermission')
+      }
+
       successMessage(`Saved order with order number ${state.order.orderNumber}`, commit)
 
       return state.order.orderNumber
     } else {
+      formData.user = context.username
+      formData.email = context.email
+
       const creationDateField = { id: 'creationDate', type: 'date' }
       const orderNumber = await createOrder(formData, [...formFields, creationDateField]).catch(() => {
         return Promise.reject(new Error('Failed to create order'))
@@ -328,11 +345,28 @@ export default {
     if (state.order.orderNumber === null) {
       throw new Error('Can not set permission if orderNumber is not set')
     }
-    setPermission(state.order.orderNumber, 'lifelines_order', 'LIFELINES_MANAGER', 'WRITE')
+    setRolePermission(state.order.orderNumber, 'lifelines_order', 'LIFELINES_MANAGER', 'WRITE')
     if (state.order.applicationForm && state.order.applicationForm.id) {
-      setPermission(state.order.applicationForm.id, 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
+      setRolePermission(state.order.applicationForm.id, 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
     }
   }),
+  fixUserPermission: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {
+    if (state.order.orderNumber === null || state.order.contents === null || state.order.user === null) {
+      throw new Error('Can not set permission if orderNumber or contents or user is not set')
+    }
+    // @ts-ignore
+    const results = [
+      setUserPermission(state.order.orderNumber, 'lifelines_order', state.order.user, 'WRITE'),
+      setUserPermission(state.order.contents.id, 'sys_FileMeta', state.order.user, 'WRITE')
+    ]
+
+    if (state.order.applicationForm) {
+      results.push(setUserPermission(state.order.applicationForm.id, 'sys_FileMeta', state.order.user, 'WRITE'))
+    }
+
+    await Promise.all(results)
+  }),
+
   sendSubmissionTrigger: async () => {
     return axios.post('/edge-server/trigger?type=submit').catch((err: any) => {
       console.log('Send submit trigger failed')

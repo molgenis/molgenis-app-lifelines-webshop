@@ -22,6 +22,27 @@ const cart: Cart = {
   }
 }
 
+function getApplicationState () {
+  const state: ApplicationState = {
+    ...emptyState,
+    order: {
+      orderNumber: '12345',
+      name: null,
+      projectNumber: null,
+      applicationForm: null,
+      state: OrderState.Draft,
+      submissionDate: 'submissionDate',
+      creationDate: 'creationDate',
+      updateDate: 'updateDate',
+      contents: null,
+      user: 'test',
+      email: 'test@molgenis.org'
+    }
+  }
+
+  return state
+}
+
 const mockResponses: { [key: string]: Object } = {
   '/api/v2/lifelines_order?num=10000': {
     items: orders
@@ -524,21 +545,10 @@ describe('actions', () => {
     describe('if orderNumber is set', () => {
       it('saves grid selection', async (done) => {
         const commit = jest.fn()
-        const state: ApplicationState = {
-          ...emptyState,
-          order: {
-            orderNumber: '12345',
-            name: null,
-            projectNumber: null,
-            applicationForm: null,
-            state: OrderState.Draft,
-            submissionDate: 'submissionDate',
-            creationDate: 'creationDate',
-            updateDate: 'updateDate'
-          }
-        }
+        const dispatch = jest.fn()
+        const state = getApplicationState()
         post.mockResolvedValue('success')
-        const response = await actions.save({ state, commit })
+        const response = await actions.save({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Saved order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
         expect(response).toBe('12345')
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order/12345?_method=PUT', expect.anything(), true)
@@ -549,6 +559,8 @@ describe('actions', () => {
     describe('if orderNumber not set', () => {
       it('saves grid selection', async (done) => {
         const commit = jest.fn()
+        const dispatch = jest.fn()
+
         const state: ApplicationState = {
           ...emptyState,
           order: {
@@ -556,16 +568,20 @@ describe('actions', () => {
             name: null,
             projectNumber: null,
             applicationForm: null,
-            state: null,
-            submissionDate: null,
-            creationDate: null,
-            updateDate: null
+            state: OrderState.Draft,
+            submissionDate: 'submissionDate',
+            creationDate: 'creationDate',
+            updateDate: 'updateDate',
+            contents: null,
+            user: 'test',
+            email: 'test@molgenis.org'
           }
         }
+
         jest.spyOn(orderService, 'buildFormData').mockImplementation(() => new FormData())
         jest.spyOn(orderService, 'generateOrderNumber').mockImplementation(() => '12345')
         post.mockResolvedValue('success')
-        const response = await actions.save({ state, commit })
+        const response = await actions.save({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Saved order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
         expect(response).toBe('12345')
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', expect.anything(), true)
@@ -576,53 +592,29 @@ describe('actions', () => {
     describe('if applicationForm is a fileRef', () => {
       it('saves order', async (done) => {
         const commit = jest.fn()
-        const state: ApplicationState = {
-          ...emptyState,
-          order: {
-            orderNumber: '12345',
-            name: null,
-            projectNumber: null,
-            applicationForm: {
-              id: 'id',
-              url: 'url',
-              filename: 'my file'
-            },
-            state: null,
-            submissionDate: null,
-            creationDate: null,
-            updateDate: null
-          }
-        }
+        const dispatch = jest.fn()
+        const state = getApplicationState()
+
         jest.spyOn(orderService, 'buildFormData').mockImplementation(() => new FormData())
         post.mockResolvedValue('success')
-        await actions.save({ state, commit })
+        await actions.save({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Saved order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order/12345?_method=PUT', expect.anything(), true)
         done()
       })
     })
 
-    describe('when the submission not succesfull', () => {
+    describe('when the submission not succesful', () => {
       let result: any
       let commit: any
-      let state: ApplicationState
+      const dispatch = jest.fn()
+
       beforeEach(async (done) => {
         commit = jest.fn()
-        state = {
-          ...emptyState,
-          order: {
-            orderNumber: null,
-            name: null,
-            projectNumber: null,
-            applicationForm: null,
-            state: OrderState.Draft,
-            submissionDate: 'submissionDate',
-            creationDate: 'creationDate',
-            updateDate: 'updateDate'
-          }
-        }
+
+        const state = getApplicationState()
         post.mockRejectedValue('error')
-        result = await actions.save({ commit, state })
+        result = await actions.save({ commit, state, dispatch })
         done()
       })
 
@@ -638,19 +630,7 @@ describe('actions', () => {
       it('submits the order', async (done) => {
         const commit = jest.fn()
         const dispatch = jest.fn()
-        const state: ApplicationState = {
-          ...emptyState,
-          order: {
-            orderNumber: '12345',
-            name: null,
-            projectNumber: null,
-            applicationForm: null,
-            state: OrderState.Draft,
-            submissionDate: 'submissionDate',
-            creationDate: 'creationDate',
-            updateDate: 'updateDate'
-          }
-        }
+        const state = getApplicationState()
         post.mockResolvedValue('success')
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
@@ -663,19 +643,8 @@ describe('actions', () => {
       it('submits the order', async (done) => {
         const commit = jest.fn()
         const dispatch = jest.fn()
-        const state: ApplicationState = {
-          ...emptyState,
-          order: {
-            orderNumber: null,
-            name: null,
-            projectNumber: null,
-            applicationForm: null,
-            state: OrderState.Draft,
-            submissionDate: 'submissionDate',
-            creationDate: 'creationDate',
-            updateDate: 'updateDate'
-          }
-        }
+        const state = getApplicationState()
+
         post.mockResolvedValue('success')
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
@@ -693,19 +662,8 @@ describe('actions', () => {
       beforeEach(async (done) => {
         commit = jest.fn()
         dispatch = jest.fn()
-        state = {
-          ...emptyState,
-          order: {
-            orderNumber: null,
-            name: null,
-            projectNumber: null,
-            applicationForm: null,
-            state: OrderState.Draft,
-            submissionDate: 'submissionDate',
-            creationDate: 'creationDate',
-            updateDate: 'updateDate'
-          }
-        }
+        const state = getApplicationState()
+
         post.mockRejectedValue('error')
         result = await actions.submit({ commit, state, dispatch })
         done()

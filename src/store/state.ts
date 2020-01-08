@@ -11,7 +11,10 @@ const state: AppState = {
     submissionDate: null,
     creationDate: null,
     updateDate: null,
-    state: null
+    state: null,
+    contents: null,
+    email: null,
+    user: null
   },
   orderFormFields: [
     {
