@@ -1,15 +1,10 @@
 {
     "eslint.enable": true,
-    "eslint.validate": [
-        { "language": "javascript", "autoFix": true },
-        { "language": "vue", "autoFix": true },
-        { "language": "typescript", "autoFix": true }
-    ],
+    "eslint.validate": ["javascript", "vue", "typescript"],
     "eslint.options": {
         "extensions": [".ts", ".js"]
     },
     "vetur.validation.template": false,
-    "eslint.autoFixOnSave": true,
     "stylelint.autoFixOnSave": true,
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
