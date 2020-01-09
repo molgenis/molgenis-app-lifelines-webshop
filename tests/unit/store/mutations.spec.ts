@@ -5,7 +5,8 @@ import { OrderState } from '@/types/Order'
 import { Toast } from '@/types/ApplicationState'
 
 const gridVariables = [
-  { id: 1,
+  {
+    id: 1,
     label: 'A',
     name: 'A1',
     variants: [
@@ -14,7 +15,8 @@ const gridVariables = [
       { assessmentId: 3, assessment_id: 3, id: 33 }],
     subsections: [1]
   },
-  { id: 2,
+  {
+    id: 2,
     label: 'B',
     name: 'B2',
     variants: [
@@ -23,7 +25,8 @@ const gridVariables = [
       { assessmentId: 6, assessment_id: 6, id: 66 }],
     subsections: [1]
   },
-  { id: 3,
+  {
+    id: 3,
     label: 'C',
     name: 'C3',
     variants: [
@@ -127,8 +130,8 @@ describe('mutations', () => {
     it('removeToast a single toast from the list', () => {
       let baseAppState = Object.assign({}, state)
       mutations.clearToast(baseAppState)
-      let toastBase:Toast = { type: 'danger', message: 'message' }
-      let toastBody:Toast = { type: 'danger', message: 'message2' }
+      let toastBase: Toast = { type: 'danger', message: 'message' }
+      let toastBody: Toast = { type: 'danger', message: 'message2' }
       mutations.setToast(baseAppState, toastBase)
       mutations.setToast(baseAppState, toastBody)
       mutations.removeToast(baseAppState, toastBody)
@@ -440,6 +443,24 @@ describe('mutations', () => {
       }
       mutations.toggleAll(state, { gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
       expect(state.gridSelection).toEqual({ 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] })
+    })
+  })
+
+  describe('setLoading', () => {
+    it('does not mutate loading variable when toggle is set to false', () => {
+      mutations.setLoading(state, false)
+      expect(state.loading).toBe(0)
+    })
+
+    it('adds 1 to loading variable when toggle is set to true', () => {
+      mutations.setLoading(state, true)
+      expect(state.loading).toBe(1)
+    })
+
+    it('subtracts 1 from loading variable when toggle is set to false and state is 1', () => {
+      state.loading = 1
+      mutations.setLoading(state, false)
+      expect(state.loading).toBe(0)
     })
   })
 })
