@@ -517,8 +517,10 @@ describe('actions', () => {
     it('adds application form if it is available', () => {
       expect(post).toBeCalledWith('/api/v1/lifelines_order', expect.anything(), expect.anything())
       const formIterator = post.mock.calls[0][1].body.entries()
-      const formStringData = Array.from(formIterator).join('')
-      expect(formStringData).toContain('applicationForm')
+      const arrayData = Array.from(formIterator)
+      // @ts-ignore
+      const file = arrayData[2][1] // position of the uploaded file
+      expect(file).not.toEqual('')
     })
   })
   describe('save', () => {
