@@ -350,7 +350,7 @@ export default {
       setRolePermission(state.order.applicationForm.id, 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
     }
   }),
-  fixUserPermission: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {
+  fixUserPermission: tryAction(async ({ state }: { state: ApplicationState }) => {
     if (state.order.orderNumber === null || state.order.contents === null || state.order.user === null) {
       throw new Error('Can not set permission if orderNumber or contents or user is not set')
     }

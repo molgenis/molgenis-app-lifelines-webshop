@@ -11,6 +11,7 @@ import axios from 'axios'
 import ApplicationState from '@/types/ApplicationState'
 import { OrderState } from '@/types/Order'
 import * as orderService from '@/services/orderService'
+import { setRolePermission, setUserPermission } from '@/services/permissionService'
 
 const cart: Cart = {
   selection: [{
@@ -245,6 +246,13 @@ const mockResponses: { [key: string]: Object } = {
 }
 
 const mockDelete = jest.fn()
+
+jest.mock('@/services/permissionService', () => {
+  return {
+    setUserPermission: jest.fn(),
+    setRolePermission: jest.fn()
+  }
+})
 
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
@@ -694,6 +702,57 @@ describe('actions', () => {
     })
   })
 
+  describe('fixUserPermission', () => {
+    describe('state does not contain required parameters', () => {
+      let state: any
+      let commit = jest.fn()
+      beforeEach(() => {
+        state = {
+          order: {
+            orderNumber: null
+          }
+        }
+      })
+
+      it('throws an error', async (done) => {
+        await actions.fixUserPermission({ commit, state })
+        expect(commit).toHaveBeenCalledWith('setToast', expect.objectContaining({
+          message: 'Can not set permission if orderNumber or contents or user is not set'
+        }))
+        done()
+      })
+    })
+
+    describe('state contains required parameters', () => {
+      let state: any
+      let commit = jest.fn()
+
+      beforeEach(async (done) => {
+        state = {
+          order: {
+            applicationForm: { id: 'applicationForm' },
+            orderNumber: '12345',
+            contents: { id: 'contents' },
+            user: 'user'
+          }
+        }
+
+        await actions.fixUserPermission({ commit, state })
+        done()
+      })
+
+      afterEach(() => {
+        jest.resetAllMocks()
+      })
+
+      it('calls setUserPermission', () => {
+        expect(setUserPermission).toHaveBeenCalledWith('12345', 'lifelines_order', 'user', 'WRITE')
+        expect(setUserPermission).toHaveBeenCalledWith('contents', 'sys_FileMeta', 'user', 'WRITE')
+        expect(setUserPermission).toHaveBeenCalledWith('applicationForm', 'sys_FileMeta', 'user', 'WRITE')
+      })
+    })
+  })
+
   describe('givePermissionToOrder with missing orderNumber', () => {
     let state: any
     beforeEach(async (done) => {
@@ -727,8 +786,8 @@ describe('actions', () => {
       done()
     })
     it('should call permission service', () => {
-      expect(post).nthCalledWith(1, '/api/permissions/entity-lifelines_order', expect.anything())
-      expect(post).nthCalledWith(2, '/api/permissions/entity-sys_FileMeta', expect.anything())
+      expect(setRolePermission).nthCalledWith(1, '12345', 'lifelines_order', 'LIFELINES_MANAGER', 'WRITE')
+      expect(setRolePermission).nthCalledWith(2, 'app-form', 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
     })
   })
 
