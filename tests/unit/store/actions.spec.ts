@@ -11,7 +11,7 @@ import axios from 'axios'
 import ApplicationState from '@/types/ApplicationState'
 import { OrderState } from '@/types/Order'
 import * as orderService from '@/services/orderService'
-import { setRolePermission, setUserPermission } from '@/services/permissionService'
+import { syncOrderPermissions } from '@/services/permissionService'
 
 // @ts-ignore
 global.console = {
@@ -267,8 +267,7 @@ const mockDelete = jest.fn()
 
 jest.mock('@/services/permissionService', () => {
   return {
-    setUserPermission: jest.fn(),
-    setRolePermission: jest.fn()
+    syncOrderPermissions: jest.fn()
   }
 })
 
@@ -663,7 +662,7 @@ describe('actions', () => {
         post.mockResolvedValue('success')
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
-        expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
+        expect(syncOrderPermissions).toHaveBeenCalled()
         expect(dispatch).toHaveBeenCalledWith('sendSubmissionTrigger')
         done()
       })
@@ -677,13 +676,13 @@ describe('actions', () => {
         post.mockResolvedValue('success')
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
-        expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
+        expect(syncOrderPermissions).toHaveBeenCalled()
         expect(dispatch).toHaveBeenCalledWith('sendSubmissionTrigger')
         done()
       })
     })
 
-    describe('when the submission not succesfull', () => {
+    describe('when the submission not succesful', () => {
       let result: any
       let commit: any
       let dispatch: any
@@ -701,115 +700,8 @@ describe('actions', () => {
       it('should return undefined', () => {
         expect(result).toBeUndefined()
         expect(commit).not.toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
-        expect(dispatch).not.toHaveBeenCalledWith('givePermissionToOrder')
         expect(dispatch).not.toHaveBeenCalledWith('sendSubmissionTrigger')
       })
-    })
-  })
-
-  describe('givePermissionToOrder', () => {
-    let state: any
-    beforeEach(async (done) => {
-      state = {
-        order: {
-          orderNumber: '3333'
-        }
-      }
-      await actions.givePermissionToOrder({ state, commit: jest.fn() })
-      done()
-    })
-    it('should resturn undefined', () => {
-      expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order', expect.anything(), true)
-    })
-  })
-
-  describe('fixUserPermission', () => {
-    describe('state does not contain required parameters', () => {
-      let state: any
-      let commit = jest.fn()
-      beforeEach(() => {
-        state = {
-          order: {
-            orderNumber: null
-          }
-        }
-      })
-
-      it('throws an error', async (done) => {
-        await actions.fixUserPermission({ commit, state })
-        expect(commit).toHaveBeenCalledWith('setToast', expect.objectContaining({
-          message: 'Can not set permission if orderNumber or contents or user is not set'
-        }))
-        done()
-      })
-    })
-
-    describe('state contains required parameters', () => {
-      let state: any
-      let commit = jest.fn()
-
-      beforeEach(async (done) => {
-        state = {
-          order: {
-            applicationForm: { id: 'applicationForm' },
-            orderNumber: '12345',
-            contents: { id: 'contents' },
-            user: 'user'
-          }
-        }
-
-        await actions.fixUserPermission({ commit, state })
-        done()
-      })
-
-      afterEach(() => {
-        jest.resetAllMocks()
-      })
-
-      it('calls setUserPermission', () => {
-        expect(setUserPermission).toHaveBeenCalledWith('contents', 'sys_FileMeta', 'user', 'WRITE')
-        expect(setUserPermission).toHaveBeenCalledWith('applicationForm', 'sys_FileMeta', 'user', 'WRITE')
-      })
-    })
-  })
-
-  describe('givePermissionToOrder with missing orderNumber', () => {
-    let state: any
-    beforeEach(async (done) => {
-      post.mockReset()
-      state = {
-        order: {
-          orderNumber: null
-        }
-      }
-      await actions.givePermissionToOrder({ state, commit: jest.fn() })
-      done()
-    })
-    it('should resturn undefined', () => {
-      expect(post).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('givePermissionToOrder with file attached', () => {
-    let state: any
-    beforeEach(async (done) => {
-      state = {
-        order: {
-          orderNumber: '12345',
-          constents: { id: 'contents-id' },
-          applicationForm: {
-            id: 'app-form'
-          }
-        }
-      }
-      await actions.givePermissionToOrder({ state, commit: jest.fn() })
-      done()
-    })
-
-    it('should call permission service', () => {
-      expect(setRolePermission).nthCalledWith(1, '12345', 'lifelines_order', 'LIFELINES_MANAGER', 'WRITE')
-      // expect(setRolePermission).nthCalledWith(2, 'contents-id', 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
-      // expect(setRolePermission).nthCalledWith(3, 'app-form', 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
     })
   })
 

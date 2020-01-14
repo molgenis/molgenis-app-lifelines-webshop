@@ -26,7 +26,7 @@ Vue.use(i18n, {
   namespace: ['lifelines-webshop', 'ui-form'],
   async callback () {
     await contextPromise
-    const app:Vue = new Vue({ store, router, render: h => h(App) })
+    const app:Vue = global.app = new Vue({ store, router, render: h => h(App) })
     app.$mount('#app')
   }
 })

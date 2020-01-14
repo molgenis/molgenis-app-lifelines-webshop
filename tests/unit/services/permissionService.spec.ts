@@ -1,6 +1,6 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
-import { setRolePermission, setUserPermission } from '@/services/permissionService'
+import { setRolePermission, setUserPermission, syncOrderPermissions } from '@/services/permissionService'
 
 describe('permission service', () => {
   describe('setRolePermission', () => {
@@ -44,6 +44,57 @@ describe('permission service', () => {
         expect.objectContaining({
           body: expect.any(String)
         }))
+    })
+  })
+
+  describe('syncOrderPermissions', () => {
+    let state: any
+    let results
+
+    beforeEach(async (done) => {
+      state = {
+        context: {
+          context: {
+            username: 'user'
+          }
+        },
+        order: {
+          applicationForm: {
+            'id': 'applicationForm'
+          },
+          contents: {
+            'id': 'contents'
+          },
+          orderNumber: '3333',
+          user: 'user'
+        }
+      }
+
+      done()
+    })
+
+    it('should add manager permission if the order is from the same user', async () => {
+      results = await syncOrderPermissions(state, true, true, true)
+      expect(results.length).toBe(3)
+      results = await syncOrderPermissions(state, false, true, true)
+      expect(results.length).toBe(2)
+      results = await syncOrderPermissions(state, false, false, true)
+      expect(results.length).toBe(1)
+      results = await syncOrderPermissions(state, false, false, false)
+      expect(results.length).toBe(0)
+    })
+
+    it('should add user permission if the order is from another user', async () => {
+      state.context.context.username = 'manager'
+      results = await syncOrderPermissions(state, true, true, true)
+      expect(results.length).toBe(3)
+      results = await syncOrderPermissions(state, false, true, true)
+      expect(results.length).toBe(2)
+      results = await syncOrderPermissions(state, false, false, true)
+      expect(results.length).toBe(1)
+
+      results = await syncOrderPermissions(state, false, false, false)
+      expect(results.length).toBe(0)
     })
   })
 })

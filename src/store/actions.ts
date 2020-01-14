@@ -13,7 +13,7 @@ import { OrderState } from '@/types/Order'
 import moment from 'moment'
 import { TreeParent } from '@/types/Tree'
 import axios from 'axios'
-import { setRolePermission, setUserPermission } from '@/services/permissionService'
+import { syncOrderPermissions } from '@/services/permissionService'
 // @ts-ignore
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -224,49 +224,45 @@ export default {
   save: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
     const { context } = state.context
-    const cart = toCart(state)
+    let orderNumber
+
+    const isNewOrder = !state.order.orderNumber
+    // @ts-ignore
+    const isNewApplicationForm = state.order.applicationForm ? Boolean(state.order.applicationForm.name) : false
 
     const formData:any = {
+      applicationForm: state.order.applicationForm,
+      contents: cartToBlob(toCart(state)),
+      creationDate: state.order.creationDate,
       name: state.order.name,
       orderNumber: state.order.orderNumber,
       projectNumber: state.order.projectNumber,
-      applicationForm: state.order.applicationForm,
-      updateDate: moment().toISOString(),
-      contents: cartToBlob(cart),
-      creationDate: state.order.creationDate,
+      state: state.order.state,
       submissionDate: state.order.submissionDate,
-      state: state.order.state
+      updateDate: moment().toISOString()
     }
 
-    if (state.order.orderNumber) {
-      formData.user = state.order.user
-      formData.email = state.order.email
-
-      await updateOrder(formData, formFields)
-
-      // Assume admin edits the user's order.
-      if (context.username !== state.order.user) {
-        const newOrderResponse = await api.get(`/api/v2/lifelines_order/${state.order.orderNumber}`)
-        commit('restoreOrderState', newOrderResponse)
-        await dispatch('fixUserPermission')
-      }
-
-      successMessage(`Saved order with order number ${state.order.orderNumber}`, commit)
-
-      return state.order.orderNumber
-    } else {
+    if (isNewOrder) {
       formData.user = context.username
       formData.email = context.email
 
       const creationDateField = { id: 'creationDate', type: 'date' }
-      const orderNumber = await createOrder(formData, [...formFields, creationDateField]).catch(() => {
-        return Promise.reject(new Error('Failed to create order'))
-      })
-      const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
-      commit('restoreOrderState', newOrderResponse)
-      successMessage(`Saved order with order number ${orderNumber}`, commit)
-      return orderNumber
+      orderNumber = await createOrder(formData, [...formFields, creationDateField])
+    } else {
+      formData.user = state.order.user
+      formData.email = state.order.email
+
+      await updateOrder(formData, formFields)
+      orderNumber = state.order.orderNumber
     }
+
+    const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
+    commit('restoreOrderState', newOrderResponse)
+
+    await syncOrderPermissions(state, isNewOrder, true, isNewApplicationForm)
+
+    successMessage(`Saved order with order number ${orderNumber}`, commit)
+    return orderNumber
   }),
   submit: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
@@ -274,6 +270,11 @@ export default {
     const now = moment().toISOString()
     const cart = toCart(state)
     const contents = cartToBlob(cart)
+
+    let orderNumber
+
+    // @ts-ignore
+    const isNewApplicationForm = state.order.applicationForm ? Boolean(state.order.applicationForm.name) : false
 
     const formData = {
       ...state.order,
@@ -286,18 +287,20 @@ export default {
     // ts enums are numbers, the backends expects strings
     // @ts-ignore
     formData.state = OrderState[OrderState.Submitted]
-    let orderNumber = state.order.orderNumber
+    const isNewOrder = !state.order.orderNumber
 
-    if (orderNumber) {
-      await updateOrder(formData, formFields)
+    if (isNewOrder) {
+      orderNumber = await createOrder(formData, formFields)
     } else {
-      orderNumber = await createOrder(formData, formFields).catch(() => {
-        return Promise.reject(new Error('Failed to submit order'))
-      })
+      orderNumber = state.order.orderNumber
+      await updateOrder(formData, formFields)
     }
+
     const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     commit('restoreOrderState', newOrderResponse)
-    dispatch('givePermissionToOrder')
+
+    await syncOrderPermissions(state, isNewOrder, true, isNewApplicationForm)
+
     dispatch('sendSubmissionTrigger')
     successMessage(`Submitted order with order number ${orderNumber}`, commit)
   }),
@@ -334,56 +337,15 @@ export default {
     }
 
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
-    const orderNumber = await createOrder(formData, [...formFields, { id: 'creationDate', type: 'date' }]).catch((e) => {
-      return Promise.reject(new Error('Failed to copy order'))
-    })
+    const orderNumber = await createOrder(formData, [...formFields, { id: 'creationDate', type: 'date' }])
 
-    // If admin copies the user's order, user needs to be given permission to the copy
-    if (state.context.context.username !== response.user) {
-      const copyOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
-      commit('restoreOrderState', copyOrderResponse)
-      const setPermissionRequests = [
-        setUserPermission(orderNumber, 'lifelines_order', copyOrderResponse.user, 'WRITE'),
-        setUserPermission(copyOrderResponse.contents.id, 'sys_FileMeta', copyOrderResponse.user, 'WRITE')
-      ]
-      if (copyOrderResponse.applicationForm) {
-        setPermissionRequests.push(setUserPermission(copyOrderResponse.applicationForm.id, 'sys_FileMeta', copyOrderResponse.user, 'WRITE'))
-      }
-      await Promise.all(setPermissionRequests)
-    }
+    const copyOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
+    commit('restoreOrderState', copyOrderResponse)
+
+    await syncOrderPermissions(state, true, true, true)
 
     successMessage(`Order copied to new order ${orderNumber}`, commit)
     return orderNumber
-  }),
-  givePermissionToOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {
-    if (state.order.orderNumber === null || state.order.contents === null) {
-      throw new Error('Can not set permission if orderNumber is not set')
-    }
-    const setPermissionRequests = [
-      setRolePermission(state.order.orderNumber, 'lifelines_order', 'LIFELINES_MANAGER', 'WRITE'),
-      setRolePermission(state.order.contents.id, 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
-    ]
-    if (state.order.applicationForm && state.order.applicationForm.id) {
-      setPermissionRequests.push(
-        setRolePermission(state.order.applicationForm.id, 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
-      )
-    }
-    Promise.all(setPermissionRequests)
-  }),
-  fixUserPermission: tryAction(async ({ state }: { state: ApplicationState }) => {
-    if (state.order.orderNumber === null || state.order.contents === null || state.order.user === null) {
-      throw new Error('Can not set permission if orderNumber or contents or user is not set')
-    }
-    // @ts-ignore
-    const results = [
-      setUserPermission(state.order.contents.id, 'sys_FileMeta', state.order.user, 'WRITE')
-    ]
-
-    if (state.order.applicationForm) {
-      results.push(setUserPermission(state.order.applicationForm.id, 'sys_FileMeta', state.order.user, 'WRITE'))
-    }
-
-    await Promise.all(results)
   }),
 
   sendSubmissionTrigger: async () => {
