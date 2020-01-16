@@ -1,4 +1,5 @@
 <template>
+
   <div id="orders-view" class="container pt-1">
     <ConfirmationModal
       v-if="$route && $route.name === 'orderDelete'"
@@ -10,67 +11,48 @@
     </ConfirmationModal>
 
     <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
+
       <spinner-animation v-if="orders === null"/>
-      <table v-else class="table" aria-describedby="orders-title">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th v-if="hasManagerRole" scope="col"></th>
-            <th v-if="hasManagerRole" scope="col">{{$t('lifelines-webshop-orders-col-header-email')}}</th>
-            <th scope="col">{{$t('lifelines-webshop-orders-col-header-title')}}</th>
-            <th scope="col">{{$t('lifelines-webshop-orders-col-header-sub-date')}}</th>
-            <th scope="col">{{$t('lifelines-webshop-orders-col-header-project')}}</th>
-            <th scope="col">{{$t('lifelines-webshop-orders-col-header-order')}}</th>
-            <th scope="col">{{$t('lifelines-webshop-orders-col-header-app-form')}}</th>
-            <th scope="col">{{$t('lifelines-webshop-orders-col-header-state')}}</th>
-          </tr>
-        </thead>
-        <tbody >
-          <tr v-for="order in orders" :key="order.id">
-            <td>
-              <router-link
-                v-if="order.state === 'Draft' || hasManagerRole"
-                class="btn btn-secondary btn-sm"
-                :to="`/shop/${order.orderNumber}`">
-                  <font-awesome-icon icon="edit" aria-label="edit"/>
-                </router-link>
-            </td>
-            <td>
-              <button class="btn btn-secondary btn-sm copy-btn" type="button" @click="handleCopyOrder(order.orderNumber)">
-                <font-awesome-icon icon="copy" aria-label="copy"/>
-              </button>
-            </td>
-            <td>
-              <router-link
-                v-if="order.state === 'Draft' || hasManagerRole"
-                :to="{ name: 'orderDelete', params: {orderNumber: order.orderNumber}}"
-                class="btn btn-danger btn-sm t-btn-order-delete">
+      <b-table v-else hover :items="orders" :fields="tableFields" per-page=5>
+
+        <template v-slot:cell(actions)="data">
+            <router-link
+              tag="button"
+              v-if="data.item.state === 'Draft' || hasManagerRole"
+              class="btn btn-secondary btn-sm"
+              :to="`/shop/${data.item.orderNumber}`">
+                <font-awesome-icon icon="edit" aria-label="edit"/>
+            </router-link>
+            <button class="btn btn-secondary btn-sm copy-btn" type="button" @click="handleCopyOrder(data.item.orderNumber)">
+              <font-awesome-icon icon="copy" aria-label="copy"/>
+            </button>
+            <router-link
+              tag="button"
+              v-if="data.item.state === 'Draft' || hasManagerRole"
+              :to="{ name: 'orderDelete', params: {orderNumber: data.item.orderNumber}}"
+              class="btn btn-danger btn-sm t-btn-order-delete">
               <font-awesome-icon icon="trash" aria-label="delete"/>
-              </router-link>
-            </td>
-            <td v-if="hasManagerRole">
-              <button
-                v-if="order.state === 'Submitted'"
-                @click="handleApproveOrder(order.orderNumber)"
-                class="btn btn-success">
-                <span v-if="approvingOrder == order.orderNumber">
-                  Approving
-                </span>
-                <span v-else>Approve</span>
-              </button>
-            </td>
-            <td v-if="hasManagerRole">{{ order.email }}</td>
-            <td>{{ order.name }}</td>
-            <td>{{ order.submissionDate | dataString }}</td>
-            <td>{{ order.projectNumber }}</td>
-            <td>{{ order.orderNumber }}</td>
-            <td><span v-if="order.applicationForm"><a :href="order.applicationForm.url">{{ order.applicationForm.filename }}<font-awesome-icon icon="download" aria-label="download"/></a></span></td>
-            <td><span class="badge badge-pill" :class="badgeClass[order.state]">{{ order.state }}</span></td>
-          </tr>
-        </tbody>
-      </table>
+            </router-link>
+        </template>
+
+        <template v-slot:cell(submissionDate)="data">
+           {{ data.item.submissionDate | dataString }}
+        </template>
+
+        <template v-slot:cell(applicationForm)="data">
+          <a v-if="data.item.applicationForm" :href="data.item.applicationForm.url">
+            {{ data.item.applicationForm.filename }} <font-awesome-icon icon="download" aria-label="download"/>
+          </a>
+        </template>
+
+        <template v-slot:cell(status)="data">
+          <b-dropdown id="dropdown-1" :text="data.item.state" class="m-md-2">
+            <b-dropdown-item active>Draft</b-dropdown-item>
+            <b-dropdown-item>Submitted</b-dropdown-item>
+            <b-dropdown-item>Approved</b-dropdown-item>
+          </b-dropdown>
+        </template>
+      </b-table>
     </div>
 </template>
 
@@ -88,18 +70,34 @@ library.add(faEdit, faDownload, faTrash, faCopy)
 
 export default Vue.extend({
   components: { ConfirmationModal, FontAwesomeIcon, SpinnerAnimation },
-  mounted () {
-    this.loadOrders()
+  computed: {
+    ...mapState(['orders']),
+    ...mapGetters(['hasManagerRole']),
+    tableFields: function () {
+      let fields = [
+        { key: 'actions', label: '', class: 'actions-column' }
+      ]
+
+      if (this.hasManagerRole) {
+        fields.push({ key: 'email', label: this.$t('lifelines-webshop-orders-col-header-email'), sortable: true })
+      }
+
+      fields = fields.concat([
+        { key: 'name', label: this.$t('lifelines-webshop-orders-col-header-title'), sortable: true },
+        { key: 'submissionDate', label: this.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true },
+        { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true },
+        { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true },
+        { key: 'applicationForm', label: this.$t('lifelines-webshop-orders-col-header-app-form') },
+        { key: 'status', label: this.$t('lifelines-webshop-orders-col-header-state'), sortable: true }
+      ])
+
+      return fields
+    }
   },
   data () {
     return {
-      badgeClass: {
-        'Draft': 'badge-info',
-        'Submitted': 'badge-primary',
-        'Approved': 'badge-success',
-        'Rejected': 'badge-danger'
-      },
-      approvingOrder: ''
+      approvingOrder: '',
+      perPage: 5
     }
   },
   methods: {
@@ -127,12 +125,23 @@ export default Vue.extend({
     ...mapActions(['loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
     ...mapMutations(['setToast'])
   },
-  computed: {
-    ...mapState(['orders']),
-    ...mapGetters(['hasManagerRole'])
+  mounted () {
+    this.loadOrders()
   },
   filters: {
     dataString: (dateValue) => dateValue ? moment(dateValue).format('LLLL') : ''
   }
 })
 </script>
+
+<style lang="scss">
+  @import "../scss/variables";
+
+  .actions-column {
+    width: 9rem;
+
+    button {
+      margin-right: $spacer;
+    }
+  }
+</style>

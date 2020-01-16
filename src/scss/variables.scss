@@ -24,6 +24,7 @@ $grid-gutter-width: 3rem;
 // border
 $border-radius: 0.25rem;
 
-@import "node_modules/bootstrap/scss/bootstrap";
+$spacer: 0.5rem;
+
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
