@@ -13,7 +13,7 @@
     <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
 
       <spinner-animation v-if="orders === null"/>
-      <b-table v-else hover :items="orders" :fields="tableFields" per-page=5>
+      <b-table v-else hover :items="orders" :fields="tableFields" >
 
         <template v-slot:cell(actions)="data">
             <router-link
@@ -46,11 +46,12 @@
         </template>
 
         <template v-slot:cell(status)="data">
-          <b-dropdown id="dropdown-1" :text="data.item.state" class="m-md-2">
+          <b-dropdown v-if="hasManagerRole" :text="data.item.state" class="m-md-2">
             <b-dropdown-item active>Draft</b-dropdown-item>
             <b-dropdown-item>Submitted</b-dropdown-item>
             <b-dropdown-item>Approved</b-dropdown-item>
           </b-dropdown>
+          <span v-else class="badge badge-pill" :class="badgeClass[data.item.state]">{{ data.item.state }}</span>
         </template>
       </b-table>
     </div>
@@ -96,8 +97,13 @@ export default Vue.extend({
   },
   data () {
     return {
-      approvingOrder: '',
-      perPage: 5
+      badgeClass: {
+        'Draft': 'badge-info',
+        'Submitted': 'badge-primary',
+        'Approved': 'badge-success',
+        'Rejected': 'badge-danger'
+      },
+      approvingOrder: ''
     }
   },
   methods: {
@@ -138,7 +144,7 @@ export default Vue.extend({
   @import "../scss/variables";
 
   .actions-column {
-    width: 9rem;
+    min-width: 9rem; // based on 3 btns ( padding + icon + padding * 3 = 9)
 
     button {
       margin-right: $spacer;
