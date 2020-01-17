@@ -13,7 +13,7 @@
     <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
 
       <spinner-animation v-if="orders === null"/>
-      <b-table v-else hover :items="orders" :fields="tableFields" >
+      <b-table v-else :items="orders" :fields="tableFields" >
 
         <template v-slot:cell(actions)="data">
             <router-link
