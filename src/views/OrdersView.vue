@@ -46,10 +46,10 @@
         </template>
 
         <template v-slot:cell(status)="data">
-          <b-dropdown v-if="hasManagerRole" :text="data.item.state" class="m-md-2">
-            <b-dropdown-item active>Draft</b-dropdown-item>
-            <b-dropdown-item>Submitted</b-dropdown-item>
-            <b-dropdown-item>Approved</b-dropdown-item>
+          <b-dropdown v-if="hasManagerRole" :text="data.item.state" :variant="statusVariant[data.item.state]" class="m-md-2">
+            <b-dropdown-item-button :active="data.item.state === 'Draft'" variant="info">Draft</b-dropdown-item-button>
+            <b-dropdown-item-button :active="data.item.state === 'Submitted'" variant="secondary">Submitted</b-dropdown-item-button>
+            <b-dropdown-item-button :active="data.item.state === 'Approved'" variant="success">Approved</b-dropdown-item-button>
           </b-dropdown>
           <span v-else class="badge badge-pill" :class="badgeClass[data.item.state]">{{ data.item.state }}</span>
         </template>
@@ -103,6 +103,12 @@ export default Vue.extend({
         'Approved': 'badge-success',
         'Rejected': 'badge-danger'
       },
+      statusVariant: {
+        'Draft': 'info',
+        'Submitted': 'primary',
+        'Approved': 'success',
+        'Rejected': 'danger'
+      },
       approvingOrder: ''
     }
   },
@@ -111,6 +117,8 @@ export default Vue.extend({
       this.deleteOrder(orderNumber)
       this.$router.push({ name: 'orders' })
     },
+    ...mapActions(['loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
+    ...mapMutations(['setToast']),
     async handleApproveOrder (orderNumber) {
       this.approveState = orderNumber
       this.sendApproveTrigger(orderNumber).then(
@@ -127,9 +135,7 @@ export default Vue.extend({
     async handleCopyOrder (orderNumber) {
       await this.copyOrder(orderNumber)
       this.loadOrders()
-    },
-    ...mapActions(['loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
-    ...mapMutations(['setToast'])
+    }
   },
   mounted () {
     this.loadOrders()
