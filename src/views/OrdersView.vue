@@ -13,9 +13,10 @@
     <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
 
       <spinner-animation v-if="orders === null"/>
-      <b-table v-else :items="orders" :fields="tableFields" >
+      <template v-else>
+        <b-table :items="orders" :fields="tableFields" :per-page="perPage" :current-page="currentPage">
 
-        <template v-slot:cell(actions)="data">
+          <template v-slot:cell(actions)="data">
             <router-link
               tag="button"
               v-b-tooltip.hover title="Edit"
@@ -39,32 +40,42 @@
               class="btn btn-danger btn-sm t-btn-order-delete">
               <font-awesome-icon icon="trash" aria-label="delete"/>
             </router-link>
-        </template>
+          </template>
 
-        <template v-slot:cell(submissionDate)="data">
+          <template v-slot:cell(submissionDate)="data">
            {{ data.item.submissionDate | dataString }}
-        </template>
+          </template>
 
-        <template v-slot:cell(applicationForm)="data">
-          <a v-if="data.item.applicationForm" :href="data.item.applicationForm.url">
-            {{ data.item.applicationForm.filename }} <font-awesome-icon icon="download" aria-label="download"/>
-          </a>
-        </template>
+          <template v-slot:cell(applicationForm)="data">
+            <a v-if="data.item.applicationForm" :href="data.item.applicationForm.url">
+              {{ data.item.applicationForm.filename }} <font-awesome-icon icon="download" aria-label="download"/>
+            </a>
+          </template>
 
-        <template v-slot:cell(status)="data">
-          <b-dropdown
+          <template v-slot:cell(status)="data">
+            <b-dropdown
+              v-if="hasManagerRole"
+              class="m-md-2"
+              v-b-tooltip.hover title="Change status"
+              :text="data.value"
+              :variant="statusVariant[data.item.state]">
+              <b-dropdown-item-button :active="data.item.state === 'Draft'" variant="info">Draft</b-dropdown-item-button>
+              <b-dropdown-item-button :active="data.item.state === 'Submitted'" variant="secondary">Submitted</b-dropdown-item-button>
+              <b-dropdown-item-button :active="data.item.state === 'Approved'" variant="success">Approved</b-dropdown-item-button>
+            </b-dropdown>
+            <span v-else class="badge badge-pill" :class="badgeClass[data.item.state]">{{ data.item.state }}</span>
+          </template>
+        </b-table>
+
+        <b-pagination
           v-if="hasManagerRole"
-          class="m-md-2"
-          v-b-tooltip.hover title="Change status"
-          :text="data.value"
-          :variant="statusVariant[data.item.state]">
-            <b-dropdown-item-button :active="data.item.state === 'Draft'" variant="info">Draft</b-dropdown-item-button>
-            <b-dropdown-item-button :active="data.item.state === 'Submitted'" variant="secondary">Submitted</b-dropdown-item-button>
-            <b-dropdown-item-button :active="data.item.state === 'Approved'" variant="success">Approved</b-dropdown-item-button>
-          </b-dropdown>
-          <span v-else class="badge badge-pill" :class="badgeClass[data.item.state]">{{ data.item.state }}</span>
-        </template>
-      </b-table>
+          v-model="currentPage"
+          :total-rows="numberOfOrders"
+          :per-page="perPage"
+          aria-controls="orders-table">
+        </b-pagination>
+
+      </template>
     </div>
 </template>
 
@@ -82,40 +93,10 @@ library.add(faEdit, faDownload, faTrash, faCopy)
 
 export default Vue.extend({
   components: { ConfirmationModal, FontAwesomeIcon, SpinnerAnimation },
-  computed: {
-    ...mapState(['orders']),
-    ...mapGetters(['hasManagerRole']),
-    tableFields: function () {
-      let fields = [
-        { key: 'actions', label: '', class: 'actions-column' }
-      ]
-
-      if (this.hasManagerRole) {
-        fields.push({ key: 'email', label: this.$t('lifelines-webshop-orders-col-header-email'), sortable: true })
-      }
-
-      fields = fields.concat([
-        { key: 'name', label: this.$t('lifelines-webshop-orders-col-header-title'), sortable: true },
-        { key: 'submissionDate', label: this.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true },
-        { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true },
-        { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true },
-        { key: 'applicationForm', label: this.$t('lifelines-webshop-orders-col-header-app-form') },
-        {
-          key: 'status',
-          label: this.$t('lifelines-webshop-orders-col-header-state'),
-          sortable: true,
-          formatter: (value, key, item) => {
-            return item.state
-          },
-          sortByFormatted: true
-        }
-      ])
-
-      return fields
-    }
-  },
   data () {
     return {
+      perPage: 10,
+      currentPage: 1,
       badgeClass: {
         'Draft': 'badge-info',
         'Submitted': 'badge-primary',
@@ -131,9 +112,42 @@ export default Vue.extend({
       approvingOrder: ''
     }
   },
+  computed: {
+    ...mapState(['orders']),
+    ...mapGetters(['hasManagerRole']),
+    numberOfOrders: (vm) => vm.orders.length,
+    tableFields: (vm) => {
+      let fields = [
+        { key: 'actions', label: '', class: 'actions-column' }
+      ]
+
+      if (vm.hasManagerRole) {
+        fields.push({ key: 'email', label: vm.$t('lifelines-webshop-orders-col-header-email'), sortable: true })
+      }
+
+      fields = fields.concat([
+        { key: 'name', label: vm.$t('lifelines-webshop-orders-col-header-title'), sortable: true },
+        { key: 'submissionDate', label: vm.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true },
+        { key: 'projectNumber', label: vm.$t('lifelines-webshop-orders-col-header-project'), sortable: true },
+        { key: 'orderNumber', label: vm.$t('lifelines-webshop-orders-col-header-order'), sortable: true },
+        { key: 'applicationForm', label: vm.$t('lifelines-webshop-orders-col-header-app-form') },
+        {
+          key: 'status',
+          label: vm.$t('lifelines-webshop-orders-col-header-state'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            return item.state
+          },
+          sortByFormatted: true
+        }
+      ])
+
+      return fields
+    }
+  },
   methods: {
     deleteOrderConfirmed: function (orderNumber) {
-      this.deleteOrder(orderNumber)
+      vm.deleteOrder(orderNumber)
       this.$router.push({ name: 'orders' })
     },
     ...mapActions(['loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
