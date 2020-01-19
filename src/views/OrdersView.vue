@@ -18,16 +18,22 @@
         <template v-slot:cell(actions)="data">
             <router-link
               tag="button"
+              v-b-tooltip.hover title="Edit"
               v-if="data.item.state === 'Draft' || hasManagerRole"
               class="btn btn-secondary btn-sm"
               :to="`/shop/${data.item.orderNumber}`">
                 <font-awesome-icon icon="edit" aria-label="edit"/>
             </router-link>
-            <button class="btn btn-secondary btn-sm copy-btn" type="button" @click="handleCopyOrder(data.item.orderNumber)">
+            <button
+              type="button"
+              v-b-tooltip.hover title="Copy"
+              class="btn btn-secondary btn-sm copy-btn"
+              @click="handleCopyOrder(data.item.orderNumber)">
               <font-awesome-icon icon="copy" aria-label="copy"/>
             </button>
             <router-link
               tag="button"
+              v-b-tooltip.hover title="Remove"
               v-if="data.item.state === 'Draft' || hasManagerRole"
               :to="{ name: 'orderDelete', params: {orderNumber: data.item.orderNumber}}"
               class="btn btn-danger btn-sm t-btn-order-delete">
@@ -46,7 +52,12 @@
         </template>
 
         <template v-slot:cell(status)="data">
-          <b-dropdown v-if="hasManagerRole" :text="data.item.state" :variant="statusVariant[data.item.state]" class="m-md-2">
+          <b-dropdown
+          v-if="hasManagerRole"
+          class="m-md-2"
+          v-b-tooltip.hover title="Change status"
+          :text="data.item.state"
+          :variant="statusVariant[data.item.state]">
             <b-dropdown-item-button :active="data.item.state === 'Draft'" variant="info">Draft</b-dropdown-item-button>
             <b-dropdown-item-button :active="data.item.state === 'Submitted'" variant="secondary">Submitted</b-dropdown-item-button>
             <b-dropdown-item-button :active="data.item.state === 'Approved'" variant="success">Approved</b-dropdown-item-button>
