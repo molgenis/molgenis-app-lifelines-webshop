@@ -56,7 +56,7 @@
           v-if="hasManagerRole"
           class="m-md-2"
           v-b-tooltip.hover title="Change status"
-          :text="data.item.state"
+          :text="data.value"
           :variant="statusVariant[data.item.state]">
             <b-dropdown-item-button :active="data.item.state === 'Draft'" variant="info">Draft</b-dropdown-item-button>
             <b-dropdown-item-button :active="data.item.state === 'Submitted'" variant="secondary">Submitted</b-dropdown-item-button>
@@ -100,7 +100,15 @@ export default Vue.extend({
         { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true },
         { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true },
         { key: 'applicationForm', label: this.$t('lifelines-webshop-orders-col-header-app-form') },
-        { key: 'status', label: this.$t('lifelines-webshop-orders-col-header-state'), sortable: true }
+        {
+          key: 'status',
+          label: this.$t('lifelines-webshop-orders-col-header-state'),
+          sortable: true,
+          formatter: (value, key, item) => {
+            return item.state
+          },
+          sortByFormatted: true
+        }
       ])
 
       return fields
