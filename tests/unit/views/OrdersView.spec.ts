@@ -1,4 +1,5 @@
-import { mount, shallowMount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
+import BootstrapVue from 'bootstrap-vue'
 import Router from 'vue-router'
 import { routes } from '@/router'
 import OrdersView from '@/views/OrdersView.vue'
@@ -34,6 +35,7 @@ describe('OrdersView.vue', () => {
     localVue.filter('moment', function (value: string, format: string) { return moment(value).utc().format(format) })
     localVue.filter('i18n', (value: string) => `#${value}#`)
     localVue.use(Vuex)
+    localVue.use(BootstrapVue)
 
     let state: any = {
       orders: null
@@ -48,35 +50,35 @@ describe('OrdersView.vue', () => {
   })
 
   it('renders orders view', () => {
-    const wrapper = shallowMount(OrdersView, { store, localVue })
+    const wrapper = mount(OrdersView, { store, localVue })
     expect(wrapper.find('#orders-view').exists()).toBeTruthy()
   })
 
   it('shows title', () => {
-    const wrapper = shallowMount(OrdersView, { store, localVue })
+    const wrapper = mount(OrdersView, { store, localVue })
     expect(wrapper.find('#orders-title').text()).toBe('lifelines-webshop-orders-title')
   })
 
   it('fetches orders when mounted', () => {
-    shallowMount(OrdersView, { store, localVue })
+    mount(OrdersView, { store, localVue })
     expect(actions.loadOrders).toHaveBeenCalled()
   })
 
   it('shows a spinner while loading orders', () => {
-    const wrapper = shallowMount(OrdersView, { store, localVue })
+    const wrapper = mount(OrdersView, { store, localVue })
     expect(wrapper.find(Spinner).isVisible()).toBeTruthy()
     store.commit('setOrders', orders)
     expect(wrapper.find(Spinner).exists()).toBeFalsy()
   })
 
   it('shows orders table when loaded', () => {
-    const wrapper = shallowMount(OrdersView, { store, localVue })
+    const wrapper = mount(OrdersView, { store, localVue })
     store.commit('setOrders', orders)
     expect(wrapper.find('table').isVisible()).toBeTruthy()
   })
 
   it('checks content of order tables', () => {
-    const wrapper = shallowMount(OrdersView, { store, localVue })
+    const wrapper = mount(OrdersView, { store, localVue })
     store.commit('setOrders', orders)
     expect(wrapper.find('table')).toMatchSnapshot()
   })
