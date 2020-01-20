@@ -295,13 +295,18 @@ export default {
     successMessage(`Submitted order with order number ${orderNumber}`, commit)
   }),
   load: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
-    const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
+    // @ts-ignore
+    const response = this.loadOrder({ state, commit })
     const cart: Cart = await api.get(`/files/${response.contents.id}`)
     const { facetFilter, gridSelection } = fromCart(cart, state)
-    commit('restoreOrderState', response)
     commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
     successMessage(`Loaded order with orderNumber ${orderNumber}`, commit)
+  }),
+  loadOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
+    const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
+    commit('restoreOrderState', response)
+    return response
   }),
   copyOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, sourceOrderNumber: string) => {
     // Fetch source data

@@ -7,10 +7,13 @@ import GridSelection from '@/types/GridSelection'
 import Filter from '@/types/Filter'
 import { Section } from '@/types/Section.ts'
 import { TreeParent } from '@/types/Tree'
-import { Order } from '@/types/Order'
+import { Order, OrderState } from '@/types/Order'
 import FormField from '@/types/FormField'
 
 export default {
+  changeOrderStatus (state: ApplicationState, status: OrderState) {
+    state.order.state = status
+  },
   setOrderFormFields (state: ApplicationState, formFields: FormField[]) {
     state.orderFormFields = formFields
   },
