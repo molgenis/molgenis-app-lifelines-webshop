@@ -5,21 +5,17 @@ import ConfirmationModal from '@/components/ConfirmationModal.vue'
 describe('ConfirmationModal.vue', () => {
   let wrapper: Wrapper<Vue>
 
-  let clicked = false
-
   wrapper = shallowMount(ConfirmationModal, {
     stubs: {
       RouterLink: RouterLinkStub
     },
     propsData: {
       backRoute: '/jest',
-      confirmButton: 'Delete',
-      confirmMethod: function () {
-        clicked = true
-      }
+      title: 'title'
     },
     slots: {
-      default: '<div class="slot-exists"/>'
+      body: '<div class="body-slot-exists"/>',
+      confirmButton: '<div class="confirmbutton-slot-exists"/>'
     }
   })
 
@@ -28,11 +24,7 @@ describe('ConfirmationModal.vue', () => {
     expect(wrapper.find('.modal-header').exists()).toBe(true)
     expect(wrapper.find('.modal-body').exists()).toBe(true)
     expect(wrapper.find('.modal-footer').exists()).toBe(true)
-    expect(wrapper.find('.slot-exists').exists()).toBe(true)
-  })
-
-  it('handles a confirmation method', () => {
-    wrapper.find('.t-btn-confirm').trigger('click')
-    expect(clicked).toBe(true)
+    expect(wrapper.find('.body-slot-exists').exists()).toBe(true)
+    expect(wrapper.find('.confirmbutton-slot-exists').exists()).toBe(true)
   })
 })

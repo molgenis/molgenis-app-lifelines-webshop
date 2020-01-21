@@ -1,5 +1,6 @@
 <template>
 <div class="c-dropdown dropdown">
+
   <button :class="buttonClass" class="btn dropdown-toggle" type="button" :id="title"
   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <template v-if="value">
@@ -8,8 +9,8 @@
     <template v-else>
         {{title}}
     </template>
-
   </button>
+
   <div class="dropdown-menu" :aria-labelledby="title">
     <a class="dropdown-item" :key="option.value"
         @click="updateModel($event, option)"

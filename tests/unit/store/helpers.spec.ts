@@ -4,12 +4,6 @@ import emptyState from '../fixtures/state'
 import { CartFilter, Cart } from '@/types/Cart'
 import Filter from '@/types/Filter'
 
-// @ts-ignore
-global.console = {
-  log: jest.fn(),
-  error: jest.fn()
-}
-
 describe('store', () => {
   describe('helpers', () => {
     describe('getErrorMessage', () => {

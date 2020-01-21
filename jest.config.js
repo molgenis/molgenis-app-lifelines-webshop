@@ -6,11 +6,9 @@ process.env.VUE_CLI_BABEL_TRANSPILE_MODULES = true
 module.exports = {
   moduleFileExtensions: [
     'js',
-    'jsx',
     'json',
     'vue',
-    'ts',
-    'tsx'
+    'ts'
   ],
   transform: {
     '^.+\\.vue$': 'vue-jest',

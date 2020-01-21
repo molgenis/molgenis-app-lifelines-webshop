@@ -79,20 +79,17 @@
 
       <template v-slot:cell(actions)="data">
         <router-link class="btn btn-secondary btn-sm" tag="button"
-          v-b-tooltip.hover title="Edit"
           v-if="data.item.state === 'Draft' || hasManagerRole"
           :to="`/shop/${data.item.orderNumber}`">
             <font-awesome-icon icon="edit" aria-label="edit"/>
         </router-link>
 
         <button class="btn btn-secondary btn-sm copy-btn" type="button"
-          v-b-tooltip.hover title="Copy"
           @click="handleCopyOrder(data.item.orderNumber)">
           <font-awesome-icon icon="copy" aria-label="copy"/>
         </button>
 
         <router-link class="btn btn-danger btn-sm t-btn-order-delete" tag="button"
-          v-b-tooltip.hover title="Remove"
           v-if="data.item.state === 'Draft' || hasManagerRole"
           :to="{ name: 'orderDelete', params: {orderNumber: data.item.orderNumber}}">
           <font-awesome-icon icon="trash" aria-label="delete"/>
@@ -164,7 +161,7 @@ export default Vue.extend({
   computed: {
     numberOfOrders: (vm) => vm.orders.length,
     stateFilterOptions: function () {
-      return [{ value: '', name: this.$t('All') }, ...this.stateOptions]
+      return [{ value: '', name: this.$t('lifelines-webshop-state-all') }, ...this.stateOptions]
     },
     tableFields: function () {
       let fields = [

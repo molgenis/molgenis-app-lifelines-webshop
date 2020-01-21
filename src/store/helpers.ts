@@ -22,7 +22,11 @@ export const tryAction = (action: any): any => {
   return (context: any, payload: any) => {
     const errorHandler = (error: any) => {
       context.commit('setToast', { message: getErrorMessage(error), type: 'danger', textType: 'light', title: 'Error' })
-      console.trace ? console.trace(error) : console.log(error)
+      // @ts-ignore
+      // The exception is also logged to console, but not during tests.
+      if (!globalThis.IS_TEST) {
+        console.trace ? console.trace(error) : console.log(error)
+      }
     }
 
     return action(context, payload).catch(errorHandler)

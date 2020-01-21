@@ -49,6 +49,10 @@ function getApplicationState () {
 }
 
 const mockResponses: { [key: string]: Object } = {
+  '/api/v2/lifelines_order?num=10&start=0': {
+    items: orders,
+    total: orders.length
+  },
   '/api/v2/lifelines_order?num=10000': {
     items: orders
   },
@@ -299,7 +303,7 @@ describe('actions', () => {
     it('loads the orders and commits them', async (done) => {
       const commit = jest.fn()
       const action = actions.loadOrders({ commit })
-      expect(commit).toHaveBeenCalledWith('setOrders', null)
+
       await action
       expect(commit).toHaveBeenCalledWith('setOrders', orders)
       done()
@@ -311,10 +315,9 @@ describe('actions', () => {
       const commit = jest.fn()
       const dispatch = jest.fn()
       const action = actions.deleteOrder({ commit, dispatch }, 'abcde')
-      expect(commit).toHaveBeenCalledWith('setOrders', null)
       await action
       expect(mockDelete).toHaveBeenCalledWith('/api/v2/lifelines_order/abcde')
-      expect(dispatch).toHaveBeenCalledWith('loadOrders')
+
       done()
     })
   })

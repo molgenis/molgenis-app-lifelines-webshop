@@ -96,7 +96,6 @@ export default {
       apiUrl += `&q=${encodeRsqlValue(rsql)}`
     }
     const response = await api.get(apiUrl)
-
     commit('setOrders', response.items)
     return response
   }),

@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from '@vue/test-utils'
+import { mount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Router from 'vue-router'
 import { routes } from '@/router'
@@ -16,6 +16,19 @@ describe('OrdersView.vue', () => {
   const hasManagerRole = jest.fn()
   const sendApproveTrigger = jest.fn()
   const copyOrder = jest.fn()
+
+  const stubs = {
+    RouterLink: RouterLinkStub
+  }
+
+  function getWrapper ({ router = false }) {
+    const params:any = { localVue, store, stubs }
+    if (router) {
+      params.router = new Router({ routes })
+    }
+
+    return mount(OrdersView, params)
+  }
 
   let actions = {
     deleteOrder: jest.fn(),
@@ -53,12 +66,12 @@ describe('OrdersView.vue', () => {
   })
 
   it('renders orders view', () => {
-    const wrapper = mount(OrdersView, { store, localVue })
+    const wrapper = getWrapper({ router: false })
     expect(wrapper.find('#orders-view').exists()).toBeTruthy()
   })
 
   it('shows title', () => {
-    const wrapper = mount(OrdersView, { store, localVue })
+    const wrapper = getWrapper({ router: false })
     expect(wrapper.find('#orders-title').text()).toBe('lifelines-webshop-orders-title')
   })
 
@@ -68,29 +81,27 @@ describe('OrdersView.vue', () => {
   })
 
   it('shows orders table when loaded', () => {
-    const wrapper = mount(OrdersView, { store, localVue })
+    const wrapper = getWrapper({ router: false })
     store.commit('setOrders', orders)
     expect(wrapper.find('table').isVisible()).toBeTruthy()
   })
 
   it('checks content of order tables', () => {
-    const wrapper = mount(OrdersView, { store, localVue })
+    const wrapper = getWrapper({ router: false })
     store.commit('setOrders', orders)
     expect(wrapper.find('table')).toMatchSnapshot()
   })
 
-  it('shows a confirmation modal after pressing the delete button', () => {
+  it('displays a confirmation modal after pressing the delete button', () => {
     localVue.use(Router)
 
-    const wrapper = mount(OrdersView, {
-      localVue,
-      store,
-      router: new Router({ routes })
-    })
-    store.commit('setOrders', orders)
+    const wrapper = getWrapper({ router: true })
 
+    store.commit('setOrders', orders)
+    console.log(wrapper.html())
     expect(wrapper.find('.modal-dialog').exists()).toBe(false)
     wrapper.find('.t-btn-order-delete').trigger('click')
+    console.log(wrapper.html())
     expect(wrapper.find('.modal-dialog').exists()).toBe(true)
     wrapper.find('.t-btn-confirm').trigger('click')
     expect(actions.deleteOrder).toHaveBeenCalled()
@@ -105,6 +116,7 @@ describe('OrdersView.vue', () => {
       wrapper = mount(OrdersView, {
         localVue,
         store,
+        stubs,
         router: new Router({ routes })
       })
 
@@ -115,7 +127,6 @@ describe('OrdersView.vue', () => {
       sendApproveTrigger.mockResolvedValue('200')
 
       const approveBtn = wrapper.find('.dropdown-update-state')
-
       expect(approveBtn.find('span').text()).toEqual('Approve')
 
       expect(actions.sendApproveTrigger).toHaveBeenCalled()
@@ -126,7 +137,6 @@ describe('OrdersView.vue', () => {
 
       const approveBtn = wrapper.find('.btn.btn-success')
       expect(approveBtn.find('span').text()).toEqual('Approve')
-
       approveBtn.trigger('click')
 
       expect(actions.sendApproveTrigger).toHaveBeenCalled()
@@ -139,12 +149,7 @@ describe('OrdersView.vue', () => {
     beforeEach(() => {
       localVue.use(Router)
       hasManagerRole.mockReturnValue(true)
-
-      wrapper = mount(OrdersView, {
-        localVue,
-        store,
-        router: new Router({ routes })
-      })
+      wrapper = getWrapper({ router: true })
 
       store.commit('setOrders', orders)
     })

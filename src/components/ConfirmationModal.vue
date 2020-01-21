@@ -27,16 +27,7 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'ConfirmationModal',
-  props: {
-    backRoute: {
-      default: null,
-      type: Object
-    },
-    title: {
-      default: 'modal',
-      type: String
-    }
-  }
+  props: ['backRoute', 'title']
 })
 </script>
 
