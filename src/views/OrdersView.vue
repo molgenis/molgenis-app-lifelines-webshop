@@ -1,13 +1,44 @@
 <template>
 
   <div id="orders-view" class="container-fw pt-1">
+
     <ConfirmationModal
       v-if="$route && $route.name === 'orderDelete'"
       :backRoute="$router.resolve({name: 'orders'}).route"
-      :confirmButton="$t('lifelines-webshop-modal-button-delete')"
-      :confirmMethod="deleteOrderConfirmed.bind(this, $route.params.orderNumber)"
-      :modalTitle="$t('lifelines-webshop-modal-delete-header', {order: $route.params.orderNumber})">
-      {{$t('lifelines-webshop-modal-delete-body', {order: $route.params.orderNumber})}}
+      :title="$t('lifelines-webshop-modal-delete-header', {order: $route.params.orderNumber})">
+
+      <template v-slot:body>
+        {{$t('lifelines-webshop-modal-delete-body', {order: $route.params.orderNumber})}}<br/>
+        {{$t('lifelines-webshop-ask-confirm')}}
+      </template>
+
+      <template v-slot:confirmButton>
+        <button type="button" class="btn btn-danger t-btn-danger"
+          @click="deleteOrderConfirmed($route.params.orderNumber)">
+          {{$t('lifelines-webshop-modal-button-delete')}}
+        </button>
+      </template>
+    </ConfirmationModal>
+
+    <ConfirmationModal
+      v-if="$route && $route.name === 'orderStateChange'"
+      :backRoute="$router.resolve({name: 'orders'}).route"
+      :title="$t('lifelines-webshop-modal-state-header')">
+
+      <template v-slot:body>
+        {{$t('lifelines-webshop-modal-state-body', {
+          order: $route.params.orderNumber,
+          state: $route.params.state,
+        })}}<br/>
+        {{$t('lifelines-webshop-ask-confirm')}}
+      </template>
+
+      <template v-slot:confirmButton>
+        <button type="button" class="btn btn-secondary"
+          @click="changeStateConfirmed($route.params.orderNumber, $route.params.state)">
+          {{$t('lifelines-webshop-modal-button-update-state')}}
+        </button>
+      </template>
     </ConfirmationModal>
 
     <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
@@ -17,7 +48,10 @@
         <input v-model="orderFilters.text" type="text" id="searchtext" class="form-control" placeholder="Search orders...">
       </div>
       <div class="form-group col-md-2">
-        <Dropdown buttonClass="btn-secondary" v-model="orderFilters.state" :options="stateOptions" :title="$t('Filter state')"/>
+        <Dropdown buttonClass="btn-secondary"
+          v-model="orderFilters.state"
+          :options="stateFilterOptions"
+          :title="$t('Filter state...')"/>
       </div>
 
       <div class="form-group col-md-6">
@@ -43,10 +77,6 @@
       :current-page="currentPage"
       :no-local-sorting="true"
     >
-
-      <template v-slot:empty="scope">
-        <h5>{{ scope.emptyText }}</h5>
-      </template>
 
       <template v-slot:cell(actions)="data">
         <router-link class="btn btn-secondary btn-sm" tag="button"
@@ -90,13 +120,14 @@
         <Dropdown
           v-if="hasManagerRole"
           v-model="data.item.state"
-          :buttonClass="buttonStateMap[data.item.state]"
-          :method="changeState.bind(this, data.item)"
+          :intend="true"
+          :buttonClass="classes.buttonState[data.item.state]"
+          :method="changeStateConfirm.bind(this, data.item)"
           :options="stateOptions"
           :title="$t(data.item.state)"
         />
 
-        <span v-else class="badge badge-pill" :class="badgeClass[data.item.state]">{{ data.item.state }}</span>
+        <span v-else class="badge badge-pill" :class="classes.badge[data.item.state]">{{ data.item.state }}</span>
       </template>
     </b-table>
 
@@ -121,10 +152,7 @@ import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
 import Dropdown from '../components/dropdown.vue'
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
-import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import moment from 'moment'
-
-import api from '@molgenis/molgenis-api-client'
 
 library.add(faEdit, faDownload, faTrash, faCopy)
 
@@ -132,23 +160,23 @@ export default Vue.extend({
   components: { ConfirmationModal, Dropdown, FontAwesomeIcon },
   computed: {
     numberOfOrders: (vm) => vm.orders.length,
-    tableFields: (vm) => {
+    tableFields: function () {
       let fields = [
         { key: 'actions', label: '', class: 'actions-column' },
-        { key: 'name', label: vm.$t('lifelines-webshop-orders-col-header-title'), sortable: true }
+        { key: 'name', label: this.$t('lifelines-webshop-orders-col-header-title'), sortable: true }
       ]
 
-      if (vm.hasManagerRole) {
-        fields.push({ key: 'email', label: vm.$t('lifelines-webshop-orders-col-header-email'), sortable: true })
+      if (this.hasManagerRole) {
+        fields.push({ key: 'email', label: this.$t('lifelines-webshop-orders-col-header-email'), sortable: true })
       }
 
       fields = fields.concat([
-        { key: 'projectNumber', label: vm.$t('lifelines-webshop-orders-col-header-project'), sortable: true },
-        { key: 'orderNumber', label: vm.$t('lifelines-webshop-orders-col-header-order'), sortable: true },
-        { key: 'submissionDate', label: vm.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true },
+        { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true },
+        { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true },
+        { key: 'submissionDate', label: this.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true },
         {
           key: 'state',
-          label: vm.$t('lifelines-webshop-orders-col-header-state'),
+          label: this.$t('lifelines-webshop-orders-col-header-state'),
           sortable: true,
           formatter: (value, key, item) => {
             return item.state
@@ -162,12 +190,21 @@ export default Vue.extend({
     ...mapState(['orders']),
     ...mapGetters(['hasManagerRole'])
   },
-  data () {
+  data: function () {
     return {
-      buttonStateMap: {
-        'Draft': 'btn-light',
-        'Submitted': 'btn-warning',
-        'Approved': 'btn-success'
+      classes: {
+        badge: {
+          'Draft': 'badge-info',
+          'Submitted': 'badge-primary',
+          'Approved': 'badge-success',
+          'Rejected': 'badge-danger'
+        },
+        buttonState: {
+          'Draft': 'btn-secondary',
+          'Submitted': 'btn-primary',
+          'Approved': 'btn-success',
+          'Rejected': 'btn-danger'
+        }
       },
       orderFilters: {
         text: '',
@@ -178,22 +215,18 @@ export default Vue.extend({
       currentPage: 1,
       stateOptions: [
         { value: 'Draft', name: this.$t('Draft') },
+        { value: 'Rejected', name: this.$t('Rejected') },
         { value: 'Submitted', name: this.$t('Submitted') },
         { value: 'Approved', name: this.$t('Approved') }
       ],
-      badgeClass: {
-        'Draft': 'badge-info',
-        'Submitted': 'badge-primary',
-        'Approved': 'badge-success',
-        'Rejected': 'badge-danger'
-      },
-      statusVariant: {
-        'Draft': 'info',
-        'Submitted': 'primary',
-        'Approved': 'success',
-        'Rejected': 'danger'
-      },
-      approvingOrder: ''
+      stateFilterOptions: [
+        { value: '', name: this.$t('All') },
+        { value: 'Draft', name: this.$t('Draft') },
+        { value: 'Rejected', name: this.$t('Rejected') },
+        { value: 'Submitted', name: this.$t('Submitted') },
+        { value: 'Approved', name: this.$t('Approved') }
+      ]
+
     }
   },
   filters: {
@@ -201,84 +234,83 @@ export default Vue.extend({
     dateShopper: (dateValue) => dateValue ? moment(dateValue).format('LLLL') : ''
   },
   methods: {
-    changeState: async function (order, selectedState) {
-      if (selectedState.value === 'Approved') {
-        await this.loadOrder(order.orderNumber)
-        this.changeOrderStatus(selectedState.value)
-        await this.save()
-        // this.handleApproveOrder(order.orderNumber)
-      } else if (selectedState.value === 'Submitted') {
-        await this.loadOrder(order.orderNumber)
+    changeStateConfirm: function (order, selectedState) {
+      this.$router.push({
+        name: 'orderStateChange',
+        params: { orderNumber: order.orderNumber, state: selectedState.value }
+      })
+    },
+    changeStateConfirmed: async function (orderNumber, targetState) {
+      await this.loadOrder(orderNumber)
+      this.changeOrderStatus(targetState)
+      await this.save()
+
+      if (targetState === 'Submitted') {
         this.submit()
-      } else if (selectedState.value === 'Draft') {
-        await this.loadOrder(order.orderNumber)
-        this.changeOrderStatus(selectedState.value)
-        await this.save()
+      } else if (targetState === 'Approved') {
+        try {
+          await this.sendApproveTrigger(orderNumber)
+          this.setToast({ type: 'success', textType: 'light', title: 'Success', timeout: this.$global.toastTimeoutTime, message: `Order ${orderNumber} approved` })
+        } catch (err) {
+          this.setToast({ type: 'danger', textType: 'light', message: `Order ${orderNumber} approval failed` })
+        }
       }
+
+      this.$router.push({ name: 'orders' })
+      this.$refs.table.refresh()
     },
     deleteOrderConfirmed: function (orderNumber) {
-      vm.deleteOrder(orderNumber)
+      this.deleteOrder(orderNumber)
       this.$router.push({ name: 'orders' })
-    },
-    handleApproveOrder: async function (orderNumber) {
-      this.approveState = orderNumber
-      this.sendApproveTrigger(orderNumber).then(
-        async () => {
-          await this.loadOrders()
-          this.approveState = ''
-          this.setToast({ type: 'success', textType: 'light', title: 'Success', timeout: this.$global.toastTimeoutTime, message: `Order ${orderNumber} approved` })
-        },
-        () => {
-          this.approveState = ''
-          this.setToast({ type: 'danger', textType: 'light', message: `Order ${orderNumber} approval failed` })
-        })
+      this.$refs.table.refresh()
     },
     handleCopyOrder: async function (orderNumber) {
       await this.copyOrder(orderNumber)
-      this.loadOrders()
+      this.$refs.table.refresh()
     },
     ordersProvider: async function (ctx, cb) {
-      const { currentPage, perPage, sortBy, sortDesc } = ctx
-      let num = perPage
-      let start = (currentPage - 1) * perPage
-
-      let apiUrl = `/api/v2/lifelines_order?num=${num}&start=${start}`
-      if (sortBy) {
-        const sortFlow = sortDesc ? 'desc' : 'asc'
-        apiUrl += `&sort=${sortBy}:${sortFlow}`
+      const params = {
+        filters: null,
+        num: ctx.perPage,
+        sortBy: ctx.sortBy,
+        sortDesc: ctx.sortDesc,
+        start: (ctx.currentPage - 1) * ctx.perPage
       }
 
-      const filterActive = this.orderFilters.text || this.orderFilters.state
-      if (filterActive) {
-        let operands = []
+      const operands = []
 
-        if (this.orderFilters.text) {
-          operands = operands.concat([
+      // Default sorting is on creation data.
+      if (!params.sortBy) {
+        params.sortBy = 'creationDate'
+        params.sortDesc = true
+      }
+
+      if (this.orderFilters.text) {
+        operands.push({
+          operands: [
             { selector: 'email', comparison: '=like=', arguments: this.orderFilters.text },
             { selector: `name`, comparison: '=like=', arguments: this.orderFilters.text },
             { selector: `orderNumber`, comparison: '=like=', arguments: this.orderFilters.text },
             { selector: `projectNumber`, comparison: '=like=', arguments: this.orderFilters.text }
-          ])
-        }
-
-        if (this.orderFilters.state) {
-          operands.push({ selector: 'state', comparison: '=q=', arguments: this.orderFilters.state })
-        }
-
-        const rsql = transformToRSQL({ operator: 'OR', operands })
-        apiUrl += `&q=${encodeRsqlValue(rsql)}`
+          ],
+          operator: 'OR'
+        })
       }
 
-      const response = await api.get(apiUrl)
+      if (this.orderFilters.state) {
+        operands.push({ selector: 'state', comparison: '=q=', arguments: this.orderFilters.state })
+      }
+
+      if (operands.length) {
+        params.filters = { operator: 'AND', operands }
+      }
+
+      const response = await this.loadOrders(params)
       this.total = response.total
       return response.items
     },
     ...mapActions(['save', 'loadOrder', 'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
     ...mapMutations(['changeOrderStatus', 'setToast'])
-
-  },
-  mounted () {
-    this.loadOrders()
   },
   watch: {
     orderFilters: {

@@ -22,6 +22,10 @@ export const routes = [
       {
         name: 'orderDelete',
         path: 'delete'
+      },
+      {
+        name: 'orderStateChange',
+        path: 'state/:state'
       }
     ]
   },

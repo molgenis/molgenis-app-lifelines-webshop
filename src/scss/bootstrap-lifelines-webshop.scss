@@ -80,3 +80,17 @@ h6 {
   margin: 0 auto;
   max-width: 1000px;
 }
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba($primary, 0.03);
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba($primary, 0.05);
+  color: #212529;
+}
+
+.table td {
+  vertical-align: middle;
+}
+

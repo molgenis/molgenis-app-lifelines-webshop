@@ -4,19 +4,19 @@
       <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{modalTitle}}</h5>
+                <h5 class="modal-title">{{title}}</h5>
                 <router-link type="button" class="close" :to="backRoute" tag="button">
                   <span>&times;</span>
                 </router-link>
             </div>
             <div class="modal-body">
-                  <slot></slot>
+                  <slot name="body"></slot>
             </div>
             <div class="modal-footer">
-                <router-link class="btn btn-secondary" :to="backRoute">
+                <router-link class="btn btn-light" :to="backRoute">
                   {{$t('lifelines-webshop-modal-button-cancel')}}
                 </router-link>
-                <button type="button" class="btn btn-primary t-btn-confirm" @click="confirmMethod">{{confirmButton}}</button>
+                <slot name="confirmButton"></slot>
             </div>
           </div>
       </div>
@@ -27,7 +27,16 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'ConfirmationModal',
-  props: ['backRoute', 'confirmButton', 'confirmMethod', 'modalTitle']
+  props: {
+    backRoute: {
+      default: null,
+      type: Object
+    },
+    title: {
+      default: 'modal',
+      type: String
+    }
+  }
 })
 </script>
 

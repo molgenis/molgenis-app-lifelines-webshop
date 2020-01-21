@@ -40,14 +40,44 @@ export default Vue.extend({
   },
   methods: {
     updateModel: function ($e, option) {
-      this.$emit('input', option.value)
+      if (!this.intend) {
+        this.$emit('input', option.value)
+      }
+
       if (this.method) {
         this.method(option)
       }
     }
   },
   name: 'Dropdown',
-  props: ['buttonClass', 'title', 'options', 'value', 'method']
+  props: {
+    buttonClass: {
+      default: 'btn-secondary',
+      type: String
+    },
+    intend: {
+      default: false,
+      type: Boolean
+    },
+    method: {
+      default: null,
+      type: Function
+    },
+    options: {
+      default () {
+        return []
+      },
+      type: Array
+    },
+    title: {
+      default: 'dropdown',
+      type: String
+    },
+    value: {
+      default: '',
+      type: String
+    }
+  }
 })
 </script>
 

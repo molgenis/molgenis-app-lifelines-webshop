@@ -15,7 +15,7 @@ import { TreeParent } from '@/types/Tree'
 import axios from 'axios'
 import { setRolePermission, setUserPermission } from '@/services/permissionService'
 // @ts-ignore
-import { encodeRsqlValue } from '@molgenis/rsql'
+import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 
 const buildPostOptions = (formData: any, formFields: FormField[]) => {
   return {
@@ -58,6 +58,12 @@ const createOrder = async (formData: any, formFields: FormField[]) => {
   return trySubmission(10)
 }
 
+const loadOrder = async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
+  const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
+  commit('restoreOrderState', response)
+  return response
+}
+
 const updateOrder = async (formData: any, formFields: FormField[]) => {
   if (formData.applicationForm && (typeof formData.applicationForm.filename === 'string')) {
     formData.applicationForm = formData.applicationForm.filename
@@ -78,16 +84,25 @@ const getApplicationForm = async (applicationFormId: string, filename: string) =
 }
 
 export default {
-  loadOrders: tryAction(async ({ commit }: any) => {
-    commit('setOrders', null)
-    const response = await api.get('/api/v2/lifelines_order?num=10000')
+  loadOrders: tryAction(async ({ commit }: any, params:any = { num: 10, start: 0 }) => {
+    let apiUrl = `/api/v2/lifelines_order?num=${params.num}&start=${params.start}`
+    if (params.sortBy) {
+      const sortFlow = params.sortDesc ? 'desc' : 'asc'
+      apiUrl += `&sort=${params.sortBy}:${sortFlow}`
+    }
+
+    if (params.filters) {
+      const rsql = transformToRSQL(params.filters)
+      apiUrl += `&q=${encodeRsqlValue(rsql)}`
+    }
+    const response = await api.get(apiUrl)
+
     commit('setOrders', response.items)
+    return response
   }),
   deleteOrder: tryAction(async ({ dispatch, commit }: any, orderId: string) => {
-    commit('setOrders', null)
     await api.delete_(`/api/v2/lifelines_order/${orderId}`)
     successMessage(`Deleted order with order number ${orderId}`, commit)
-    dispatch('loadOrders')
   }),
   loadSections: tryAction(async ({ commit, state }: any) => {
     if (!Object.keys(state.sections).length) {
@@ -295,8 +310,7 @@ export default {
     successMessage(`Submitted order with order number ${orderNumber}`, commit)
   }),
   load: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
-    // @ts-ignore
-    const response = this.loadOrder({ state, commit })
+    const response = await loadOrder({ state, commit }, orderNumber)
     const cart: Cart = await api.get(`/files/${response.contents.id}`)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('updateFacetFilter', facetFilter)
@@ -304,9 +318,7 @@ export default {
     successMessage(`Loaded order with orderNumber ${orderNumber}`, commit)
   }),
   loadOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
-    const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
-    commit('restoreOrderState', response)
-    return response
+    return loadOrder({ state, commit }, orderNumber)
   }),
   copyOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, sourceOrderNumber: string) => {
     // Fetch source data
