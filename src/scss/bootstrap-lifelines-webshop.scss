@@ -68,29 +68,53 @@ h6 {
   color: $secondary;
 }
 
-.page-item.active .page-link {
-  background-color: $secondary;
-  border-color: $secondary;
-  box-shadow: none;
-  color: #fff;
-  z-index: 1;
+.page-item {
+  .page-link {
+    color: $secondary;
+  }
+
+  &.active .page-link {
+    background-color: $secondary;
+    border-color: $secondary;
+    box-shadow: none;
+    color: #fff;
+    z-index: 1;
+  }
 }
+
+
 
 .container-fw {
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: 1200px;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba($primary, 0.03);
+.table {
+  table-layout: fixed;
+
+  &.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba($primary, 0.03);
+  }
+
+  th {
+    border-top: 0;
+    color: $secondary;
+
+    &[aria-sort="ascending"],
+    &[aria-sort="descending"] {
+      color: $primary;
+    }
+  }
+
+  td {
+    border-top: 1px solid #efefef;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+  }
 }
 
-.table-hover tbody tr:hover {
-  background-color: rgba($primary, 0.05);
-  color: #212529;
-}
 
-.table td {
-  vertical-align: middle;
+*:focus {
+  outline: none;
 }
-

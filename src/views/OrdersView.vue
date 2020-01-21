@@ -43,7 +43,7 @@
 
     <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
 
-    <div class="filters form-row">
+    <div v-if="hasManagerRole" class="filters form-row">
       <div class="form-group col-md-4">
         <input v-model="orderFilters.text" type="text" id="searchtext" class="form-control" placeholder="Search orders...">
       </div>
@@ -51,7 +51,7 @@
         <Dropdown buttonClass="btn-secondary"
           v-model="orderFilters.state"
           :options="stateFilterOptions"
-          :title="$t('Filter state...')"/>
+          :title="$t('Filter status...')"/>
       </div>
 
       <div class="form-group col-md-6">
@@ -69,7 +69,6 @@
     <b-table
       ref="table"
       striped
-      hover
       show-empty
       :items="ordersProvider"
       :fields="tableFields"
@@ -121,13 +120,16 @@
           v-if="hasManagerRole"
           v-model="data.item.state"
           :intend="true"
-          :buttonClass="classes.buttonState[data.item.state]"
+          :buttonClass="`btn-${classes.state[data.item.state]}`"
           :method="changeStateConfirm.bind(this, data.item)"
           :options="stateOptions"
           :title="$t(data.item.state)"
         />
 
-        <span v-else class="badge badge-pill" :class="classes.badge[data.item.state]">{{ data.item.state }}</span>
+        <span v-else
+          class="badge badge-pill"
+          :class="`badge-${classes.state[data.item.state]}`"
+        >{{ data.item.state }}</span>
       </template>
     </b-table>
 
@@ -162,20 +164,21 @@ export default Vue.extend({
     numberOfOrders: (vm) => vm.orders.length,
     tableFields: function () {
       let fields = [
-        { key: 'actions', label: '', class: 'actions-column' },
-        { key: 'name', label: this.$t('lifelines-webshop-orders-col-header-title'), sortable: true }
+        { key: 'actions', label: '', class: 'td-actions' },
+        { key: 'name', label: this.$t('lifelines-webshop-orders-col-header-title'), sortable: true, class: 'td-title' }
       ]
 
       if (this.hasManagerRole) {
-        fields.push({ key: 'email', label: this.$t('lifelines-webshop-orders-col-header-email'), sortable: true })
+        fields.push({ key: 'email', label: this.$t('lifelines-webshop-orders-col-header-email'), sortable: true, class: 'td-email' })
       }
 
       fields = fields.concat([
-        { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true },
-        { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true },
-        { key: 'submissionDate', label: this.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true },
+        { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true, class: 'td-project' },
+        { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true, class: 'td-order' },
+        { key: 'submissionDate', label: this.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true, class: 'td-submitted' },
         {
           key: 'state',
+          class: 'td-state',
           label: this.$t('lifelines-webshop-orders-col-header-state'),
           sortable: true,
           formatter: (value, key, item) => {
@@ -193,17 +196,11 @@ export default Vue.extend({
   data: function () {
     return {
       classes: {
-        badge: {
-          'Draft': 'badge-info',
-          'Submitted': 'badge-primary',
-          'Approved': 'badge-success',
-          'Rejected': 'badge-danger'
-        },
-        buttonState: {
-          'Draft': 'btn-secondary',
-          'Submitted': 'btn-primary',
-          'Approved': 'btn-success',
-          'Rejected': 'btn-danger'
+        state: {
+          'Draft': 'secondary',
+          'Submitted': 'primary',
+          'Approved': 'success',
+          'Rejected': 'danger'
         }
       },
       orderFilters: {
@@ -268,10 +265,15 @@ export default Vue.extend({
       await this.copyOrder(orderNumber)
       this.$refs.table.refresh()
     },
+    /**
+     * Retrieves orders from the Molgenis API.
+     * Please note that only managers have
+     * pagination and filtering.
+     */
     ordersProvider: async function (ctx, cb) {
       const params = {
         filters: null,
-        num: ctx.perPage,
+        num: this.hasManagerRole ? ctx.perPage : 10000,
         sortBy: ctx.sortBy,
         sortDesc: ctx.sortDesc,
         start: (ctx.currentPage - 1) * ctx.perPage
@@ -330,14 +332,42 @@ export default Vue.extend({
     margin: $spacer 0;
   }
 
-  .actions-column {
-    padding-left: 0;
-    padding-right: 0;
-    text-overflow: none;
-    width: 145px;
+  .td-actions {
+    width: 9rem;
 
     button {
       margin-right: $spacer;
+    }
+  }
+
+  .td-order {
+    width: 10rem;
+  }
+
+  .td-project {
+    width: 7rem;
+  }
+
+  .badge {
+    font-size: 0.9rem;
+    padding: $spacer $spacer * 2;
+  }
+
+  .td-state {
+    overflow: visible !important;
+    width: 140px;
+  }
+
+  @media screen and (max-width: $breakpoint-tablet) {
+    .td-email,
+    .td-project {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: $breakpoint-desktop) {
+    .td-submitted {
+      display: none;
     }
   }
 </style>

@@ -26,7 +26,7 @@ const en = {
   'lifelines-webshop-orders-col-header-project': 'Project',
   'lifelines-webshop-orders-col-header-order': 'Order',
   'lifelines-webshop-orders-col-header-app-form': 'Application form',
-  'lifelines-webshop-orders-col-header-state': 'State',
+  'lifelines-webshop-orders-col-header-state': 'Status',
   'lifelines-webshop-cancel-btn-label': 'Cancel',
   'lifelines-webshop-saving-btn-label': 'Saving',
   'lifelines-webshop-submit-btn-label': 'Submit',
