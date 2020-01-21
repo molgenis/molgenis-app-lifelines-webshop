@@ -48,10 +48,10 @@
         <input v-model="orderFilters.text" type="text" id="searchtext" class="form-control" placeholder="Search orders...">
       </div>
       <div class="form-group col-md-2">
-        <Dropdown buttonClass="btn-secondary"
+        <Dropdown class="dropdown-filter-state" buttonClass="btn-secondary"
           v-model="orderFilters.state"
           :options="stateFilterOptions"
-          :title="$t('Filter status...')"/>
+          :title="$t('lifelines-webshop-filter-status')"/>
       </div>
 
       <div class="form-group col-md-6">
@@ -117,6 +117,7 @@
 
       <template v-slot:cell(state)="data" class="table-cell-overflow">
         <Dropdown
+          class="dropdown-update-state"
           v-if="hasManagerRole"
           v-model="data.item.state"
           :intend="true"
@@ -162,6 +163,9 @@ export default Vue.extend({
   components: { ConfirmationModal, Dropdown, FontAwesomeIcon },
   computed: {
     numberOfOrders: (vm) => vm.orders.length,
+    stateFilterOptions: function () {
+      return [{ value: '', name: this.$t('All') }, ...this.stateOptions]
+    },
     tableFields: function () {
       let fields = [
         { key: 'actions', label: '', class: 'td-actions' },
@@ -211,19 +215,11 @@ export default Vue.extend({
       perPage: 10,
       currentPage: 1,
       stateOptions: [
-        { value: 'Draft', name: this.$t('Draft') },
-        { value: 'Rejected', name: this.$t('Rejected') },
-        { value: 'Submitted', name: this.$t('Submitted') },
-        { value: 'Approved', name: this.$t('Approved') }
-      ],
-      stateFilterOptions: [
-        { value: '', name: this.$t('All') },
-        { value: 'Draft', name: this.$t('Draft') },
-        { value: 'Rejected', name: this.$t('Rejected') },
-        { value: 'Submitted', name: this.$t('Submitted') },
-        { value: 'Approved', name: this.$t('Approved') }
+        { value: 'Draft', name: this.$t('lifelines-webshop-state-draft') },
+        { value: 'Rejected', name: this.$t('lifelines-webshop-state-rejected') },
+        { value: 'Submitted', name: this.$t('lifelines-webshop-state-submitted') },
+        { value: 'Approved', name: this.$t('lifelines-webshop-state-approved') }
       ]
-
     }
   },
   filters: {
@@ -309,7 +305,7 @@ export default Vue.extend({
 
       const response = await this.loadOrders(params)
       this.total = response.total
-      return response.items
+      return this.orders
     },
     ...mapActions(['save', 'loadOrder', 'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
     ...mapMutations(['changeOrderStatus', 'setToast'])

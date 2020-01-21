@@ -6,9 +6,7 @@ import OrdersView from '@/views/OrdersView.vue'
 import moment from 'moment'
 import Vuex from 'vuex'
 import orders from '../fixtures/orders'
-import Spinner from '@/components/animations/SpinnerAnimation.vue'
 import mutations from '@/store/mutations'
-import { OrderState } from '@/types/Order'
 import '@/globals/variables'
 
 describe('OrdersView.vue', () => {
@@ -21,7 +19,12 @@ describe('OrdersView.vue', () => {
 
   let actions = {
     deleteOrder: jest.fn(),
-    loadOrders: jest.fn(),
+    loadOrders: jest.fn(() => {
+      return {
+        items: orders,
+        total: orders.length
+      }
+    }),
     sendApproveTrigger,
     copyOrder
   }
@@ -111,10 +114,9 @@ describe('OrdersView.vue', () => {
     it('approve order success', () => {
       sendApproveTrigger.mockResolvedValue('200')
 
-      const approveBtn = wrapper.find('.btn.btn-success')
-      expect(approveBtn.find('span').text()).toEqual('Approve')
+      const approveBtn = wrapper.find('.dropdown-update-state')
 
-      approveBtn.trigger('click')
+      expect(approveBtn.find('span').text()).toEqual('Approve')
 
       expect(actions.sendApproveTrigger).toHaveBeenCalled()
     })
