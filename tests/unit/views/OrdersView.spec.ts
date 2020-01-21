@@ -64,13 +64,6 @@ describe('OrdersView.vue', () => {
     expect(actions.loadOrders).toHaveBeenCalled()
   })
 
-  it('shows a spinner while loading orders', () => {
-    const wrapper = mount(OrdersView, { store, localVue })
-    expect(wrapper.find(Spinner).isVisible()).toBeTruthy()
-    store.commit('setOrders', orders)
-    expect(wrapper.find(Spinner).exists()).toBeFalsy()
-  })
-
   it('shows orders table when loaded', () => {
     const wrapper = mount(OrdersView, { store, localVue })
     store.commit('setOrders', orders)
