@@ -33,19 +33,17 @@ export const generateOrderNumber = () => Math.floor(Math.random() * 1000000).toS
 export const buildOrdersQuery = (query: QueryParams) => {
   let queryParams = `?num=${query.num}&start=${query.start}`
 
-  if (query.sortBy) {
-    const sortFlow = query.sortDesc ? 'desc' : 'asc'
-    queryParams += `&sort=${query.sortBy}:${sortFlow}`
-  }
-
-  let rsqlOptions:[] | Object = []
-  const operands = { text: {}, state: {} }
-
   // Default sorting is on creation data.
   if (!query.sortBy) {
     query.sortBy = 'creationDate'
     query.sortDesc = true
   }
+
+  const sortFlow = query.sortDesc ? 'desc' : 'asc'
+  queryParams += `&sort=${query.sortBy}:${sortFlow}`
+
+  let rsqlOptions:[] | Object = []
+  const operands = { text: {}, state: {} }
 
   if (query.filters.text) {
     operands.text = {

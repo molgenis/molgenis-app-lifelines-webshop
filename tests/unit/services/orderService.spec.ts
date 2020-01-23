@@ -79,7 +79,7 @@ describe('buildOrdersQuery', () => {
   }
 
   it('should generate a default page query', () => {
-    expect(buildOrdersQuery(query)).toEqual('?num=10&start=0')
+    expect(buildOrdersQuery(query)).toEqual('?num=10&start=0&sort=creationDate:desc')
   })
 
   it('should add sorting to query params', () => {

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`OrdersView.vue When component is mounted checks content of order tables 1`] = `
-<table role="table" aria-busy="false" aria-colcount="7" class="table b-table table-striped" id="__BVID__109">
+<table role="table" aria-busy="false" aria-colcount="7" class="table b-table table-striped" id="__BVID__118">
   <!---->
   <!---->
   <thead role="rowgroup" class="">
@@ -35,9 +35,7 @@ exports[`OrdersView.vue When component is mounted checks content of order tables
       </td>
       <td aria-colindex="6" role="cell" class="td-submitted"><span></span></td>
       <td aria-colindex="7" role="cell" class="td-state">
-        <div class="c-dropdown dropdown dropdown-update-state"><button type="button" id="Draft" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn dropdown-toggle btn-block btn-small btn-secondary">
-            lifelines-webshop-state-draft
-          </button>
+        <div class="c-dropdown dropdown dropdown-update-state"><button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn dropdown-toggle btn-block btn-small btn-secondary">lifelines-webshop-state-draft</button>
           <div class="dropdown-menu"><a class="dropdown-item">lifelines-webshop-state-draft
             </a><a class="dropdown-item">lifelines-webshop-state-rejected
             </a><a class="dropdown-item">lifelines-webshop-state-submitted
@@ -64,9 +62,7 @@ exports[`OrdersView.vue When component is mounted checks content of order tables
           </svg></a></td>
       <td aria-colindex="6" role="cell" class="td-submitted"><span></span></td>
       <td aria-colindex="7" role="cell" class="td-state">
-        <div class="c-dropdown dropdown dropdown-update-state"><button type="button" id="Submitted" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn dropdown-toggle btn-block btn-small btn-primary">
-            lifelines-webshop-state-submitted
-          </button>
+        <div class="c-dropdown dropdown dropdown-update-state"><button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn dropdown-toggle btn-block btn-small btn-primary">lifelines-webshop-state-submitted</button>
           <div class="dropdown-menu"><a class="dropdown-item">lifelines-webshop-state-draft
             </a><a class="dropdown-item">lifelines-webshop-state-rejected
             </a><a class="dropdown-item">lifelines-webshop-state-submitted

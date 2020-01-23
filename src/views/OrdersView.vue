@@ -248,7 +248,6 @@ export default Vue.extend({
       }
 
       this.$router.push({ name: 'orders' })
-      this.$refs.table.refresh()
     },
     deleteOrderConfirmed: function (orderNumber) {
       this.deleteOrder(orderNumber)
@@ -261,6 +260,11 @@ export default Vue.extend({
     },
     handleCopyOrder: async function (orderNumber) {
       await this.copyOrder(orderNumber)
+      this.table.filters.text = ''
+      this.table.filters.state = ''
+      this.table.sortBy = ''
+      this.table.sortDesc = true
+      await this.updateTable()
       successMessage(`Order copied to new order ${orderNumber}`, this.$store.commit)
     },
     handlePaginate: function (pageNumber) {

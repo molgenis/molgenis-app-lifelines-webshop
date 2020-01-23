@@ -6,15 +6,14 @@ import OrdersView from '@/views/OrdersView.vue'
 import moment from 'moment'
 import Vuex from 'vuex'
 import orders from '../fixtures/orders'
-import mutations from '@/store/mutations'
 import '@/globals/variables'
 
 describe('OrdersView.vue', () => {
   let localVue: any
   let store: any
+  let mutations: any
 
   const hasManagerRole = jest.fn()
-  const sendApproveTrigger = jest.fn()
   const copyOrder = jest.fn()
 
   const stubs = {
@@ -31,6 +30,7 @@ describe('OrdersView.vue', () => {
   }
 
   let actions = {
+    loadOrder: jest.fn(),
     deleteOrder: jest.fn(),
     loadOrders: jest.fn(() => {
       return {
@@ -38,8 +38,10 @@ describe('OrdersView.vue', () => {
         total: orders.length
       }
     }),
-    sendApproveTrigger,
-    copyOrder
+    sendApproveTrigger: jest.fn(),
+    copyOrder,
+    save: jest.fn(),
+    submit: jest.fn()
   }
 
   let getters = {
@@ -55,6 +57,11 @@ describe('OrdersView.vue', () => {
 
     let state: any = {
       orders
+    }
+
+    mutations = {
+      changeOrderStatus: jest.fn(),
+      setToast: jest.fn()
     }
 
     store = new Vuex.Store({
@@ -118,58 +125,153 @@ describe('OrdersView.vue', () => {
       })
     })
 
-    describe('when the user clicks state dropdown', () => {
+    describe('when the user changes the state to approve', () => {
       beforeEach(() => {
         // Click on Approved (4th item)
         wrapper.find('.dropdown-update-state .dropdown-item:nth-child(4)').trigger('click')
       })
 
-      it.only('should show the order state modal', () => {
+      it('should show the order state modal', () => {
         expect(wrapper.find('.modal-dialog').exists()).toBe(true)
+        expect(wrapper.find('.t-btn-confirm-state').text()).toEqual('lifelines-webshop-modal-button-update-state')
       })
 
-      it('approve order success', () => {
-        wrapper.find('.t-btn-confirm-state').trigger('click')
+      describe('when user clicks confirm btn in the modal', () => {
+        beforeEach(async (done) => {
+          actions.sendApproveTrigger.mockResolvedValue('200')
+          wrapper.find('.t-btn-confirm-state').trigger('click')
+          // needed to wait for async calls to store to finish
+          await localVue.nextTick()
+          done()
+        })
 
-        sendApproveTrigger.mockResolvedValue('200')
-        const approveBtn = wrapper.find('.dropdown-update-state')
-        expect(approveBtn.find('span').text()).toEqual('Approve')
-
-        expect(actions.sendApproveTrigger).toHaveBeenCalled()
+        it('approve order success', () => {
+          expect(actions.loadOrder).toHaveBeenCalled()
+          expect(mutations.changeOrderStatus).toHaveBeenCalled()
+          expect(actions.save).toHaveBeenCalled()
+          expect(actions.sendApproveTrigger).toHaveBeenCalled()
+        })
       })
 
-      // it('approve order fail', () => {
-      //   sendApproveTrigger.mockRejectedValue('500')
+      describe('when user clicks confirm btn in the modal but the approve fails', () => {
+        beforeEach(async (done) => {
+          actions.sendApproveTrigger.mockRejectedValue('500')
+          wrapper.find('.t-btn-confirm-state').trigger('click')
+          // needed to wait for async calls to store to finish
+          await localVue.nextTick()
+          await localVue.nextTick()
+          done()
+        })
 
-      //   const approveBtn = wrapper.find('.btn.btn-success')
-      //   expect(approveBtn.find('span').text()).toEqual('Approve')
-      //   approveBtn.trigger('click')
+        it('approve order success', () => {
+          expect(mutations.setToast).toHaveBeenCalled()
+        })
+      })
+    })
 
-      //   expect(actions.sendApproveTrigger).toHaveBeenCalled()
-      // })
+    describe('when the user changes the state to submitted', () => {
+      describe('when user clicks confirm btn in the modal', () => {
+        beforeEach(async (done) => {
+          // Click on Submmited (3th item)
+          wrapper.find('.dropdown-update-state .dropdown-item:nth-child(3)').trigger('click')
+          actions.sendApproveTrigger.mockResolvedValue('200')
+          wrapper.find('.t-btn-confirm-state').trigger('click')
+          // needed to wait for async calls to store to finish
+          await localVue.nextTick()
+          done()
+        })
+
+        it('submit order success', () => {
+          expect(actions.submit).toHaveBeenCalled()
+        })
+      })
+    })
+
+    describe('Copy order', () => {
+      it('should add a copy button of each order', () => {
+        const copyButtons = wrapper.findAll('.copy-btn')
+        expect(copyButtons.length).toEqual(2)
+      })
+
+      describe('when the user click the copy btn', () => {
+        beforeEach(() => {
+          const copyButton = wrapper.find('.copy-btn')
+          copyButton.trigger('click')
+        })
+
+        it('should call the copy action when clicked', () => {
+          expect(actions.copyOrder).toHaveBeenCalled()
+        })
+      })
+    })
+
+    describe('handleContextChanged', () => {
+      beforeEach(() => {
+        wrapper.vm.handleContextChanged({
+          sortBy: 'foo',
+          sortDesc: false
+        })
+      })
+
+      it('refresh the table', () => {
+        expect(actions.loadOrders).toHaveBeenCalledWith(expect.anything(),
+          {
+            'filters': {
+              'state': '',
+              'text': ''
+            },
+            'num': 10,
+            'sortBy': 'foo',
+            'sortDesc': false,
+            'start': 0
+          },
+          undefined
+        )
+      })
+    })
+
+    describe('handlePaginate', () => {
+      beforeEach(() => {
+        wrapper.vm.handlePaginate(4)
+      })
+
+      it('update the page start load the new orders', () => {
+        expect(actions.loadOrders).toHaveBeenCalledWith(expect.anything(),
+          {
+            'filters': {
+              'state': '',
+              'text': ''
+            },
+            'num': 10,
+            'sortBy': '',
+            'sortDesc': false,
+            'start': 30
+          },
+          undefined
+        )
+      })
+    })
+
+    describe('onSearchChange', () => {
+      beforeEach(() => {
+        wrapper.vm.onSearchChange('find me')
+      })
+
+      it('update search text and fetch orders', () => {
+        expect(actions.loadOrders).toHaveBeenCalledWith(expect.anything(),
+          {
+            'filters': {
+              'state': '',
+              'text': 'find me'
+            },
+            'num': 10,
+            'sortBy': '',
+            'sortDesc': true,
+            'start': 0
+          },
+          undefined
+        )
+      })
     })
   })
-
-  // describe('Copy order', () => {
-  //   let wrapper:any
-
-  //   beforeEach(() => {
-  //     localVue.use(Router)
-  //     hasManagerRole.mockReturnValue(true)
-  //     wrapper = getWrapper({ router: true })
-
-  //     store.commit('setOrders', orders)
-  //   })
-
-  //   it('should add a copy button of each order', () => {
-  //     const copyButtons = wrapper.findAll('.copy-btn')
-  //     expect(copyButtons.length).toEqual(2)
-  //   })
-
-  //   it('should call the copy action when clicked', () => {
-  //     const copyButton = wrapper.find('.copy-btn')
-  //     copyButton.trigger('click')
-  //     expect(actions.copyOrder).toHaveBeenCalled()
-  //   })
-  // })
 })
