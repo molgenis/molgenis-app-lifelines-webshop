@@ -62,9 +62,7 @@ export default Vue.extend({
       type: Function
     },
     options: {
-      default () {
-        return []
-      },
+      default: () => [],
       type: Array
     },
     title: {
