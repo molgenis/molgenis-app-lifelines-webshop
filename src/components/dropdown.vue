@@ -39,6 +39,7 @@ export default Vue.extend({
     updateModel: function ($e, option) {
       if (!this.intend) {
         this.$emit('input', option.value)
+        Vue.nextTick(() => this.$emit('change', option.value))
       }
 
       if (this.method) {

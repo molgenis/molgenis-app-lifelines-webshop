@@ -58,6 +58,7 @@
           :buttonClass="`btn-${classes.state[table.filters.state]}`"
           v-model="table.filters.state"
           :options="stateFilterOptions"
+          @change="updateTable"
           :title="$t('lifelines-webshop-filter-status')"/>
       </div>
 
@@ -248,6 +249,7 @@ export default Vue.extend({
       }
 
       this.$router.push({ name: 'orders' })
+      this.updateTable()
     },
     deleteOrderConfirmed: function (orderNumber) {
       this.deleteOrder(orderNumber)
