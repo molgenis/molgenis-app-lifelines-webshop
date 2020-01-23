@@ -21,13 +21,14 @@ import Vue from 'vue'
 export default Vue.extend({
   computed: {
     selectedTitle: function () {
+      let selected
       for (const option of this.options) {
         if (option.value === this.value) {
-          return option.name
+          selected = option.name
         }
       }
 
-      return this.title
+      return selected
     }
   },
   data: function () {
@@ -62,7 +63,6 @@ export default Vue.extend({
       type: Function
     },
     options: {
-      default: () => [],
       type: Array
     },
     title: {
