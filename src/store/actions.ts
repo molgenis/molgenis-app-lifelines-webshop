@@ -7,7 +7,7 @@ import { Section } from '@/types/Section.ts'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
 import Getters from '@/types/Getters'
-import { buildFormData, generateOrderNumber } from '@/services/orderService.ts'
+import { buildFormData, generateOrderNumber, buildOrdersQuery } from '@/services/orderService.ts'
 import FormField from '@/types/FormField'
 import { OrderState } from '@/types/Order'
 import moment from 'moment'
@@ -15,7 +15,8 @@ import { TreeParent } from '@/types/Tree'
 import axios from 'axios'
 import { setRolePermission, setUserPermission } from '@/services/permissionService'
 // @ts-ignore
-import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
+import { encodeRsqlValue } from '@molgenis/rsql'
+import { QueryParams } from '@/types/QueryParams'
 
 const buildPostOptions = (formData: any, formFields: FormField[]) => {
   return {
@@ -84,24 +85,15 @@ const getApplicationForm = async (applicationFormId: string, filename: string) =
 }
 
 export default {
-  loadOrders: tryAction(async ({ commit }: any, params:any = { num: 10, start: 0 }) => {
-    let apiUrl = `/api/v2/lifelines_order?num=${params.num}&start=${params.start}`
-    if (params.sortBy) {
-      const sortFlow = params.sortDesc ? 'desc' : 'asc'
-      apiUrl += `&sort=${params.sortBy}:${sortFlow}`
-    }
-
-    if (params.filters) {
-      const rsql = transformToRSQL(params.filters)
-      apiUrl += `&q=${encodeRsqlValue(rsql)}`
-    }
-    const response = await api.get(apiUrl)
-    commit('setOrders', response.items)
-    return response
+  loadOrders: tryAction(async ({ commit }: any, query:QueryParams) => {
+    const queryParams = buildOrdersQuery(query)
+    const response = await api.get(`/api/v2/lifelines_order${queryParams}`)
+    commit('setOrders', response)
   }),
-  deleteOrder: tryAction(async ({ dispatch, commit }: any, orderId: string) => {
-    await api.delete_(`/api/v2/lifelines_order/${orderId}`)
-    successMessage(`Deleted order with order number ${orderId}`, commit)
+  deleteOrder: tryAction(async ({ dispatch, commit }: any, orderNumber: string) => {
+    await api.delete_(`/api/v2/lifelines_order/${orderNumber}`)
+    commit('deleteOrder', orderNumber)
+    successMessage(`Deleted order with order number ${orderNumber}`, commit)
   }),
   loadSections: tryAction(async ({ commit, state }: any) => {
     if (!Object.keys(state.sections).length) {
@@ -361,7 +353,6 @@ export default {
       await Promise.all(setPermissionRequests)
     }
 
-    successMessage(`Order copied to new order ${orderNumber}`, commit)
     return orderNumber
   }),
   givePermissionToOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {

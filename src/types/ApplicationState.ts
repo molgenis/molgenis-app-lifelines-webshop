@@ -44,6 +44,7 @@ export interface AppState {
   filteredSubsections: number[] | null
   filteredSections: number[] | null
   orders: Order[] | null
+  ordersTotal: number
 }
 
 // we start using the store only after the context is loaded

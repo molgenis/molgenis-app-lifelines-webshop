@@ -13,7 +13,7 @@
       </template>
 
       <template v-slot:confirmButton>
-        <button type="button" class="btn btn-danger t-btn-danger"
+        <button type="button" class="btn btn-danger t-btn-confirm-delete"
           @click="deleteOrderConfirmed($route.params.orderNumber)">
           {{$t('lifelines-webshop-modal-button-delete')}}
         </button>
@@ -34,7 +34,7 @@
       </template>
 
       <template v-slot:confirmButton>
-        <button type="button" class="btn btn-secondary"
+        <button type="button" class="btn btn-secondary t-btn-confirm-state"
           @click="changeStateConfirmed($route.params.orderNumber, $route.params.state)">
           {{$t('lifelines-webshop-modal-button-update-state')}}
         </button>
@@ -43,53 +43,52 @@
 
     <h1 id="orders-title">{{$t('lifelines-webshop-orders-title')}}</h1>
 
-    <div v-if="hasManagerRole" class="filters form-row">
-      <div class="form-group col-md-4">
-        <input v-model="orderFilters.text" type="text" id="searchtext" class="form-control" placeholder="Search orders...">
+    <div v-if="hasManagerRole" class="filters form-row flex-row-reverse">
+
+      <div class="form-group ml-3">
+        <search-component
+          :searchTerm="table.filters.text"
+          :searching="table.isBusy"
+          @searchChanged="onSearchChange"
+        ></search-component>
       </div>
-      <div class="form-group col-md-2">
-        <Dropdown class="dropdown-filter-state" buttonClass="btn-secondary"
-          v-model="orderFilters.state"
+
+      <div class="form-group">
+        <Dropdown class="dropdown-filter-state"
+          :buttonClass="`btn-${classes.state[table.filters.state]}`"
+          v-model="table.filters.state"
           :options="stateFilterOptions"
           :title="$t('lifelines-webshop-filter-status')"/>
       </div>
 
-      <div class="form-group col-md-6">
-        <b-pagination
-          align="right"
-          v-if="hasManagerRole"
-          v-model="currentPage"
-          :total-rows="total"
-          :per-page="perPage"
-          aria-controls="orders-table">
-        </b-pagination>
-      </div>
     </div>
 
     <b-table
       ref="table"
       striped
       show-empty
-      :items="ordersProvider"
+      :items="orders"
+      :filter="table.filter"
       :fields="tableFields"
-      :per-page="perPage"
-      :current-page="currentPage"
+      :per-page="0"
+      :current-page="table.currentPage"
       :no-local-sorting="true"
+      @context-changed="handleContextChanged"
     >
 
       <template v-slot:cell(actions)="data">
-        <router-link class="btn btn-secondary btn-sm" tag="button"
+        <router-link class="btn btn-secondary" tag="button"
           v-if="data.item.state === 'Draft' || hasManagerRole"
           :to="`/shop/${data.item.orderNumber}`">
             <font-awesome-icon icon="edit" aria-label="edit"/>
         </router-link>
 
-        <button class="btn btn-secondary btn-sm copy-btn" type="button"
+        <button class="btn btn-secondary copy-btn" type="button"
           @click="handleCopyOrder(data.item.orderNumber)">
           <font-awesome-icon icon="copy" aria-label="copy"/>
         </button>
 
-        <router-link class="btn btn-danger btn-sm t-btn-order-delete" tag="button"
+        <router-link class="btn btn-danger t-btn-order-delete" tag="button"
           v-if="data.item.state === 'Draft' || hasManagerRole"
           :to="{ name: 'orderDelete', params: {orderNumber: data.item.orderNumber}}">
           <font-awesome-icon icon="trash" aria-label="delete"/>
@@ -118,7 +117,7 @@
           v-if="hasManagerRole"
           v-model="data.item.state"
           :intend="true"
-          :buttonClass="`btn-${classes.state[data.item.state]}`"
+          :buttonClass="`btn-block btn-small btn-${classes.state[data.item.state]}`"
           :method="changeStateConfirm.bind(this, data.item)"
           :options="stateOptions"
           :title="$t(data.item.state)"
@@ -134,10 +133,10 @@
     <b-pagination
       align="right"
       v-if="hasManagerRole"
-      v-model="currentPage"
-      :total-rows="total"
-      :per-page="perPage"
-      aria-controls="orders-table">
+      v-model="table.currentPage"
+      :total-rows="ordersTotal"
+      :per-page="table.perPage"
+      @change="handlePaginate">
     </b-pagination>
 
   </div>
@@ -150,16 +149,17 @@ import { faEdit, faDownload, faTrash, faCopy } from '@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
+import SearchComponent from '../components/search/SearchComponent.vue'
 import Dropdown from '../components/dropdown.vue'
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
 import moment from 'moment'
+import { successMessage } from '@/store/helpers'
 
 library.add(faEdit, faDownload, faTrash, faCopy)
 
 export default Vue.extend({
-  components: { ConfirmationModal, Dropdown, FontAwesomeIcon },
+  components: { ConfirmationModal, Dropdown, FontAwesomeIcon, SearchComponent },
   computed: {
-    numberOfOrders: (vm) => vm.orders.length,
     stateFilterOptions: function () {
       return [{ value: '', name: this.$t('lifelines-webshop-state-all') }, ...this.stateOptions]
     },
@@ -182,35 +182,36 @@ export default Vue.extend({
           class: 'td-state',
           label: this.$t('lifelines-webshop-orders-col-header-state'),
           sortable: true,
-          formatter: (value, key, item) => {
-            return item.state
-          },
+          formatter: (value, key, item) => item.state,
           sortByFormatted: true
         }
       ])
 
       return fields
     },
-    ...mapState(['orders']),
+    ...mapState(['orders', 'ordersTotal']),
     ...mapGetters(['hasManagerRole'])
   },
   data: function () {
     return {
       classes: {
         state: {
+          '': 'secondary',
           'Draft': 'secondary',
           'Submitted': 'primary',
           'Approved': 'success',
           'Rejected': 'danger'
         }
       },
-      orderFilters: {
-        text: '',
-        state: ''
+      table: {
+        currentPage: 1,
+        filters: { text: '', state: '' },
+        isBusy: false,
+        perPage: 10,
+        sortBy: '',
+        sortDesc: true
       },
       total: 0,
-      perPage: 10,
-      currentPage: 1,
       stateOptions: [
         { value: 'Draft', name: this.$t('lifelines-webshop-state-draft') },
         { value: 'Rejected', name: this.$t('lifelines-webshop-state-rejected') },
@@ -252,81 +253,64 @@ export default Vue.extend({
     deleteOrderConfirmed: function (orderNumber) {
       this.deleteOrder(orderNumber)
       this.$router.push({ name: 'orders' })
-      this.$refs.table.refresh()
+    },
+    handleContextChanged: function (table) {
+      this.table.sortBy = table.sortBy
+      this.table.sortDesc = table.sortDesc
+      this.updateTable()
     },
     handleCopyOrder: async function (orderNumber) {
       await this.copyOrder(orderNumber)
-      this.$refs.table.refresh()
+      successMessage(`Order copied to new order ${orderNumber}`, this.$store.commit)
+    },
+    handlePaginate: function (pageNumber) {
+      this.table.currentPage = pageNumber
+      this.updateTable()
+    },
+    onSearchChange: function (searchText) {
+      this.table.filters.text = searchText
+      this.updateTable()
     },
     /**
      * Retrieves orders from the Molgenis API.
      * Please note that only managers have
      * pagination and filtering.
      */
-    ordersProvider: async function (ctx, cb) {
-      const params = {
-        filters: null,
-        num: this.hasManagerRole ? ctx.perPage : 10000,
-        sortBy: ctx.sortBy,
-        sortDesc: ctx.sortDesc,
-        start: (ctx.currentPage - 1) * ctx.perPage
+    updateTable: function () {
+      const query = {
+        filters: this.table.filters,
+        num: this.hasManagerRole ? this.table.perPage : 100,
+        sortBy: this.table.sortBy,
+        sortDesc: this.table.sortDesc,
+        start: (this.table.currentPage - 1) * this.table.perPage
       }
 
-      const operands = []
-
-      // Default sorting is on creation data.
-      if (!params.sortBy) {
-        params.sortBy = 'creationDate'
-        params.sortDesc = true
-      }
-
-      if (this.orderFilters.text) {
-        operands.push({
-          operands: [
-            { selector: 'email', comparison: '=like=', arguments: this.orderFilters.text },
-            { selector: `name`, comparison: '=like=', arguments: this.orderFilters.text },
-            { selector: `orderNumber`, comparison: '=like=', arguments: this.orderFilters.text },
-            { selector: `projectNumber`, comparison: '=like=', arguments: this.orderFilters.text }
-          ],
-          operator: 'OR'
-        })
-      }
-
-      if (this.orderFilters.state) {
-        operands.push({ selector: 'state', comparison: '=q=', arguments: this.orderFilters.state })
-      }
-
-      if (operands.length) {
-        params.filters = { operator: 'AND', operands }
-      }
-
-      const response = await this.loadOrders(params)
-      this.total = response.total
-      return this.orders
+      this.loadOrders(query)
     },
     ...mapActions(['save', 'loadOrder', 'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
     ...mapMutations(['changeOrderStatus', 'setToast'])
   },
+  mounted: function () {
+    this.updateTable(this.table)
+  },
   watch: {
-    orderFilters: {
-      deep: true,
-      handler: function (val) {
-        this.$refs.table.refresh()
-      }
+    'table.filters.state': function (newStatus) {
+      this.updateTable()
     }
   }
 })
 </script>
 
 <style lang="scss">
-  @import "../scss/variables";
+@import "../scss/variables";
 
+#orders-view {
   .filters {
     margin: $spacer 0;
   }
 
   .td-actions {
-    width: 9rem;
+    width: 11rem;
 
     button {
       margin-right: $spacer;
@@ -351,6 +335,12 @@ export default Vue.extend({
     width: 140px;
   }
 
+  .dropdown-filter-state {
+    button {
+      width: 8rem;
+    }
+  }
+
   @media screen and (max-width: $breakpoint-tablet) {
     .td-email,
     .td-project {
@@ -363,4 +353,6 @@ export default Vue.extend({
       display: none;
     }
   }
+}
+
 </style>

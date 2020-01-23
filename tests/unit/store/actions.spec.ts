@@ -54,7 +54,8 @@ const mockResponses: { [key: string]: Object } = {
     total: orders.length
   },
   '/api/v2/lifelines_order?num=10000': {
-    items: orders
+    items: orders,
+    total: orders.length
   },
   '/api/v2/lifelines_order/fghij': {
     contents: {
@@ -285,6 +286,14 @@ jest.mock('@/services/permissionService', () => {
   }
 })
 
+jest.mock('@/services/orderService', () => {
+  return {
+    buildOrdersQuery: jest.fn(),
+    buildFormData: jest.fn(),
+    generateOrderNumber: jest.fn()
+  }
+})
+
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
     get: (url: string) => {
@@ -302,10 +311,14 @@ describe('actions', () => {
   describe('loadOrders', () => {
     it('loads the orders and commits them', async (done) => {
       const commit = jest.fn()
-      const action = actions.loadOrders({ commit })
+      // @ts-ignore
+      orderService.buildOrdersQuery.mockReturnValue('?num=10&start=0')
+      await actions.loadOrders({ commit }, {})
 
-      await action
-      expect(commit).toHaveBeenCalledWith('setOrders', orders)
+      expect(commit).toHaveBeenCalledWith('setOrders', {
+        items: orders,
+        total: orders.length
+      })
       done()
     })
   })
@@ -572,15 +585,6 @@ describe('actions', () => {
         expect(newOrderNumber).toBeDefined()
         expect(newOrderNumber).not.toMatch(sourceNumber)
         done()
-      })
-
-      it('adds application form if it is available', () => {
-        expect(post).toBeCalledWith('/api/v1/lifelines_order', expect.anything(), expect.anything())
-        const formIterator = post.mock.calls[0][1].body.entries()
-        const arrayData = Array.from(formIterator)
-        // @ts-ignore
-        const file = arrayData[2][1] // position of the uploaded file
-        expect(file).not.toEqual('')
       })
     })
 

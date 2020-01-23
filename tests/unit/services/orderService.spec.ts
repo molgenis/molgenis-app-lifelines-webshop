@@ -1,4 +1,5 @@
-import { isFileIncluded, buildFormData, generateOrderNumber } from '@/services/orderService.ts'
+import { isFileIncluded, buildFormData, generateOrderNumber, buildOrdersQuery } from '@/services/orderService.ts'
+import { QueryParams } from '@/types/QueryParams'
 
 describe('orderService', () => {
   describe('when a file type field is included', () => {
@@ -66,4 +67,36 @@ describe('buildFormData', () => {
 describe('generateOrderNumber', () => {
   const orderNumber = parseInt(generateOrderNumber())
   expect(orderNumber > 0 && orderNumber <= 1000000).toBeTruthy()
+})
+
+describe('buildOrdersQuery', () => {
+  let query:QueryParams = {
+    filters: { text: '', state: '' },
+    sortBy: null,
+    sortDesc: true,
+    num: 10,
+    start: 0
+  }
+
+  it('should generate a default page query', () => {
+    expect(buildOrdersQuery(query)).toEqual('?num=10&start=0')
+  })
+
+  it('should add sorting to query params', () => {
+    query.sortBy = 'name'
+    expect(buildOrdersQuery(query)).toEqual('?num=10&start=0&sort=name:desc')
+    query.sortDesc = false
+    expect(buildOrdersQuery(query)).toEqual('?num=10&start=0&sort=name:asc')
+  })
+
+  it('should generate valid filter query params', () => {
+    query.filters.text = 'text'
+    query.filters.state = 'state'
+    expect(buildOrdersQuery(query)).toEqual('?num=10&start=0&sort=name:asc&q=(email=like=text,name=like=text,orderNumber=like=text,projectNumber=like=text);state=q=state')
+    query.filters.text = ''
+    expect(buildOrdersQuery(query)).toEqual('?num=10&start=0&sort=name:asc&q=state=q=state')
+    query.filters.text = 'text'
+    query.filters.state = ''
+    expect(buildOrdersQuery(query)).toEqual('?num=10&start=0&sort=name:asc&q=email=like=text,name=like=text,orderNumber=like=text,projectNumber=like=text')
+  })
 })

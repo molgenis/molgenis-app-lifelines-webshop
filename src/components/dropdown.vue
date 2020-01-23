@@ -1,17 +1,13 @@
 <template>
 <div class="c-dropdown dropdown">
 
-  <button :class="buttonClass" class="btn dropdown-toggle" type="button" :id="title"
+  <button :class="buttonClass" class="btn dropdown-toggle" type="button"
   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <template v-if="value">
-        {{selectedTitle}}
-    </template>
-    <template v-else>
-        {{title}}
-    </template>
+    <template v-if="value">{{selectedTitle}}</template>
+    <template v-else>{{title}}</template>
   </button>
 
-  <div class="dropdown-menu" :aria-labelledby="title">
+  <div class="dropdown-menu">
     <a class="dropdown-item" :key="option.value"
         @click="updateModel($event, option)"
         v-for="option in options">{{option.name}}

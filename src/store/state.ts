@@ -94,7 +94,8 @@ const state: AppState = {
   searchTerm: null,
   filteredSubsections: null, // contains the IDs of subsections that either match the search term or contain variables that match the search term
   filteredSections: null, // contains the IDs of sections that match the search term
-  orders: null
+  orders: null,
+  ordersTotal: 0
 }
 
 export default state

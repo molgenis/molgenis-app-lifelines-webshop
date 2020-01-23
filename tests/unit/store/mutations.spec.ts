@@ -51,7 +51,8 @@ describe('mutations', () => {
   describe('setOrders', () => {
     it('sets the orders', () => {
       const baseAppState = { ...state }
-      mutations.setOrders(baseAppState, orders)
+      const response = { items: orders, total: orders.length }
+      mutations.setOrders(baseAppState, response)
       expect(baseAppState.orders).toEqual(orders)
     })
   })
