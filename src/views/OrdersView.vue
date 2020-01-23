@@ -298,11 +298,6 @@ export default Vue.extend({
   },
   mounted: function () {
     this.updateTable(this.table)
-  },
-  watch: {
-    'table.filters.state': function (newStatus) {
-      this.updateTable()
-    }
   }
 })
 </script>

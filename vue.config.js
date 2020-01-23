@@ -88,7 +88,7 @@ module.exports = {
         'changeOrigin': true
       }
     },
-    before: process.env.NODE_ENV === 'production' ? undefined : function (app, server) {
+    before: process.env.NODE_ENV === 'development' ? undefined : function (app, server) {
       app.get('/api/v2/i18n/lifelines-webshop/en', function (req, res) {
         res.json(i18n.en)
       })

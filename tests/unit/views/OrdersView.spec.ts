@@ -72,7 +72,26 @@ describe('OrdersView.vue', () => {
     })
   })
 
-  describe('When component is mounted', () => {
+  describe('When component is mounted is shopper', () => {
+    let wrapper:any
+
+    beforeEach(async (done) => {
+      const params = {
+        localVue,
+        store,
+        router: new Router({ routes })
+      }
+      hasManagerRole.mockReturnValue(false)
+      wrapper = mount(OrdersView, params)
+      done()
+    })
+
+    it('renders orders view', () => {
+      expect(wrapper.find('#orders-view').exists()).toBeTruthy()
+    })
+  })
+
+  describe('When component is mounted is manager', () => {
     let wrapper:any
 
     beforeEach(async (done) => {
