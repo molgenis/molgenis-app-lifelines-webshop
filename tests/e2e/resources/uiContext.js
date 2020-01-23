@@ -1,6 +1,13 @@
 module.exports = {
+  roles: [
+    'ROLE_USER',
+    'ROLE_LIFELINES_SHOPPER',
+    'ROLE_LIFELINES_MANAGER'
+  ],
+  email: 'll_admin@molgenis.org',
+  username: 'll_admin',
   logoTopMaxHeight: 150,
-  navBarLogo: '/img/Logo_Blue_Small.png',
+  navBarLogo: '/logo/ll-logo.png',
   menu: {
     type: 'menu',
     id: 'main',
