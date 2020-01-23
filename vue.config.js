@@ -88,7 +88,7 @@ module.exports = {
         'changeOrigin': true
       }
     },
-    before: process.env.NODE_ENV === 'development' ? undefined : function (app, server) {
+    before: function (app, server) {
       app.get('/api/v2/i18n/lifelines-webshop/en', function (req, res) {
         res.json(i18n.en)
       })
@@ -101,9 +101,12 @@ module.exports = {
       app.get('/api/v2/i18n/ui-form', function (req, res) {
         res.json(i18n.en)
       })
-      app.get('/app-ui-context', function (req, res) {
-        res.json(require('./tests/e2e/resources/uiContext.js'))
-      })
+      // E2E tests on Jenkins require this mock response.
+      if (process.env.NODE_ENV !== 'development') {
+        app.get('/app-ui-context', function (req, res) {
+          res.json(require('./tests/e2e/resources/uiContext.js'))
+        })
+      }
     }
   }
 }
