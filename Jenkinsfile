@@ -36,7 +36,6 @@ pipeline {
                     sh "yarn lint"
                     sh "yarn lint:scss"
                     sh "yarn test:unit"
-                    sh "yarn test:e2e --env ci_chrome,ci_safari,ci_ie11,ci_firefox"
                 }
             }
             post {
