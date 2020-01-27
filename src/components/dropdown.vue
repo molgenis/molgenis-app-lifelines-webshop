@@ -19,35 +19,6 @@
 <script>
 import Vue from 'vue'
 export default Vue.extend({
-  computed: {
-    selectedTitle: function () {
-      let selected
-      for (const option of this.options) {
-        if (option.value === this.value) {
-          selected = option.name
-        }
-      }
-
-      return selected
-    }
-  },
-  data: function () {
-    return {
-      selected: this.title
-    }
-  },
-  methods: {
-    updateModel: function ($e, option) {
-      if (!this.intend) {
-        this.$emit('input', option.value)
-        Vue.nextTick(() => this.$emit('change', option.value))
-      }
-
-      if (this.method) {
-        this.method(option)
-      }
-    }
-  },
   name: 'Dropdown',
   props: {
     buttonClass: {
@@ -72,6 +43,35 @@ export default Vue.extend({
     value: {
       default: '',
       type: String
+    }
+  },
+  data: function () {
+    return {
+      selected: this.title
+    }
+  },
+  computed: {
+    selectedTitle: function () {
+      let selected
+      for (const option of this.options) {
+        if (option.value === this.value) {
+          selected = option.name
+        }
+      }
+
+      return selected
+    }
+  },
+  methods: {
+    updateModel: function ($e, option) {
+      if (!this.intend) {
+        this.$emit('input', option.value)
+        Vue.nextTick(() => this.$emit('change', option.value))
+      }
+
+      if (this.method) {
+        this.method(option)
+      }
     }
   }
 })
