@@ -40,6 +40,35 @@ const gridVariables = [
   }]
 
 describe('mutations', () => {
+  describe('changeOrderStatus', () => {
+    it('updates the orderStatus with given value', () => {
+      const baseAppState = { ...state }
+      mutations.changeOrderStatus(baseAppState, OrderState.Rejected)
+      expect(baseAppState.order.state).toEqual('Rejected')
+    })
+  })
+
+  describe('deleteOrder', () => {
+    it('should skip delete if orders list is empty', () => {
+      const deleteState:any = {
+        orders: null
+      }
+      mutations.deleteOrder(deleteState, 'invalid number')
+      expect(deleteState.orders).toEqual(null)
+    })
+
+    it('should remove order if its in the orders list', () => {
+      const deleteState:any = {
+        orders: [
+          { orderNumber: '123' },
+          { orderNumber: '456' }
+        ]
+      }
+      mutations.deleteOrder(deleteState, '456')
+      expect(deleteState.orders).toEqual([{ orderNumber: '123' }])
+    })
+  })
+
   describe('setOrderFormFields', () => {
     it('sets the orderFormFields', () => {
       const baseAppState = { ...state }
@@ -150,7 +179,7 @@ describe('mutations', () => {
 
   describe('setOrderDetails', () => {
     it('sets the order form values', () => {
-      let baseAppState = Object.assign({}, state)
+      const baseAppState = { ...state }
       const order = {
         orderNumber: 'edit',
         name: 'name',
@@ -179,7 +208,7 @@ describe('mutations', () => {
           filename: 'fileName',
           url: 'fileUrl'
         },
-        state: null,
+        state: 'Rejected',
         submissionDate: null,
         creationDate: null,
         updateDate: null,
