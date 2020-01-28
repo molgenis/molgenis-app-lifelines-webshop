@@ -176,7 +176,7 @@ describe('getters', () => {
           subcohort: ['ABCDE', 'FGHIJ']
         }
       }
-      expect(getters.rsql(state)).toBe('ll_nr.subcohortABCDE_group==true;ll_nr.subcohortFGHIJ_group==true')
+      expect(getters.rsql(state)).toBe('ll_nr.subcohortABCDE_group==true,ll_nr.subcohortFGHIJ_group==true')
     })
     it('filters gender', () => {
       const state: ApplicationState = {

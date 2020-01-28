@@ -54,14 +54,14 @@ export default {
       })
     }
     if (state.facetFilter.subcohort.length > 0) {
-      operands = [
-        ...operands,
-        ...state.facetFilter.subcohort.map(subcohort => ({
+      operands = [...operands, {
+        operator: 'OR',
+        operands: state.facetFilter.subcohort.map(subcohort => ({
           selector: `ll_nr.subcohort${subcohort}_group`,
           comparison: '==',
           arguments: true
-        })
-        )]
+        }))
+      }]
     }
     if (state.facetFilter.gender.length > 0) {
       operands.push({
