@@ -315,9 +315,11 @@ export default Vue.extend({
   .order-table {
     min-width: 60rem; // Make sure the table stays big enough to display the 7 rows in smaller devices or browsers
   }
-  .td-actions{
+
+  .td-actions {
     width: 11rem; // Needed to hold the edit, copy and delete button and there margins
   }
+
   .td-state {
     overflow: visible;
   }
