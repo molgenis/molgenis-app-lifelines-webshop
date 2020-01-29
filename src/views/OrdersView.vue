@@ -153,7 +153,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
 import SearchComponent from '../components/search/SearchComponent.vue'
-import Dropdown from '../components/dropdown.vue'
+import Dropdown from '../components/Dropdown.vue'
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
 import moment from 'moment'
 import { successMessage } from '@/store/helpers'
@@ -314,6 +314,10 @@ export default Vue.extend({
 
   .order-table {
     min-width: 60rem; // Make sure the table stays big enough to display the 7 rows in smaller devices or browsers
+  }
+
+  .td-state {
+    overflow: visible !important;
   }
 
   .dropdown-filter-state {
