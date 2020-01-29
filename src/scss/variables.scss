@@ -1,28 +1,60 @@
 
-// Colors
+// Bootstrap colors
+$white: #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black: #000;
+
 $primary: #276daa;
 $secondary: #00acc7;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;
 $danger: #fc5c61;
 $light: #e9f6f9;
+$dark: #343a40;
+
 $link-color: $primary;
 
-// Typography
-$font-size-base: 1rem;
-$line-height-base: 1.6;
-$font-family-base: Arial,Tahoma,Verdana,sans-serif;
+// Generates a .btn-gray variant
+$theme-colors: (
+  "gray": $gray-200
+);
+
 $headings-color: $primary;
 $headings-secondary: #000;
 
-// input
 $input-border-color: #00acc7;
 $input-color: #00acc7;
 $custom-select-indicator-color: #00acc7;
 
-// container
+$font-family-base: Arial,Tahoma,Verdana,sans-serif;
+$font-size-base: 1rem;
+$font-size-lg: 1.2rem;
+$font-size-sm: 0.8rem;
+
+$line-height-base: 1.6;
+
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
+
+$spacer: 0.5rem;
+
 $grid-gutter-width: 3rem;
 
-// border
-$border-radius: 0.25rem;
+$breakpoint-desktop: 1000px;
+$breakpoint-tablet: 768px;
 
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
+
+// App-specific variables
+$icon-small: $spacer * 3;
+$icon-normal: $spacer * 4;
+$icon-large: $spacer * 5;

@@ -24,13 +24,13 @@ describe('GridInfoDialog', () => {
 
   it('should use name if label is empty', () => {
     wrapper = shallowMount(GridInfoDialog, { propsData: basicModel })
-    expect(wrapper.find('.pr-4').text()).toBe(basicModel.data.name)
+    expect(wrapper.find('.title').text()).toBe(basicModel.data.name)
   })
 
   it('should show label and name if label is specified', () => {
     let dataModel = { data: { name: 'variable_name', label: 'myLabel', options: [] } }
     wrapper = shallowMount(GridInfoDialog, { propsData: dataModel })
-    expect(wrapper.find('.pr-4').text()).toContain(dataModel.data.label)
-    expect(wrapper.find('.pr-4').text()).toContain(dataModel.data.name)
+    expect(wrapper.find('.name').text()).toContain(dataModel.data.name)
+    expect(wrapper.find('.title').text()).toContain(dataModel.data.label)
   })
 })

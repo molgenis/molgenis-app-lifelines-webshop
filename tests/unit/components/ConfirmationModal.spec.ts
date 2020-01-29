@@ -20,7 +20,7 @@ describe('ConfirmationModal.vue', () => {
   })
 
   it('should render a basic modal layout', () => {
-    expect(wrapper.find('.modal-overlay').exists()).toBe(true)
+    expect(wrapper.find('.modal-backdrop').exists()).toBe(true)
     expect(wrapper.find('.modal-header').exists()).toBe(true)
     expect(wrapper.find('.modal-body').exists()).toBe(true)
     expect(wrapper.find('.modal-footer').exists()).toBe(true)

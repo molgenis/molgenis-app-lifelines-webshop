@@ -1,19 +1,19 @@
 <template>
     <div class="modal open" tabindex="-1">
-      <div class="modal-overlay"></div>
+      <div class="modal-backdrop"></div>
       <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{title}}</h5>
-                <router-link type="button" class="close" :to="backRoute" tag="button">
-                  <span>&times;</span>
+                <span class="title">{{title}}</span>
+                <router-link class="btn-close" :to="backRoute" tag="div">
+                  <font-awesome-icon icon="window-close"/>
                 </router-link>
             </div>
             <div class="modal-body">
                   <slot name="body"></slot>
             </div>
-            <div class="modal-footer">
-                <router-link class="btn btn-light" :to="backRoute">
+            <div class="modal-footer modal-confirm">
+                <router-link class="btn btn-gray" :to="backRoute" tag="button">
                   {{$t('lifelines-webshop-modal-button-cancel')}}
                 </router-link>
                 <slot name="confirmButton"></slot>
@@ -25,29 +25,15 @@
 
 <script>
 import Vue from 'vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faWindowClose)
+
 export default Vue.extend({
+  components: { FontAwesomeIcon },
   name: 'ConfirmationModal',
   props: ['backRoute', 'title']
 })
 </script>
-
-<style lang="scss" scoped>
-
-  .modal {
-    &.open {
-      display: block;
-
-      .modal-overlay {
-        background-color: rgba($modal-backdrop-bg , $modal-backdrop-opacity);
-        height: 100%;
-        position: fixed;
-        width: 100%;
-        z-index: $zindex-modal-backdrop;
-      }
-
-      .modal-dialog {
-        z-index: $zindex-modal;
-      }
-    }
-  }
-</style>

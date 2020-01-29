@@ -318,7 +318,6 @@ export default Vue.extend({
   z-index: $zindex-modal;
 
   &::before {
-    @include box-shadow;
     background-color: #fff;
     border-radius: 3px;
     bottom: -0.4rem;

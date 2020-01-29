@@ -2,7 +2,7 @@
 
   <div id="orders-view" class="container pt-1">
 
-    <ConfirmationModal
+    <ConfirmationModal class="danger"
       v-if="$route && $route.name === 'orderDelete'"
       :backRoute="$router.resolve({name: 'orders'}).route"
       :title="$t('lifelines-webshop-modal-delete-header', {order: $route.params.orderNumber})">
@@ -20,7 +20,7 @@
       </template>
     </ConfirmationModal>
 
-    <ConfirmationModal
+    <ConfirmationModal class="danger"
       v-if="$route && $route.name === 'orderStateChange'"
       :backRoute="$router.resolve({name: 'orders'}).route"
       :title="$t('lifelines-webshop-modal-state-header')">
@@ -34,7 +34,7 @@
       </template>
 
       <template v-slot:confirmButton>
-        <button type="button" class="btn btn-secondary t-btn-confirm-state"
+        <button type="button" class="btn btn-danger t-btn-confirm-state"
           @click="changeStateConfirmed($route.params.orderNumber, $route.params.state)">
           {{$t('lifelines-webshop-modal-button-update-state')}}
         </button>

@@ -35,6 +35,9 @@ module.exports = {
         data: `
         @import "src/scss/variables.scss";
         @import "src/scss/mixins.scss";
+        @import "node_modules/bootstrap/scss/functions";
+        @import "node_modules/bootstrap/scss/mixins";
+        @import "node_modules/bootstrap/scss/variables";
         `
       }
     }

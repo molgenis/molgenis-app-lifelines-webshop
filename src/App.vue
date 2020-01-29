@@ -38,6 +38,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-  @import "scss/bootstrap-lifelines-webshop";
+  @import "scss/app";
 
 </style>

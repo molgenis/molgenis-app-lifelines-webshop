@@ -1,4 +1,4 @@
-// Mixins
-@mixin box-shadow {
-  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+@mixin icon-size($size) {
+  height: $size;
+  width: $size;
 }
