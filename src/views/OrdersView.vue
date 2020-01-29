@@ -313,23 +313,7 @@ export default Vue.extend({
   }
 
   .order-table {
-    min-width: 60rem;
-  }
-
-  .td-actions {
-    width: 11rem;
-  }
-
-  .td-order {
-    width: 10rem;
-  }
-
-  .td-project {
-    width: 7rem;
-  }
-
-  .td-state {
-    width: 9rem;
+    min-width: 60rem; // Make sure the table stays big enough to display the 7 rows in smaller devices or browsers
   }
 
   .dropdown-filter-state {
