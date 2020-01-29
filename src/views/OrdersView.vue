@@ -315,15 +315,11 @@ export default Vue.extend({
   .order-table {
     min-width: 60rem; // Make sure the table stays big enough to display the 7 rows in smaller devices or browsers
   }
-
-  .td-state {
-    overflow: visible !important;
+  .td-actions{
+    width: 11rem; // Needed to hold the edit, copy and delete button and there margins
   }
-
-  .dropdown-filter-state {
-    button {
-      width: 8rem;
-    }
+  .td-state {
+    overflow: visible;
   }
 }
 
