@@ -23,6 +23,10 @@ module.exports = {
     ? pkgName + '/dist/'
     : '/',
   configureWebpack: config => {
+    if (process.env.NODE_ENV !== 'production') {
+      config.devtool = 'source-map'
+    }
+
     config.plugins.push(
       new BannerPlugin({
         banner: bannerText
@@ -37,7 +41,8 @@ module.exports = {
         @import "src/scss/mixins.scss";
         `
       }
-    }
+    },
+    sourceMap: process.env.NODE_ENV !== 'production'
   },
   devServer: {
     // In CI mode, Safari cannot contact "localhost", so as a workaround, run the dev server using the jenkins agent pod dns instead.
