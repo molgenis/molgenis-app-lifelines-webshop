@@ -34,7 +34,7 @@ module.exports = {
 
       Using `source-map` mode comes with a performance hit.
       If needed, this mode can be overriden with:
-      DEVTOOL=cheap-module-eval-source-map yarn serv
+      DEVTOOL=cheap-module-eval-source-map yarn serve
       */
       config.devtool = process.env.DEVTOOL ? process.env.DEVTOOL : 'source-map'
       console.log(`Sourcemap mode: ${config.devtool}`)
