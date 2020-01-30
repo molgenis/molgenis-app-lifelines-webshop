@@ -24,7 +24,20 @@ module.exports = {
     : '/',
   configureWebpack: config => {
     if (process.env.NODE_ENV !== 'production') {
-      config.devtool = 'source-map'
+      /*
+      Vue-cli's default is `cheap-module-eval-source-map`,
+      however breakpoints only work correctly using
+      full source-maps. See:
+
+       - https://github.com/vuejs/vue-cli/issues/1806
+       - https://webpack.js.org/configuration/devtool/
+
+      Using `source-map` mode comes with a performance hit.
+      If needed, this mode can be overriden with:
+      DEVTOOL=cheap-module-eval-source-map yarn serv
+      */
+      config.devtool = process.env.DEVTOOL ? process.env.DEVTOOL : 'source-map'
+      console.log(`Sourcemap mode: ${config.devtool}`)
     }
 
     config.plugins.push(
