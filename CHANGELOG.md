@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.5.2...v1.6.0) (2020-01-30)
+
+
+### Features
+
+* add b-table busy state ([#253](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/253)) ([5e6e53d](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/5e6e53d))
+
 ## [1.5.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.5.1...v1.5.2) (2020-01-29)
 
 
