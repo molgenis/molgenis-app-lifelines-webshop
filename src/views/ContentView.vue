@@ -38,7 +38,7 @@ export default Vue.extend({
   components: { TreeView, GridView, SearchComponent, ToastComponent },
   data: () => {
     return {
-      toast: [{ type: 'info', textType: 'light', message: 'Please sign in to select and order variables' }]
+      toast: [{ type: 'info', textType: 'dark', message: 'Please sign in to select and order variables' }]
     }
   },
   computed: {
