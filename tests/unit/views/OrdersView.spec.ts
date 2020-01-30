@@ -3,7 +3,7 @@ import BootstrapVue from 'bootstrap-vue'
 import Router from 'vue-router'
 import { routes } from '@/router'
 import OrdersView from '@/views/OrdersView.vue'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import Vuex from 'vuex'
 import orders from '../fixtures/orders'
 import '@/globals/variables'
@@ -50,7 +50,6 @@ describe('OrdersView.vue', () => {
 
   beforeEach(() => {
     localVue = createLocalVue()
-    localVue.filter('moment', function (value: string, format: string) { return moment(value).utc().format(format) })
     localVue.filter('i18n', (value: string) => `#${value}#`)
     localVue.use(Vuex)
     localVue.use(BootstrapVue)
