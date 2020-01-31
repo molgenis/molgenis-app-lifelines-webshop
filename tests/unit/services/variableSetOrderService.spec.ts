@@ -6,20 +6,19 @@ describe('finalVariableSetSort', () => {
       id: 2,
       subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ]
     }, {
-      id: 4,
+      id: 3,
       subvariable_of: { id: 2 }
     }, {
       id: 5,
       subvariable_of: { id: 2 }
     }, {
-      id: 3,
+      id: 4,
       subvariable_of: { id: 2 }
     }, {
       id: 1
     }, {
       id: 6
     }]
-
     const data:any = [{
       id: 3,
       subvariable_of: { id: 2 }
