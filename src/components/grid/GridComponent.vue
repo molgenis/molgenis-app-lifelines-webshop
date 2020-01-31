@@ -64,7 +64,7 @@
             </tr>
 
             <tr v-for="(row, rowIndex) in grid" :key="rowIndex" :class="{'d-none': !isVisableVariable(gridVariables[rowIndex])}">
-              <th class="collapse-holder" :class="variableSetClass(gridVariables[rowIndex])" @click="variableSetClickHandler(gridVariables[rowIndex])">
+              <th class="collapse-holder set-line" :class="variableSetClass(gridVariables[rowIndex])" @click="variableSetClickHandler(gridVariables[rowIndex])">
                 <font-awesome-icon class="mb-1" v-if="gridVariables[rowIndex].subvariables && gridVariables[rowIndex].subvariables.length>0" :icon="variableSetIsOpen(gridVariables[rowIndex])?'plus-square':'minus-square'" />
               </th>
               <th @click="openInfoDialog(rowIndex)"
@@ -367,36 +367,6 @@ table {
         path {
           fill: $primary;
         }
-      }
-
-      &::after {
-        bottom: 0;
-        content: "";
-        position: absolute;
-        right: 5px;
-        top: 0;
-        width: 10px;
-      }
-
-      &.closed,
-      &.start {
-        cursor: pointer;
-      }
-
-      &.start::after {
-        border-left: 2px solid $primary;
-        border-top: 2px solid $primary;
-        border-top-left-radius: 10px;
-      }
-
-      &.end::after {
-        border-bottom: 2px solid $primary;
-        border-bottom-left-radius: 10px;
-        border-left: 2px solid $primary;
-      }
-
-      &.line::after {
-        border-left: 2px solid $primary;
       }
     }
   }

@@ -111,3 +111,37 @@ h6 {
 *:focus {
   outline: none;
 }
+
+// The blue line that indicates sets of variables used in grid and card view
+.set-line{
+  position: relative;
+  &::after {
+    bottom: 0;
+    content: "";
+    position: absolute;
+    right: 5px;
+    top: 0;
+    width: 10px;
+  }
+
+  &.closed,
+  &.start {
+    cursor: pointer;
+  }
+
+  &.start::after {
+    border-left: 2px solid $primary;
+    border-top: 2px solid $primary;
+    border-top-left-radius: 10px;
+  }
+
+  &.end::after {
+    border-bottom: 2px solid $primary;
+    border-bottom-left-radius: 10px;
+    border-left: 2px solid $primary;
+  }
+
+  &.line::after {
+    border-left: 2px solid $primary;
+  }
+}

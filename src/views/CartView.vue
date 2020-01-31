@@ -49,11 +49,11 @@
                 :accordion="`my-accordion-${index}`"
                 role="tabpanel"
               >
-                <b-card-body>
+                <b-card-body class="mx-3 my-1">
                   <div v-for="subsection in section.subsections" :key="subsection.id">
                     <h5 class="h6">{{subsection.name}}</h5>
                     <ul>
-                      <li v-for="variable in subsection.variables" :key="variable.id">
+                      <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="set-line" :class="variableSetClass(variable)">
                         <span>{{variable.label||variable.name}} {{ variableAssesments[variable.id] }}</span>
                       </li>
                     </ul>
@@ -119,6 +119,45 @@ export default Vue.extend({
     isActive (index) {
       let clickedItem = `accordion-${index}`
       return this.openItems.indexOf(clickedItem) >= 0
+    },
+    variablesWithSet (variables) {
+      let isStart = []
+      let isEnd = []
+      // Find start and endings of variables sets
+      let lastSubVariable = variables[0]
+      variables.forEach(variable => {
+        if (variable.subvariable_of) {
+          isStart.push(variable.subvariable_of.id)
+        }
+        if (lastSubVariable.subvariable_of && !variable.subvariable_of) {
+          isEnd.push(lastSubVariable.id)
+        }
+        lastSubVariable = variable
+      })
+      // Set flags that are useful for styling
+      variables.forEach((variable, index, array) => {
+        if (isStart.includes(variable.id)) {
+          array[index].startSet = true
+        }
+        if (isEnd.includes(variable.id)) {
+          array[index].endSet = true
+        }
+      })
+      console.log(variables)
+      return variables
+    },
+    variableSetClass (variable) {
+      console.log(variable)
+      if (variable.startSet) {
+        return 'start'
+      }
+      if (variable.subvariable_of) {
+        if (variable.endSet) {
+          return 'end'
+        }
+        return 'line'
+      }
+      return ''
     }
   },
   computed: {
@@ -162,5 +201,14 @@ export default Vue.extend({
 
 .hoverable {
   cursor: pointer;
+}
+.set-line{
+  &::after {
+    left: -$spacer;
+    right: auto;
+  }
+  &.line, &.end{
+    padding-left: 0.75rem;
+  }
 }
 </style>
