@@ -27,7 +27,9 @@ exports[`CartView.vue renders cart view 1`] = `
                 <div>
                   <h5 class="h6">Subsection 1</h5>
                   <ul>
-                    <li class="set-line"><span>var 123 ( assessment1, assessment3 )</span></li>
+                    <li class="set-line">
+
+                      <span>var 123 ( assessment1, assessment3 )</span></li>
                   </ul>
                 </div>
               </div>
@@ -52,7 +54,9 @@ exports[`CartView.vue renders cart view 1`] = `
                 <div>
                   <h5 class="h6">Subsection 2</h5>
                   <ul>
-                    <li class="set-line"><span>var 456 ( assessment3 )</span></li>
+                    <li class="set-line">
+
+                      <span>var 456 ( assessment3 )</span></li>
                   </ul>
                 </div>
               </div>

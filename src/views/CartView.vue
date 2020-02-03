@@ -54,6 +54,7 @@
                     <h5 class="h6">{{subsection.name}}</h5>
                     <ul>
                       <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="set-line" :class="variableSetClass(variable)">
+                        {{variableSetClass(variable)}}
                         <span>{{variable.label||variable.name}} {{ variableAssesments[variable.id] }}</span>
                       </li>
                     </ul>
@@ -123,34 +124,45 @@ export default Vue.extend({
     variablesWithSet (variables) {
       let isStart = []
       let isEnd = []
-      // Find start and endings of variables sets
-      let lastSubVariable = variables[0]
+      let isChild = []
+      // Find child / parent status of variables sets
       variables.forEach(variable => {
         if (variable.subvariable_of) {
-          isStart.push(variable.subvariable_of.id)
+          // IF parent exists in selection
+          if (variables.find(target => target.id === variable.subvariable_of.id)) {
+            isChild.push(variable.id)
+            isStart.push(variable.subvariable_of.id)
+          }
         }
-        if (lastSubVariable.subvariable_of && !variable.subvariable_of) {
-          isEnd.push(lastSubVariable.id)
+      })
+      // find end status
+      let lastVariable
+      variables.forEach(variable => {
+        if (!variable.isChild && lastVariable && lastVariable.isChild) {
+          isEnd.push(lastVariable.id)
         }
-        lastSubVariable = variable
+        lastVariable = variable
       })
       // Set flags that are useful for styling
       variables.forEach((variable, index, array) => {
-        if (isStart.includes(variable.id)) {
-          array[index].startSet = true
-        }
         if (isEnd.includes(variable.id)) {
-          array[index].endSet = true
+          array[index].isEnd = true
+        }
+        if (isStart.includes(variable.id)) {
+          array[index].isStart = true
+        }
+        if (isChild.includes(variable.id)) {
+          array[index].isChild = true
         }
       })
       return variables
     },
     variableSetClass (variable) {
-      if (variable.startSet) {
+      if (variable.isStart) {
         return 'start'
       }
-      if (variable.subvariable_of) {
-        if (variable.endSet) {
+      if (variable.isChild) {
+        if (variable.isEnd) {
           return 'end'
         }
         return 'line'
