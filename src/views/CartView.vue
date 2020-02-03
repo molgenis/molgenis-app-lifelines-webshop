@@ -143,11 +143,9 @@ export default Vue.extend({
           array[index].endSet = true
         }
       })
-      console.log(variables)
       return variables
     },
     variableSetClass (variable) {
-      console.log(variable)
       if (variable.startSet) {
         return 'start'
       }
@@ -202,12 +200,15 @@ export default Vue.extend({
 .hoverable {
   cursor: pointer;
 }
-.set-line{
+
+.set-line {
   &::after {
     left: -$spacer;
     right: auto;
   }
-  &.line, &.end{
+
+  &.line,
+  &.end {
     padding-left: 0.75rem;
   }
 }

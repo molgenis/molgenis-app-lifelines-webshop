@@ -493,4 +493,11 @@ th {
     border-bottom-left-radius: 0;
   }
 }
+
+.set-line {
+  &.closed,
+  &.start {
+    cursor: pointer;
+  }
+}
 </style>

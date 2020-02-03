@@ -153,7 +153,7 @@ const mockResponses: { [key: string]: Object } = {
       { id: 2, name: '1B' }
     ]
   },
-  '/api/v2/lifelines_variable?attrs=id,name,label,subsections&num=10000&sort=id': {
+  '/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id': {
     items: [{
       id: 2,
       name: 'ARZON',
@@ -166,7 +166,7 @@ const mockResponses: { [key: string]: Object } = {
       subsections: '1,2'
     }]
   },
-  '/api/v2/lifelines_variable?attrs=id,name,label,subsections&num=10000&start=10000&sort=id': {
+  '/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id': {
     items: [{
       id: 4,
       name: 'UVREFLECT',

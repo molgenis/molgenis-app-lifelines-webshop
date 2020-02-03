@@ -113,8 +113,9 @@ h6 {
 }
 
 // The blue line that indicates sets of variables used in grid and card view
-.set-line{
+.set-line {
   position: relative;
+
   &::after {
     bottom: 0;
     content: "";
@@ -122,11 +123,6 @@ h6 {
     right: 5px;
     top: 0;
     width: 10px;
-  }
-
-  &.closed,
-  &.start {
-    cursor: pointer;
   }
 
   &.start::after {
