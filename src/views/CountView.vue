@@ -1,15 +1,10 @@
 <template>
   <div class="vld-parent count-view">
-    <loading
-      v-if="participantCount === null"
-      :active="true"
-      loader="dots"
-      :isFullPage="false"
-      >
-    </loading>
-    <p v-else
+    <loading v-if="participantCount === null" :active="true" loader="dots" :isFullPage="false"></loading>
+    <p
+      v-else
       class="lead participant-count"
-      >{{participantCount | formatSI}} {{$t('lifelines-webshop-participant-count-suffix')}}</p>
+    >{{participantCount | formatNumber}} {{$t('lifelines-webshop-participant-count-suffix')}}</p>
   </div>
 </template>
 
@@ -17,7 +12,7 @@
 import Vue from 'vue'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 // @ts-ignore
-import { formatSI } from 'format-si-prefix'
+import { formatNumber } from '@/globals/formatting'
 // @ts-ignore
 import Loading from 'vue-loading-overlay'
 
@@ -35,13 +30,13 @@ export default Vue.extend({
   created () {
     this.loadParticipantCount()
   },
-  filters: { formatSI },
+  filters: { formatNumber },
   components: { Loading }
 })
 </script>
 
 <style scoped lang="scss">
-  .count-view {
-    height: 30px;
-  }
+.count-view {
+  height: 30px;
+}
 </style>
