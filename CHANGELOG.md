@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.6.0...v1.6.1) (2020-02-04)
+
+
+### Bug Fixes
+
+* make sure the variable set starts closed ([7acbbfd](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/7acbbfd))
+
 # [1.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.5.2...v1.6.0) (2020-01-30)
 
 
