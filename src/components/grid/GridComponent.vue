@@ -288,11 +288,8 @@ export default Vue.extend({
       return this.$refs.gridheader
         ? this.$refs.gridheader.getBoundingClientRect().height
         : null
-    }
-  },
-  watch: {
-    // Start with all grouped variables closed
-    gridVariables: function () {
+    },
+    closeVariableSet () {
       if (this.gridVariables) {
         this.gridVariables.forEach(variable => {
           if (variable.subvariables && variable.subvariables.length > 0 && !this.openVariableSets.includes(variable.id)) {
@@ -302,8 +299,15 @@ export default Vue.extend({
       }
     }
   },
+  watch: {
+    // Start with all grouped variables closed
+    gridVariables: function () {
+      this.closeVariableSet()
+    }
+  },
   created: function () {
     window.addEventListener('scroll', this.scroll)
+    this.closeVariableSet()
   },
   destroyed: function () {
     window.removeEventListener('scroll', this.scroll)
