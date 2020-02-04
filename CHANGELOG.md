@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.6.1...v1.7.0) (2020-02-04)
+
+
+### Features
+
+* better implementation for abbreviating big numbers. Removed  "format-si-prefix", fixed typo in name, added formatting file. ([4f77d4d](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4f77d4d))
+
 ## [1.6.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.6.0...v1.6.1) (2020-02-04)
 
 
