@@ -1,5 +1,5 @@
 <template>
-  <div id="sidebar-view" v-click-outside="hide" :class="{'hide-bar':!value}">
+  <div id="sidebar-view" :class="{'hide-bar':!value}">
     <div class="label" @click="toggleVisibility">
       {{$t('lifelines-webshop-sidebar-header')}}
       <font-awesome-icon icon="angle-double-down" class="ml-2"></font-awesome-icon>
