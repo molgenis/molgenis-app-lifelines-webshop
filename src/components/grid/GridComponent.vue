@@ -198,7 +198,7 @@ export default Vue.extend({
   },
   filters: {
     formatCount: function (value) {
-      if (value === -1) {
+      if (value < 0) {
         return '1-15'
       } else if (isNaN(value)) {
         return '-'
