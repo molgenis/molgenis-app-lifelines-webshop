@@ -54,7 +54,6 @@
                     <h5 class="h6">{{subsection.name}}</h5>
                     <ul>
                       <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="set-line" :class="variableSetClass(variable)">
-                        {{variableSetClass(variable)}}
                         <span>{{variable.label||variable.name}} {{ variableAssesments[variable.id] }}</span>
                       </li>
                     </ul>
@@ -121,6 +120,7 @@ export default Vue.extend({
       let clickedItem = `accordion-${index}`
       return this.openItems.indexOf(clickedItem) >= 0
     },
+    // Set a collection of flags that are useful for styling
     variablesWithSet (variables) {
       let isStart = []
       let isEnd = []
@@ -128,31 +128,34 @@ export default Vue.extend({
       // Find child / parent status of variables sets
       variables.forEach(variable => {
         if (variable.subvariable_of) {
-          // IF parent exists in selection
           if (variables.find(target => target.id === variable.subvariable_of.id)) {
             isChild.push(variable.id)
             isStart.push(variable.subvariable_of.id)
           }
         }
       })
-      // find end status
+      variables.forEach((variable, index, array) => {
+        if (isChild.includes(variable.id)) {
+          array[index].isChild = true
+        }
+      })
       let lastVariable
-      variables.forEach(variable => {
+      variables.forEach((variable, index, set) => {
         if (!variable.isChild && lastVariable && lastVariable.isChild) {
           isEnd.push(lastVariable.id)
         }
+        // last item in set: close the set
+        if (variable.isChild && set.length - 1 === index) {
+          isEnd.push(variable.id)
+        }
         lastVariable = variable
       })
-      // Set flags that are useful for styling
       variables.forEach((variable, index, array) => {
         if (isEnd.includes(variable.id)) {
           array[index].isEnd = true
         }
         if (isStart.includes(variable.id)) {
           array[index].isStart = true
-        }
-        if (isChild.includes(variable.id)) {
-          array[index].isChild = true
         }
       })
       return variables
