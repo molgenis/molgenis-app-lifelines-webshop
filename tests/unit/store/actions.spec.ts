@@ -855,9 +855,9 @@ describe('actions', () => {
     })
 
     it('should call permission service', () => {
-      expect(setRolePermission).nthCalledWith(1, '12345', 'lifelines_order', 'LIFELINES_MANAGER', 'WRITE')
-      expect(setRolePermission).nthCalledWith(2, 'contents-id', 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
-      expect(setRolePermission).nthCalledWith(3, 'app-form', 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
+      expect(setRolePermission).nthCalledWith(1, '12345', 'lifelines_order', 'lifelines_MANAGER', 'WRITE')
+      expect(setRolePermission).nthCalledWith(2, 'contents-id', 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
+      expect(setRolePermission).nthCalledWith(3, 'app-form', 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
     })
   })
 

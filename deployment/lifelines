@@ -6,9 +6,9 @@ add group lifelines
 
 # Create user
 add user ll_admin --set-password xxxxx
-make ll_admin lifelines_manager
+make ll_admin lifelines_MANAGER
 
-$wait Create custom role LIFELINES_SHOPPER and add group "lifelines" to role
+$wait Create custom role lifelines_SHOPPER and add group "lifelines" to role
 
 # Give plugin permissions
 give --role ANONYMOUS read --plugin app
@@ -21,11 +21,11 @@ give --role ANONYMOUS read --package sys_md
 import attributes --in lifelines
 import sys_L10nString
 
-# Give write LIFELINES_SHOPPER permissions to cart and read on roles
+# Give write lifelines_SHOPPER permissions to cart and read on roles
 enable rls lifelines_order
-give --role LIFELINES_SHOPPER write --entity-type lifelines_order
-give --role LIFELINES_SHOPPER write --entity-type sys_FileMeta
-give --role LIFELINES_SHOPPER read --entity-type sys_sec_Role
+give --role lifelines_SHOPPER write --entity-type lifelines_order
+give --role lifelines_SHOPPER write --entity-type sys_FileMeta
+give --role lifelines_SHOPPER read --entity-type sys_sec_Role
 
 # Set aggregate threshold
 set app aggregate_threshold 15
@@ -40,7 +40,8 @@ set app title LifeLines
 set auth signup true
 set auth signup_moderation false
 
-$wait Add LIFELINES_SHOPPER to includes of USER role
-$wait Add via the menu manager the "Catalogue" and "My Orders" menu items by using the redirect plugin
+$wait Add 'Lifelines shopper' to includes of USER role
+$wait Add redirect menu item 'Catalogue' using query string: url=https%3A%2F%2F{{domain}}%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Fshop
+$wait Add redirect menu item 'Orders' using query string: url=https%3A%2F%2F{{domain}}%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Forders
 $wait Copy the contents of homepage.html to the home plugin
 $wait Delete password of user from this script
