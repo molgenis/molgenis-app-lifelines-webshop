@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.7.1...v1.8.0) (2020-02-05)
+
+
+### Features
+
+* only hide cohort selection when user clicks on the button ([#260](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/260)) ([c8fd36b](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/c8fd36b))
+
 ## [1.7.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.7.0...v1.7.1) (2020-02-04)
 
 
