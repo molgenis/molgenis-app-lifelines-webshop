@@ -542,7 +542,7 @@ describe('actions', () => {
   describe('load', () => {
     it('loads grid selection', async (done) => {
       const commit = jest.fn()
-      const state: ApplicationState = {
+      const state: any = {
         ...emptyState,
         assessments: { 1: { id: 1, name: '1A' } },
         variables: {

@@ -29,7 +29,7 @@ describe('CartView.vue', () => {
   let actions: any
   let mutations: any
 
-  let cartTree: CartSection[]
+  let cartTree: any[]
 
   const getters = {
     cartTree: () => cartTree,
@@ -91,14 +91,14 @@ describe('CartView.vue', () => {
           id: 123,
           name: 'var123',
           label: 'var 123',
-          subvariables: [{ id: 456, name: '', subsections: [] }, { id: 789, name: '', subsections: [] }],
+          subvariables: [{ id: 456 }, { id: 789 }],
           subsections: [1],
           subsection: 1
         }, {
           id: 456,
           name: 'var456',
           label: 'var 456',
-          subvariable_of: { id: 123, name: '', subsections: [] },
+          subvariable_of: { id: 123 },
           subvariables: [],
           subsections: [1, 2],
           subsection: 1
@@ -106,7 +106,7 @@ describe('CartView.vue', () => {
           id: 789,
           name: 'var789',
           label: 'var 789',
-          subvariable_of: { id: 123, name: '', subsections: [] },
+          subvariable_of: { id: 123 },
           subvariables: [],
           subsections: [1],
           subsection: 1
