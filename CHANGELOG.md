@@ -1,3 +1,38 @@
+## [1.7.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.7.0...v1.7.1) (2020-02-04)
+
+
+### Bug Fixes
+
+* only show warning about empty variables if there are variables selected in the first place ([4b53c61](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4b53c61))
+
+# [1.7.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.6.1...v1.7.0) (2020-02-04)
+
+
+### Features
+
+* better implementation for abbreviating big numbers. Removed  "format-si-prefix", fixed typo in name, added formatting file. ([4f77d4d](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4f77d4d))
+
+## [1.6.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.6.0...v1.6.1) (2020-02-04)
+
+
+### Bug Fixes
+
+* make sure the variable set starts closed ([7acbbfd](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/7acbbfd))
+
+# [1.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.5.2...v1.6.0) (2020-01-30)
+
+
+### Features
+
+* add b-table busy state ([#253](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/253)) ([5e6e53d](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/5e6e53d))
+
+## [1.5.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.5.1...v1.5.2) (2020-01-29)
+
+
+### Bug Fixes
+
+* styling errors ([#247](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/247)) ([6303044](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/6303044))
+
 ## [1.5.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.5.0...v1.5.1) (2020-01-28)
 
 

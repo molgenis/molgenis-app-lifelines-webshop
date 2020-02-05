@@ -23,6 +23,23 @@ module.exports = {
     ? pkgName + '/dist/'
     : '/',
   configureWebpack: config => {
+    if (process.env.NODE_ENV !== 'production') {
+      /*
+      Vue-cli's default is `cheap-module-eval-source-map`,
+      however breakpoints only work correctly using
+      full source-maps. See:
+
+       - https://github.com/vuejs/vue-cli/issues/1806
+       - https://webpack.js.org/configuration/devtool/
+
+      Using `source-map` mode comes with a performance hit.
+      If needed, this mode can be overriden with:
+      DEVTOOL=cheap-module-eval-source-map yarn serve
+      */
+      config.devtool = process.env.DEVTOOL ? process.env.DEVTOOL : 'source-map'
+      console.log(`Sourcemap mode: ${config.devtool}`)
+    }
+
     config.plugins.push(
       new BannerPlugin({
         banner: bannerText
@@ -37,7 +54,8 @@ module.exports = {
         @import "src/scss/mixins.scss";
         `
       }
-    }
+    },
+    sourceMap: process.env.NODE_ENV !== 'production'
   },
   devServer: {
     // In CI mode, Safari cannot contact "localhost", so as a workaround, run the dev server using the jenkins agent pod dns instead.

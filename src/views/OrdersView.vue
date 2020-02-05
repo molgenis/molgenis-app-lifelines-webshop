@@ -61,7 +61,6 @@
           @change="updateTable"
           :title="$t('lifelines-webshop-filter-status')"/>
       </div>
-
     </div>
 
     <b-table
@@ -69,6 +68,7 @@
       :class="{'order-table':true, 'container-fluid': hasManagerRole}"
       striped
       show-empty
+      :busy="table.isBusy"
       :items="orders"
       :filter="table.filter"
       :fields="tableFields"
@@ -284,7 +284,8 @@ export default Vue.extend({
      * Please note that only managers have
      * pagination and filtering.
      */
-    updateTable: function () {
+    updateTable: async function () {
+      this.table.isBusy = true
       const query = {
         filters: this.table.filters,
         num: this.hasManagerRole ? this.table.perPage : 100,
@@ -293,7 +294,8 @@ export default Vue.extend({
         start: (this.table.currentPage - 1) * this.table.perPage
       }
 
-      this.loadOrders(query)
+      await this.loadOrders(query)
+      this.table.isBusy = false
     },
     ...mapActions(['save', 'loadOrder', 'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
     ...mapMutations(['changeOrderStatus', 'setToast'])
