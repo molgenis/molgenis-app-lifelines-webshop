@@ -95,15 +95,19 @@ yarn test:unit
 
 ## Data
 ![https://yuml.me/edit/e9dd81eb](./docs/img/data-model.svg)
-To transform the raw data to a format that can be used by this app, use the 
+To transform the raw data to a format that can be used by this app, use the
 [molgenis-py-lifelines-transform](https://github.com/molgenis/molgenis-py-lifelines-transform) tool.
 
 ## Deployment using molgenis commander
-Add the `deployment/datasets` folder of this repository to the `dataset_folders` section of `~/.mcmd/mcmc.yaml` and the 
-`deployment/resources` folder to the `resource_folders` section, or alternatively copy the files in 
-`deployment/datasets` to one of your configured `dataset_folders` and the contents of `deployment/resources` to one of 
-your configured `resource_folders`.  
-Now configure your molgenis commander to run on the lifelines server using `mcmd config add host` and 
+> The deployment script as of [this tag](https://github.com/molgenis/molgenis-app-lifelines-webshop/tree/8.3-deployment) is
+> meant to be used with Molgenis 8.3+, which uses case-sensitive group names. Use the deployment script from a commit before
+> that particular tag, if case of a deployment on Molgenis below 8.3.
+
+Add the `deployment/datasets` folder of this repository to the `dataset_folders` section of `~/.mcmd/mcmc.yaml` and the
+`deployment/resources` folder to the `resource_folders` section, or alternatively copy the files in
+`deployment/datasets` to one of your configured `dataset_folders` and the contents of `deployment/resources` to one of
+your configured `resource_folders`.
+Now configure your molgenis commander to run on the lifelines server using `mcmd config add host` and
 `mcmd config set host`. Then you can run the commander script to setup the server:
 ```
 cp ~/molgenis-app-lifelines-webshop/deployment/lifelines ~/.mcmd/scripts/
