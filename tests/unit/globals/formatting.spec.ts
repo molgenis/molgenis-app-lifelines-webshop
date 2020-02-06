@@ -2,9 +2,6 @@ import { formatNumber } from '@/globals/formatting'
 
 describe('formatters', () => {
   describe('format number', () => {
-    it('should return a 0 when a negative value is given', () => {
-      expect(formatNumber(-3)).toBe('0')
-    })
     it('should return a full number when given a four digit number', () => {
       expect(formatNumber(1337)).toBe('1337')
     })
