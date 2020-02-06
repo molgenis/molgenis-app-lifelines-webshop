@@ -129,7 +129,7 @@ import {
   faMinusSquare
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { formatNumber } from '@/globals/formatting'
+import { formatCount } from '@/filters/GridComponentFilters'
 
 library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare)
 
@@ -197,16 +197,7 @@ export default Vue.extend({
     }
   },
   filters: {
-    formatCount: function (value) {
-      if (value < 0) {
-        return '1-15'
-      } else if (isNaN(value)) {
-        return '-'
-      } else if (value > 0) {
-        return formatNumber(value)
-      }
-      return value
-    }
+    formatCount
   },
   methods: {
     variableSetIsOpen (variable) {
