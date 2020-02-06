@@ -7,4 +7,7 @@ describe('GridComponentsFilter', () => {
   it('returns "-" when a value that is NaN is provided', () => {
     expect(formatCount(NaN)).toBe('-')
   })
+  it('returns "0" when a value is 0', () => {
+    expect(formatCount(0)).toBe('0')
+  })
 })
