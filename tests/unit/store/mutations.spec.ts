@@ -177,6 +177,14 @@ describe('mutations', () => {
     })
   })
 
+  describe('updateTreeOpenSelection', () => {
+    it('updates the treeOpenSelected number with the given number', () => {
+      let baseAppState = Object.assign({}, state)
+      mutations.updateTreeOpenSection(baseAppState, 99)
+      expect(baseAppState.treeOpenPageSection).toEqual(99)
+    })
+  })
+
   describe('setOrderDetails', () => {
     it('sets the order form values', () => {
       const baseAppState = { ...state }
