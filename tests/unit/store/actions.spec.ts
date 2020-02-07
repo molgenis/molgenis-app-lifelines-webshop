@@ -12,6 +12,7 @@ import ApplicationState from '@/types/ApplicationState'
 import { OrderState } from '@/types/Order'
 import * as orderService from '@/services/orderService'
 import { setRolePermission, setUserPermission } from '@/services/permissionService'
+import { fetchVariables } from '@/repository/VariableRepository'
 
 const cart: Cart = {
   selection: [{
@@ -153,7 +154,7 @@ const mockResponses: { [key: string]: Object } = {
       { id: 2, name: '1B' }
     ]
   },
-  '/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id': {
+  '/api/v2/lifelines_variable?attrs=id,name,subvariableOf,label,subsections&num=10000&sort=id': {
     items: [{
       id: 2,
       name: 'ARZON',
@@ -166,7 +167,7 @@ const mockResponses: { [key: string]: Object } = {
       subsections: '1,2'
     }]
   },
-  '/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id': {
+  '/api/v2/lifelines_variable?attrs=id,name,subvariableOf,label,subsections&num=10000&start=10000&sort=id': {
     items: [{
       id: 4,
       name: 'UVREFLECT',
@@ -279,6 +280,12 @@ const mockResponses: { [key: string]: Object } = {
 
 const mockDelete = jest.fn()
 
+jest.mock('@/repository/VariableRepository', () => {
+  return {
+    fetchVariables: jest.fn()
+  }
+})
+
 jest.mock('@/services/permissionService', () => {
   return {
     setUserPermission: jest.fn(),
@@ -304,6 +311,12 @@ jest.mock('@molgenis/molgenis-api-client', () => {
     },
     post: jest.fn(),
     delete_: function () { mockDelete(...arguments) }
+  }
+})
+
+jest.mock('@/services/variableSetOrderService', () => {
+  return {
+    finalVariableSetSort: (variables: any) => variables
   }
 })
 
@@ -402,60 +415,76 @@ describe('actions', () => {
   })
 
   describe('loadGridVariables', () => {
-    it('searches for variables in subsection', async (done) => {
-      const commit = jest.fn()
-      const action = actions.loadGridVariables({
-        getters: { searchTermQuery: 'subsection_id==3' },
-        state: { treeSelected: 3 },
-        commit
+    describe('when searchTermQuery is empty', () => {
+      let commit: any
+
+      beforeEach(async (done) => {
+        commit = jest.fn()
+        await actions.loadGridVariables({
+          getters: { searchTermQuery: '' },
+          commit
+        })
+        done()
       })
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
-      await action
-      const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', [
-        { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant], options: [] },
-        { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant], options: [] }
-      ])
-      done()
-    })
-    it('searches for variables across subsections', async (done) => {
-      const commit = jest.fn()
-      const action = actions.loadGridVariables({
-        getters: { searchTermQuery: 'name=q=cream,label=q=cream' },
-        state: { treeSelected: -1 },
-        commit
+      it('should clear the gridVariables and return ', () => {
+        expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
+        expect(fetchVariables).not.toHaveBeenCalled()
       })
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
-      await action
-      const variant = { 'assessmentId': 1, 'assessment_id': 1, 'id': 197 }
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', [
-        { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', 'variants': [variant], options: [] },
-        { 'id': 3, 'label': 'SAF', 'name': 'SAF', 'variants': [variant], options: [] },
-        { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT', 'variants': [variant], options: [] },
-        { 'id': 4, 'label': 'Skin cream used', 'name': 'ARCREME', 'variants': [variant], options: [] }
-      ])
-      done()
     })
-    it('clears grid if search term query is null', async (done) => {
-      const commit = jest.fn()
-      const getters = { searchTermQuery: null }
-      const state = { treeSelected: -1 }
-      const action = actions.loadGridVariables({ commit, getters, state })
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
-      await action
-      expect(commit).toHaveBeenCalledTimes(1)
-      done()
+
+    describe('when searchTermQuery is not empty', () => {
+      let commit: any
+
+      beforeEach(async (done) => {
+        commit = jest.fn()
+        // @ts-ignore
+        fetchVariables.mockResolvedValue([{ foo: 'bar' }])
+        await actions.loadGridVariables({
+          getters: { searchTermQuery: 'i am not empty' },
+          commit,
+          state: {
+            treeSelected: 3
+          }
+        })
+        done()
+      })
+
+      it('should update the gridVariable with the fetch result', () => {
+        expect(commit).toHaveBeenCalledWith('updateGridVariables', [{ foo: 'bar' }])
+      })
     })
-    it('does not commit the grid variables if the search term query changes during the call', async (done) => {
-      const commit = jest.fn()
-      const getters = { searchTermQuery: 'name=q=cream,label=q=cream' }
-      const state = { treeSelected: -1 }
-      const action = actions.loadGridVariables({ commit, getters, state })
-      expect(commit).toHaveBeenCalledWith('updateGridVariables', null)
-      getters.searchTermQuery = 'subsection_id==5;variable.name=q=cream'
-      await action
-      expect(commit).toHaveBeenCalledTimes(1)
-      done()
+
+    describe('when searchTermQuery changes before values are fetched ', () => {
+      let commit: any
+
+      beforeEach(async (done) => {
+        commit = jest.fn()
+        let getCount = 0
+        const getters = {
+          get searchTermQuery () {
+            if (getCount === 0) {
+              getCount++
+              return 'original search term'
+            }
+            return 'changed search term'
+          }
+        }
+        // @ts-ignore
+        fetchVariables.mockResolvedValue([{ foo: 'bar' }])
+        await actions.loadGridVariables({
+          getters,
+          commit,
+          state: {
+            treeSelected: 3
+          }
+        })
+        done()
+      })
+
+      it('should not commit the fetched results', () => {
+        expect(fetchVariables).toHaveBeenCalled()
+        expect(commit).not.toHaveBeenCalledWith('updateGridVariables', [{ foo: 'bar' }])
+      })
     })
   })
 
@@ -542,7 +571,7 @@ describe('actions', () => {
   describe('load', () => {
     it('loads grid selection', async (done) => {
       const commit = jest.fn()
-      const state: any = {
+      const state = {
         ...emptyState,
         assessments: { 1: { id: 1, name: '1A' } },
         variables: {
