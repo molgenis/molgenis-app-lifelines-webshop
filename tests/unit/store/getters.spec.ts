@@ -42,21 +42,30 @@ describe('getters', () => {
     label: 'variable 11',
     name: 'VAR11',
     variants: [variant2, variant1],
-    subsections: [1]
+    subsections: [1],
+    subvariables: [],
+    subvariableOf: null,
+    options: []
   }
   const variable12: VariableWithVariants = {
     id: 12,
     label: 'variable 12',
     name: 'VAR12',
     variants: [variant1],
-    subsections: [1, 2]
+    subsections: [1, 2],
+    subvariables: [],
+    subvariableOf: null,
+    options: []
   }
   const variable13: VariableWithVariants = {
     id: 13,
     label: 'variable 13',
     name: 'VAR13',
     variants: [variant3],
-    subsections: [3]
+    subsections: [3],
+    subvariables: [],
+    subvariableOf: null,
+    options: []
   }
 
   describe('cartTree', () => {

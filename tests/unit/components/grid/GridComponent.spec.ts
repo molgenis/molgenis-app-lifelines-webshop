@@ -145,12 +145,12 @@ describe('GridComponent.vue', () => {
         }, {
           name: 'b',
           id: 102,
-          subvariable_of: { id: 101 },
+          subvariableOf: { id: 101 },
           subvariables: []
         }, {
           name: 'c',
           id: 103,
-          subvariable_of: { id: 101 },
+          subvariableOf: { id: 101 },
           subvariables: []
         }, {
           name: 'd',
@@ -187,17 +187,17 @@ describe('GridComponent.vue', () => {
       expect(wrapper.vm.variableSetIsOpen(props.gridVariables[0])).toBeFalsy()
     })
 
-    it('can use isVisableVariable to find visable variables sets', () => {
+    it('can use isVisibleVariable to find visable variables sets', () => {
       // @ts-ignore
       expect(wrapper.vm.openVariableSets).toEqual([101])
       // @ts-ignore
-      expect(wrapper.vm.isVisableVariable(props.gridVariables[0])).toBeTruthy()
+      expect(wrapper.vm.isVisibleVariable(props.gridVariables[0])).toBeTruthy()
       // @ts-ignore
-      expect(wrapper.vm.isVisableVariable(props.gridVariables[1])).toBeFalsy()
+      expect(wrapper.vm.isVisibleVariable(props.gridVariables[1])).toBeFalsy()
       // @ts-ignore
       wrapper.vm.openVariableSets = []
       // @ts-ignore
-      expect(wrapper.vm.isVisableVariable(props.gridVariables[1])).toBeTruthy()
+      expect(wrapper.vm.isVisibleVariable(props.gridVariables[1])).toBeTruthy()
     })
 
     it('can use variableSetClickHandler to open en close variable sets', () => {

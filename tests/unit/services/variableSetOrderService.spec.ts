@@ -9,7 +9,7 @@ describe('finalVariableSetSort', () => {
       id: 1 // Normal variable
     }, {
       id: 3, // Sub variable
-      subvariable_of: { id: 2 }
+      subvariableOf: { id: 2 }
     }, {
       id: 2, // Parent variable
       subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ]
@@ -17,10 +17,10 @@ describe('finalVariableSetSort', () => {
       id: 6 // Normal variable
     }, {
       id: 4, // Sub variable
-      subvariable_of: { id: 2 }
+      subvariableOf: { id: 2 }
     }, {
       id: 5, // Sub variable
-      subvariable_of: { id: 2 }
+      subvariableOf: { id: 2 }
     }]
 
     // Wished results
@@ -31,13 +31,13 @@ describe('finalVariableSetSort', () => {
       subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ]
     }, {
       id: 3, // Sub variable
-      subvariable_of: { id: 2 }
+      subvariableOf: { id: 2 }
     }, {
       id: 4, // Sub variable
-      subvariable_of: { id: 2 }
+      subvariableOf: { id: 2 }
     }, {
       id: 5, // Normal variable
-      subvariable_of: { id: 2 }
+      subvariableOf: { id: 2 }
     }, {
       id: 6 // Normal variable
     }]
