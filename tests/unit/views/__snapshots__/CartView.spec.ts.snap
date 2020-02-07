@@ -21,13 +21,15 @@ exports[`CartView.vue renders cart view 1`] = `
                 </svg></h5>
             </header>
             <div id="accordion-0" class="collapse show" role="tabpanel">
-              <div class="card-body">
+              <div class="card-body mx-3 my-1">
                 <!---->
                 <!---->
                 <div>
                   <h5 class="h6">Subsection 1</h5>
                   <ul>
-                    <li><span>var 123 ( assessment1, assessment3 )</span></li>
+                    <li class="subvariable-line start"><span>var 123 ( assessment1, assessment3 )</span></li>
+                    <li class="subvariable-line line"><span>var 456 ( assessment3 )</span></li>
+                    <li class="subvariable-line end"><span>var 789 </span></li>
                   </ul>
                 </div>
               </div>
@@ -46,13 +48,13 @@ exports[`CartView.vue renders cart view 1`] = `
                 </svg></h5>
             </header>
             <div id="accordion-1" class="collapse" style="display: none;" role="tabpanel">
-              <div class="card-body">
+              <div class="card-body mx-3 my-1">
                 <!---->
                 <!---->
                 <div>
                   <h5 class="h6">Subsection 2</h5>
                   <ul>
-                    <li><span>var 456 ( assessment3 )</span></li>
+                    <li class="subvariable-line"><span>var 456 ( assessment3 )</span></li>
                   </ul>
                 </div>
               </div>

@@ -142,8 +142,8 @@ export default {
   }),
   loadVariables: tryAction(async ({ state, commit }: any) => {
     const [response0, response1] = await Promise.all([
-      api.get('/api/v2/lifelines_variable?attrs=id,name,label,subsections&num=10000&sort=id'),
-      api.get('/api/v2/lifelines_variable?attrs=id,name,label,subsections&num=10000&start=10000&sort=id')
+      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id'),
+      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id')
     ])
     const variables = [...response0.items, ...response1.items]
 

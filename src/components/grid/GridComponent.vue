@@ -68,7 +68,7 @@
               :class="{'d-none': !isVisibleVariable(gridVariables[rowIndex])}"
             >
               <th
-                class="collapse-holder"
+                class="collapse-holder subvariable-line"
                 :class="variableSetClass(gridVariables[rowIndex])"
                 @click="variableSetClickHandler(gridVariables[rowIndex])"
               >
@@ -415,36 +415,6 @@ table {
           fill: $primary;
         }
       }
-
-      &::after {
-        bottom: 0;
-        content: "";
-        position: absolute;
-        right: 5px;
-        top: 0;
-        width: 10px;
-      }
-
-      &.closed,
-      &.start {
-        cursor: pointer;
-      }
-
-      &.start::after {
-        border-left: 2px solid $primary;
-        border-top: 2px solid $primary;
-        border-top-left-radius: 10px;
-      }
-
-      &.end::after {
-        border-bottom: 2px solid $primary;
-        border-bottom-left-radius: 10px;
-        border-left: 2px solid $primary;
-      }
-
-      &.line::after {
-        border-left: 2px solid $primary;
-      }
     }
   }
 }
@@ -568,6 +538,13 @@ th {
 .all-toggle {
   button {
     border-bottom-left-radius: 0;
+  }
+}
+
+.subvariable-line {
+  &.closed,
+  &.start {
+    cursor: pointer;
   }
 }
 </style>

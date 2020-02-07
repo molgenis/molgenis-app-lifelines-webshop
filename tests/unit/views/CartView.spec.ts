@@ -55,12 +55,15 @@ describe('CartView.vue', () => {
         123: {
           id: 123,
           name: 'var123',
-          label: 'var 123'
+          label: 'var 123',
+          subvariables: [{ id: 456 }]
         },
         456: {
           id: 456,
           name: 'var456',
-          label: 'var 456'
+          label: 'var 456',
+          subvariable_of: { id: 123 },
+          subvariables: []
         }
       },
       assessments: {
@@ -88,6 +91,23 @@ describe('CartView.vue', () => {
           id: 123,
           name: 'var123',
           label: 'var 123',
+          subvariables: [{ id: 456 }, { id: 789 }],
+          subsections: [1],
+          subsection: 1
+        }, {
+          id: 456,
+          name: 'var456',
+          label: 'var 456',
+          subvariable_of: { id: 123 },
+          subvariables: [],
+          subsections: [1, 2],
+          subsection: 1
+        }, {
+          id: 789,
+          name: 'var789',
+          label: 'var 789',
+          subvariable_of: { id: 123 },
+          subvariables: [],
           subsections: [1],
           subsection: 1
         }]
@@ -101,6 +121,7 @@ describe('CartView.vue', () => {
           id: 456,
           name: 'var456',
           label: 'var 456',
+          subvariables: [],
           subsections: [2],
           subsection: 2
         }]
@@ -183,5 +204,14 @@ describe('CartView.vue', () => {
     cartHeader.trigger('click')
     // the element is openened
     expect(wrapper.vm.openItems).toHaveLength(1)
+  })
+
+  it('can render variables sets correctly', async () => {
+    // @ts-ignore
+    const wrapper = mount(CartView, { stubs, store, localVue, mocks })
+    // @ts-ignore
+    expect(wrapper.vm.variableSetClass(cartTree[0].subsections[0].variables[0])).toEqual('start')
+    expect(wrapper.vm.variableSetClass(cartTree[0].subsections[0].variables[1])).toEqual('line')
+    expect(wrapper.vm.variableSetClass(cartTree[0].subsections[0].variables[2])).toEqual('end')
   })
 })
