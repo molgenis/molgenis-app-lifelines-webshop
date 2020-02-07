@@ -5,7 +5,12 @@
         <div class="col-sm-12 col-md-12 col-lg-6">
           <h3 class="h4">{{$t('lifelines-webshop-cart-header')}}</h3>
 
-          <toast-component :value="toast" :fixed="false" class="my-3"></toast-component>
+          <toast-component
+            v-if="selectedVariableIds.length > 0"
+            :value="toast"
+            :fixed="false"
+            class="my-3"
+          ></toast-component>
 
           <spinner-animation v-if="loading" />
 
@@ -97,7 +102,13 @@ export default Vue.extend({
   data () {
     return {
       openItems: ['accordion-0'],
-      toast: [{ type: 'warning', textType: 'dark', message: this.$t('lifelines-webshop-cart-empty-variables-warning') }]
+      toast: [
+        {
+          type: 'warning',
+          textType: 'dark',
+          message: this.$t('lifelines-webshop-cart-empty-variables-warning')
+        }
+      ]
     }
   },
   methods: {

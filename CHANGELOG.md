@@ -1,3 +1,31 @@
+# [1.8.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.7.1...v1.8.0) (2020-02-05)
+
+
+### Features
+
+* only hide cohort selection when user clicks on the button ([#260](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/260)) ([c8fd36b](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/c8fd36b))
+
+## [1.7.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.7.0...v1.7.1) (2020-02-04)
+
+
+### Bug Fixes
+
+* only show warning about empty variables if there are variables selected in the first place ([4b53c61](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4b53c61))
+
+# [1.7.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.6.1...v1.7.0) (2020-02-04)
+
+
+### Features
+
+* better implementation for abbreviating big numbers. Removed  "format-si-prefix", fixed typo in name, added formatting file. ([4f77d4d](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4f77d4d))
+
+## [1.6.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.6.0...v1.6.1) (2020-02-04)
+
+
+### Bug Fixes
+
+* make sure the variable set starts closed ([7acbbfd](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/7acbbfd))
+
 # [1.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.5.2...v1.6.0) (2020-01-30)
 
 
