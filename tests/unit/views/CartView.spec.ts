@@ -29,7 +29,7 @@ describe('CartView.vue', () => {
   let actions: any
   let mutations: any
 
-  let cartTree: CartSection[]
+  let cartTree: any[]
 
   const getters = {
     cartTree: () => cartTree,

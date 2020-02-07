@@ -83,7 +83,7 @@
                 :class="{'selected-variable': rowIndex === selectedRowIndex }"
               >
                 <grid-titel-info
-                  :class="{'ml-3': !!gridVariables[rowIndex].subvariable_of}"
+                  :class="{'ml-3': !!gridVariables[rowIndex].subvariableOf}"
                   v-bind="gridVariables[rowIndex]"
                 />
               </th>
@@ -229,8 +229,8 @@ export default Vue.extend({
     },
     isVisibleVariable (variable) {
       if (
-        variable.subvariable_of &&
-        this.openVariableSets.includes(variable.subvariable_of.id)
+        variable.subvariableOf &&
+        this.openVariableSets.includes(variable.subvariableOf.id)
       ) {
         return false
       }
@@ -240,9 +240,9 @@ export default Vue.extend({
       if (this.openVariableSets.includes(variable.id)) {
         return 'closed'
       }
-      if (variable.subvariable_of) {
+      if (variable.subvariableOf) {
         const parent = this.gridVariables.filter(
-          varid => varid.id === variable.subvariable_of.id
+          varid => varid.id === variable.subvariableOf.id
         )[0]
         const index = this.gridVariables.findIndex(
           varid => varid.id === variable.id
@@ -250,7 +250,7 @@ export default Vue.extend({
         if (
           index + 1 < this.gridVariables.length &&
           this.gridVariables[index + 1] &&
-          !this.gridVariables[index + 1].subvariable_of
+          !this.gridVariables[index + 1].subvariableOf
         ) {
           return 'end'
         }

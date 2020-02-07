@@ -4,7 +4,7 @@ export const finalVariableSetSort = (gridVariables: any) => {
   let variableSets:any = []
   // Step 1: ADD all non sub variables
   gridVariables.forEach((variable:any) => {
-    if (!variable.subvariable_of) {
+    if (!variable.subvariableOf) {
       orderedGridVariables.push(variable)
     }
     if (variable.subvariables && variable.subvariables.length > 0) {
@@ -15,7 +15,7 @@ export const finalVariableSetSort = (gridVariables: any) => {
   variableSets.forEach((setVariable:any) => {
     // Step 3: add subvariables in correct order
     gridVariables.forEach((variable:any) => {
-      if (variable.subvariable_of && variable.subvariable_of.id === setVariable.id) {
+      if (variable.subvariableOf && variable.subvariableOf.id === setVariable.id) {
         const index:number = orderedGridVariables.findIndex((item:any) => item.id === setVariable.id)
         orderedGridVariables.splice(index + 1, 0, variable)
       }
