@@ -125,6 +125,34 @@ describe('mutations', () => {
     })
   })
 
+  describe('update sections', () => {
+    it('updates sections', () => {
+      const baseAppState = { ...state }
+      mutations.updateSections(baseAppState, { 0: { id: 1, name: 'test' } })
+      expect(baseAppState.sections).toEqual({ 0: { id: 1, name: 'test' } })
+    })
+  })
+  describe('update subsections', () => {
+    it('updates subsections', () => {
+      const baseAppState = { ...state }
+      mutations.updateSubSections(baseAppState, ['one', 'two'])
+      expect(baseAppState.subSectionList).toEqual(['one', 'two'])
+    })
+  })
+  describe('update variables', () => {
+    it('updates variables', () => {
+      const baseAppState = { ...state }
+      mutations.updateVariables(baseAppState, { 0: { id: 1, label: 'test label', name: 'test', subsections: [1, 2, 3, 4] } })
+      expect(baseAppState.variables).toEqual({ 0: { id: 1, label: 'test label', name: 'test', subsections: [1, 2, 3, 4] } })
+    })
+  })
+  describe('update assessments', () => {
+    it('updates assessments', () => {
+      const baseAppState = { ...state }
+      mutations.updateAssessments(baseAppState, { 0: { id: 1, name: 'test' } })
+      expect(baseAppState.assessments).toEqual({ 0: { id: 1, name: 'test' } })
+    })
+  })
   describe('updateSearchTerm', () => {
     it('updates search term', () => {
       const baseAppState = { ...state }
@@ -174,6 +202,14 @@ describe('mutations', () => {
       let baseAppState = Object.assign({}, state)
       mutations.updateTreeSelection(baseAppState, 99)
       expect(baseAppState.treeSelected).toEqual(99)
+    })
+  })
+
+  describe('updateTreeOpenSelection', () => {
+    it('updates the treeOpenSelected number with the given number', () => {
+      let baseAppState = Object.assign({}, state)
+      mutations.updateTreeOpenSection(baseAppState, 99)
+      expect(baseAppState.treeOpenPageSection).toEqual(99)
     })
   })
 

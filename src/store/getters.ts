@@ -102,13 +102,37 @@ export default {
     state.gridVariables === null ? null : state.gridVariables.map((variable: VariableWithVariants) =>
       getters.gridAssessments.map((assessment: Assessment) => {
         if (state.variantCounts === null) { return NaN }
+
         const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
-        const count: number = variants.reduce((sum: number, variant: Variant) => {
-          // @ts-ignore
-          const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
-          return sum + (variantCount ? variantCount.count : 0)
-        }, 0)
-        return count
+
+        const variantCounts: number[] = []
+        variants.forEach((variant: Variant) => {
+          if (state.variantCounts) {
+            const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
+            if (variantCount) {
+              variantCounts.push(variantCount.count)
+            } else {
+              variantCounts.push(0)
+            }
+          }
+        })
+
+        // no counts found.
+        if (variantCounts.length === 0) {
+          return 0
+        }
+
+        let allBelowThreshold = variantCounts.every((value) => value === -1 || value === 0)
+
+        // check if everything is below threshold, if so pass the -1 to notify grid
+        if (allBelowThreshold) {
+          return -1
+        } else {
+          // filter out any below threshold.
+          const positiveVariantCounts = variantCounts.filter((value) => value >= 0)
+          // sum it.
+          return positiveVariantCounts.reduce((sum: number, nextValue: number) => sum + nextValue)
+        }
       })
     ),
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null =>
@@ -128,10 +152,10 @@ export default {
     const loadedTreeStructure: boolean = state.treeStructure.length > 0
     if (loadedSection && loadedSubSection && loadedTreeStructure) {
       // return full tree
-      return state.treeStructure.map((item:TreeParent) => {
+      return state.treeStructure.map((item: TreeParent) => {
         return {
           ...state.sections[item.key],
-          children: item.list.map((id:number) => {
+          children: item.list.map((id: number) => {
             return {
               name: state.subSectionList[id],
               id
