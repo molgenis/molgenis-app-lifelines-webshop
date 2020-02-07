@@ -70,7 +70,7 @@
               <th @click="openInfoDialog(rowIndex)"
                   :class="{'selected-variable': rowIndex === selectedRowIndex }"
               >
-                <grid-titel-info :class="{'ml-3': !!gridVariables[rowIndex].subvariable_of}" v-bind="gridVariables[rowIndex]" />
+                <grid-titel-info :class="{'ml-3': !!gridVariables[rowIndex].subvariableOf}" v-bind="gridVariables[rowIndex]" />
               </th>
               <th class="row-toggle grid-toggle">
                 <button
@@ -208,17 +208,17 @@ export default Vue.extend({
       }
     },
     isVisableVariable (variable) {
-      if (variable.subvariable_of && this.openVariableSets.includes(variable.subvariable_of.id)) {
+      if (variable.subvariableOf && this.openVariableSets.includes(variable.subvariableOf.id)) {
         return false
       }
       return true
     },
     variableSetClass (variable) {
       if (this.openVariableSets.includes(variable.id)) { return 'closed' }
-      if (variable.subvariable_of) {
-        const parent = this.gridVariables.filter(varid => varid.id === variable.subvariable_of.id)[0]
+      if (variable.subvariableOf) {
+        const parent = this.gridVariables.filter(varid => varid.id === variable.subvariableOf.id)[0]
         const index = this.gridVariables.findIndex(varid => varid.id === variable.id)
-        if (index + 1 < this.gridVariables.length && this.gridVariables[index + 1] && !this.gridVariables[index + 1].subvariable_of) {
+        if (index + 1 < this.gridVariables.length && this.gridVariables[index + 1] && !this.gridVariables[index + 1].subvariableOf) {
           return 'end'
         }
         return 'line'

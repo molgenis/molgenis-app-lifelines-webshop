@@ -4,8 +4,11 @@ export interface Variable {
   name: string
   label: string
   subsections: number[]
+  subvariableOf: Variable | null
 }
 
 export interface VariableWithVariants extends Variable {
   variants: Variant[]
+  options: string[]
+  subvariables: Variable[]
 }
