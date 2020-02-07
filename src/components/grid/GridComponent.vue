@@ -409,7 +409,7 @@ table {
       svg {
         left: 0.5rem;
         position: relative;
-        top: 0.05rem;
+        top: 0.3rem;
 
         path {
           fill: $primary;

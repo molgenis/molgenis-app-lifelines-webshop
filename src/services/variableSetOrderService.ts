@@ -7,20 +7,21 @@ export const finalVariableSetSort = (gridVariables: any) => {
     if (!variable.subvariableOf) {
       orderedGridVariables.push(variable)
     }
-    if (variable.subvariables && variable.subvariables.length > 0) {
+    if (variable.subvariables.length) {
       variableSets.push(variable)
     }
   })
   // Step 2: select variables with subvariables
   variableSets.forEach((setVariable:any) => {
     // Step 3: add subvariables in correct order
+    let offset = 1
     gridVariables.forEach((variable:any) => {
       if (variable.subvariableOf && variable.subvariableOf.id === setVariable.id) {
         const index:number = orderedGridVariables.findIndex((item:any) => item.id === setVariable.id)
-        orderedGridVariables.splice(index + 1, 0, variable)
+        orderedGridVariables.splice(index + offset, 0, variable)
+        offset++
       }
     })
   })
-  console.assert(orderedGridVariables.length === gridVariables.length)
   return orderedGridVariables
 }
