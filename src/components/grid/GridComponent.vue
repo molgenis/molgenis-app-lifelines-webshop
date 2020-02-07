@@ -68,7 +68,7 @@
               :class="{'d-none': !isVisibleVariable(gridVariables[rowIndex])}"
             >
               <th
-                class="collapse-holder set-line"
+                class="collapse-holder subvariable-line"
                 :class="variableSetClass(gridVariables[rowIndex])"
                 @click="variableSetClickHandler(gridVariables[rowIndex])"
               >
@@ -541,7 +541,7 @@ th {
   }
 }
 
-.set-line {
+.subvariable-line {
   &.closed,
   &.start {
     cursor: pointer;

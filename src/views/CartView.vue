@@ -58,7 +58,7 @@
                   <div v-for="subsection in section.subsections" :key="subsection.id">
                     <h5 class="h6">{{subsection.name}}</h5>
                     <ul>
-                      <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="set-line" :class="variableSetClass(variable)">
+                      <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="subvariable-line" :class="variableSetClass(variable)">
                         <span>{{variable.label||variable.name}} {{ variableAssesments[variable.id] }}</span>
                       </li>
                     </ul>
@@ -227,7 +227,7 @@ export default Vue.extend({
   cursor: pointer;
 }
 
-.set-line {
+.subvariable-line {
   &::after {
     left: -$spacer;
     right: auto;
