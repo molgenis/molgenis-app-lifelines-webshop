@@ -7,7 +7,7 @@ export const finalVariableSetSort = (gridVariables: any) => {
     if (!variable.subvariableOf) {
       orderedGridVariables.push(variable)
     }
-    if (variable.subvariables && variable.subvariables.length > 0) {
+    if (variable.subvariables.length) {
       variableSets.push(variable)
     }
   })
