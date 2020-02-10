@@ -108,6 +108,8 @@ export default {
         const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
 
         const variantCounts: number[] = []
+
+        // get all counts for this variant
         variants.forEach((variant: Variant) => {
           // @ts-ignore
           const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
@@ -118,15 +120,20 @@ export default {
           }
         })
 
-        // no counts found.
-        if (variantCounts.length === 0) {
+        /** CASES:
+         *   0,  0, 0 becomes  0
+         *  -1, -1, 0 becomes -1
+         *  -1,  0, 0 becomes -1
+         *  80, -1, 0 becomes 80
+         */
+
+        // no counts found or all counts are empty
+        if (variantCounts.every((value) => value === 0)) {
           return 0
         }
 
-        let allBelowThreshold = variantCounts.every((value) => value === -1 || value === 0)
-
         // check if everything is below threshold, if so pass the -1 to notify grid
-        if (allBelowThreshold) {
+        if (variantCounts.every((value) => value <= 0)) {
           return -1
         } else {
           // filter out any below threshold.
