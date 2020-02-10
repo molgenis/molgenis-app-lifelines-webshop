@@ -68,7 +68,7 @@
               :class="{'d-none': !isVisibleVariable(gridVariables[rowIndex])}"
             >
               <th
-                class="collapse-holder"
+                class="collapse-holder subvariable-line"
                 :class="variableSetClass(gridVariables[rowIndex])"
                 @click="variableSetClickHandler(gridVariables[rowIndex])"
               >
@@ -83,7 +83,7 @@
                 :class="{'selected-variable': rowIndex === selectedRowIndex }"
               >
                 <grid-titel-info
-                  :class="{'ml-3': !!gridVariables[rowIndex].subvariable_of}"
+                  :class="{'ml-3': !!gridVariables[rowIndex].subvariableOf}"
                   v-bind="gridVariables[rowIndex]"
                 />
               </th>
@@ -220,8 +220,8 @@ export default Vue.extend({
     },
     isVisibleVariable (variable) {
       if (
-        variable.subvariable_of &&
-        this.openVariableSets.includes(variable.subvariable_of.id)
+        variable.subvariableOf &&
+        this.openVariableSets.includes(variable.subvariableOf.id)
       ) {
         return false
       }
@@ -231,9 +231,9 @@ export default Vue.extend({
       if (this.openVariableSets.includes(variable.id)) {
         return 'closed'
       }
-      if (variable.subvariable_of) {
+      if (variable.subvariableOf) {
         const parent = this.gridVariables.filter(
-          varid => varid.id === variable.subvariable_of.id
+          varid => varid.id === variable.subvariableOf.id
         )[0]
         const index = this.gridVariables.findIndex(
           varid => varid.id === variable.id
@@ -241,7 +241,7 @@ export default Vue.extend({
         if (
           index + 1 < this.gridVariables.length &&
           this.gridVariables[index + 1] &&
-          !this.gridVariables[index + 1].subvariable_of
+          !this.gridVariables[index + 1].subvariableOf
         ) {
           return 'end'
         }
@@ -400,41 +400,11 @@ table {
       svg {
         left: 0.5rem;
         position: relative;
-        top: 0.05rem;
+        top: 0.3rem;
 
         path {
           fill: $primary;
         }
-      }
-
-      &::after {
-        bottom: 0;
-        content: "";
-        position: absolute;
-        right: 5px;
-        top: 0;
-        width: 10px;
-      }
-
-      &.closed,
-      &.start {
-        cursor: pointer;
-      }
-
-      &.start::after {
-        border-left: 2px solid $primary;
-        border-top: 2px solid $primary;
-        border-top-left-radius: 10px;
-      }
-
-      &.end::after {
-        border-bottom: 2px solid $primary;
-        border-bottom-left-radius: 10px;
-        border-left: 2px solid $primary;
-      }
-
-      &.line::after {
-        border-left: 2px solid $primary;
       }
     }
   }
@@ -559,6 +529,13 @@ th {
 .all-toggle {
   button {
     border-bottom-left-radius: 0;
+  }
+}
+
+.subvariable-line {
+  &.closed,
+  &.start {
+    cursor: pointer;
   }
 }
 </style>

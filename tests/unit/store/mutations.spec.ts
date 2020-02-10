@@ -2,41 +2,53 @@ import mutations from '@/store/mutations'
 import state from '../fixtures/state'
 import orders from '../fixtures/orders'
 import { OrderState } from '@/types/Order'
-import { Toast } from '@/types/ApplicationState'
+import { Toast, AppState } from '@/types/ApplicationState'
+import { VariableWithVariants } from '@/types/Variable'
+import initialState from '@/store/state'
 
-const gridVariables = [
+const gridVariables:VariableWithVariants[] = [
   {
     id: 1,
     label: 'A',
     name: 'A1',
     variants: [
-      { assessmentId: 1, assessment_id: 1, id: 11 },
-      { assessmentId: 2, assessment_id: 2, id: 22 },
-      { assessmentId: 3, assessment_id: 3, id: 33 }],
-    subsections: [1]
+      { assessmentId: 1, id: 11 },
+      { assessmentId: 2, id: 22 },
+      { assessmentId: 3, id: 33 }],
+    subsections: [1],
+    subvariableOf: null,
+    subvariables: [],
+    options: []
+
   },
   {
     id: 2,
     label: 'B',
     name: 'B2',
     variants: [
-      { assessmentId: 4, assessment_id: 4, id: 44 },
-      { assessmentId: 5, assessment_id: 5, id: 55 },
-      { assessmentId: 6, assessment_id: 6, id: 66 }],
-    subsections: [1]
+      { assessmentId: 4, id: 44 },
+      { assessmentId: 5, id: 55 },
+      { assessmentId: 6, id: 66 }],
+    subsections: [1],
+    subvariableOf: null,
+    subvariables: [],
+    options: []
   },
   {
     id: 3,
     label: 'C',
     name: 'C3',
     variants: [
-      { assessmentId: 1, assessment_id: 1, id: 11 },
-      { assessmentId: 2, assessment_id: 2, id: 22 },
-      { assessmentId: 3, assessment_id: 3, id: 33 },
-      { assessmentId: 4, assessment_id: 4, id: 44 },
-      { assessmentId: 5, assessment_id: 5, id: 55 },
-      { assessmentId: 6, assessment_id: 6, id: 66 }],
-    subsections: [1]
+      { assessmentId: 1, id: 11 },
+      { assessmentId: 2, id: 22 },
+      { assessmentId: 3, id: 33 },
+      { assessmentId: 4, id: 44 },
+      { assessmentId: 5, id: 55 },
+      { assessmentId: 6, id: 66 }],
+    subsections: [1],
+    subvariableOf: null,
+    subvariables: [],
+    options: []
   }]
 
 describe('mutations', () => {
@@ -461,7 +473,8 @@ describe('mutations', () => {
   })
   describe('toggleGridColumn', () => {
     it('selects if none selected', () => {
-      const state = {
+      const state:AppState = {
+        ...initialState,
         gridSelection: {},
         treeSelected: -1,
         gridVariables
@@ -471,7 +484,8 @@ describe('mutations', () => {
     })
 
     it('removes if all already selected', () => {
-      const state = {
+      const state:AppState = {
+        ...initialState,
         gridSelection: { 1: [2, 3], 2: [2], 3: [2] },
         gridVariables
       }
@@ -480,7 +494,8 @@ describe('mutations', () => {
     })
 
     it('selects all if one already selected', () => {
-      const state = {
+      const state:AppState = {
+        ...initialState,
         gridSelection: { 1: [2], 3: [3] },
         gridVariables
       }
@@ -491,7 +506,8 @@ describe('mutations', () => {
 
   describe('toggleAll', () => {
     it('selects if none selected', () => {
-      const state = {
+      const state:AppState = {
+        ...initialState,
         gridSelection: {},
         treeSelected: -1,
         treeStructure: [],
@@ -502,7 +518,8 @@ describe('mutations', () => {
     })
 
     it('removes if all already selected', () => {
-      const state = {
+      const state:AppState = {
+        ...initialState,
         gridSelection: { 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] },
         treeSelected: -1,
         treeStructure: [],
@@ -513,7 +530,8 @@ describe('mutations', () => {
     })
 
     it('selects all if one already selected', () => {
-      const state = {
+      const state:AppState = {
+        ...initialState,
         gridSelection: { 1: [2] },
         treeSelected: -1,
         treeStructure: [],

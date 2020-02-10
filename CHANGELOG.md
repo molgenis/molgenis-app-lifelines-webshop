@@ -1,3 +1,15 @@
+# [1.9.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.8.0...v1.9.0) (2020-02-07)
+
+
+### Bug Fixes
+
+* variable set order and misaligned icon ([#255](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/255)) ([bf9b7ca](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/bf9b7ca))
+
+
+### Features
+
+* set variable set line for cart ([#256](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/256)) ([def21df](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/def21df))
+
 # [1.8.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.7.1...v1.8.0) (2020-02-05)
 
 

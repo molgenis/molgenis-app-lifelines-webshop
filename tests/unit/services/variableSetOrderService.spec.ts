@@ -1,41 +1,55 @@
 import { finalVariableSetSort } from '@/services/variableSetOrderService'
 
 describe('finalVariableSetSort', () => {
-  it('sort the variable into its holding sets', () => {
-    const out:any = [{
-      id: 2,
-      subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ]
+  // finalVariableSetSort takes a set of data and sorts so that subvariable are always after the parent variable
+  // Note: the original order will be kept
+  it('sorts the sub variables below its parent variable', () => {
+    // data where the variable sets are not correctly together
+    const data:any = [{
+      id: 1, // Normal variable
+      subvariables: []
     }, {
-      id: 4,
-      subvariable_of: { id: 2 }
+      id: 3, // Sub variable
+      subvariableOf: { id: 2 },
+      subvariables: []
     }, {
-      id: 5,
-      subvariable_of: { id: 2 }
+      id: 2, // Parent variable
+      subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ],
     }, {
-      id: 3,
-      subvariable_of: { id: 2 }
+      id: 6, // Normal variable
+      subvariables: []
     }, {
-      id: 1
+      id: 4, // Sub variable
+      subvariableOf: { id: 2 },
+      subvariables: []
     }, {
-      id: 6
+      id: 5, // Sub variable
+      subvariableOf: { id: 2 },
+      subvariables: []
     }]
 
-    const data:any = [{
-      id: 3,
-      subvariable_of: { id: 2 }
+    // Wished results
+    const out:any = [{
+      id: 1, // Normal variable
+      subvariables: []
     }, {
-      id: 2,
+      id: 2, // Parent variable
       subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ]
     }, {
-      id: 1
+      id: 3, // Sub variable
+      subvariableOf: { id: 2 },
+      subvariables: []
     }, {
-      id: 6
+      id: 4, // Sub variable
+      subvariableOf: { id: 2 },
+      subvariables: []
     }, {
-      id: 5,
-      subvariable_of: { id: 2 }
+      id: 5, // Normal variable
+      subvariableOf: { id: 2 },
+      subvariables: []
     }, {
-      id: 4,
-      subvariable_of: { id: 2 }
+      id: 6, // Normal variable
+      subvariables: []
     }]
     expect(finalVariableSetSort(data)).toEqual(out)
   })

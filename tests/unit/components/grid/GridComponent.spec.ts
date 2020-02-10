@@ -145,12 +145,12 @@ describe('GridComponent.vue', () => {
         }, {
           name: 'b',
           id: 102,
-          subvariable_of: { id: 101 },
+          subvariableOf: { id: 101 },
           subvariables: []
         }, {
           name: 'c',
           id: 103,
-          subvariable_of: { id: 101 },
+          subvariableOf: { id: 101 },
           subvariables: []
         }, {
           name: 'd',

@@ -54,11 +54,11 @@
                 :accordion="`my-accordion-${index}`"
                 role="tabpanel"
               >
-                <b-card-body>
+                <b-card-body class="mx-3 my-1">
                   <div v-for="subsection in section.subsections" :key="subsection.id">
                     <h5 class="h6">{{subsection.name}}</h5>
                     <ul>
-                      <li v-for="variable in subsection.variables" :key="variable.id">
+                      <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="subvariable-line" :class="variableSetClass(variable)">
                         <span>{{variable.label||variable.name}} {{ variableAssesments[variable.id] }}</span>
                       </li>
                     </ul>
@@ -130,6 +130,58 @@ export default Vue.extend({
     isActive (index) {
       let clickedItem = `accordion-${index}`
       return this.openItems.indexOf(clickedItem) >= 0
+    },
+    // Set a collection of flags that are useful for styling
+    variablesWithSet (variables) {
+      let isStart = []
+      let isEnd = []
+      let isChild = []
+      // Find child / parent status of variables sets
+      variables.forEach(variable => {
+        if (variable.subvariable_of) {
+          if (variables.find(target => target.id === variable.subvariable_of.id)) {
+            isChild.push(variable.id)
+            isStart.push(variable.subvariable_of.id)
+          }
+        }
+      })
+      variables.forEach((variable, index, array) => {
+        if (isChild.includes(variable.id)) {
+          array[index].isChild = true
+        }
+      })
+      let lastVariable
+      variables.forEach((variable, index, set) => {
+        if (!variable.isChild && lastVariable && lastVariable.isChild) {
+          isEnd.push(lastVariable.id)
+        }
+        // last item in set: close the set
+        if (variable.isChild && set.length - 1 === index) {
+          isEnd.push(variable.id)
+        }
+        lastVariable = variable
+      })
+      variables.forEach((variable, index, array) => {
+        if (isEnd.includes(variable.id)) {
+          array[index].isEnd = true
+        }
+        if (isStart.includes(variable.id)) {
+          array[index].isStart = true
+        }
+      })
+      return variables
+    },
+    variableSetClass (variable) {
+      if (variable.isStart) {
+        return 'start'
+      }
+      if (variable.isChild) {
+        if (variable.isEnd) {
+          return 'end'
+        }
+        return 'line'
+      }
+      return ''
     }
   },
   computed: {
@@ -173,5 +225,17 @@ export default Vue.extend({
 
 .hoverable {
   cursor: pointer;
+}
+
+.subvariable-line {
+  &::after {
+    left: -$spacer;
+    right: auto;
+  }
+
+  &.line,
+  &.end {
+    padding-left: 0.75rem;
+  }
 }
 </style>
