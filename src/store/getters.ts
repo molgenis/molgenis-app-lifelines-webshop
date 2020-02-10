@@ -101,14 +101,46 @@ export default {
   grid: (state: ApplicationState, getters: Getters): number[][] | null =>
     state.gridVariables === null ? null : state.gridVariables.map((variable: VariableWithVariants) =>
       getters.gridAssessments.map((assessment: Assessment) => {
-        if (state.variantCounts === null) { return NaN }
+        if (state.variantCounts === null) {
+          return NaN
+        }
+
         const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
-        const count: number = variants.reduce((sum: number, variant: Variant) => {
+
+        const variantCounts: number[] = []
+
+        // get all counts for this variant
+        variants.forEach((variant: Variant) => {
           // @ts-ignore
           const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
-          return sum + (variantCount ? variantCount.count : 0)
-        }, 0)
-        return count
+          if (variantCount) {
+            variantCounts.push(variantCount.count)
+          } else {
+            variantCounts.push(0)
+          }
+        })
+
+        /** CASES:
+         *   0,  0, 0 becomes  0
+         *  -1, -1, 0 becomes -1
+         *  -1,  0, 0 becomes -1
+         *  80, -1, 0 becomes 80
+         */
+
+        // no counts found or all counts are empty
+        if (variantCounts.every((value) => value === 0)) {
+          return 0
+        }
+
+        // check if everything is below threshold, if so pass the -1 to notify grid
+        if (variantCounts.every((value) => value <= 0)) {
+          return -1
+        } else {
+          // filter out any below threshold.
+          const positiveVariantCounts = variantCounts.filter((value) => value >= 0)
+          // sum it.
+          return positiveVariantCounts.reduce((sum: number, nextValue: number) => sum + nextValue)
+        }
       })
     ),
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null =>
@@ -128,10 +160,10 @@ export default {
     const loadedTreeStructure: boolean = state.treeStructure.length > 0
     if (loadedSection && loadedSubSection && loadedTreeStructure) {
       // return full tree
-      return state.treeStructure.map((item:TreeParent) => {
+      return state.treeStructure.map((item: TreeParent) => {
         return {
           ...state.sections[item.key],
-          children: item.list.map((id:number) => {
+          children: item.list.map((id: number) => {
             return {
               name: state.subSectionList[id],
               id
