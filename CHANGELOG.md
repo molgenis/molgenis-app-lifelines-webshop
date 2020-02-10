@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.9.0...v1.9.1) (2020-02-10)
+
+
+### Bug Fixes
+
+* fixed negative values due to privacy threshold ([#261](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/261)) ([5c06858](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/5c06858)), closes [#254](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/254) [#254](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/254)
+
 # [1.9.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.8.0...v1.9.0) (2020-02-07)
 
 
