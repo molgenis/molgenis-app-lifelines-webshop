@@ -101,19 +101,20 @@ export default {
   grid: (state: ApplicationState, getters: Getters): number[][] | null =>
     state.gridVariables === null ? null : state.gridVariables.map((variable: VariableWithVariants) =>
       getters.gridAssessments.map((assessment: Assessment) => {
-        if (state.variantCounts === null) { return NaN }
+        if (state.variantCounts === null) {
+          return NaN
+        }
 
         const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
 
         const variantCounts: number[] = []
         variants.forEach((variant: Variant) => {
-          if (state.variantCounts) {
-            const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
-            if (variantCount) {
-              variantCounts.push(variantCount.count)
-            } else {
-              variantCounts.push(0)
-            }
+          // @ts-ignore
+          const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
+          if (variantCount) {
+            variantCounts.push(variantCount.count)
+          } else {
+            variantCounts.push(0)
           }
         })
 

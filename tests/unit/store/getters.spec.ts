@@ -256,7 +256,7 @@ describe('getters', () => {
     it('determines assessments for selected variants', () => {
       const state: ApplicationState = {
         ...emptyState,
-        assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ]
+        assessments: [assessment1A, assessment2A, assessment3A, assessment1B]
       }
       const gettersParam: Getters = {
         ...emptyGetters,
@@ -275,7 +275,7 @@ describe('getters', () => {
       }
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [ assessment1A, assessment2A ],
+        gridAssessments: [assessment1A, assessment2A],
         variants: [variant1, variant2, variant3]
       }
       expect(getters.grid(state, gettersParam)).toEqual([[10, 100], [10, 0]])
@@ -287,10 +287,98 @@ describe('getters', () => {
       }
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [ assessment1A, assessment2A ],
+        gridAssessments: [assessment1A, assessment2A],
         variants: [variant1, variant2, variant3]
       }
       expect(getters.grid(state, gettersParam)).toEqual([[NaN, NaN], [NaN, NaN]])
+    })
+
+    describe('when there are no grid variables', () => {
+      let gridResult: any
+      beforeEach(() => {
+        const state: any = { gridVariables: null }
+        const gettersParam: any = {}
+        gridResult = getters.grid(state, gettersParam)
+      })
+
+      it('should return null', () => {
+        expect(gridResult).toEqual(null)
+      })
+    })
+
+    describe('when grid variables are non empty and all variantCount are below threshold, -1', () => {
+      let gridResult: any
+      beforeEach(() => {
+        const state: any = {
+          gridVariables: [
+            {
+              id: 'variable-1',
+              variants: [
+                {
+                  id: 101,
+                  assessmentId: 222
+                },
+                {
+                  id: 102,
+                  assessmentId: 222
+                }
+              ]
+            }
+          ],
+          variantCounts: [
+            {
+              variantId: 101,
+              count: -1
+            },
+            {
+              variantId: 102,
+              count: -1
+            }
+          ]
+        }
+        const gettersParam: any = {
+          gridAssessments: [{
+            id: 222,
+            name: 'assessments-222'
+          }]
+        }
+        gridResult = getters.grid(state, gettersParam)
+      })
+
+      it('should return one by one grid with -1 as value', () => {
+        expect(gridResult).toEqual([[-1]])
+      })
+    })
+
+    describe('when variable has no mathing variant count', () => {
+      let gridResult: any
+      beforeEach(() => {
+        const state: any = {
+          gridVariables: [
+            {
+              id: 'variable-1',
+              variants: [
+                {
+                  id: 101,
+                  assessmentId: 222
+                }
+              ]
+            }
+          ],
+          variantCounts: []
+        }
+        const gettersParam: any = {
+          gridAssessments: [{
+            id: 222,
+            name: 'assessments-222'
+          }]
+        }
+        gridResult = getters.grid(state, gettersParam)
+      })
+
+      it('should return 0', () => {
+        expect(gridResult).toEqual([[0]])
+      })
     })
   })
 
@@ -303,7 +391,7 @@ describe('getters', () => {
       }
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [ assessment1A, assessment2A ]
+        gridAssessments: [assessment1A, assessment2A]
       }
       expect(getters.gridSelections(state, gettersParam))
         .toEqual([[true, true], [true, false], [false, false]])

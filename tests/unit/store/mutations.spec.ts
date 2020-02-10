@@ -154,8 +154,25 @@ describe('mutations', () => {
   describe('update variables', () => {
     it('updates variables', () => {
       const baseAppState = { ...state }
-      mutations.updateVariables(baseAppState, { 0: { id: 1, label: 'test label', name: 'test', subsections: [1, 2, 3, 4] } })
-      expect(baseAppState.variables).toEqual({ 0: { id: 1, label: 'test label', name: 'test', subsections: [1, 2, 3, 4] } })
+      mutations.updateVariables(baseAppState, {
+        0: {
+          id: 1,
+          label: 'test label',
+          name: 'test',
+          subsections: [1, 2, 3, 4],
+          subvariableOf: null
+        }
+      })
+      expect(baseAppState.variables).toEqual({
+        0:
+        {
+          id: 1,
+          label: 'test label',
+          name: 'test',
+          subsections: [1, 2, 3, 4],
+          subvariableOf: null
+        }
+      })
     })
   })
   describe('update assessments', () => {
