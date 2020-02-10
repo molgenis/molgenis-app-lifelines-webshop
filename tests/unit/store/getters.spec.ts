@@ -350,7 +350,7 @@ describe('getters', () => {
       })
     })
 
-    describe('when variable has no mathing variant count', () => {
+    describe('when variable has no matching variant count', () => {
       let gridResult: any
       beforeEach(() => {
         const state: any = {
