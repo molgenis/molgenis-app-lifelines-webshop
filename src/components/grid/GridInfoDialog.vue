@@ -17,13 +17,13 @@
           <p>
             <strong>Description (en):</strong>
             <br />
-            {{data.definition_en}}
-            <span v-if="!data.definition_en">No description found.</span>
+            {{data.definitionEn}}
+            <span v-if="!data.definitionEn">No description found.</span>
           </p>
-          <p v-if="data.definition_nl">
+          <p v-if="data.definitionNl">
             <strong>Description (nl):</strong>
             <br />
-            {{data.definition_nl}}
+            {{data.definitionNl}}
           </p>
           <p v-if="data.options.length > 0">
             <strong>Categorical values (en):</strong>

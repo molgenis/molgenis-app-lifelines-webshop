@@ -5,6 +5,8 @@ export interface Variable {
   label: string
   subsections: number[]
   subvariableOf: Variable | null
+  definitionEn: string
+  definitionNl: string
 }
 
 export interface VariableWithVariants extends Variable {
