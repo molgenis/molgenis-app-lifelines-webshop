@@ -7,6 +7,8 @@
       </div>
     </div>
 
+    <input type="text" v-model="searchTerm"/>
+
     <div class="row flex-nowrap mb-5" >
       <tree-view  class="col-sm-auto info-bar" />
 
@@ -41,9 +43,9 @@ export default Vue.extend({
       toast: [{ type: 'info', textType: 'dark', message: 'Please sign in to select and order variables' }]
     }
   },
+  stash: ['searchTerm'],
   computed: {
-    ...mapGetters(['isSignedIn', 'isGridLoading']),
-    ...mapState(['searchTerm'])
+    ...mapGetters(['isSignedIn', 'isGridLoading'])
   },
   methods: {
     ...mapMutations(['updateSearchTerm']),
