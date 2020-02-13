@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.10.0...v1.10.1) (2020-02-13)
+
+
+### Bug Fixes
+
+* add definitionEn & definitionNl to Variable definition ([#270](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/270)) ([21f07bd](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/21f07bd)), closes [#269](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/269)
+
 # [1.10.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.9.1...v1.10.0) (2020-02-13)
 
 
