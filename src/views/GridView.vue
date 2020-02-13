@@ -1,6 +1,5 @@
 <template>
   <div id="grid-view">
-    <em>{{searchMessage}}</em>
 
     <grid-component
       v-if="!isSearchResultEmpty"
@@ -31,26 +30,7 @@ export default Vue.extend({
     ...mapGetters([
       'searchTermQuery', 'rsql', 'gridAssessments', 'grid', 'gridSelections',
       'numberOfSelectedItems', 'isSignedIn', 'isGridLoading', 'isSearchResultEmpty'
-    ]),
-    searchMessage: function () {
-      if (!this.gridVariables) { return '' }
-      let searchMessage = this.$t('lifelines-webshop-search-variables-found', { count: this.gridVariables.length })
-      if (this.searchTerm) {
-        searchMessage += ' ' + this.$t('lifelines-webshop-search-variables-term', { searchTerm: this.searchTerm })
-      }
-
-      if (this.selectedSubsection) {
-        searchMessage += ' ' + this.$t('lifelines-webshop-search-variables-subsection', { subSection: this.selectedSubsection })
-      }
-
-      return `${searchMessage}.`
-    },
-    selectedSubsection: function () {
-      if (this.treeSelected) {
-        return this.subSectionList[this.treeSelected]
-      }
-      return null
-    }
+    ])
   },
   methods: {
     ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),

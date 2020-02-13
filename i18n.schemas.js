@@ -68,7 +68,8 @@ const en = {
   'lifelines-webshop-search-variables-found': '{{count}} variable found',
   'lifelines-webshop-search-variables-found_plural': '{{count}} variables found',
   'lifelines-webshop-search-variables-term': 'using search term "{{searchTerm}}"',
-  'lifelines-webshop-search-variables-subsection': 'in subsection "{{subSection}}"'
+  'lifelines-webshop-search-variables-subsection': 'in subsection "{{subSection}}"',
+  'lifelines-webshop-search-variables-search-all': 'Search all sections'
 }
 
 module.exports = {
