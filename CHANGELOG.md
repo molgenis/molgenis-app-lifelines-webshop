@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.9.1...v1.10.0) (2020-02-13)
+
+
+### Features
+
+* added search all link to the search text. ([#267](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/267)) ([c0ea7b9](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/c0ea7b9))
+
 ## [1.9.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.9.0...v1.9.1) (2020-02-10)
 
 
