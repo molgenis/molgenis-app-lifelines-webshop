@@ -23,7 +23,7 @@
             <span>{{searchMessage}}</span>
           </div>
           <div class="col-4 text-right">
-            <button type="button" class="btn btn-link p-0" v-if="selectedSubsection" @click="handleClearSubsection">Search all sections</button>
+            <button type="button" class="btn btn-link p-0" v-if="selectedSubsection && searchTerm && searchMessage" @click="handleClearSubsection">{{$t('lifelines-webshop-search-variables-search-all')}}</button>
           </div>
         </div>
         <grid-view />
