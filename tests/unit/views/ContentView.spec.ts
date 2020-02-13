@@ -81,7 +81,7 @@ describe('ContentView.vue', () => {
         store.commit('updateSubSections', ['mySelectedSubsection'])
       })
       it('should show the subsection name in the i18n message', () => {
-        expect(wrapper.find('.search-info').text()).toEqual('3 variable found in subsection "mySelectedSubsection". Search all sections')
+        expect(wrapper.find('.search-info').text()).toEqual('3 variable found in subsection "mySelectedSubsection".')
       })
     })
 
