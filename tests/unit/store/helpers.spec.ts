@@ -108,8 +108,8 @@ describe('store', () => {
         expect(toCart({
           ...emptyState,
           variables: {
-            1: { id: 1, name: 'VAR1', label: 'variable 1', subsections: [1], subvariableOf: null },
-            2: { id: 2, name: 'VAR2', label: 'variable 2', subsections: [1], subvariableOf: null }
+            1: { id: 1, name: 'VAR1', label: 'variable 1', subsections: [1], subvariableOf: null, definitionEn: '', definitionNl: '' },
+            2: { id: 2, name: 'VAR2', label: 'variable 2', subsections: [1], subvariableOf: null, definitionEn: '', definitionNl: '' }
           },
           assessments: {
             1: { id: 1, name: '1A' },
@@ -153,8 +153,8 @@ describe('store', () => {
         }, {
           ...emptyState,
           variables: {
-            1: { id: 1, name: 'VAR1', label: 'variable 1', subsections: [1], subvariableOf: null },
-            2: { id: 2, name: 'VAR2', label: 'variable 2', subsections: [1], subvariableOf: null }
+            1: { id: 1, name: 'VAR1', label: 'variable 1', subsections: [1], subvariableOf: null, definitionEn: '', definitionNl: '' },
+            2: { id: 2, name: 'VAR2', label: 'variable 2', subsections: [1], subvariableOf: null, definitionEn: '', definitionNl: '' }
           },
           assessments: {
             1: { id: 1, name: '1A' },

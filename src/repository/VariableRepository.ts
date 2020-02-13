@@ -38,6 +38,8 @@ const toVariable = (response: any):VariableWithVariants => {
       label_en: option.label_en
     })) : [],
     subvariableOf: response.subvariable_of ? response.subvariable_of : null,
-    subvariables: response.subvariables
+    subvariables: response.subvariables,
+    definitionEn: response.definition_en ? response.definition_en : '',
+    definitionNl: response.definition_nl ? response.definition_nl : ''
   }
 }

@@ -45,7 +45,9 @@ describe('getters', () => {
     subsections: [1],
     subvariables: [],
     subvariableOf: null,
-    options: []
+    options: [],
+    definitionNl: '',
+    definitionEn: ''
   }
   const variable12: VariableWithVariants = {
     id: 12,
@@ -55,7 +57,9 @@ describe('getters', () => {
     subsections: [1, 2],
     subvariables: [],
     subvariableOf: null,
-    options: []
+    options: [],
+    definitionNl: '',
+    definitionEn: ''
   }
   const variable13: VariableWithVariants = {
     id: 13,
@@ -65,7 +69,9 @@ describe('getters', () => {
     subsections: [3],
     subvariables: [],
     subvariableOf: null,
-    options: []
+    options: [],
+    definitionNl: '',
+    definitionEn: ''
   }
 
   describe('cartTree', () => {

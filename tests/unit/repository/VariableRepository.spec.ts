@@ -72,7 +72,9 @@ describe('VariableRepository', () => {
           name: '',
           options: [],
           variants: [],
-          subvariableOf: null
+          subvariableOf: null,
+          definitionEn: '',
+          definitionNl: ''
         })
       })
     })
@@ -88,7 +90,9 @@ describe('VariableRepository', () => {
             variants: [{ assessment_id: '1', id: 1 }],
             subvariable_of: 1,
             subsections: [1],
-            options: [{ label_en: 'foo', bar: 'bas' }]
+            options: [{ label_en: 'foo', bar: 'bas' }],
+            definitionEn: '',
+            definitionNl: ''
           }
         }] })
         result = await fetchVariables('subsection_id=1', 1)
@@ -103,7 +107,9 @@ describe('VariableRepository', () => {
           options: [{ label_en: 'foo' }],
           variants: [{ assessmentId: '1', id: 1 }],
           subsections: [1],
-          subvariableOf: 1
+          subvariableOf: 1,
+          definitionEn: '',
+          definitionNl: ''
         })
       })
     })

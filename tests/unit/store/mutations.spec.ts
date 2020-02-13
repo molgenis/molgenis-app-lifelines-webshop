@@ -18,8 +18,9 @@ const gridVariables:VariableWithVariants[] = [
     subsections: [1],
     subvariableOf: null,
     subvariables: [],
-    options: []
-
+    options: [],
+    definitionNl: '',
+    definitionEn: ''
   },
   {
     id: 2,
@@ -32,7 +33,9 @@ const gridVariables:VariableWithVariants[] = [
     subsections: [1],
     subvariableOf: null,
     subvariables: [],
-    options: []
+    options: [],
+    definitionNl: '',
+    definitionEn: ''
   },
   {
     id: 3,
@@ -48,7 +51,9 @@ const gridVariables:VariableWithVariants[] = [
     subsections: [1],
     subvariableOf: null,
     subvariables: [],
-    options: []
+    options: [],
+    definitionNl: '',
+    definitionEn: ''
   }]
 
 describe('mutations', () => {
@@ -160,7 +165,9 @@ describe('mutations', () => {
           label: 'test label',
           name: 'test',
           subsections: [1, 2, 3, 4],
-          subvariableOf: null
+          subvariableOf: null,
+          definitionNl: '',
+          definitionEn: ''
         }
       })
       expect(baseAppState.variables).toEqual({
@@ -170,7 +177,9 @@ describe('mutations', () => {
           label: 'test label',
           name: 'test',
           subsections: [1, 2, 3, 4],
-          subvariableOf: null
+          subvariableOf: null,
+          definitionNl: '',
+          definitionEn: ''
         }
       })
     })
