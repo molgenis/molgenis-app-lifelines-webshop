@@ -40,6 +40,7 @@ export interface AppState {
   treeOpenSection: number
   treeOpenPageSection: number
   gridSelection: GridSelection
+  searchExact: boolean
   searchTerm: string | null
   filteredSubsections: number[] | null
   filteredSections: number[] | null

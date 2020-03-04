@@ -47,6 +47,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .mg-info-icon {
+  color: $primary;
   cursor: pointer;
 }
 

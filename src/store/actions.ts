@@ -169,7 +169,6 @@ export default {
     }
 
     const variables = await fetchVariables(searchTermQuery, state.treeSelected)
-
     if (searchTermQuery === getters.searchTermQuery) {
       const sortedGridVariables = finalVariableSetSort(variables)
       commit('updateGridVariables', sortedGridVariables)

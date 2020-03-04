@@ -19,8 +19,8 @@ const gridVariables:VariableWithVariants[] = [
     subvariableOf: null,
     subvariables: [],
     options: [],
-    definitionNl: '',
-    definitionEn: ''
+    definitionEn: '',
+    definitionNl: ''
   },
   {
     id: 2,
@@ -34,8 +34,8 @@ const gridVariables:VariableWithVariants[] = [
     subvariableOf: null,
     subvariables: [],
     options: [],
-    definitionNl: '',
-    definitionEn: ''
+    definitionEn: '',
+    definitionNl: ''
   },
   {
     id: 3,
@@ -52,8 +52,8 @@ const gridVariables:VariableWithVariants[] = [
     subvariableOf: null,
     subvariables: [],
     options: [],
-    definitionNl: '',
-    definitionEn: ''
+    definitionEn: '',
+    definitionNl: ''
   }]
 
 describe('mutations', () => {

@@ -69,7 +69,10 @@ const en = {
   'lifelines-webshop-search-variables-found_plural': '{{count}} variables found',
   'lifelines-webshop-search-variables-term': 'using search term "{{searchTerm}}"',
   'lifelines-webshop-search-variables-subsection': 'in subsection "{{subSection}}"',
-  'lifelines-webshop-search-variables-search-all': 'Search all sections'
+  'lifelines-webshop-search-variables-search-all': 'Search all sections',
+  'lifelines-webshop-textsearch-label': 'Search in name fields only',
+  'lifelines-webshop-textsearch-info-title': 'Name field search',
+  'lifelines-webshop-textsearch-info-text': 'Limits search to variable names. Without it, a broader search is applied which also looks for matches in the definition and categorial values.'
 }
 
 module.exports = {
