@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.10.1...v1.11.0) (2020-03-04)
+
+
+### Features
+
+* text and string catalog search ([1120b3e](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/1120b3e))
+
 ## [1.10.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.10.0...v1.10.1) (2020-02-13)
 
 
