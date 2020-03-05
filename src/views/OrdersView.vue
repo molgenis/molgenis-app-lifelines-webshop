@@ -155,9 +155,11 @@ import ConfirmationModal from '../components/ConfirmationModal.vue'
 import SearchComponent from '../components/search/SearchComponent.vue'
 import Dropdown from '../components/Dropdown.vue'
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import { successMessage } from '@/store/helpers'
 
+dayjs.extend(LocalizedFormat)
 library.add(faEdit, faDownload, faTrash, faCopy)
 
 export default Vue.extend({
@@ -224,8 +226,8 @@ export default Vue.extend({
     }
   },
   filters: {
-    dateManager: (dateValue) => dateValue ? moment(dateValue).format('L') : '',
-    dateShopper: (dateValue) => dateValue ? moment(dateValue).format('LLLL') : ''
+    dateManager: (dateValue) => dateValue ? dayjs(dateValue).format('L') : '',
+    dateShopper: (dateValue) => dateValue ? dayjs(dateValue).format('LLLL') : ''
   },
   methods: {
     changeStateConfirm: function (order, selectedState) {

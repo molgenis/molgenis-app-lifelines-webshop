@@ -10,7 +10,7 @@ import Getters from '@/types/Getters'
 import { buildFormData, generateOrderNumber, buildOrdersQuery } from '@/services/orderService.ts'
 import FormField from '@/types/FormField'
 import { OrderState } from '@/types/Order'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { TreeParent } from '@/types/Tree'
 import axios from 'axios'
 import { setRolePermission, setUserPermission } from '@/services/permissionService'
@@ -212,7 +212,7 @@ export default {
       orderNumber: state.order.orderNumber,
       projectNumber: state.order.projectNumber,
       applicationForm: state.order.applicationForm,
-      updateDate: moment().toISOString(),
+      updateDate: dayjs().toISOString(),
       contents: cartToBlob(cart),
       creationDate: state.order.creationDate,
       submissionDate: state.order.submissionDate,
@@ -252,7 +252,7 @@ export default {
   submit: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
     const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
     const { context: { email, username } } = state.context
-    const now = moment().toISOString()
+    const now = dayjs().toISOString()
     const cart = toCart(state)
     const contents = cartToBlob(cart)
 
