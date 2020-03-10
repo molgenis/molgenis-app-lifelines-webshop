@@ -1,4 +1,4 @@
-import { mount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
+import { mount, createLocalVue } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Router from 'vue-router'
 import { routes } from '@/router'
@@ -8,6 +8,36 @@ import Vuex from 'vuex'
 import orders from '../fixtures/orders'
 import '@/globals/variables'
 
+// @ts-ignore
+import { get } from '@molgenis/molgenis-api-client'
+
+jest.mock('@molgenis/molgenis-api-client', () => {
+  return {
+    get: jest.fn((url) => {
+      if (url.includes('/api/v2/lifelines_order/')) {
+        return {
+          contents: {
+            id: 1
+          },
+          name: 'testName'
+        }
+      } else if (url.includes('/files/')) {
+        return {
+          filters: {},
+          selection: []
+        }
+      } else {
+        return {
+          items: []
+        }
+      }
+    })
+  }
+})
+
+jest.mock('axios', () => ({ post: jest.fn((url) => ({ data: 'pdfdata' })) }))
+jest.mock('js-file-download', () => jest.fn(() => {}))
+
 describe('OrdersView.vue', () => {
   let localVue: any
   let store: any
@@ -15,19 +45,6 @@ describe('OrdersView.vue', () => {
 
   const hasManagerRole = jest.fn()
   const copyOrder = jest.fn()
-
-  const stubs = {
-    RouterLink: RouterLinkStub
-  }
-
-  function getWrapper ({ router = false }) {
-    const params:any = { localVue, store, stubs }
-    if (router) {
-      params.router = new Router({ routes })
-    }
-
-    return mount(OrdersView, params)
-  }
 
   let actions = {
     loadOrder: jest.fn(),
@@ -100,6 +117,7 @@ describe('OrdersView.vue', () => {
         store,
         router: new Router({ routes })
       }
+
       hasManagerRole.mockReturnValue(true)
       wrapper = mount(OrdersView, params)
       done()
@@ -131,6 +149,19 @@ describe('OrdersView.vue', () => {
 
     it('should not show any modal by default', () => {
       expect(wrapper.find('.modal-dialog').exists()).toBe(false)
+    })
+
+    it('should have a pdf download button', () => {
+      expect(wrapper.find('.pdf-btn').exists()).toBe(true)
+    })
+
+    describe('when the user clicks on pdf download', () => {
+      beforeEach(() => {
+        wrapper.find('.pdf-btn').trigger('click')
+      })
+      it('should execute the pdf download method', () => {
+        expect(get).toHaveBeenCalled()
+      })
     })
 
     describe('when the user clicks delete', () => {

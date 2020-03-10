@@ -90,6 +90,12 @@
           <font-awesome-icon icon="copy" aria-label="copy"/>
         </button>
 
+        <button :disabled="isLoadingPdf[data.item.orderNumber]" class="btn btn-secondary pdf-btn ml-2" type="button"
+          @click="downloadPdf(data.item.orderNumber)">
+          <font-awesome-icon v-if="isLoadingPdf[data.item.orderNumber]" icon="spinner" spin />
+          <font-awesome-icon v-else icon="file-pdf" aria-label="pdf" />
+        </button>
+
         <router-link class="btn btn-danger t-btn-order-delete ml-2" tag="button"
           v-if="data.item.state === 'Draft' || hasManagerRole"
           :to="{ name: 'orderDelete', params: {orderNumber: data.item.orderNumber}}">
@@ -147,18 +153,22 @@
 
 <script>
 import Vue from 'vue'
+import api from '@molgenis/molgenis-api-client'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faEdit, faDownload, faTrash, faCopy } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faDownload, faTrash, faCopy, faFilePdf } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { gridSelectionFromCart, successMessage } from '@/store/helpers'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
+import transforms from '@/store/transforms'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
 import SearchComponent from '../components/search/SearchComponent.vue'
 import Dropdown from '../components/Dropdown.vue'
 import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
+import axios from 'axios'
+import fileDownload from 'js-file-download'
 import moment from 'moment'
-import { successMessage } from '@/store/helpers'
 
-library.add(faEdit, faDownload, faTrash, faCopy)
+library.add(faEdit, faDownload, faTrash, faCopy, faFilePdf)
 
 export default Vue.extend({
   components: { ConfirmationModal, Dropdown, FontAwesomeIcon, SearchComponent },
@@ -206,6 +216,7 @@ export default Vue.extend({
           'Rejected': 'danger'
         }
       },
+      isLoadingPdf: {},
       table: {
         currentPage: 1,
         filters: { text: '', state: '' },
@@ -256,6 +267,47 @@ export default Vue.extend({
     deleteOrderConfirmed: function (orderNumber) {
       this.deleteOrder(orderNumber)
       this.$router.push({ name: 'orders' })
+    },
+    downloadPdf: async function (orderNumber) {
+      Vue.set(this.isLoadingPdf, orderNumber, true)
+
+      const [
+        order,
+        { items: apiVariables1 },
+        { items: apiVariables2 },
+        { items: apiAssessments },
+        { items: apiTree },
+        { items: apiSections },
+        { items: apiSubSections }
+      ] = await Promise.all([
+        api.get(`/api/v2/lifelines_order/${orderNumber}`),
+        api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id'),
+        api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id'),
+        api.get('/api/v2/lifelines_assessment'),
+        api.get('/api/v2/lifelines_tree?num=10000'),
+        api.get('/api/v2/lifelines_section?num=10000'),
+        api.get('/api/v2/lifelines_sub_section?num=10000')
+      ])
+
+      const assessments = transforms.assessments(apiAssessments)
+      const sections = transforms.sections(apiSections)
+      const sectionTree = transforms.sectionTree(apiTree)
+      const subSections = transforms.subSectionList(apiSubSections)
+      const variables = transforms.variables([...apiVariables1, ...apiVariables2])
+
+      const cart = await api.get(`/files/${order.contents.id}`)
+      const gridSelection = gridSelectionFromCart(cart.selection, { assessments, variables })
+      const cartTree = transforms.cartTree(gridSelection, sectionTree, sections, subSections, variables)
+
+      const state = { assessments, cartTree, gridSelection, order }
+
+      const res = await axios.post('/vuepdf', { component: 'orders', state }, { responseType: 'blob' })
+
+      // We could have used URL.createObjectURL manually, but
+      // this library takes care of IE/Safari edge cases as well.
+      const fileName = `${order.name ? order.name : `order-${order.orderNumber}`}.pdf`
+      fileDownload(res.data, fileName, 'application/pdf')
+      Vue.set(this.isLoadingPdf, orderNumber, false)
     },
     handleContextChanged: function (table) {
       this.table.sortBy = table.sortBy
@@ -309,6 +361,10 @@ export default Vue.extend({
 <style lang="scss">
 @import "../scss/variables";
 
+.btn .fa-spinner {
+  width: 12px;
+}
+
 #orders-view {
   .filters {
     margin: $spacer 0;
@@ -319,7 +375,7 @@ export default Vue.extend({
   }
 
   .td-actions {
-    width: 11rem; // Needed to hold the edit, copy and delete button and there margins
+    width: 14rem; // Needed to hold the edit, copy and delete button and there margins
   }
 
   .td-state {

@@ -88,7 +88,7 @@ export const toCart = (state: ApplicationState) : Cart => {
   return { selection: toCartSelection(state), filters: toCartFilters(state) }
 }
 
-const gridSelectionFromCart = (cartSelection: Selection[], { variables, assessments }: ApplicationState) : GridSelection => {
+export const gridSelectionFromCart = (cartSelection: Selection[], { variables, assessments }: ApplicationState) : GridSelection => {
   const gridSelection: GridSelection = {}
   const lookupMap:any = { assessments: {}, variables: {} }
 
