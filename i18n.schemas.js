@@ -18,6 +18,8 @@ const en = {
   'lifelines-webshop-state-submitted': 'Submitted',
   'lifelines-webshop-state-rejected': 'Rejected',
   'lifelines-webshop-age-facet-label': 'Age at',
+  'lifelines-webshop-error-order-inconsistency': 'Order {{orderNumber}} contains inconsistent data! Please contact Lifelines.',
+  'lifelines-webshop-error-pdf-service': 'An error occured while generating a PDF for order {{orderNumber}}. Please contact Lifelines.',
   'lifelines-webshop-yob-facet-label': 'Year of birth',
   'lifelines-webshop-gender-facet-label': 'Gender',
   'lifelines-webshop-subcohort-facet-label': 'Subcohorts',

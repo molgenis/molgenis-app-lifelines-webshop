@@ -90,9 +90,13 @@
           <font-awesome-icon icon="copy" aria-label="copy"/>
         </button>
 
-        <button :disabled="isLoadingPdf[data.item.orderNumber]" class="btn btn-secondary pdf-btn ml-2" type="button"
+        <button
+          :disabled="pdfLoadState[data.item.orderNumber]"
+          :class="`btn-${classes.pdfLoadState[pdfLoadState[data.item.orderNumber]]}`"
+          class="btn btn-secondary pdf-btn ml-2"
+          type="button"
           @click="downloadPdf(data.item.orderNumber)">
-          <font-awesome-icon v-if="isLoadingPdf[data.item.orderNumber]" icon="spinner" spin />
+          <font-awesome-icon v-if="pdfLoadState[data.item.orderNumber] === 'LOADING'" icon="spinner" spin />
           <font-awesome-icon v-else icon="file-pdf" aria-label="pdf" />
         </button>
 
@@ -208,6 +212,11 @@ export default Vue.extend({
   data: function () {
     return {
       classes: {
+        pdfLoadState: {
+          'ERROR': 'danger',
+          null: 'secondary',
+          'LOADING': 'secondary'
+        },
         state: {
           '': 'secondary',
           'Draft': 'secondary',
@@ -216,7 +225,7 @@ export default Vue.extend({
           'Rejected': 'danger'
         }
       },
-      isLoadingPdf: {},
+      pdfLoadState: {},
       table: {
         currentPage: 1,
         filters: { text: '', state: '' },
@@ -269,7 +278,7 @@ export default Vue.extend({
       this.$router.push({ name: 'orders' })
     },
     downloadPdf: async function (orderNumber) {
-      Vue.set(this.isLoadingPdf, orderNumber, true)
+      Vue.set(this.pdfLoadState, orderNumber, 'LOADING')
 
       const [
         order,
@@ -296,18 +305,40 @@ export default Vue.extend({
       const variables = transforms.variables([...apiVariables1, ...apiVariables2])
 
       const cart = await api.get(`/files/${order.contents.id}`)
-      const gridSelection = gridSelectionFromCart(cart.selection, { assessments, variables })
-      const cartTree = transforms.cartTree(gridSelection, sectionTree, sections, subSections, variables)
 
-      const state = { assessments, cartTree, gridSelection, order }
+      let state
 
-      const res = await axios.post('/vuepdf', { component: 'orders', state }, { responseType: 'blob' })
+      try {
+        const gridSelection = gridSelectionFromCart(cart.selection, { assessments, variables })
+        const cartTree = transforms.cartTree(gridSelection, sectionTree, sections, subSections, variables)
+        state = { assessments, cartTree, filters: cart.filters, gridSelection, order }
+      } catch (err) {
+        Vue.set(this.pdfLoadState, orderNumber, 'ERROR')
+        this.setToast({
+          type: 'danger',
+          textType: 'light',
+          message: this.$t('lifelines-webshop-error-order-inconsistency', { orderNumber })
+        })
+        throw (err)
+      }
 
-      // We could have used URL.createObjectURL manually, but
-      // this library takes care of IE/Safari edge cases as well.
-      const fileName = `${order.name ? order.name : `order-${order.orderNumber}`}.pdf`
-      fileDownload(res.data, fileName, 'application/pdf')
-      Vue.set(this.isLoadingPdf, orderNumber, false)
+      try {
+        const res = await axios.post('/vuepdf', { component: 'orders', state }, { responseType: 'blob' })
+        // We could have used URL.createObjectURL manually, but
+        // this library takes care of IE/Safari edge cases as well.
+        const fileName = `${order.name ? order.name : `order-${order.orderNumber}`}.pdf`
+        fileDownload(res.data, fileName, 'application/pdf')
+      } catch (err) {
+        Vue.set(this.pdfLoadState, orderNumber, 'ERROR')
+        this.setToast({
+          type: 'danger',
+          textType: 'light',
+          message: this.$t('lifelines-webshop-error-pdf-service', { orderNumber })
+        })
+        throw (err)
+      }
+
+      Vue.set(this.pdfLoadState, orderNumber, null)
     },
     handleContextChanged: function (table) {
       this.table.sortBy = table.sortBy
