@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.11.0...v1.12.0) (2020-03-12)
+
+
+### Features
+
+* pdf order download ([07041c9](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/07041c9))
+
 # [1.11.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.10.1...v1.11.0) (2020-03-04)
 
 
