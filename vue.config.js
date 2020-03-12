@@ -13,7 +13,8 @@ build-date: ${buildDate}`
 
 const config = require('rc')('lifelines', {
   development: {
-    proxy: 'https://lifelines.dev.molgenis.org'
+    molgenis_proxy: 'https://dev-lifelines.test.molgenis.org/',
+    pdf_proxy: 'https://dev-lifelines.test.molgenis.org/'
   }
 })
 
@@ -61,48 +62,52 @@ module.exports = {
     // In CI mode, Safari cannot contact "localhost", so as a workaround, run the dev server using the jenkins agent pod dns instead.
     host: process.env.JENKINS_AGENT_NAME || 'localhost',
     proxy: process.env.NODE_ENV === 'production' ? undefined : {
+      '^/vuepdf*': {
+        'target': config.development.pdf_proxy,
+        'keepOrigin': true
+      },
       '^/api': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'keepOrigin': true
       },
       '^/menu': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'keepOrigin': true
       },
       '^/app-ui-context': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'keepOrigin': true
       },
       '^/fonts': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'keepOrigin': true
       },
       '^/img': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'keepOrigin': true
       },
       '^/css': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'changeOrigin': true
       },
       '^/js': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'changeOrigin': true
       },
       '^/logo': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'changeOrigin': true
       },
       '^/login': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'changeOrigin': true
       },
       '^/@molgenis-ui': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'changeOrigin': true
       },
       '^/files': {
-        'target': config.development.proxy,
+        'target': config.development.molgenis_proxy,
         'changeOrigin': true
       }
     },

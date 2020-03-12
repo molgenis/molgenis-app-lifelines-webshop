@@ -1,8 +1,6 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
 import { successMessage, tryAction, toCart, fromCart } from './helpers'
-import { Variable } from '@/types/Variable'
-import Assessment from '@/types/Assessment'
 import { Section } from '@/types/Section.ts'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
@@ -11,11 +9,10 @@ import { buildFormData, generateOrderNumber, buildOrdersQuery } from '@/services
 import FormField from '@/types/FormField'
 import { OrderState } from '@/types/Order'
 import moment from 'moment'
-import { TreeParent } from '@/types/Tree'
 import axios from 'axios'
 import { setRolePermission, setUserPermission } from '@/services/permissionService'
-// @ts-ignore
-import { encodeRsqlValue } from '@molgenis/rsql'
+
+import transforms from './transforms'
 import { finalVariableSetSort } from '@/services/variableSetOrderService'
 import { QueryParams } from '@/types/QueryParams'
 import { fetchVariables } from '@/repository/VariableRepository'
@@ -100,65 +97,36 @@ export default {
   loadSections: tryAction(async ({ commit, state }: any) => {
     if (!Object.keys(state.sections).length) {
       const response = await api.get('/api/v2/lifelines_section?num=10000')
-      commit('updateSections'
-        , response.items.reduce((sections: { [key: number]: Section }, item: any) => {
-          sections[item.id] = item
-          return sections
-        }, {}))
+      commit('updateSections', transforms.sections(response.items))
     }
   }),
   loadSubSections: tryAction(async ({ commit, state }: any) => {
     if (state.subSectionList.length === 0) {
       const response = await api.get('/api/v2/lifelines_sub_section?num=10000')
-      let subSections: string[] = []
-      response.items.map((item: any) => { subSections[item.id] = item.name })
+      const subSections = transforms.subSectionList(response.items)
       commit('updateSubSections', subSections)
     }
   }),
   loadSectionTree: tryAction(async ({ commit, state }: any) => {
     if (state.treeStructure.length === 0) {
       const response = await api.get('/api/v2/lifelines_tree?num=10000')
-      let structure: { [id: number]: number[] } = {}
-      response.items.map((item: any) => {
-        if (item.section_id.id in structure) {
-          structure[item.section_id.id].push(item.subsection_id.id)
-        } else {
-          structure[item.section_id.id] = [item.subsection_id.id]
-        }
-      })
-      let treeStructure: TreeParent[] = []
-      for (let [key, value] of Object.entries(structure)) {
-        treeStructure.push({ key: (key as unknown) as number, list: value })
-      }
-      commit('updateSectionTree', treeStructure)
+      const sectionTree = transforms.sectionTree(response.items)
+      commit('updateSectionTree', sectionTree)
     }
   }),
   loadAssessments: tryAction(async ({ commit }: any) => {
     const response = await api.get('/api/v2/lifelines_assessment')
-    commit('updateAssessments', response.items.reduce((accum: { [key: number]: Assessment }, assessment: Assessment) => {
-      accum[assessment.id] = assessment
-      return accum
-    }, {}))
+    const assessments = transforms.assessments(response.items)
+    commit('updateAssessments', assessments)
   }),
   loadVariables: tryAction(async ({ state, commit }: any) => {
     const [response0, response1] = await Promise.all([
       api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id'),
       api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id')
     ])
-    const variables = [...response0.items, ...response1.items]
 
-    const variableMap: { [key: number]: Variable } =
-      variables.reduce((soFar: { [key: number]: Variable }, variable) => {
-        if (!variable.subsections) {
-          variable.subsections = []
-        } else {
-          variable.subsections = variable.subsections.split(',').map((i: string) => parseInt(i, 10))
-        }
-        soFar[variable.id] = variable
-        return soFar
-      }, {})
-
-    commit('updateVariables', variableMap)
+    const variables = transforms.variables([...response0.items, ...response1.items])
+    commit('updateVariables', variables)
   }),
   loadGridVariables: tryAction(async ({ state, commit, getters }: { state: ApplicationState, commit: any, getters: Getters }) => {
     commit('updateGridVariables', null)

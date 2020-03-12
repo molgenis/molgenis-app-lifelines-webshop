@@ -1,5 +1,6 @@
 {
     "development": {
-        "proxy": "https://lifelines.dev.molgenis.org"
+        "molgenis_proxy": "https://dev-lifelines.test.molgenis.org/",
+        "pdf_proxy": "https://dev-lifelines.test.molgenis.org/"
     }
 }
