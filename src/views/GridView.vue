@@ -28,7 +28,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['gridVariables', 'searchTerm', 'subSectionList', 'treeSelected']),
     ...mapGetters([
-      'searchTermQuery', 'rsql', 'gridAssessments', 'grid', 'gridSelections',
+      'searchTermQuery', 'rsql', 'gridAssessments', 'gridAssessmentsActive', 'grid', 'gridSelections',
       'numberOfSelectedItems', 'isSignedIn', 'isGridLoading', 'isSearchResultEmpty'
     ])
   },
@@ -38,7 +38,7 @@ export default Vue.extend({
     handleGridRowToggle (variableId) {
       this.toggleGridRow({
         variableId,
-        gridAssessments: this.gridAssessments
+        gridAssessmentsActive: this.gridAssessmentsActive
       })
     },
     handleGridColumnToggle (assessmentId) {
@@ -51,7 +51,7 @@ export default Vue.extend({
       })
     },
     handleGridAllToggle () {
-      this.toggleAll({ gridAssessments: this.gridAssessments })
+      this.toggleAll(this.gridAssessmentsActive)
     }
   },
   watch: {

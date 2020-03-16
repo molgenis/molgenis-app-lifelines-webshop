@@ -9,7 +9,9 @@ export default interface Getters {
   variantIds: number[]
   rsql: string
   gridAssessments: Assessment[]
+  gridAssessmentsActive: Assessment[]
   grid: number[][]
+  gridActive: number[][]
   gridSelections: boolean[][]
   treeStructure: TreeNode[]
   searchTermQuery: string | null

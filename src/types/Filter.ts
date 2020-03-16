@@ -1,4 +1,5 @@
 export default interface Filter {
+    assessment: string[]
     gender: string[]
     subcohort: string[]
     ageGroupAt1A: string[]

@@ -76,6 +76,9 @@ export default {
   updateGenderFilter (state: ApplicationState, selectedGenders: string[]) {
     state.facetFilter.gender = selectedGenders
   },
+  updateAssessmentfilter (state: ApplicationState, selectedAssessments: string[]) {
+    state.facetFilter.assessment = selectedAssessments
+  },
   updateSubcohortfilter (state: ApplicationState, selectedSubcohorts: string[]) {
     state.facetFilter.subcohort = selectedSubcohorts
   },
@@ -174,26 +177,40 @@ export default {
       })
     }
   },
-  toggleGridRow ({ gridSelection, treeSelected }: { gridSelection: GridSelection, treeSelected: number }, { variableId, gridAssessments }: {variableId: number, gridAssessments: Assessment[] }) {
-    if (gridSelection.hasOwnProperty(variableId) && (gridSelection[variableId].length === gridAssessments.length)) {
-      Vue.delete(gridSelection, variableId)
+  toggleGridRow (state:ApplicationState, { variableId, gridAssessmentsActive }: {variableId: number, gridAssessmentsActive: Assessment[] }) {
+    const hiddenSelectedCells = state.gridSelection[variableId].filter((i:any) => !gridAssessmentsActive.find((_i) => i === _i.id))
+    if (state.gridSelection.hasOwnProperty(variableId) && (state.gridSelection[variableId].length !== hiddenSelectedCells.length)) {
+      // Deselect all visible cells in the row; keep the hidden selected cells.
+      Vue.set(state.gridSelection, variableId, hiddenSelectedCells)
     } else {
-      Vue.set(gridSelection, variableId, gridAssessments.map((it) => it.id))
+      // Select all visible cells in the row; add the already selected invisible ones as well.
+      Vue.set(state.gridSelection, variableId, gridAssessmentsActive.map((it) => it.id).concat(hiddenSelectedCells))
     }
   },
-  toggleAll ({ gridSelection, gridVariables, treeSelected, treeStructure }: {gridSelection: GridSelection, gridVariables: VariableWithVariants[] | null, treeSelected: number, treeStructure: object[]}, { gridAssessments }: {gridAssessments: Assessment[] }) {
-    if (gridVariables === null) { return }
+  toggleAll (state:ApplicationState, gridAssessmentsActive: Assessment[]) {
+    if (state.gridVariables === null) { return }
     // For each variable all assessments are selected
-    const allSelected = gridVariables.every((variable) => {
-      return gridSelection.hasOwnProperty(variable.id) && (gridSelection[variable.id].length === gridAssessments.length)
+    const allSelected = state.gridVariables.every((variable) => {
+      if (state.gridSelection.hasOwnProperty(variable.id) && state.gridSelection[variable.id].length) {
+        const visibleSelectedCells = state.gridSelection[variable.id].filter((i:any) => gridAssessmentsActive.find((_i) => i === _i.id))
+        return visibleSelectedCells.length === gridAssessmentsActive.length
+      }
+      return false
     })
     if (allSelected) {
-      gridVariables.forEach((variable) => {
-        Vue.delete(gridSelection, variable.id)
+      state.gridVariables.forEach((variable) => {
+        const hiddenSelectedCells = state.gridSelection[variable.id].filter((i:any) => !gridAssessmentsActive.find((_i) => i === _i.id))
+        // Deselect all visible cells in the row; keep the hidden selected cells.
+        Vue.set(state.gridSelection, variable.id, hiddenSelectedCells)
       })
     } else {
-      gridVariables.forEach((variable) => {
-        Vue.set(gridSelection, variable.id, gridAssessments.map((it) => it.id))
+      state.gridVariables.forEach((variable) => {
+        let hiddenSelectedCells:any = []
+        if (state.gridSelection[variable.id]) {
+          hiddenSelectedCells = state.gridSelection[variable.id].filter((i:any) => !gridAssessmentsActive.find((_i) => i === _i.id))
+        }
+        // Select all visible cells in the row; add the already selected invisible ones as well.
+        Vue.set(state.gridSelection, variable.id, gridAssessmentsActive.map((it) => it.id).concat(hiddenSelectedCells))
       })
     }
   },

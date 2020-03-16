@@ -3,12 +3,13 @@
     <grid-info-dialog v-if="dialogInfo !== null" :data="dialogInfo" @close="closeInfoDialog"></grid-info-dialog>
     <div class="row">
       <div class="col vld-parent">
+
         <table ref="gridheader" class="grid-header-table" :class="{'sticky':stickyTableHeader}">
           <tr>
             <th class="collapse-holder"></th>
             <th></th>
             <th></th>
-            <th v-for="assessment in gridAssessments" :key="assessment.id" class="text-center">
+            <th v-for="assessment in gridAssessmentsActive" :key="assessment.id" class="text-center">
               <div class="assessments-title">
                 <span>{{assessment.name}}</span>
               </div>
@@ -27,7 +28,7 @@
           ></loading>
 
           <table
-            v-if="grid"
+            v-if="gridActive"
             ref="grid"
             class="grid-table"
             @click.stop="clickGridDelegate"
@@ -47,7 +48,7 @@
                 >All</button>
               </th>
               <th
-                v-for="(assessment, colIndex) in gridAssessments"
+                v-for="(assessment, colIndex) in gridAssessmentsActive"
                 :key="assessment.id"
                 class="column-toggle grid-toggle"
               >
@@ -63,7 +64,7 @@
             </tr>
 
             <tr
-              v-for="(row, rowIndex) in grid"
+              v-for="(row, rowIndex) in gridActive"
               :key="rowIndex"
               :class="{'d-none': !isVisibleVariable(gridVariables[rowIndex])}"
             >
@@ -130,6 +131,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { formatCount } from '@/filters/GridComponentFilters'
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 
 library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare)
 
@@ -137,29 +139,7 @@ export default Vue.extend({
   name: 'GridComponent',
   components: { FontAwesomeIcon, Loading, GridTitelInfo, GridInfoDialog },
   computed: {
-    /**
-     * Provides visual feedback for grid selection helpers,
-     * e.g. All/Column/Row select.
-     */
-    selected: function () {
-      const selected = { all: true, row: [], col: [] }
-      if (!this.grid.length) {
-        return selected
-      }
-      selected.col = this.grid[0].map(i => true)
-
-      this.grid.forEach((row, i) => {
-        selected.row[i] = true
-        row.forEach((col, j) => {
-          if (!this.gridSelections[i][j]) {
-            selected.col[j] = false
-            selected.row[i] = false
-            selected.all = false
-          }
-        })
-      })
-      return selected
-    }
+    ...mapGetters(['gridActive', 'gridAssessmentsActive', 'gridSelectionIndicators'])
   },
   props: {
     grid: {
@@ -267,13 +247,13 @@ export default Vue.extend({
       const classes = {}
 
       if (target === 'allSelect') {
-        if (this.selected.all) {
+        if (this.gridSelectionIndicators.all) {
           classes['active'] = true
         }
       } else if (target === 'columnSelect') {
-        classes['active'] = this.selected.col[context.colIndex]
+        classes['active'] = this.gridSelectionIndicators.col[context.colIndex]
       } else if (target === 'rowSelect') {
-        classes['active'] = this.selected.row[context.rowIndex]
+        classes['active'] = this.gridSelectionIndicators.row[context.rowIndex]
       } else if (target === 'cell') {
         const cell = !!this.gridSelections[context.rowIndex][context.colIndex]
         if (cell) {

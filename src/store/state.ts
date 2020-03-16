@@ -57,6 +57,7 @@ const state: AppState = {
     { value: '1', text: 'Male' },
     { value: '2', text: 'Female' }
   ],
+  assessmentOptions: [],
   subcohortOptions: [
     { value: 'gwas', text: 'GWAS', info: 'lifelines-webshop-sidebar-gwas-info', href: 'lifelines-webshop-sidebar-gwas-link' },
     { value: 'ugli', text: 'UGLI', info: 'lifelines-webshop-sidebar-ugli-info', href: 'lifelines-webshop-sidebar-ugli-link' },
@@ -74,6 +75,7 @@ const state: AppState = {
     { value: 'ageGroupAt3A', text: 'third assessment' }
   ],
   facetFilter: {
+    assessment: [],
     gender: [],
     subcohort: [],
     ageGroupAt1A: [],

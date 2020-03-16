@@ -28,6 +28,7 @@ export interface AppState {
   subSectionList: string[]
   toast: Toast[]
   genderOptions: FacetOption[]
+  assessmentOptions: []
   subcohortOptions: FacetOption[]
   ageGroupOptions: FacetOption[]
   ageAtOptions: FacetOption[]
