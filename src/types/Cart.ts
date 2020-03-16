@@ -4,6 +4,7 @@ export interface Cart {
 }
 
 export interface CartFilter {
+    assessment: number[]
     gender?: string[]
     subcohort?: string[]
     ageGroupAt1A?: string[]

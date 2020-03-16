@@ -74,6 +74,24 @@
               />
             </facet-container>
           </li>
+
+          <li>
+            <facet-container
+              facetId="assessment"
+              :label="$t('lifelines-webshop-facet-assessment-label')"
+            >
+              <template v-slot:label-slot>
+                <info-icon id="cohort-info-icon" :title="$t('lifelines-webshop-subcohort-facet-label')"  href="http://wiki-lifelines.web.rug.nl/doku.php?id=cohort#subcohorts">
+                  <span v-html="$t('lifelines-webshop-sidebar-cohort-info')"></span>
+                </info-icon>
+              </template>
+              <toggle-facet
+                facetId="cohort"
+                :options="assessments"
+                v-model="assessmentsActive"
+              />
+            </facet-container>
+          </li>
         </ul>
         <count-view class="px-4"></count-view>
       </div>
@@ -87,7 +105,7 @@ import FacetContainer from '../components/facets/FacetContainer.vue'
 import ToggleFacet from '../components/facets/ToggleFacet.vue'
 import AgeFacet from '../components/facets/AgeFacet.vue'
 import RangeFacet from '../components/facets/RangeFacet.vue'
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import CountView from '@/views/CountView'
 import ClickOutside from 'v-click-outside'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -154,11 +172,20 @@ export default Vue.extend({
         this.$store.commit('updateYearOfBirthRangefilter', this.cachedAgeState)
         this.cachedAgeState = tempState
       }
+    },
+    assessmentsActive (assessmentsActive, oldassessmentsActive) {
+      if (!assessmentsActive.length) {
+        this.$store.commit('updateAssessmentfilter', this.assessments.map((i) => i.value))
+      }
     }
   },
   computed: {
+    ...mapGetters(['gridMarkers']),
     genderOptions () {
       return this.$store.state.genderOptions
+    },
+    assessments () {
+      return Object.values(this.$store.state.assessments).map((i) => ({ value: i.id, text: i.name }))
     },
     subcohortOptions () {
       return this.$store.state.subcohortOptions
@@ -175,6 +202,14 @@ export default Vue.extend({
       },
       set (value) {
         this.$store.commit('updateGenderFilter', value)
+      }
+    },
+    assessmentsActive: {
+      get () {
+        return this.$store.state.facetFilter.assessment
+      },
+      set (value) {
+        this.$store.commit('updateAssessmentfilter', value)
       }
     },
     selectedSubcohortOptions: {

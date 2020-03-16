@@ -5,19 +5,20 @@ import ApplicationState from '@/types/ApplicationState'
 import Variant from '@/types/Variant'
 import Assessment from '@/types/Assessment'
 import { VariableWithVariants } from '@/types/Variable'
-import { TreeNode } from '@/types/TreeNode'
 import { Section } from '@/types/Section'
 import CartSection from '@/types/CartSection'
 import state from '@/store/state'
 
 describe('getters', () => {
   const emptyGetters: Getters = {
+    gridActive: [],
     isSignedIn: false,
     variants: [],
     variantIds: [],
     rsql: '',
     grid: [],
     gridAssessments: [],
+    gridAssessmentsActive: [],
     searchTermQuery: null,
     treeStructure: [],
     gridSelections: [],
@@ -395,6 +396,9 @@ describe('getters', () => {
         gridVariables: [variable11, variable12, variable13],
         gridSelection: { 11: [1, 2], 12: [1] }
       }
+
+      state.facetFilter.assessment = [assessment1A.id, assessment2A.id]
+      console.log('BLAAA', state.facetFilter.assessment)
       const gettersParam: Getters = {
         ...emptyGetters,
         gridAssessments: [ assessment1A, assessment2A ]
@@ -410,6 +414,7 @@ describe('getters', () => {
         ...emptyGetters,
         gridSelections: [[true, true], [true, false], [false, false]]
       }
+      state.facetFilter.assessment = [assessment1A.id, assessment2A.id]
       expect(getters.numberOfSelectedItems(state, gettersParam)).toEqual(3)
     })
   })

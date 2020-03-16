@@ -67,6 +67,7 @@ describe('store', () => {
       ageGroupAt1A: ['1'],
       ageGroupAt2A: ['2', '3'],
       ageGroupAt3A: ['3'],
+      assessment: [1, 2],
       gender: ['1'],
       subcohort: ['gwas'],
       yearOfBirthRange: [1960, 1970]

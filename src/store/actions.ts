@@ -118,6 +118,8 @@ export default {
     const response = await api.get('/api/v2/lifelines_assessment')
     const assessments = transforms.assessments(response.items)
     commit('updateAssessments', assessments)
+    // All assessment filters are selected by default.
+    commit('updateAssessmentfilter', Object.values(assessments).map((i:any) => i.id))
   }),
   loadVariables: tryAction(async ({ state, commit }: any) => {
     const [response0, response1] = await Promise.all([

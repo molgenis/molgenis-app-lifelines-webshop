@@ -341,6 +341,7 @@ describe('mutations', () => {
     it('replace facets with the passed facets', () => {
       let baseAppState = Object.assign({}, state)
       mutations.updateFacetFilter(baseAppState, {
+        assessment: [],
         gender: ['female'],
         subcohort: [],
         ageGroupAt1A: [],
@@ -349,6 +350,7 @@ describe('mutations', () => {
         yearOfBirthRange: []
       })
       expect(baseAppState.facetFilter).toEqual({
+        assessment: [],
         gender: ['female'],
         subcohort: [],
         ageGroupAt1A: [],
@@ -471,36 +473,45 @@ describe('mutations', () => {
   })
   describe('toggleGridRow', () => {
     it('selects if none selected', () => {
-      const state = {
+      const state:any = {
         gridSelection: {},
         treeSelected: -1
       }
-      mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }] })
+      mutations.toggleGridRow(state, { variableId: 123, gridAssessmentsActive: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }] })
       expect(state.gridSelection).toEqual({ 123: [1, 2] })
     })
 
     it('removes if all already selected', () => {
-      const state = {
+      const state:any = {
+        facetFilter: {
+          assessment: [1, 2, 3, 4, 5, 6]
+        },
         gridSelection: { 123: [1, 2, 3], 456: [1] },
         treeSelected: -1
       }
-      mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      mutations.toggleGridRow(state, { variableId: 123, gridAssessmentsActive: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
       expect(state.gridSelection).toEqual({ 456: [1] })
     })
 
-    it('selects all if one already selected', () => {
-      const state = {
+    it.only('selects all if one already selected', () => {
+      const state:any = {
+        facetFilter: {
+          assessment: [1, 2, 3]
+        },
         gridSelection: { 123: [1] },
         treeSelected: -1
       }
-      mutations.toggleGridRow(state, { variableId: 123, gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      mutations.toggleGridRow(state, { variableId: 123, gridAssessmentsActive: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
       expect(state.gridSelection).toEqual({ 123: [1, 2, 3] })
     })
   })
   describe('toggleGridColumn', () => {
     it('selects if none selected', () => {
-      const state:AppState = {
+      const state:any = {
         ...initialState,
+        facetFilter: {
+          assessment: [1, 2, 3, 4, 5, 6]
+        },
         gridSelection: {},
         treeSelected: -1,
         gridVariables
@@ -510,8 +521,11 @@ describe('mutations', () => {
     })
 
     it('removes if all already selected', () => {
-      const state:AppState = {
+      const state:any = {
         ...initialState,
+        facetFilter: {
+          assessment: [1, 2, 3, 4, 5, 6]
+        },
         gridSelection: { 1: [2, 3], 2: [2], 3: [2] },
         gridVariables
       }
@@ -520,8 +534,11 @@ describe('mutations', () => {
     })
 
     it('selects all if one already selected', () => {
-      const state:AppState = {
+      const state:any = {
         ...initialState,
+        facetFilter: {
+          assessment: [1, 2, 3, 4, 5, 6]
+        },
         gridSelection: { 1: [2], 3: [3] },
         gridVariables
       }
@@ -532,38 +549,47 @@ describe('mutations', () => {
 
   describe('toggleAll', () => {
     it('selects if none selected', () => {
-      const state:AppState = {
+      const state:any = {
         ...initialState,
+        facetFilter: {
+          assessment: [1, 2, 3, 4, 5, 6]
+        },
         gridSelection: {},
         treeSelected: -1,
         treeStructure: [],
         gridVariables
       }
-      mutations.toggleAll(state, { gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      mutations.toggleAll(state, [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }])
       expect(state.gridSelection).toEqual({ 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] })
     })
 
     it('removes if all already selected', () => {
-      const state:AppState = {
+      const state:any = {
         ...initialState,
+        facetFilter: {
+          assessment: [1, 2, 3]
+        },
         gridSelection: { 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] },
         treeSelected: -1,
         treeStructure: [],
         gridVariables
       }
-      mutations.toggleAll(state, { gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
-      expect(state.gridSelection).toEqual({})
+      mutations.toggleAll(state, [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }])
+      expect(state.gridSelection).toEqual({ 1: [], 2: [], 3: [] })
     })
 
     it('selects all if one already selected', () => {
-      const state:AppState = {
+      const state:any = {
         ...initialState,
+        facetFilter: {
+          assessment: [1, 2, 3, 4, 5, 6]
+        },
         gridSelection: { 1: [2] },
         treeSelected: -1,
         treeStructure: [],
         gridVariables
       }
-      mutations.toggleAll(state, { gridAssessments: [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }] })
+      mutations.toggleAll(state, [{ id: 1, name: 'a1' }, { id: 2, name: 'a2' }, { id: 3, name: 'a3' }])
       expect(state.gridSelection).toEqual({ 1: [1, 2, 3], 2: [1, 2, 3], 3: [1, 2, 3] })
     })
   })

@@ -74,6 +74,7 @@ const state: AppState = {
     { value: 'ageGroupAt3A', text: 'third assessment' }
   ],
   facetFilter: {
+    assessment: [],
     gender: [],
     subcohort: [],
     ageGroupAt1A: [],
