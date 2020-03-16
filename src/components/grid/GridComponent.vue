@@ -1,6 +1,8 @@
 <template>
   <div id="grid">
     <grid-info-dialog v-if="dialogInfo !== null" :data="dialogInfo" @close="closeInfoDialog"></grid-info-dialog>
+    <a href="#" v-if="!showHidden" @click="showHidden = true"><font-awesome-icon icon="eye" /> Show hidden rows and columns</a>
+    <a href="#" v-else @click="showHidden = false"><font-awesome-icon icon="eye-slash" /> Hide hidden rows and columns</a>
     <div class="row">
       <div class="col vld-parent">
         <table ref="gridheader" class="grid-header-table" :class="{'sticky':stickyTableHeader}">
@@ -8,15 +10,14 @@
             <th class="collapse-holder"></th>
             <th></th>
             <th></th>
-            <th v-for="assessment in gridAssessments" :key="assessment.id" class="text-center">
+            <th v-for="assessment in filteredGridAssessments" :key="assessment.id" class="text-center">
               <div class="assessments-title">
                 <span>{{assessment.name}}</span>
               </div>
             </th>
           </tr>
         </table>
-
-        <div :class="{'space-holder':stickyTableHeader || !grid}"></div>
+        <div :class="{'space-holder':stickyTableHeader || !filteredGrid}"></div>
         <div class="table-holder">
           <loading
             :active="isLoading"
@@ -27,7 +28,7 @@
           ></loading>
 
           <table
-            v-if="grid"
+            v-if="filteredGrid"
             ref="grid"
             class="grid-table"
             @click.stop="clickGridDelegate"
@@ -47,7 +48,7 @@
                 >All</button>
               </th>
               <th
-                v-for="(assessment, colIndex) in gridAssessments"
+                v-for="(assessment, colIndex) in filteredGridAssessments"
                 :key="assessment.id"
                 class="column-toggle grid-toggle"
               >
@@ -61,9 +62,8 @@
                 </button>
               </th>
             </tr>
-
             <tr
-              v-for="(row, rowIndex) in grid"
+              v-for="(row, rowIndex) in filteredGrid"
               :key="rowIndex"
               :class="{'d-none': !isVisibleVariable(gridVariables[rowIndex])}"
             >
@@ -126,24 +126,77 @@ import {
   faArrowRight,
   faArrowsAlt,
   faPlusSquare,
-  faMinusSquare
+  faMinusSquare,
+  faEye,
+  faEyeSlash
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { formatCount } from '@/filters/GridComponentFilters'
 
-library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare)
+library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare, faEye, faEyeSlash)
 
 export default Vue.extend({
   name: 'GridComponent',
   components: { FontAwesomeIcon, Loading, GridTitelInfo, GridInfoDialog },
   computed: {
+    filteredGrid () {
+      if (this.grid && this.grid.length > 0) {
+        if (!this.showHidden) {
+          return this.grid.reduce((rowSet, rowValue, rowIndex) => {
+            if (!this.emptyRows[rowIndex]) {
+              rowSet.push(
+                rowValue.reduce((colSet, colValue, colIndex) => {
+                  if (!this.emptyCols[colIndex]) {
+                    colSet.push(colValue)
+                  }
+                  return colSet
+                }, [])
+              )
+            }
+            return rowSet
+          }, [])
+        } else {
+          return this.grid
+        }
+      }
+      return []
+    },
+    filteredGridAssessments () {
+      if (this.gridAssessments && this.gridAssessments.length > 0) {
+        if (!this.showHidden) {
+          return this.gridAssessments.reduce((set, value, index) => {
+            if (!this.emptyRows[index]) {
+              set.push(value)
+            }
+            return set
+          }, [])
+        } else {
+          return this.gridAssessments
+        }
+      }
+      return []
+    },
+    emptyRows () {
+      if (this.grid) {
+        return this.findEmpty(this.grid)
+      }
+      return []
+    },
+    emptyCols () {
+      // transpose array
+      if (this.grid) {
+        return this.findEmpty(this.transpose(this.grid))
+      }
+      // add hiddenColums
+      return []
+    },
     /**
      * Provides visual feedback for grid selection helpers,
      * e.g. All/Column/Row select.
      */
     selected: function () {
       const selected = { all: true, row: [], col: [] }
-      if (!this.grid.length) {
+      if (!this.grid || !this.grid.length) {
         return selected
       }
       selected.col = this.grid[0].map(i => true)
@@ -178,6 +231,10 @@ export default Vue.extend({
       type: Array,
       required: false
     },
+    hiddenColums: {
+      type: Array,
+      default: () => []
+    },
     isLoading: {
       type: Boolean,
       required: true
@@ -193,13 +250,28 @@ export default Vue.extend({
       stickyTableHeader: false,
       dialogInfo: null,
       selectedRowIndex: '',
-      openVariableSets: []
+      openVariableSets: [],
+      showHidden: false
     }
   },
   filters: {
     formatCount
   },
   methods: {
+    transpose (array) {
+      return (array && array.length && array[0].map && array[0].map(function (_, c) { return array.map(function (r) { return r[c] }) })) || []
+    },
+    findEmpty (set) {
+      return set.reduce((acc, array) => {
+        array.sort() // if sorted and first and last array element is equal to 0 we know all elements are zerow
+        if (array[0] === array[array.length - 1] && array[0] === 0) {
+          acc.push(true)
+        } else {
+          acc.push(false)
+        }
+        return acc
+      }, [])
+    },
     variableSetIsOpen (variable) {
       return (
         variable.subvariables &&
