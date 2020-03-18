@@ -6,7 +6,7 @@
         <table ref="gridheader" class="grid-header-table" :class="{'sticky':stickyTableHeader}">
           <tr>
             <th class="collapse-holder"></th>
-            <th class="variable-column"></th>
+            <th class="variable-column-spacer"></th>
             <th></th>
             <th v-for="assessment in gridAssessments" :key="assessment.id" class="text-center">
               <div class="assessments-title">
@@ -98,7 +98,7 @@
                   <font-awesome-icon icon="arrow-right" />
                 </button>
               </th>
-              <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
+              <td class="cell" :key="colIndex" v-for="(count,colIndex) in row" >
                 <button
                   :disabled="!isSignedIn"
                   :data-col="colIndex"
@@ -309,6 +309,16 @@ export default Vue.extend({
       if (table && header) {
         this.stickyTableHeader = table - header < 112 // 7rem @ 16px basesize
       }
+      // this.setGridHeaderSpacer()
+    },
+    setGridHeaderSpacer () {
+      const variableHTMLElements = document.getElementsByClassName('variable-column')
+      let elemArray = [].slice.call(variableHTMLElements)
+      if (elemArray.length) {
+        let size = elemArray.sort((a, b) => b.offsetWidth - a.offsetWidth)[0].offsetWidth
+        let spacer = document.getElementsByClassName('variable-column-spacer')[0]
+        spacer.style.width = (size) + 'px'
+      }
     },
     getTableTop () {
       return this.$refs.grid
@@ -338,6 +348,9 @@ export default Vue.extend({
     // Start with all grouped variables closed
     gridVariables: function () {
       this.closeVariableSet()
+    },
+    grid: function () {
+      this.$nextTick(this.setGridHeaderSpacer)
     }
   },
   created: function () {
@@ -374,11 +387,10 @@ table {
   overflow: hidden;
   position: relative;
 
-  th.variable-column {
+  .variable-column {
     cursor: pointer;
     max-width: 22rem;
-    min-width: 22rem;
-    width: 22rem;
+    min-width: 5rem;
   }
 
   td,
