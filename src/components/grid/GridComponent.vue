@@ -6,7 +6,7 @@
         <table ref="gridheader" class="grid-header-table" :class="{'sticky':stickyTableHeader}">
           <tr>
             <th class="collapse-holder"></th>
-            <th></th>
+            <th class="variable-column"></th>
             <th></th>
             <th v-for="assessment in gridAssessments" :key="assessment.id" class="text-center">
               <div class="assessments-title">
@@ -35,7 +35,7 @@
           >
             <tr>
               <th class="collapse-holder"></th>
-              <th></th>
+              <th class="variable-column"></th>
               <th class="all-toggle grid-toggle">
                 <button
                   :disabled="!isSignedIn"
@@ -80,6 +80,7 @@
               </th>
               <th
                 @click="openInfoDialog(rowIndex)"
+                class="variable-column"
                 :class="{'selected-variable': rowIndex === selectedRowIndex }"
               >
                 <grid-titel-info
@@ -373,11 +374,11 @@ table {
   overflow: hidden;
   position: relative;
 
-  th:nth-child(2) {
+  th.variable-column {
     cursor: pointer;
-    max-width: 15rem;
-    min-width: 15rem;
-    width: 15rem;
+    max-width: 22rem;
+    min-width: 22rem;
+    width: 22rem;
   }
 
   td,
