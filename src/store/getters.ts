@@ -4,56 +4,11 @@ import { transformToRSQL } from '@molgenis/rsql'
 import Getters from '@/types/Getters'
 import Variant from '@/types/Variant'
 import { VariableWithVariants } from '@/types/Variable'
-import Assessment from '@/types/Assessment'
 import CartSection from '@/types/CartSection'
 
 import 'core-js/fn/array/flat-map'
 
 import transforms from './transforms'
-
-const paramGetters = {
-  grid (state: ApplicationState, getters: Getters, gridAssessments:any) {
-    if (state.gridVariables === null) { return null }
-
-    return state.gridVariables.map((variable: VariableWithVariants) => {
-      return gridAssessments.map((assessment: Assessment) => {
-        if (state.variantCounts === null) { return NaN }
-
-        const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
-        const variantCounts: number[] = []
-
-        // Get all counts for this variant.
-        variants.forEach((variant: Variant) => {
-          // @ts-ignore
-          const variantCount = state.variantCounts.find((variantCount) => variant.id === variantCount.variantId)
-          if (variantCount) {
-            variantCounts.push(variantCount.count)
-          } else {
-            variantCounts.push(0)
-          }
-        })
-
-        if (variantCounts.every((value) => value === 0)) { return 0 }
-        if (variantCounts.every((value) => value <= 0)) { return -1 } else {
-          // Filter out any below threshold.
-          const positiveVariantCounts = variantCounts.filter((value) => value >= 0)
-          // Sum it.
-          return positiveVariantCounts.reduce((sum: number, nextValue: number) => sum + nextValue)
-        }
-      })
-    })
-  },
-  gridAssessments: (state: ApplicationState, getters: Getters, filterActive = false) => {
-    const assessmentIds: number[] = getters.variants.reduce((acc: number[], variant: Variant) => acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
-    const gridAssessments = Object.values(state.assessments).filter(assessment => assessmentIds.includes(assessment.id))
-
-    if (filterActive) {
-      return gridAssessments.filter((i:any) => state.facetFilter.assessment.includes(i.id))
-    } else {
-      return gridAssessments
-    }
-  }
-}
 
 export default {
   isSignedIn: (state: ApplicationState): boolean => state.context.context && state.context.context.authenticated,
@@ -145,42 +100,22 @@ export default {
     })
   },
   grid: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.grid(state, getters, getters.gridAssessments)
+    return transforms.grid(state.gridVariables, getters.gridAssessments, state.variantCounts)
   },
-  gridActive: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.grid(state, getters, getters.gridAssessmentsActive)
+  gridColumns: (state: ApplicationState, getters: Getters) => {
+    const emptyCols = state.facetFilter.emptyCols
+    const assessmentFilter = state.facetFilter.assessment
+    return transforms.gridAssessments(getters.variants, state.assessments, assessmentFilter, emptyCols)
+  },
+  gridRows: (state: ApplicationState, getters: Getters) => {
+    const emptyRows = state.facetFilter.emptyRows
+    return transforms.grid(state.gridVariables, getters.gridColumns, state.variantCounts, emptyRows)
   },
   gridAssessments: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.gridAssessments(state, getters, false)
-  },
-  gridAssessmentsActive: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.gridAssessments(state, getters, true)
-  },
-  gridMarkers: function (state: ApplicationState, getters: Getters) {
-    const selected:any = { all: true, row: [], col: [] }
-    if (!getters.gridActive.length) {
-      return selected
-    }
-    selected.col = getters.gridActive[0].map(i => true)
-
-    getters.gridActive.forEach((row, i) => {
-      selected.row[i] = true
-      row.forEach((col, j) => {
-        if (!getters.gridSelections[i][j]) {
-          selected.col[j] = false
-          selected.row[i] = false
-          selected.all = false
-        }
-      })
-    })
-    return selected
+    return transforms.gridAssessments(getters.variants, state.assessments, null)
   },
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null => {
-    if (state.gridVariables === null) { return null }
-    return state.gridVariables.map(variable => {
-      const variableSelections = state.gridSelection[variable.id]
-      return getters.gridAssessmentsActive.map(assessment => !!variableSelections && variableSelections.includes(assessment.id))
-    })
+    return transforms.gridSelections(getters.gridColumns, state.gridSelection, state.gridVariables)
   },
   numberOfSelectedItems: (state: ApplicationState, getters: Getters): number =>
     getters.gridSelections.reduce((total: number, item: boolean[]) => {

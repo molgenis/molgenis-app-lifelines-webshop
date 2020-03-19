@@ -1,11 +1,13 @@
-import { gridSelectionFromCart } from '@/store/helpers'
-import CartSection from '@/types/CartSection'
 import Assessment from '@/types/Assessment'
-import { Section } from '@/types/Section.ts'
-import { TreeParent } from '@/types/Tree'
-import { Variable } from '@/types/Variable'
+import CartSection from '@/types/CartSection'
+import Filter from '@/types/Filter'
+import GridSelection from '@/types/GridSelection'
 import groupBy from 'lodash.groupby'
 import property from 'lodash.property'
+import { Section } from '@/types/Section.ts'
+import { TreeParent } from '@/types/Tree'
+import { VariableWithVariants, Variable } from '@/types/Variable'
+import Variant from '@/types/Variant'
 
 const transforms:any = {}
 
@@ -17,7 +19,7 @@ transforms.assessments = (apiItems:any) => {
   return assessments
 }
 
-transforms.cartTree = (gridSelection:any, treeStructure:any, sections:any, subSectionList:any, variables:{ [key: number]: Variable }): CartSection[] => {
+transforms.cartTree = (gridSelection:GridSelection, treeStructure:any, sections:TreeParent[], subSectionList:any, variables:{ [key: number]: Variable }): CartSection[] => {
   const selectedVariableIds: number[] = Object.keys(gridSelection) as unknown as number[]
   const selectedVariables: Variable[] = selectedVariableIds
     .filter((id: number) => variables.hasOwnProperty(id))
@@ -39,6 +41,85 @@ transforms.cartTree = (gridSelection:any, treeStructure:any, sections:any, subSe
 
     return { ...sections[section.key], subsections }
   }).filter((section:any) => section.subsections.length > 0)
+}
+
+transforms.helpers = {
+  findEmpty: (set:any) => {
+    return set.reduce((acc:any, array:any) => {
+      array.sort() // if sorted and first and last array element is equal to 0 we know all elements are zerow
+      if (array[0] === array[array.length - 1] && array[0] === 0) {
+        acc.push(true)
+      } else {
+        acc.push(false)
+      }
+      return acc
+    }, [])
+  },
+  transpose: (array:[]) => {
+    // @ts-ignore
+    return (array && array.length && array[0].map && array[0].map(function (_, c) { return array.map(function (r) { return r[c] }) })) || []
+  }
+}
+
+transforms.grid = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any) => {
+  if (gridRows === null) { return null }
+  let grid = gridRows.map((variable: VariableWithVariants) => {
+    const _assessments = gridColumns.map((assessment: Assessment) => {
+      if (variantCounts === null) { return NaN }
+
+      const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
+      const _variantCounts: number[] = []
+
+      // Get all counts for this variant.
+      variants.forEach((variant: Variant) => {
+        // @ts-ignore
+        const variantCount = variantCounts.find((variantCount) => variant.id === variantCount.variantId)
+        if (variantCount) {
+          _variantCounts.push(variantCount.count)
+        } else {
+          _variantCounts.push(0)
+        }
+      })
+
+      if (_variantCounts.every((value) => value === 0)) {
+        return 0
+      }
+      if (_variantCounts.every((value) => value <= 0)) { return -1 } else {
+        // Filter out any below threshold.
+        const positiveVariantCounts = _variantCounts.filter((value) => value >= 0)
+        // Sum it.
+        return positiveVariantCounts.reduce((sum: number, nextValue: number) => sum + nextValue)
+      }
+    })
+
+    return _assessments
+  })
+
+  return grid
+}
+
+transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null = null, filterEmpty: boolean | null = null) => {
+  const assessmentIds: number[] = variants.reduce((acc: number[], variant: Variant) => acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
+  const gridAssessments = Object.values(assessments).filter((assessment:any) => assessmentIds.includes(assessment.id))
+
+  if (filterEmpty !== null) {
+
+  }
+
+  if (Array.isArray(filterAssessments)) {
+    // @ts-ignore
+    return gridAssessments.filter((i:any) => filterAssessments.includes(i.id))
+  }
+
+  return gridAssessments
+}
+
+transforms.gridSelections = (gridAssessments:any, gridSelection:any, gridVariables:VariableWithVariants[]) => {
+  if (gridVariables === null) { return null }
+  return gridVariables.map((variable:any) => {
+    const variableSelections = gridSelection[variable.id]
+    return gridAssessments.map((assessment:any) => !!variableSelections && variableSelections.includes(assessment.id))
+  })
 }
 
 transforms.sections = (apiItems:any) => {
@@ -98,6 +179,20 @@ transforms.variables = (variables:[]) => {
         }, {})
 
   return variableMap
+}
+
+transforms.variants = (gridVariables:any): Variant[] => {
+  if (gridVariables === null) { return [] }
+
+  return gridVariables.reduce((result: Variant[], variable: VariableWithVariants): Variant[] => {
+    return variable.variants.reduce((accumulator: Variant[], variant: Variant) => {
+      if (accumulator.some((candidate: Variant): boolean => candidate.id === variant.id)) {
+        return accumulator
+      } else {
+        return [...accumulator, variant]
+      }
+    }, result)
+  }, [])
 }
 
 export default transforms

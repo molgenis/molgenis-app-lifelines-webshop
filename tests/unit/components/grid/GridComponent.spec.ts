@@ -4,8 +4,9 @@ import GridComponent from '@/components/grid/GridComponent.vue'
 
 describe('GridComponent.vue', () => {
   const emptyProps = {
-    grid: null,
     gridAssessments: [],
+    gridColumns: [],
+    gridRows: null,
     gridVariables: null,
     gridSelections: null,
     isLoading: false,
@@ -61,8 +62,9 @@ describe('GridComponent.vue', () => {
     let props
     beforeEach(() => {
       props = {
-        grid: [[1, 2], [3, 4]],
+        gridRows: [[1, 2], [3, 4]],
         gridAssessments: [],
+        gridColumns: [],
         gridVariables: [{
           name: 'a',
           id: 101
@@ -91,8 +93,9 @@ describe('GridComponent.vue', () => {
 
     beforeEach(() => {
       props = {
-        grid: [[1, 2], [3, 4]],
+        gridRows: [[1, 2], [3, 4]],
         gridAssessments: [{ id: 'c1' }, { id: 'c2' }],
+        gridColumns: [{ id: 'c1' }, { id: 'c2' }],
         gridVariables: [{
           name: 'a',
           id: 101
@@ -136,8 +139,9 @@ describe('GridComponent.vue', () => {
 
     beforeEach(() => {
       props = {
-        grid: [[1, 2], [3, 4]],
         gridAssessments: [{ id: 10 }, { id: 11 }, { id: 12 }],
+        gridColumns: [{ id: 10 }, { id: 11 }, { id: 12 }],
+        gridRows: [[1, 2], [3, 4]],
         gridVariables: [{
           name: 'a',
           id: 101,

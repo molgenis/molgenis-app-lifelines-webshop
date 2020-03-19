@@ -7,7 +7,6 @@ import Assessment from '@/types/Assessment'
 import { VariableWithVariants } from '@/types/Variable'
 import { Section } from '@/types/Section'
 import CartSection from '@/types/CartSection'
-import state from '@/store/state'
 
 describe('getters', () => {
   const emptyGetters: Getters = {
@@ -18,7 +17,7 @@ describe('getters', () => {
     rsql: '',
     grid: [],
     gridAssessments: [],
-    gridAssessmentsActive: [],
+    gridColumns: [],
     searchTermQuery: null,
     treeStructure: [],
     gridSelections: [],
@@ -398,10 +397,11 @@ describe('getters', () => {
       }
 
       state.facetFilter.assessment = [assessment1A.id, assessment2A.id]
-      console.log('BLAAA', state.facetFilter.assessment)
+
       const gettersParam: Getters = {
         ...emptyGetters,
-        gridAssessments: [ assessment1A, assessment2A ]
+        gridAssessments: [ assessment1A, assessment2A ],
+        gridColumns: [ assessment1A, assessment2A ]
       }
       expect(getters.gridSelections(state, gettersParam))
         .toEqual([[true, true], [true, false], [false, false]])

@@ -9,7 +9,7 @@
             <th class="collapse-holder"></th>
             <th></th>
             <th></th>
-            <th v-for="assessment in gridAssessmentsActive" :key="assessment.id" class="text-center">
+            <th v-for="assessment in gridColumns" :key="assessment.id" class="text-center">
               <div class="assessments-title">
                 <span>{{assessment.name}}</span>
               </div>
@@ -17,7 +17,7 @@
           </tr>
         </table>
 
-        <div :class="{'space-holder':stickyTableHeader || !gridActive}"></div>
+        <div :class="{'space-holder':stickyTableHeader || !gridRows}"></div>
         <div class="table-holder">
           <loading
             :active="isLoading"
@@ -28,7 +28,7 @@
           ></loading>
 
           <table
-            v-if="gridActive"
+            v-if="gridRows"
             ref="grid"
             class="grid-table"
             @click.stop="clickGridDelegate"
@@ -48,7 +48,7 @@
                 >All</button>
               </th>
               <th
-                v-for="(assessment, colIndex) in gridAssessmentsActive"
+                v-for="(assessment, colIndex) in gridColumns"
                 :key="assessment.id"
                 class="column-toggle grid-toggle"
               >
@@ -64,7 +64,7 @@
             </tr>
 
             <tr
-              v-for="(row, rowIndex) in gridActive"
+              v-for="(row, rowIndex) in gridRows"
               :key="rowIndex"
               :class="{'d-none': !isVisibleVariable(gridVariables[rowIndex])}"
             >
@@ -138,11 +138,12 @@ library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare)
 export default Vue.extend({
   name: 'GridComponent',
   components: { FontAwesomeIcon, Loading, GridTitelInfo, GridInfoDialog },
-  computed: {
-    ...mapGetters(['gridActive', 'gridAssessmentsActive', 'gridMarkers'])
-  },
   props: {
-    gridAssessments: {
+    gridRows: {
+      type: Array,
+      required: false
+    },
+    gridColumns: {
       type: Array,
       required: true
     },
@@ -161,6 +162,27 @@ export default Vue.extend({
     isSignedIn: {
       type: Boolean,
       required: true
+    }
+  },
+  computed: {
+    gridMarkers: function () {
+      const selected = { all: true, row: [], col: [] }
+      if (!this.gridRows.length) {
+        return selected
+      }
+      selected.col = this.gridRows[0].map(i => true)
+
+      this.gridRows.forEach((row, i) => {
+        selected.row[i] = true
+        row.forEach((col, j) => {
+          if (!this.gridSelections[i][j]) {
+            selected.col[j] = false
+            selected.row[i] = false
+            selected.all = false
+          }
+        })
+      })
+      return selected
     }
   },
   data: function () {
@@ -271,7 +293,7 @@ export default Vue.extend({
         if (data.col && data.row) {
           this.$emit('gridCellToggle', parseInt(data.row), parseInt(data.col))
         } else if (data.col && !data.row) {
-          this.$emit('gridColumnToggle', this.gridAssessments[data.col].id)
+          this.$emit('gridColumnToggle', this.gridColumns[data.col].id)
         } else if (!data.col && data.row) {
           const variable = this.gridVariables[parseInt(data.row)]
           this.$emit('gridRowToggle', variable.id)

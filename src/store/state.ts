@@ -75,6 +75,8 @@ const state: AppState = {
   ],
   facetFilter: {
     assessment: [],
+    emptyRows: true,
+    emptyCols: true,
     gender: [],
     subcohort: [],
     ageGroupAt1A: [],

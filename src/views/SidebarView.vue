@@ -58,6 +58,7 @@
             </facet-container>
           </li>
           <li>
+
             <facet-container
               facetId="cohort"
               :label="$t('lifelines-webshop-subcohort-facet-label')"
@@ -83,7 +84,8 @@
               <template v-slot:label-slot>
                 <info-icon id="cohort-info-icon" :title="$t('lifelines-webshop-subcohort-facet-label')"  href="http://wiki-lifelines.web.rug.nl/doku.php?id=cohort#subcohorts">
                   <span v-html="$t('lifelines-webshop-sidebar-cohort-info')"></span>
-                </info-icon>
+                </info-icon><br/>
+                    <a href="#" @click="emptyCells = !emptyCells"><font-awesome-icon :icon="emptyCells ? 'eye-slash' : 'eye'" /> Empty participant sets</a>
               </template>
               <toggle-facet
                 facetId="cohort"
@@ -111,11 +113,13 @@ import ClickOutside from 'v-click-outside'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faAngleDoubleLeft,
-  faAngleDoubleDown
+  faAngleDoubleDown,
+  faEye,
+  faEyeSlash
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import InfoIcon from '../components/InfoIcon'
-library.add(faAngleDoubleLeft, faAngleDoubleDown)
+library.add(faAngleDoubleLeft, faAngleDoubleDown, faEye, faEyeSlash)
 
 export default Vue.extend({
   name: 'SidebarView',
@@ -138,7 +142,8 @@ export default Vue.extend({
   data: function () {
     return {
       activeAgeFacetId: 'age',
-      cachedAgeState: []
+      cachedAgeState: [],
+      showHidden: false
     }
   },
   methods: {
@@ -175,7 +180,7 @@ export default Vue.extend({
     },
     assessmentsActive (assessmentsActive, oldassessmentsActive) {
       if (!assessmentsActive.length) {
-        this.$store.commit('updateAssessmentfilter', this.assessments.map((i) => i.value))
+        this.$store.commit('assessmentsActive', this.assessments.map((i) => i.value))
       }
     }
   },
@@ -203,12 +208,20 @@ export default Vue.extend({
         this.$store.commit('updateGenderFilter', value)
       }
     },
+    emptyCells: {
+      get () {
+        return this.$store.state.facetFilter.emptyRows && this.$store.state.facetFilter.emptyCols
+      },
+      set (value) {
+        this.$store.commit('emptyCells', value)
+      }
+    },
     assessmentsActive: {
       get () {
         return this.$store.state.facetFilter.assessment
       },
       set (value) {
-        this.$store.commit('updateAssessmentfilter', value)
+        this.$store.commit('assessmentsActive', value)
       }
     },
     selectedSubcohortOptions: {

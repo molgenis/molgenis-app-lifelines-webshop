@@ -42,7 +42,9 @@ describe('GridView', () => {
       searchTermQuery: (state: any) => state.searchTermQueryMock,
       rsql: (state: any) => state.rsqlMock,
       gridAssessments: () => [],
-      grid: () => [],
+      gridColumns: () => [],
+      gridRows: () => [],
+      gridActive: () => [],
       gridSelections: () => [],
       numberOfSelectedItems: () => 0,
       isSignedIn: () => true,
@@ -94,35 +96,13 @@ describe('GridView', () => {
     })
   })
 
-  describe('When handleGridRowToggle gets called', () => {
-    it('handleGridRowToggle mutation should be called', () => {
-      wrapper = shallowMount(GridView, { store })
-
-      let variableId = 1024
-      // @ts-ignore
-      wrapper.vm.handleGridRowToggle(variableId)
-      expect(toggleGridRowMock).toHaveBeenCalled()
-    })
-  })
-
-  describe('When handleGridColumnToggle gets called', () => {
-    it('toggleGridColumn mutation should be called', () => {
-      wrapper = shallowMount(GridView, { store })
-
-      let assessmentId = 56
-      // @ts-ignore
-      wrapper.vm.handleGridColumnToggle(assessmentId)
-      expect(toggleGridColumnMock).toHaveBeenCalled()
-    })
-  })
-
   describe('When handleGridCellToggle gets called', () => {
     it('toggleGridSelection mutation should be called', () => {
       wrapper = shallowMount(GridView, {
         store,
         computed: {
           gridVariables: () => [{ id: 1 }, { id: 2 }, { id: 3 }],
-          gridAssessments: () => [{ id: 1 }, { id: 2 }]
+          gridColumns: () => [{ id: 1 }, { id: 2 }]
         }
       })
 
@@ -131,16 +111,6 @@ describe('GridView', () => {
       // @ts-ignore
       wrapper.vm.handleGridCellToggle(rowIndex, colIndex)
       expect(toggleGridSelectionMock).toHaveBeenCalled()
-    })
-  })
-
-  describe('When handleGridAllToggle gets called', () => {
-    it('toggleAll mutation should be called', () => {
-      wrapper = shallowMount(GridView, { store })
-
-      // @ts-ignore
-      wrapper.vm.handleGridAllToggle()
-      expect(toggleAllMock).toHaveBeenCalled()
     })
   })
 })

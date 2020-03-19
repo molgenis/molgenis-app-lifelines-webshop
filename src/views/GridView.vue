@@ -3,15 +3,16 @@
 
     <grid-component
       v-if="!isSearchResultEmpty"
-      :gridAssessments="gridAssessments"
+      :gridRows="gridRows"
+      :gridColumns="gridColumns"
       :gridVariables="gridVariables"
       :gridSelections="gridSelections"
       :isLoading="isGridLoading"
       :isSignedIn="isSignedIn"
-      @gridRowToggle="handleGridRowToggle"
-      @gridColumnToggle="handleGridColumnToggle"
+      @gridRowToggle="toggleGridRow"
+      @gridColumnToggle="toggleGridColumn"
       @gridCellToggle="handleGridCellToggle"
-      @gridAllToggle="handleGridAllToggle"
+      @gridAllToggle="toggleAll"
     />
   </div>
 </template>
@@ -27,27 +28,18 @@ export default Vue.extend({
   computed: {
     ...mapState(['gridVariables', 'searchTerm', 'subSectionList', 'treeSelected']),
     ...mapGetters([
-      'searchTermQuery', 'rsql', 'gridAssessments', 'gridAssessmentsActive', 'gridSelections',
+      'searchTermQuery', 'rsql', 'gridRows', 'gridColumns', 'gridSelections',
       'numberOfSelectedItems', 'isSignedIn', 'isGridLoading', 'isSearchResultEmpty'
     ])
   },
   methods: {
     ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
     ...mapActions(['loadGridVariables', 'loadGridData', 'loadAssessments']),
-    handleGridRowToggle (variableId) {
-      this.toggleGridRow({ variableId, gridAssessmentsActive: this.gridAssessmentsActive })
-    },
-    handleGridColumnToggle (assessmentId) {
-      this.toggleGridColumn({ assessmentId })
-    },
     handleGridCellToggle (rowIndex, colIndex) {
       this.toggleGridSelection({
         variableId: this.gridVariables[rowIndex].id,
-        assessmentId: this.gridAssessments[colIndex].id
+        assessmentId: this.gridColumns[colIndex].id
       })
-    },
-    handleGridAllToggle () {
-      this.toggleAll(this.gridAssessmentsActive)
     }
   },
   watch: {

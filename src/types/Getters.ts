@@ -11,7 +11,7 @@ export default interface Getters {
   grid: number[][]
   gridActive: number[][]
   gridAssessments: Assessment[]
-  gridAssessmentsActive: Assessment[]
+  gridColumns: Assessment[]
   gridSelections: boolean[][]
   treeStructure: TreeNode[]
   searchTermQuery: string | null

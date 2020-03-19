@@ -5,6 +5,8 @@ export interface Cart {
 
 export interface CartFilter {
     assessment: number[]
+    emptyRows: boolean
+    emptyCols: boolean
     gender?: string[]
     subcohort?: string[]
     ageGroupAt1A?: string[]
