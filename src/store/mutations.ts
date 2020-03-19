@@ -69,6 +69,12 @@ export default {
       user: loadOrderResponse.user
     }
   },
+  setZeroDataVisibility (state: ApplicationState, visibility: boolean) {
+    state.hideZeroData = visibility
+  },
+  setHiddenDataFields (state: ApplicationState, { rows, cols }: { rows:number, cols:number }) {
+    state.hiddenData = { rows, cols }
+  },
   setOrders (state: ApplicationState, response:any) {
     state.orders = response.items
     state.ordersTotal = response.total

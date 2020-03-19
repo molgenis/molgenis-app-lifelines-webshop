@@ -46,6 +46,8 @@ export interface AppState {
   filteredSections: number[] | null
   orders: Order[] | null
   ordersTotal: number
+  hideZeroData: boolean
+  hiddenData: { rows: number, cols: number }
 }
 
 // we start using the store only after the context is loaded

@@ -82,6 +82,8 @@ const state: AppState = {
     ageGroupAt3A: [],
     yearOfBirthRange: []
   },
+  hideZeroData: true,
+  hiddenData: { rows: 0, cols: 0 },
   sections: {},
   subSectionList: [],
   treeStructure: [],

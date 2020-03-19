@@ -1,6 +1,10 @@
 <template>
   <div id="grid">
     <grid-info-dialog v-if="dialogInfo !== null" :data="dialogInfo" @close="closeInfoDialog"></grid-info-dialog>
+    <div v-if="gridActive && (hiddenData.rows > 0 || hiddenData.cols > 0)">
+      <a href="#" v-if="hideZeroData" @click.prevent="setZeroDataVisibility(false)"><font-awesome-icon icon="eye" /> Show {{hiddenData.rows}} empty rows and {{hiddenData.cols}} columns</a>
+      <a href="#" v-else @click.prevent="setZeroDataVisibility(true)"><font-awesome-icon icon="eye-slash" /> Hide {{hiddenData.rows}} empty rows and {{hiddenData.cols}} columns</a>
+    </div>
     <div class="row">
       <div class="col vld-parent">
 
@@ -127,19 +131,22 @@ import {
   faArrowRight,
   faArrowsAlt,
   faPlusSquare,
-  faMinusSquare
+  faMinusSquare,
+  faEye,
+  faEyeSlash
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { formatCount } from '@/filters/GridComponentFilters'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 
-library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare)
+library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare, faEye, faEyeSlash)
 
 export default Vue.extend({
   name: 'GridComponent',
   components: { FontAwesomeIcon, Loading, GridTitelInfo, GridInfoDialog },
   computed: {
-    ...mapGetters(['gridActive', 'gridAssessmentsActive', 'gridMarkers'])
+    ...mapGetters(['gridActive', 'gridAssessmentsActive', 'gridMarkers']),
+    ...mapState(['hideZeroData', 'hiddenData'])
   },
   props: {
     gridAssessments: {
@@ -176,6 +183,7 @@ export default Vue.extend({
     formatCount
   },
   methods: {
+    ...mapMutations(['setZeroDataVisibility']),
     variableSetIsOpen (variable) {
       return (
         variable.subvariables &&
