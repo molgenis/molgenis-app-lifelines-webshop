@@ -299,12 +299,8 @@ describe('GridComponent.vue', () => {
       isSignedIn: true
     }
 
-    beforeEach(() => {
-      wrapper = shallowMount(GridComponent, { localVue, propsData })
-    })
-
     it('should toggle the recalculate spacer when the grid changes', async (done) => {
-      expect(wrapper).toBeDefined()
+      wrapper = shallowMount(GridComponent, { localVue, propsData })
       wrapper.setProps({ gridVariables: [{
         name: 'a',
         id: 101,
@@ -313,7 +309,8 @@ describe('GridComponent.vue', () => {
       wrapper.setProps({ grid: [[101]] })
       wrapper.vm.$nextTick(() => {
         expect(wrapper).toBeDefined()
-        expect(wrapper.vm.$refs.varspacer.style.width).toEqual('16px')
+        // 0px as jest dom has no width
+        expect(wrapper.vm.$refs.varspacer.style.width).toEqual('0px')
         done()
       })
     })

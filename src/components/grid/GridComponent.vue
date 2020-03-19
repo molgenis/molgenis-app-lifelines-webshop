@@ -306,15 +306,13 @@ export default Vue.extend({
     setGridHeaderSpacer () {
       const variableHTMLElements = this.$refs.variable
       const elemArray = [].slice.call(variableHTMLElements)
-      if (elemArray.length) {
-        let maxSize = 16 // 16px basesize
-        elemArray.forEach((elem) => {
-          if (elem.offsetWidth > maxSize) {
-            maxSize = elem.offsetWidth
-          }
-        })
-        this.$refs.varspacer.style.width = maxSize + 'px'
-      }
+      let maxSize = -1 // 16px basesize
+      elemArray.forEach((elem) => {
+        if (elem.offsetWidth > maxSize) {
+          maxSize = elem.offsetWidth
+        }
+      })
+      this.$refs.varspacer.style.width = maxSize + 'px'
     },
     getTableTop () {
       return this.$refs.grid
