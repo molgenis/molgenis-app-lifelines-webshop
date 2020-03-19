@@ -12,16 +12,10 @@ import 'core-js/fn/array/flat-map'
 import transforms from './transforms'
 
 const paramGetters = {
-  grid (state: ApplicationState, getters: Getters, filterActive = false) {
+  grid (state: ApplicationState, getters: Getters, gridAssessments:any) {
     if (state.gridVariables === null) { return null }
 
     return state.gridVariables.map((variable: VariableWithVariants) => {
-      let gridAssessments
-      if (filterActive) {
-        gridAssessments = getters.gridAssessmentsActive
-      } else {
-        gridAssessments = getters.gridAssessments
-      }
       return gridAssessments.map((assessment: Assessment) => {
         if (state.variantCounts === null) { return NaN }
 
@@ -151,10 +145,10 @@ export default {
     })
   },
   grid: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.grid(state, getters, false)
+    return paramGetters.grid(state, getters, getters.gridAssessments)
   },
   gridActive: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.grid(state, getters, true)
+    return paramGetters.grid(state, getters, getters.gridAssessmentsActive)
   },
   gridAssessments: (state: ApplicationState, getters: Getters) => {
     return paramGetters.gridAssessments(state, getters, false)

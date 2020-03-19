@@ -180,7 +180,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['gridMarkers']),
     genderOptions () {
       return this.$store.state.genderOptions
     },
