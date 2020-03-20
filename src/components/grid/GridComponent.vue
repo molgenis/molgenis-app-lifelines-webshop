@@ -81,7 +81,8 @@
                 @click="openInfoDialog(rowIndex)"
                 class="variable-column"
                 ref="variable"
-                v-b-popover.hover.left.html="popupBody(rowIndex)" :title="popupTitle(rowIndex)"
+                v-b-popover.hover.left.html="popupBody(rowIndex)"
+                :title="popupTitle(rowIndex)"
                 :class="{'selected-variable': rowIndex === selectedRowIndex }"
               >
                 <grid-titel-info
@@ -99,7 +100,7 @@
                   <font-awesome-icon icon="arrow-right" />
                 </button>
               </th>
-              <td class="cell" :key="colIndex" v-for="(count,colIndex) in row" >
+              <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
                 <button
                   :disabled="!isSignedIn"
                   :data-col="colIndex"
@@ -297,6 +298,15 @@ export default Vue.extend({
       const header = this.getHeaderHeight()
       if (table && header) {
         this.stickyTableHeader = table - header < 112 // 7rem @ 16px basesize
+      }
+
+      // Update grid header offset to compansate for horizontal scrollbar
+      // This is needed due to use of absolute positioning used for foating header
+      if (this.$refs.gridheader && this.$refs.gridheader.className.indexOf('sticky') > -1) {
+        const left = window.pageXOffset || document.documentElement.scrollLeft
+        this.$refs.gridheader.style.marginLeft = '-' + left + 'px'
+      } else {
+        this.$refs.gridheader.style.marginLeft = '0px'
       }
     },
     /**

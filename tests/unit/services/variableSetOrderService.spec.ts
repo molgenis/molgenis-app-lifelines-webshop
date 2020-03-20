@@ -14,7 +14,7 @@ describe('finalVariableSetSort', () => {
       subvariables: []
     }, {
       id: 2, // Parent variable
-      subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ],
+      subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ]
     }, {
       id: 6, // Normal variable
       subvariables: []
