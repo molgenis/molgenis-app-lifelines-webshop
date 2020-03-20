@@ -1,9 +1,9 @@
 <template>
   <div id="grid">
     <grid-info-dialog v-if="dialogInfo !== null" :data="dialogInfo" @close="closeInfoDialog"></grid-info-dialog>
-    <div v-if="gridActive && (hiddenData.rows > 0 || hiddenData.cols > 0)">
-      <a href="#" v-if="hideZeroData" @click.prevent="setZeroDataVisibility(false)"><font-awesome-icon icon="eye" /> Show {{hiddenData.rows}} empty rows and {{hiddenData.cols}} columns</a>
-      <a href="#" v-else @click.prevent="setZeroDataVisibility(true)"><font-awesome-icon icon="eye-slash" /> Hide {{hiddenData.rows}} empty rows and {{hiddenData.cols}} columns</a>
+    <div v-if="gridActive && (findZeroRowsAndCols.rows.length > 0 || findZeroRowsAndCols.cols.length > 0)">
+      <a href="#" v-if="hideZeroData" @click.prevent="setZeroDataVisibility(false)"><font-awesome-icon icon="eye" /> Show {{findZeroRowsAndCols.rows.length}} hidden empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
+      <a href="#" v-else @click.prevent="setZeroDataVisibility(true)"><font-awesome-icon icon="eye-slash" /> Hide {{findZeroRowsAndCols.rows.length}} empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
     </div>
     <div class="row">
       <div class="col vld-parent">
@@ -145,8 +145,8 @@ export default Vue.extend({
   name: 'GridComponent',
   components: { FontAwesomeIcon, Loading, GridTitelInfo, GridInfoDialog },
   computed: {
-    ...mapGetters(['gridActive', 'gridAssessmentsActive', 'gridMarkers']),
-    ...mapState(['hideZeroData', 'hiddenData'])
+    ...mapGetters(['gridActive', 'gridAssessmentsActive', 'gridMarkers', 'findZeroRowsAndCols']),
+    ...mapState(['hideZeroData'])
   },
   props: {
     gridAssessments: {

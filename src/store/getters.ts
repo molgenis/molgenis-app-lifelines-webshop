@@ -12,9 +12,18 @@ import 'core-js/fn/array/flat-map'
 import transforms from './transforms'
 
 const paramGetters = {
-  grid (state: ApplicationState, getters: Getters, gridAssessments:any) {
+  grid (state: ApplicationState, getters: Getters) {
     if (state.gridVariables === null) { return null }
 
+    const toHide = paramGetters.findZeroRowsAndCols(state, getters)
+    let grid = this.baseGrid(state, getters, paramGetters.gridAssessments(state, getters))
+    if (grid && state.hideZeroData) {
+      grid = grid.filter((_, index) => !toHide.rows.includes(index))
+    }
+    return grid
+  },
+  baseGrid (state: ApplicationState, getters: Getters, gridAssessments:any) {
+    if (state.gridVariables === null) { return null }
     return state.gridVariables.map((variable: VariableWithVariants) => {
       return gridAssessments.map((assessment: Assessment) => {
         if (state.variantCounts === null) { return NaN }
@@ -43,15 +52,49 @@ const paramGetters = {
       })
     })
   },
-  gridAssessments: (state: ApplicationState, getters: Getters, filterActive = false) => {
-    const assessmentIds: number[] = getters.variants.reduce((acc: number[], variant: Variant) => acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
-    const gridAssessments = Object.values(state.assessments).filter(assessment => assessmentIds.includes(assessment.id))
-
-    if (filterActive) {
-      return gridAssessments.filter((i:any) => state.facetFilter.assessment.includes(i.id))
-    } else {
-      return gridAssessments
+  gridVariables: (state: ApplicationState, getters: Getters) => {
+    if (state.hideZeroData) {
+      const toHide = paramGetters.findZeroRowsAndCols(state, getters)
+      const results = state.gridVariables ? state.gridVariables : []
+      return results.filter((_, index) => !toHide.rows.includes(index))
     }
+    return state.gridVariables
+  },
+  baseGridAssessments: (state: ApplicationState, getters: Getters) => {
+    const assessmentIds: number[] = getters.variants.reduce((acc: number[], variant: Variant) => acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
+    return Object.values(state.assessments).filter(assessment => assessmentIds.includes(assessment.id))
+  },
+  gridAssessments: (state: ApplicationState, getters: Getters) => {
+    let gridAssessments = paramGetters.baseGridAssessments(state, getters)
+    if (state.hideZeroData) {
+      const toHide = paramGetters.findZeroRowsAndCols(state, getters)
+      gridAssessments = gridAssessments.filter((_, index) => !toHide.cols.includes(index))
+    }
+    return gridAssessments.filter((i:any) => state.facetFilter.assessment.includes(i.id))
+  },
+  findZeroRowsAndCols: (state: ApplicationState, getters: Getters) => {
+    let grid = paramGetters.baseGrid(state, getters, paramGetters.baseGridAssessments(state, getters))
+    let rows: number[] = []
+    let cols: number[] = []
+
+    if (grid) {
+      rows = paramGetters.filterZeroFromRow(grid)
+      cols = paramGetters.filterZeroFromRow(paramGetters.transpose(grid))
+    } else {
+      return { cols: [], rows: [] }
+    }
+    return { rows, cols }
+  },
+  filterZeroFromRow (grid: Array<Array<number>>) {
+    return grid.reduce((previous, current, index) => {
+      if (current.every((value:number) => value === 0)) {
+        previous.push(index)
+      }
+      return previous
+    }, [])
+  },
+  transpose (matrix: Array<Array<number>>) {
+    return (matrix && matrix.length && matrix[0].map && matrix[0].map(function (_, c) { return matrix.map(function (r) { return r[c] }) })) || []
   }
 }
 
@@ -145,16 +188,22 @@ export default {
     })
   },
   grid: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.grid(state, getters, getters.gridAssessments)
+    return paramGetters.baseGrid(state, getters, paramGetters.baseGridAssessments(state, getters))
   },
   gridActive: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.grid(state, getters, getters.gridAssessmentsActive)
+    return paramGetters.grid(state, getters)
   },
   gridAssessments: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.gridAssessments(state, getters, false)
+    return paramGetters.baseGridAssessments(state, getters)
   },
   gridAssessmentsActive: (state: ApplicationState, getters: Getters) => {
-    return paramGetters.gridAssessments(state, getters, true)
+    return paramGetters.gridAssessments(state, getters)
+  },
+  gridVariables: (state: ApplicationState, getters: Getters) => {
+    return paramGetters.gridVariables(state, getters)
+  },
+  findZeroRowsAndCols: (state: ApplicationState, getters: Getters) => {
+    return paramGetters.findZeroRowsAndCols(state, getters)
   },
   gridMarkers: function (state: ApplicationState, getters: Getters) {
     const selected:any = { all: true, row: [], col: [] }

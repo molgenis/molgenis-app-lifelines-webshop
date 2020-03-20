@@ -3,7 +3,7 @@
 
     <grid-component
       v-if="!isSearchResultEmpty"
-      :gridAssessments="gridAssessments"
+      :gridAssessments="gridAssessmentsActive"
       :gridVariables="gridVariables"
       :gridSelections="gridSelections"
       :isLoading="isGridLoading"
@@ -25,9 +25,9 @@ export default Vue.extend({
   name: 'GridView',
   components: { GridComponent },
   computed: {
-    ...mapState(['gridVariables', 'searchTerm', 'subSectionList', 'treeSelected']),
+    ...mapState(['searchTerm', 'subSectionList', 'treeSelected']),
     ...mapGetters([
-      'searchTermQuery', 'rsql', 'gridAssessments', 'gridAssessmentsActive', 'gridSelections',
+      'gridVariables', 'searchTermQuery', 'rsql', 'gridAssessmentsActive', 'gridSelections',
       'numberOfSelectedItems', 'isSignedIn', 'isGridLoading', 'isSearchResultEmpty'
     ])
   },
@@ -43,7 +43,7 @@ export default Vue.extend({
     handleGridCellToggle (rowIndex, colIndex) {
       this.toggleGridSelection({
         variableId: this.gridVariables[rowIndex].id,
-        assessmentId: this.gridAssessments[colIndex].id
+        assessmentId: this.gridAssessmentsActive[colIndex].id
       })
     },
     handleGridAllToggle () {
