@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.13.0...v1.13.1) (2020-03-20)
+
+
+### Bug Fixes
+
+* fix 278 Grid header alignment is off ([09e6626](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/09e6626)), closes [#278](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/278)
+
 # [1.13.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.12.0...v1.13.0) (2020-03-20)
 
 
