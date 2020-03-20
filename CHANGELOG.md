@@ -1,3 +1,15 @@
+# [1.13.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.12.0...v1.13.0) (2020-03-20)
+
+
+### Bug Fixes
+
+* increase variable column with from 15 to 22 rem ([fe13715](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/fe13715))
+
+
+### Features
+
+* Dynamic variable column with and popover variable info ([22d5f69](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/22d5f69))
+
 # [1.12.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.11.0...v1.12.0) (2020-03-12)
 
 
