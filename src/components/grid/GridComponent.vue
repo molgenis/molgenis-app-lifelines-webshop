@@ -461,12 +461,10 @@ table {
 }
 
 .sticky {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 0.9) 75%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(180deg,
+  rgba(255, 255, 255, 1) 0%,
+  rgba(255, 255, 255, 0.9) 75%,
+  rgba(255, 255, 255, 0) 100%);
   pointer-events: none;
   position: fixed;
   top: 7rem;
