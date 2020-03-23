@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CartView.vue renders cart view 1`] = `
+exports[`CartView.vue renders cart view, showing the assesment labels sorted alphabetically 1`] = `
 <div id="cart-view">
   <div class="container-fluid">
     <div class="row">
@@ -27,8 +27,8 @@ exports[`CartView.vue renders cart view 1`] = `
                 <div>
                   <h5 class="h6">Subsection 1</h5>
                   <ul>
-                    <li class="subvariable-line start"><span>var 123 ( assessment1, assessment3 )</span></li>
-                    <li class="subvariable-line line"><span>var 456 ( assessment3 )</span></li>
+                    <li class="subvariable-line start"><span>var 123 ( 1A, 2C )</span></li>
+                    <li class="subvariable-line line"><span>var 456 ( 2B )</span></li>
                     <li class="subvariable-line end"><span>var 789 </span></li>
                   </ul>
                 </div>
@@ -54,7 +54,7 @@ exports[`CartView.vue renders cart view 1`] = `
                 <div>
                   <h5 class="h6">Subsection 2</h5>
                   <ul>
-                    <li class="subvariable-line"><span>var 456 ( assessment3 )</span></li>
+                    <li class="subvariable-line"><span>var 456 ( 2B )</span></li>
                   </ul>
                 </div>
               </div>
