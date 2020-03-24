@@ -22,7 +22,8 @@ describe('getters', () => {
     treeStructure: [],
     gridSelections: [],
     isSearchResultEmpty: false,
-    numberOfSelectedItems: 0
+    numberOfSelectedItems: 0,
+    findZeroRowsAndCols: { cols: [], rows: [] }
   }
 
   const variant1: Variant = { id: 1, assessmentId: 1 }

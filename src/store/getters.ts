@@ -107,7 +107,7 @@ export default {
     const assessmentFilter = state.facetFilter.assessment
     let assessments = transforms.gridAssessments(getters.variants, state.assessments, assessmentFilter)
     if (assessments && state.hideZeroData) {
-      assessments = assessments.filter((_, index:number) => !toHide.cols.includes(index))
+      assessments = assessments.filter((_:any, index:number) => !toHide.cols.includes(index))
     }
     return assessments
   },
@@ -115,7 +115,7 @@ export default {
     const toHide = getters.findZeroRowsAndCols
     let grid = transforms.grid(state.gridVariables, getters.gridColumns, state.variantCounts)
     if (grid && state.hideZeroData) {
-      grid = grid.filter((_, index:number) => !toHide.rows.includes(index))
+      grid = grid.filter((_:any, index:number) => !toHide.rows.includes(index))
     }
     return grid
   },
@@ -123,7 +123,7 @@ export default {
     let variables = state.gridVariables
     const toHide = getters.findZeroRowsAndCols
     if (variables && state.hideZeroData) {
-      variables = variables.filter((_, index:number) => !toHide.rows.includes(index))
+      variables = variables.filter((_:any, index:number) => !toHide.rows.includes(index))
     }
     return variables
   },
@@ -134,7 +134,7 @@ export default {
     let selections = transforms.gridSelections(getters.gridColumns, state.gridSelection, state.gridVariables)
     const toHide = getters.findZeroRowsAndCols
     if (selections && state.hideZeroData) {
-      selections = selections.filter((_, index:number) => !toHide.rows.includes(index))
+      selections = selections.filter((_:any, index:number) => !toHide.rows.includes(index))
     }
     return selections
   },
