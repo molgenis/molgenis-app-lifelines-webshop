@@ -1,7 +1,5 @@
 export default interface Filter {
     assessment: number[]
-    emptyRows: boolean
-    emptyCols: boolean
     gender: string[]
     subcohort: string[]
     ageGroupAt1A: string[]

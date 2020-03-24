@@ -44,21 +44,30 @@ transforms.cartTree = (gridSelection:GridSelection, treeStructure:any, sections:
 }
 
 transforms.helpers = {
-  findEmpty: (set:any) => {
-    return set.reduce((acc:any, array:any) => {
-      array.sort() // if sorted and first and last array element is equal to 0 we know all elements are zerow
-      if (array[0] === array[array.length - 1] && array[0] === 0) {
-        acc.push(true)
-      } else {
-        acc.push(false)
+  findEmpty: (grid: Array<Array<number>>) => {
+    return grid.reduce((previous, current, index) => {
+      if (current.every((value:number) => value === 0)) {
+        previous.push(index)
       }
-      return acc
+      return previous
     }, [])
   },
-  transpose: (array:[]) => {
-    // @ts-ignore
-    return (array && array.length && array[0].map && array[0].map(function (_, c) { return array.map(function (r) { return r[c] }) })) || []
+  transpose: (matrix: Array<Array<number>>) => {
+    return (matrix && matrix.length && matrix[0].map && matrix[0].map(function (_, c) { return matrix.map(function (r) { return r[c] }) })) || []
   }
+}
+
+transforms.findZeroRowsAndCols = (grid:any) => {
+  let rows: number[] = []
+  let cols: number[] = []
+
+  if (grid) {
+    rows = transforms.helpers.findEmpty(grid)
+    cols = transforms.helpers.findEmpty(transforms.helpers.transpose(grid))
+  } else {
+    return { cols: [], rows: [] }
+  }
+  return { rows, cols }
 }
 
 transforms.grid = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any) => {
@@ -98,13 +107,9 @@ transforms.grid = (gridRows:VariableWithVariants[], gridColumns:any, variantCoun
   return grid
 }
 
-transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null = null, filterEmpty: boolean | null = null) => {
+transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null = null) => {
   const assessmentIds: number[] = variants.reduce((acc: number[], variant: Variant) => acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
   const gridAssessments = Object.values(assessments).filter((assessment:any) => assessmentIds.includes(assessment.id))
-
-  if (filterEmpty !== null) {
-
-  }
 
   if (Array.isArray(filterAssessments)) {
     // @ts-ignore

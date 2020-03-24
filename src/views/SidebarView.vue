@@ -85,7 +85,6 @@
                 <info-icon id="cohort-info-icon" :title="$t('lifelines-webshop-subcohort-facet-label')"  href="http://wiki-lifelines.web.rug.nl/doku.php?id=cohort#subcohorts">
                   <span v-html="$t('lifelines-webshop-sidebar-cohort-info')"></span>
                 </info-icon><br/>
-                    <a href="#" @click="emptyCells = !emptyCells"><font-awesome-icon :icon="emptyCells ? 'eye-slash' : 'eye'" /> Empty participant sets</a>
               </template>
               <toggle-facet
                 facetId="cohort"
@@ -206,14 +205,6 @@ export default Vue.extend({
       },
       set (value) {
         this.$store.commit('updateGenderFilter', value)
-      }
-    },
-    emptyCells: {
-      get () {
-        return this.$store.state.facetFilter.emptyRows && this.$store.state.facetFilter.emptyCols
-      },
-      set (value) {
-        this.$store.commit('emptyCells', value)
       }
     },
     assessmentsActive: {

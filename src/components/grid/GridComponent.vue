@@ -1,6 +1,10 @@
 <template>
   <div id="grid">
     <grid-info-dialog v-if="dialogInfo !== null" :data="dialogInfo" @close="closeInfoDialog"></grid-info-dialog>
+    <div v-if="gridRows && (findZeroRowsAndCols.rows.length > 0 || findZeroRowsAndCols.cols.length > 0)">
+      <a href="#" v-if="hideZeroData" @click.prevent="setZeroDataVisibility(false)"><font-awesome-icon icon="eye" /> Show {{findZeroRowsAndCols.rows.length}} hidden empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
+      <a href="#" v-else @click.prevent="setZeroDataVisibility(true)"><font-awesome-icon icon="eye-slash" /> Hide {{findZeroRowsAndCols.rows.length}} empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
+    </div>
     <div class="row">
       <div class="col vld-parent">
 
@@ -127,13 +131,15 @@ import {
   faArrowRight,
   faArrowsAlt,
   faPlusSquare,
-  faMinusSquare
+  faMinusSquare,
+  faEye,
+  faEyeSlash
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { formatCount } from '@/filters/GridComponentFilters'
-import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 
-library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare)
+library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare, faEye, faEyeSlash)
 
 export default Vue.extend({
   name: 'GridComponent',
@@ -165,6 +171,8 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapGetters(['findZeroRowsAndCols']),
+    ...mapState(['hideZeroData']),
     gridMarkers: function () {
       const selected = { all: true, row: [], col: [] }
       if (!this.gridRows.length) {
@@ -198,6 +206,7 @@ export default Vue.extend({
     formatCount
   },
   methods: {
+    ...mapMutations(['setZeroDataVisibility']),
     variableSetIsOpen (variable) {
       return (
         variable.subvariables &&

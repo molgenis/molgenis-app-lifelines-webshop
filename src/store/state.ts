@@ -75,8 +75,6 @@ const state: AppState = {
   ],
   facetFilter: {
     assessment: [],
-    emptyRows: true,
-    emptyCols: true,
     gender: [],
     subcohort: [],
     ageGroupAt1A: [],
@@ -99,7 +97,8 @@ const state: AppState = {
   filteredSubsections: null, // contains the IDs of subsections that either match the search term or contain variables that match the search term
   filteredSections: null, // contains the IDs of sections that match the search term
   orders: null,
-  ordersTotal: 0
+  ordersTotal: 0,
+  hideZeroData: true
 }
 
 export default state

@@ -26,9 +26,9 @@ export default Vue.extend({
   name: 'GridView',
   components: { GridComponent },
   computed: {
-    ...mapState(['gridVariables', 'searchTerm', 'subSectionList', 'treeSelected']),
+    ...mapState(['searchTerm', 'subSectionList', 'treeSelected']),
     ...mapGetters([
-      'searchTermQuery', 'rsql', 'gridRows', 'gridColumns', 'gridSelections',
+      'gridVariables', 'searchTermQuery', 'rsql', 'gridRows', 'gridColumns', 'gridSelections',
       'numberOfSelectedItems', 'isSignedIn', 'isGridLoading', 'isSearchResultEmpty'
     ])
   },

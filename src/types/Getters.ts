@@ -17,4 +17,5 @@ export default interface Getters {
   searchTermQuery: string | null
   isSearchResultEmpty: boolean
   numberOfSelectedItems: Number
+  findZeroRowsAndCols: { cols: number[], rows: number[] }
 }

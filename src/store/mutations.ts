@@ -12,6 +12,9 @@ import FormField from '@/types/FormField'
 import transforms from './transforms'
 
 export default {
+  setZeroDataVisibility (state: ApplicationState, visibility: boolean) {
+    state.hideZeroData = visibility
+  },
   assessmentsActive (state: ApplicationState, selectedAssessments: number[]) {
     state.facetFilter.assessment = selectedAssessments
   },
