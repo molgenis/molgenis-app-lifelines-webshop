@@ -18,10 +18,6 @@ export default {
   assessmentsActive (state: ApplicationState, selectedAssessments: number[]) {
     state.facetFilter.assessment = selectedAssessments
   },
-  emptyCells (state: ApplicationState, isEnabled: boolean) {
-    state.facetFilter.emptyCols = isEnabled
-    state.facetFilter.emptyRows = isEnabled
-  },
   changeOrderStatus (state: ApplicationState, status: OrderState) {
     state.order.state = status
   },

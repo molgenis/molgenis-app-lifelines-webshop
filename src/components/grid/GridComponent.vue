@@ -168,11 +168,21 @@ export default Vue.extend({
     isSignedIn: {
       type: Boolean,
       required: true
+    },
+    hideZeroData: {
+      type: Boolean,
+      default: () => true
+    },
+    findZeroRowsAndCols: {
+      type: Object,
+      default: () => { return { cols: [], rows: [] } }
+    },
+    setZeroDataVisibility: {
+      type: Function,
+      default: () => () => {}
     }
   },
   computed: {
-    ...mapGetters(['findZeroRowsAndCols']),
-    ...mapState(['hideZeroData']),
     gridMarkers: function () {
       const selected = { all: true, row: [], col: [] }
       if (!this.gridRows.length) {
@@ -206,7 +216,6 @@ export default Vue.extend({
     formatCount
   },
   methods: {
-    ...mapMutations(['setZeroDataVisibility']),
     variableSetIsOpen (variable) {
       return (
         variable.subvariables &&

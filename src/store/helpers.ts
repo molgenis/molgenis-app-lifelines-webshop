@@ -63,9 +63,7 @@ const toCartId = (options: FacetOption[], id: string, groupName: string): string
 
 const toCartFilters = ({ genderOptions, subcohortOptions, ageGroupOptions, facetFilter }: ApplicationState) : CartFilter => {
   const result: CartFilter = {
-    assessment: facetFilter.assessment,
-    emptyCols: facetFilter.emptyCols,
-    emptyRows: facetFilter.emptyRows
+    assessment: facetFilter.assessment
   }
 
   if (facetFilter.ageGroupAt1A.length > 0) {
@@ -142,8 +140,6 @@ const facetFilterFromCart = (filters: CartFilter, { ageGroupOptions, genderOptio
     ageGroupAt1A: (filters.ageGroupAt1A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt1A')),
     ageGroupAt2A: (filters.ageGroupAt2A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt2A')),
     ageGroupAt3A: (filters.ageGroupAt3A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt3A')),
-    emptyCols: filters.emptyCols,
-    emptyRows: filters.emptyRows,
     gender: (filters.gender || []).map(optionText => toFilterId(genderOptions, optionText, 'gender')),
     subcohort: (filters.subcohort || []).map(optionText => toFilterId(subcohortOptions, optionText, 'subcohort')),
     yearOfBirthRange: (filters.yearOfBirthRange || [])

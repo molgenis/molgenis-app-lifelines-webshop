@@ -21,9 +21,7 @@ const cart: Cart = {
   }],
   filters: {
     ageGroupAt1A: ['18-65', '65+'],
-    assessment: [],
-    emptyCols: true,
-    emptyRows: true
+    assessment: []
   }
 }
 

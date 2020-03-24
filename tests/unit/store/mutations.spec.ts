@@ -342,8 +342,6 @@ describe('mutations', () => {
       let baseAppState = Object.assign({}, state)
       mutations.updateFacetFilter(baseAppState, {
         assessment: [],
-        emptyCols: true,
-        emptyRows: true,
         gender: ['female'],
         subcohort: [],
         ageGroupAt1A: [],
@@ -353,8 +351,6 @@ describe('mutations', () => {
       })
       expect(baseAppState.facetFilter).toEqual({
         assessment: [],
-        emptyCols: true,
-        emptyRows: true,
         gender: ['female'],
         subcohort: [],
         ageGroupAt1A: [],

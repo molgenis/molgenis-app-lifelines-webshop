@@ -9,6 +9,9 @@
       :gridSelections="gridSelections"
       :isLoading="isGridLoading"
       :isSignedIn="isSignedIn"
+      :hideZeroData="hideZeroData"
+      :findZeroRowsAndCols="findZeroRowsAndCols"
+      :setZeroDataVisibility="setZeroDataVisibility"
       @gridRowToggle="toggleGridRow"
       @gridColumnToggle="toggleGridColumn"
       @gridCellToggle="handleGridCellToggle"
@@ -26,14 +29,14 @@ export default Vue.extend({
   name: 'GridView',
   components: { GridComponent },
   computed: {
-    ...mapState(['searchTerm', 'subSectionList', 'treeSelected']),
+    ...mapState(['hideZeroData', 'searchTerm', 'subSectionList', 'treeSelected']),
     ...mapGetters([
-      'gridVariables', 'searchTermQuery', 'rsql', 'gridRows', 'gridColumns', 'gridSelections',
+      'findZeroRowsAndCols', 'gridVariables', 'searchTermQuery', 'rsql', 'gridRows', 'gridColumns', 'gridSelections',
       'numberOfSelectedItems', 'isSignedIn', 'isGridLoading', 'isSearchResultEmpty'
     ])
   },
   methods: {
-    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
+    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll', 'setZeroDataVisibility']),
     ...mapActions(['loadGridVariables', 'loadGridData', 'loadAssessments']),
     handleGridCellToggle (rowIndex, colIndex) {
       this.toggleGridSelection({

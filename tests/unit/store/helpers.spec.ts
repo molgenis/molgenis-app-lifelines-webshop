@@ -68,8 +68,6 @@ describe('store', () => {
       ageGroupAt2A: ['2', '3'],
       ageGroupAt3A: ['3'],
       assessment: [1, 2],
-      emptyRows: true,
-      emptyCols: true,
       gender: ['1'],
       subcohort: ['gwas'],
       yearOfBirthRange: [1960, 1970]
@@ -80,8 +78,6 @@ describe('store', () => {
       ageGroupAt1A: ['0-17'],
       ageGroupAt2A: ['18-65', '65+'],
       ageGroupAt3A: ['65+'],
-      emptyRows: true,
-      emptyCols: true,
       gender: ['Male'],
       subcohort: ['GWAS'],
       yearOfBirthRange: [1960, 1970]
@@ -89,7 +85,7 @@ describe('store', () => {
 
     describe('toCart', () => {
       it('converts empty state to empty cart', () => {
-        expect(toCart(emptyState)).toEqual({ filters: { assessment: [], emptyCols: true, emptyRows: true }, selection: [] })
+        expect(toCart(emptyState)).toEqual({ filters: { assessment: [] }, selection: [] })
       })
       it('converts facetFilter to cart filter', () => {
         expect(toCart({
@@ -126,7 +122,7 @@ describe('store', () => {
             2: [1]
           }
         })).toEqual({
-          filters: { assessment: [], emptyCols: true, emptyRows: true },
+          filters: { assessment: [] },
           selection: [{
             assessment: '1A',
             variables: ['VAR1', 'VAR2']
@@ -140,7 +136,7 @@ describe('store', () => {
 
     describe('fromCart', () => {
       it('converts empty cart', () => {
-        expect(fromCart({ filters: { assessment: [], emptyCols: true, emptyRows: true }, selection: [] }, emptyState))
+        expect(fromCart({ filters: { assessment: [] }, selection: [] }, emptyState))
           .toEqual({
             facetFilter: emptyState.facetFilter,
             gridSelection: {}
@@ -148,7 +144,7 @@ describe('store', () => {
       })
       it('converts cart selection to grid selection', () => {
         expect(fromCart({
-          filters: { assessment: [], emptyCols: true, emptyRows: true },
+          filters: { assessment: [] },
           selection: [{
             assessment: '1A',
             variables: ['VAR1', 'VAR2']
@@ -182,9 +178,7 @@ describe('store', () => {
         expect(() =>
           fromCart({ filters: {
             assessment: [],
-            ageGroupAt1A: ['blah'],
-            emptyRows: true,
-            emptyCols: true
+            ageGroupAt1A: ['blah']
           },
           selection: [] }, emptyState)
         ).toThrowError('Cannot find ageGroupAt1A facet option with text blah')
