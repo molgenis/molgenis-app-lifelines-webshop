@@ -195,9 +195,9 @@ export default Vue.extend({
       for (const [variableId, assessmentIds] of Object.entries(
         this.gridSelection
       )) {
-        const assessmentNames = assessmentIds.map(
-          assessmentId => this.assessments[assessmentId].name
-        )
+        const assessmentNames = assessmentIds
+          .map(assessmentId => this.assessments[assessmentId].name)
+          .sort()
         variableAssesmentsStings[variableId] =
           '( ' + assessmentNames.join(', ') + ' )'
       }
