@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.14.0...v1.14.1) (2020-03-25)
+
+
+### Bug Fixes
+
+* removed broken callback to open non-existing popup ([#282](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/282)) ([ca366c1](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/ca366c1))
+
 # [1.14.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.13.1...v1.14.0) (2020-03-25)
 
 
