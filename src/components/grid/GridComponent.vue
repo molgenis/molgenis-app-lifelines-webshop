@@ -1,6 +1,5 @@
 <template>
   <div id="grid">
-    <grid-info-dialog v-if="dialogInfo !== null" :data="dialogInfo" @close="closeInfoDialog"></grid-info-dialog>
     <div v-if="gridRows && (findZeroRowsAndCols.rows.length > 0 || findZeroRowsAndCols.cols.length > 0)">
       <a href="#" v-if="hideZeroData" @click.prevent="setZeroDataVisibility(false)"><font-awesome-icon icon="eye" /> Show {{findZeroRowsAndCols.rows.length}} hidden empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
       <a href="#" v-else @click.prevent="setZeroDataVisibility(true)"><font-awesome-icon icon="eye-slash" /> Hide {{findZeroRowsAndCols.rows.length}} empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
@@ -11,7 +10,7 @@
         <table ref="gridheader" class="grid-header-table" :class="{'sticky':stickyTableHeader}">
           <tr>
             <th class="collapse-holder"></th>
-            <th></th>
+            <th class="variable-column-spacer" ref="varspacer"></th>
             <th></th>
             <th v-for="assessment in gridColumns" :key="assessment.id" class="text-center">
               <div class="assessments-title">
@@ -40,7 +39,7 @@
           >
             <tr>
               <th class="collapse-holder"></th>
-              <th></th>
+              <th class="variable-column"></th>
               <th class="all-toggle grid-toggle">
                 <button
                   :disabled="!isSignedIn"
@@ -85,6 +84,10 @@
               </th>
               <th
                 @click="openInfoDialog(rowIndex)"
+                class="variable-column"
+                ref="variable"
+                v-b-popover.hover.left.html="popupBody(rowIndex)"
+                :title="popupTitle(rowIndex)"
                 :class="{'selected-variable': rowIndex === selectedRowIndex }"
               >
                 <grid-titel-info
@@ -123,7 +126,6 @@
 import Vue from 'vue'
 import Loading from 'vue-loading-overlay'
 import GridTitelInfo from './GridTitelInfo.vue'
-import GridInfoDialog from './GridInfoDialog.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -143,7 +145,7 @@ library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare,
 
 export default Vue.extend({
   name: 'GridComponent',
-  components: { FontAwesomeIcon, Loading, GridTitelInfo, GridInfoDialog },
+  components: { FontAwesomeIcon, Loading, GridTitelInfo },
   props: {
     gridRows: {
       type: Array,
@@ -248,9 +250,6 @@ export default Vue.extend({
         return 'closed'
       }
       if (variable.subvariableOf) {
-        const parent = this.gridVariables.filter(
-          varid => varid.id === variable.subvariableOf.id
-        )[0]
         const index = this.gridVariables.findIndex(
           varid => varid.id === variable.id
         )
@@ -270,14 +269,6 @@ export default Vue.extend({
       ) {
         return 'start'
       }
-    },
-    closeInfoDialog () {
-      this.dialogInfo = null
-      this.selectedRowIndex = ''
-    },
-    openInfoDialog (rowIndex) {
-      this.selectedRowIndex = rowIndex
-      this.dialogInfo = this.gridVariables[rowIndex]
     },
     classes (target, context) {
       const classes = {}
@@ -324,6 +315,30 @@ export default Vue.extend({
       if (table && header) {
         this.stickyTableHeader = table - header < 112 // 7rem @ 16px basesize
       }
+
+      // Update grid header offset to compansate for horizontal scrollbar
+      // This is needed due to use of absolute positioning used for foating header
+      if (this.$refs.gridheader && this.$refs.gridheader.className.indexOf('sticky') > -1) {
+        const left = window.pageXOffset || document.documentElement.scrollLeft
+        this.$refs.gridheader.style.marginLeft = '-' + left + 'px'
+      } else {
+        this.$refs.gridheader.style.marginLeft = '0px'
+      }
+    },
+    /**
+     * Find largest variable width
+     * and use this as the header offSet to align column headers.
+    **/
+    setGridHeaderSpacer () {
+      const variableHTMLElements = this.$refs.variable
+      const elemArray = [].slice.call(variableHTMLElements)
+      let maxSize = -1 // 16px basesize
+      elemArray.forEach((elem) => {
+        if (elem.offsetWidth > maxSize) {
+          maxSize = elem.offsetWidth
+        }
+      })
+      this.$refs.varspacer.style.width = maxSize + 'px'
     },
     getTableTop () {
       return this.$refs.grid
@@ -347,12 +362,37 @@ export default Vue.extend({
           }
         })
       }
+    },
+    popupTitle (rowIndex) {
+      return this.gridVariables[rowIndex].name
+    },
+    popupBody (rowIndex) {
+      let optonsHtml = ''
+      if (this.gridVariables[rowIndex].options) {
+        const optionSpans = this.gridVariables[rowIndex].options.map((option) => {
+          return `<span>${option['label_en']}</span>`
+        })
+        optonsHtml = optionSpans.join(', ')
+      }
+
+      return `
+      <div>
+        <strong>Description (en):</strong>
+        <p>${this.gridVariables[rowIndex].definitionEn}</p>
+        <strong>Description (nl):</strong>
+        <p>${this.gridVariables[rowIndex].definitionNL}</p>
+        <strong>Categorical values (en):</strong>
+        <p>${optonsHtml}</p>
+      </div>`
     }
   },
   watch: {
     // Start with all grouped variables closed
     gridVariables: function () {
       this.closeVariableSet()
+    },
+    gridRows: function () {
+      this.$nextTick(this.setGridHeaderSpacer)
     }
   },
   created: function () {
@@ -389,11 +429,10 @@ table {
   overflow: hidden;
   position: relative;
 
-  th:nth-child(2) {
+  .variable-column {
     cursor: pointer;
-    max-width: 15rem;
-    min-width: 15rem;
-    width: 15rem;
+    max-width: 22rem;
+    min-width: 5rem;
   }
 
   td,

@@ -69,15 +69,15 @@ describe('CartView.vue', () => {
       assessments: {
         1: {
           id: 1,
-          name: 'assessment1'
+          name: '2C'
         },
         2: {
           id: 1,
-          name: 'assessment3'
+          name: '1A'
         },
         3: {
           id: 1,
-          name: 'assessment3'
+          name: '2B'
         }
       }
     }
@@ -136,12 +136,12 @@ describe('CartView.vue', () => {
     })
   })
 
-  it('renders cart view', () => {
+  it('renders cart view, showing the assesment labels sorted alphabetically', () => {
     // CartView types do not match, but they should
     // @ts-ignore
     const wrapper = mount(CartView, { stubs, store, localVue })
-    expect(wrapper.findAll('li').at(0).text()).toEqual('var 123 ( assessment1, assessment3 )')
-    expect(wrapper.findAll('li').at(1).text()).toEqual('var 456 ( assessment3 )')
+    expect(wrapper.findAll('li').at(0).text()).toEqual('var 123 ( 1A, 2C )')
+    expect(wrapper.findAll('li').at(1).text()).toEqual('var 456 ( 2B )')
     expect(wrapper.find('#cart-view')).toMatchSnapshot()
   })
 

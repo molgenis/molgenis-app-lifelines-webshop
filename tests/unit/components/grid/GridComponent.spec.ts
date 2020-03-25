@@ -1,6 +1,10 @@
-import { shallowMount, Wrapper } from '@vue/test-utils'
+import { shallowMount, Wrapper, createLocalVue } from '@vue/test-utils'
 import Vue from 'vue'
 import GridComponent from '@/components/grid/GridComponent.vue'
+
+const localVue = createLocalVue()
+
+localVue.directive('b-popover', { /* stub */ })
 
 describe('GridComponent.vue', () => {
   const emptyProps = {
@@ -18,6 +22,7 @@ describe('GridComponent.vue', () => {
     beforeEach(() => {
       window.addEventListener = jest.fn()
       wrapper = shallowMount(GridComponent, {
+        localVue,
         propsData: { ...emptyProps }
       })
     })
@@ -34,6 +39,7 @@ describe('GridComponent.vue', () => {
     beforeEach(() => {
       window.removeEventListener = jest.fn()
       wrapper = shallowMount(GridComponent, {
+        localVue,
         propsData: { ...emptyProps }
       })
     })
@@ -78,6 +84,7 @@ describe('GridComponent.vue', () => {
         isSignedIn: false
       }
       wrapper = shallowMount(GridComponent, {
+        localVue,
         propsData: { ...props }
       })
     })
@@ -108,6 +115,7 @@ describe('GridComponent.vue', () => {
         isSignedIn: true
       }
       wrapper = shallowMount(GridComponent, {
+        localVue,
         propsData: { ...props }
       })
     })
@@ -167,6 +175,7 @@ describe('GridComponent.vue', () => {
       }
 
       wrapper = shallowMount(GridComponent, {
+        localVue,
         propsData: { ...props }
       })
       wrapper.setProps({
@@ -230,6 +239,84 @@ describe('GridComponent.vue', () => {
       expect(wrapper.vm.variableSetClass(props.gridVariables[2])).toEqual('end')
       // @ts-ignore
       expect(wrapper.vm.variableSetClass(props.gridVariables[3])).toEqual(undefined)
+    })
+  })
+
+  describe('Building popup data', () => {
+    let wrapper:any
+    let popoverTitle: string
+    let bodyHtml: string
+
+    const propsData = {
+      grid: [[1]],
+      gridAssessments: [{ id: 10 }],
+      gridVariables: [{
+        name: 'a',
+        id: 101,
+        subvariables: [],
+        options: [{ label_en: 'my option' }],
+        definitionEn: 'enDef',
+        definitionNL: 'nlDef'
+      }],
+      gridSelections: [[false]],
+      isLoading: false,
+      isSignedIn: true
+    }
+
+    beforeEach(() => {
+      wrapper = shallowMount(GridComponent, { localVue, propsData })
+      popoverTitle = wrapper.vm.popupTitle(0)
+      bodyHtml = wrapper.vm.popupBody(0)
+    })
+
+    it('set the name as popover title', () => {
+      expect(popoverTitle).toEqual('a')
+    })
+
+    it('generate the body html', () => {
+      const expectedHtml = `
+      <div>
+        <strong>Description (en):</strong>
+        <p>enDef</p>
+        <strong>Description (nl):</strong>
+        <p>nlDef</p>
+        <strong>Categorical values (en):</strong>
+        <p><span>my option</span></p>
+      </div>`
+      expect(bodyHtml).toEqual(expectedHtml)
+    })
+  })
+
+  describe('setGridHeaderSpacer', () => {
+    let wrapper:any
+
+    const propsData = {
+      grid: [[1]],
+      gridAssessments: [{ id: 10 }],
+      gridVariables: [{
+        name: 'a',
+        id: 101,
+        subvariables: []
+      }],
+      gridSelections: [[false]],
+      isLoading: false,
+      isSignedIn: true
+    }
+
+    it('should toggle the recalculate spacer when the grid changes', async (done) => {
+      wrapper = shallowMount(GridComponent, { localVue, propsData })
+      wrapper.setProps({ gridVariables: [{
+        name: 'a',
+        id: 101,
+        subvariables: []
+      }] })
+      wrapper.setProps({ grid: [[101]] })
+      wrapper.vm.$nextTick(() => {
+        expect(wrapper).toBeDefined()
+        // 0px as jest dom has no width
+        expect(wrapper.vm.$refs.varspacer.style.width).toEqual('0px')
+        done()
+      })
     })
   })
 })

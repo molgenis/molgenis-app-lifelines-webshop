@@ -1,3 +1,29 @@
+# [1.14.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.13.1...v1.14.0) (2020-03-25)
+
+
+### Features
+
+* Sort assesment labels alphabetically ([#280](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/280)) ([f9db13e](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/f9db13e)), closes [#7249](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/7249)
+
+## [1.13.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.13.0...v1.13.1) (2020-03-20)
+
+
+### Bug Fixes
+
+* fix 278 Grid header alignment is off ([09e6626](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/09e6626)), closes [#278](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/278)
+
+# [1.13.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.12.0...v1.13.0) (2020-03-20)
+
+
+### Bug Fixes
+
+* increase variable column with from 15 to 22 rem ([fe13715](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/fe13715))
+
+
+### Features
+
+* Dynamic variable column with and popover variable info ([22d5f69](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/22d5f69))
+
 # [1.12.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.11.0...v1.12.0) (2020-03-12)
 
 
