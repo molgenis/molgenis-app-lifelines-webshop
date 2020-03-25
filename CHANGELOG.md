@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.13.1...v1.14.0) (2020-03-25)
+
+
+### Features
+
+* Sort assesment labels alphabetically ([#280](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/280)) ([f9db13e](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/f9db13e)), closes [#7249](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/7249)
+
 ## [1.13.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.13.0...v1.13.1) (2020-03-20)
 
 
