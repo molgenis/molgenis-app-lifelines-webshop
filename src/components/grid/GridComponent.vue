@@ -78,7 +78,6 @@
                 />
               </th>
               <th
-                @click="openInfoDialog(rowIndex)"
                 class="variable-column"
                 ref="variable"
                 v-b-popover.hover.left.html="popupBody(rowIndex)"
