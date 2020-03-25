@@ -125,8 +125,8 @@ describe('ContentView.vue', () => {
   describe('When selectedSubselection is called', () => {
     let wrapper: any
     beforeEach(() => {
-      store.commit('treeSelected', 2)
-      store.commit('treeOpenSection', 5)
+      store.commit('updateTreeSelection', 2)
+      store.commit('updateTreeOpenSection', 5)
       wrapper = shallowMount(ContentView, { store, localVue })
     })
 
