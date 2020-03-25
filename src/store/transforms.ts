@@ -65,7 +65,7 @@ transforms.findZeroRowsAndCols = (grid:any) => {
     rows = transforms.helpers.findEmpty(grid)
     cols = transforms.helpers.findEmpty(transforms.helpers.transpose(grid))
   } else {
-    return { cols: [], rows: [] }
+    return { rows: [], cols: [] }
   }
   return { rows, cols }
 }
