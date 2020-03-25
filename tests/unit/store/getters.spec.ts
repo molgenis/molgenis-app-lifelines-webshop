@@ -389,6 +389,45 @@ describe('getters', () => {
     })
   })
 
+  describe('gridRows', () => {
+    it('return filtered grid results', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        hideZeroData: true,
+        gridVariables: [variable11, variable12],
+        variantCounts: [{ variantId: 1, count: 10 }, { variantId: 2, count: 100 }]
+      }
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        findZeroRowsAndCols: { rows: [0], cols: [] },
+        gridColumns: [ assessment1A, assessment2A ],
+        variants: [variant1, variant2, variant3]
+      }
+      expect(getters.gridRows(state, gettersParam)).toEqual([[10, 0]])
+    })
+  })
+
+  describe('gridColumns', () => {
+    it('return filtered gridColumns results', () => {
+      const state: ApplicationState = {
+        ...emptyState,
+        hideZeroData: true,
+        // @ts-ignore
+        facetFilter: { assessment: [1, 2] },
+        gridVariables: [variable11, variable12],
+        assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ],
+        variantCounts: [{ variantId: 1, count: 10 }, { variantId: 2, count: 100 }]
+      }
+      const gettersParam: Getters = {
+        ...emptyGetters,
+        findZeroRowsAndCols: { rows: [], cols: [1] },
+        gridColumns: [ assessment1A, assessment2A ],
+        variants: [variant1, variant2, variant3]
+      }
+      expect(getters.gridColumns(state, gettersParam)).toEqual([{ id: 1, name: '1A' }])
+    })
+  })
+
   describe('gridSelections', () => {
     it('computes grid selections', () => {
       const state: ApplicationState = {
