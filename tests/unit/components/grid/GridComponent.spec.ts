@@ -291,8 +291,8 @@ describe('GridComponent.vue', () => {
     let wrapper:any
 
     const propsData = {
-      grid: [[1]],
-      gridAssessments: [{ id: 10 }],
+      gridRows: [[1]],
+      gridColumns: [{ id: 10 }],
       gridVariables: [{
         name: 'a',
         id: 101,
@@ -310,7 +310,7 @@ describe('GridComponent.vue', () => {
         id: 101,
         subvariables: []
       }] })
-      wrapper.setProps({ grid: [[101]] })
+      wrapper.setProps({ gridRows: [[101]] })
       wrapper.vm.$nextTick(() => {
         expect(wrapper).toBeDefined()
         // 0px as jest dom has no width
