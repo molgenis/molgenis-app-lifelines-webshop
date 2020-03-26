@@ -35,7 +35,7 @@ jest.mock('@molgenis/molgenis-api-client', () => {
   }
 })
 
-jest.mock('axios', () => ({ post: jest.fn((url) => ({ data: 'pdfdata' })) }))
+jest.mock('axios')
 jest.mock('js-file-download', () => jest.fn(() => {}))
 
 describe('OrdersView.vue', () => {
