@@ -79,13 +79,19 @@
     >
 
       <template v-slot:cell(actions)="data">
-        <router-link class="btn btn-secondary ml-2" tag="button"
+        <router-link
+          class="btn btn-secondary ml-2"
+          tag="button"
+          v-b-popover.hover.top="$t('lifelines-webshop-orders-edit-btn-label')"
           v-if="data.item.state === 'Draft' || hasManagerRole"
           :to="`/shop/${data.item.orderNumber}`">
             <font-awesome-icon icon="edit" aria-label="edit"/>
         </router-link>
 
-        <button class="btn btn-secondary copy-btn ml-2" type="button"
+        <button
+        class="btn btn-secondary copy-btn ml-2"
+        type="button"
+        v-b-popover.hover.top="$t('lifelines-webshop-orders-copy-btn-label')"
           @click="handleCopyOrder(data.item.orderNumber)">
           <font-awesome-icon icon="copy" aria-label="copy"/>
         </button>
@@ -95,12 +101,16 @@
           :class="`btn-${classes.pdfLoadState[pdfLoadState[data.item.orderNumber]]}`"
           class="btn btn-secondary pdf-btn ml-2"
           type="button"
+          v-b-popover.hover.top="$t('lifelines-webshop-orders-pdf-btn-label')"
           @click="downloadPdf(data.item.orderNumber)">
           <font-awesome-icon v-if="pdfLoadState[data.item.orderNumber] === 'LOADING'" icon="spinner" spin />
           <font-awesome-icon v-else icon="file-pdf" aria-label="pdf" />
         </button>
 
-        <router-link class="btn btn-danger t-btn-order-delete ml-2" tag="button"
+        <router-link
+        class="btn btn-danger t-btn-order-delete ml-2"
+        tag="button"
+        v-b-popover.hover.top="$t('lifelines-webshop-orders-delete-btn-label')"
           v-if="data.item.state === 'Draft' || hasManagerRole"
           :to="{ name: 'orderDelete', params: {orderNumber: data.item.orderNumber}}">
           <font-awesome-icon icon="trash" aria-label="delete"/>
@@ -162,7 +172,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEdit, faDownload, faTrash, faCopy, faFilePdf } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { gridSelectionFromCart, successMessage } from '@/store/helpers'
-import SpinnerAnimation from '../components/animations/SpinnerAnimation.vue'
 import transforms from '@/store/transforms'
 import ConfirmationModal from '../components/ConfirmationModal.vue'
 import SearchComponent from '../components/search/SearchComponent.vue'

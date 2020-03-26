@@ -12,7 +12,7 @@ const translations = Object.keys(schema.en).map((id) => [
   id, id, field['namespace'], field['description'], schema.en[id], '', '', '', '', '', '', ''
 ])
 
-input = [
+const input = [
   ['id', 'msgid', 'namespace', 'description', 'en', 'nl', 'de', 'es', 'it', 'pt', 'fr', 'xx']
 ].concat(translations)
 

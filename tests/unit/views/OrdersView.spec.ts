@@ -35,7 +35,7 @@ jest.mock('@molgenis/molgenis-api-client', () => {
   }
 })
 
-jest.mock('axios', () => ({ post: jest.fn((url) => ({ data: 'pdfdata' })) }))
+jest.mock('axios')
 jest.mock('js-file-download', () => jest.fn(() => {}))
 
 describe('OrdersView.vue', () => {
@@ -67,6 +67,7 @@ describe('OrdersView.vue', () => {
 
   beforeEach(() => {
     localVue = createLocalVue()
+    localVue.directive('b-popover', { /* stub */ })
     localVue.filter('moment', function (value: string, format: string) { return moment(value).utc().format(format) })
     localVue.filter('i18n', (value: string) => `#${value}#`)
     localVue.use(Vuex)
