@@ -202,7 +202,11 @@ export default {
     }
 
     if (allCellsSelected) {
-      Vue.set(state.gridSelection, variableId, selectedRowCells.hidden)
+      if (selectedRowCells.hidden.length) {
+        Vue.set(state.gridSelection, variableId, selectedRowCells.hidden)
+      } else {
+        Vue.delete(state.gridSelection, variableId)
+      }
     } else {
       Vue.set(state.gridSelection, variableId, gridColumns.map((it) => it.id).concat(selectedRowCells.hidden))
     }
@@ -223,8 +227,13 @@ export default {
     if (allSelected) {
       state.gridVariables.forEach((variable:any) => {
         const hiddenSelectedRowCells = state.gridSelection[variable.id].filter((i:any) => !gridColumns.find((_i) => i === _i.id))
-        // Deselect all visible cells in the row; keep the hidden selected cells.
-        Vue.set(state.gridSelection, variable.id, hiddenSelectedRowCells)
+        // Deselect all visible cells in the row, but keep
+        // the hidden selected cells.
+        if (hiddenSelectedRowCells.length) {
+          Vue.set(state.gridSelection, variable.id, hiddenSelectedRowCells)
+        } else {
+          Vue.delete(state.gridSelection, variable.id)
+        }
       })
     } else {
       state.gridVariables.forEach((variable:any) => {
