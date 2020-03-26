@@ -67,6 +67,7 @@ describe('OrdersView.vue', () => {
 
   beforeEach(() => {
     localVue = createLocalVue()
+    localVue.directive('b-popover', { /* stub */ })
     localVue.filter('moment', function (value: string, format: string) { return moment(value).utc().format(format) })
     localVue.filter('i18n', (value: string) => `#${value}#`)
     localVue.use(Vuex)
