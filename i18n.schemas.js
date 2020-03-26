@@ -14,6 +14,7 @@ const en = {
   'lifelines-webshop-modal-delete-body': 'You are about to delete order {{order}}.',
   'lifelines-webshop-modal-state-header': 'Updating order status',
   'lifelines-webshop-modal-state-body': 'You are about to update order {{order}} to status "{{state}}".',
+  'lifelines-webshop-no-assessments-found': 'No assessments found...',
   'lifelines-webshop-state-all': 'All',
   'lifelines-webshop-state-approved': 'Approved',
   'lifelines-webshop-state-draft': 'Draft',

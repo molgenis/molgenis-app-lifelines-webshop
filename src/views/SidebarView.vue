@@ -192,11 +192,6 @@ export default Vue.extend({
         this.$store.commit('updateYearOfBirthRangefilter', this.cachedAgeState)
         this.cachedAgeState = tempState
       }
-    },
-    assessmentsActive (assessmentsActive, oldassessmentsActive) {
-      if (!assessmentsActive.length) {
-        this.$store.commit('assessmentsActive', this.assessments.map((i) => i.value))
-      }
     }
   },
   computed: {

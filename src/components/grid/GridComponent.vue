@@ -21,6 +21,7 @@
         </table>
 
         <div :class="{'space-holder':stickyTableHeader || !gridRows}"></div>
+
         <div class="table-holder">
           <loading
             :active="isLoading"
@@ -30,8 +31,11 @@
             background-color="var(--light)"
           ></loading>
 
+          <div class="empty-columns" v-if="gridRows && !gridColumns.length">
+            <h3 class="mg-header">{{$t('lifelines-webshop-no-assessments-found')}}</h3>
+          </div>
           <table
-            v-if="gridRows"
+            v-else-if="gridRows"
             ref="grid"
             class="grid-table"
             @click.stop="clickGridDelegate"
@@ -406,6 +410,14 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.empty-columns {
+  padding: 1rem 0;
+
+  .mg-header {
+    color: $gray-500;
+  }
+}
+
 .selected-variable div {
   pointer-events: none;
   position: relative;

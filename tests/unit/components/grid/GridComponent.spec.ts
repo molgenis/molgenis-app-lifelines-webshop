@@ -69,8 +69,8 @@ describe('GridComponent.vue', () => {
     beforeEach(() => {
       props = {
         gridRows: [[1, 2], [3, 4]],
-        gridAssessments: [],
-        gridColumns: [],
+        gridAssessments: [{ id: 'c1' }, { id: 'c2' }],
+        gridColumns: [{ id: 'c1' }, { id: 'c2' }],
         gridVariables: [{
           name: 'a',
           id: 101
