@@ -1,3 +1,10 @@
+## [1.14.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.14.1...v1.14.2) (2020-03-26)
+
+
+### Bug Fixes
+
+* Put back removed icon-button popover messages ([d9d2de4](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/d9d2de4)), closes [#284](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/284)
+
 ## [1.14.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.14.0...v1.14.1) (2020-03-25)
 
 
