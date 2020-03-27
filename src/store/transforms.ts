@@ -106,7 +106,7 @@ transforms.grid = (gridRows:VariableWithVariants[], gridColumns:any, variantCoun
   return grid
 }
 
-transforms.gridRows = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any, findZeroRowsAndCols:any, hideZeroData: boolean) => {
+transforms.gridRows = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any, findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
   let grid = transforms.grid(gridRows, gridColumns, variantCounts)
   if (grid && hideZeroData) {
     grid = grid.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
@@ -126,7 +126,7 @@ transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessme
   return gridAssessments
 }
 
-transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols:any, hideZeroData: boolean) => {
+transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
   let results = transforms.gridAssessments(variants, assessments, filterAssessments)
   if (results && hideZeroData) {
     results = results.filter((_:any, index:number) => !findZeroRowsAndCols.cols.includes(index))
@@ -140,6 +140,14 @@ transforms.gridSelections = (gridAssessments:any, gridSelection:any, gridVariabl
     const variableSelections = gridSelection[variable.id]
     return gridAssessments.map((assessment:any) => !!variableSelections && variableSelections.includes(assessment.id))
   })
+}
+
+transforms.gridSelectionsFiltered = (gridAssessments:any, gridSelection:any, gridVariables:VariableWithVariants[], findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
+  let selections = transforms.gridSelections(gridAssessments, gridSelection, gridVariables)
+  if (selections && hideZeroData) {
+    selections = selections.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
+  }
+  return selections
 }
 
 transforms.sections = (apiItems:any) => {
@@ -199,6 +207,13 @@ transforms.variables = (variables:[]) => {
         }, {})
 
   return variableMap
+}
+
+transforms.gridVariablesFiltered = (gridVariables:any, findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
+  if (gridVariables && hideZeroData) {
+    gridVariables = gridVariables.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
+  }
+  return gridVariables
 }
 
 transforms.variants = (gridVariables:any): Variant[] => {

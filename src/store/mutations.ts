@@ -149,6 +149,7 @@ export default {
   },
   toggleGridColumn (state: ApplicationState, assessmentId: number) {
     if (state.gridVariables === null) { return }
+
     // Check if all variables(rows) for this column are already selected.
     const columnSelected = state.gridVariables.every((variable) => {
       return state.gridSelection.hasOwnProperty(variable.id) && state.gridSelection[variable.id].includes(assessmentId)
@@ -213,10 +214,16 @@ export default {
   },
   toggleAll (state:any) {
     const variants = transforms.variants(state.gridVariables)
-    const gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, state.facetFilter.assessment, true)
-
+    let gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, state.facetFilter.assessment, true)
+    let filteredGridVariables = state.gridVariables
+    const toHide = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
+    // Exclude hidden rows and columns from the selection.
+    if (state.hideZeroData) {
+      gridColumns = gridColumns.filter((_:any, index:number) => !toHide.cols.includes(index))
+      filteredGridVariables = state.gridVariables.filter((_:any, index:number) => !toHide.rows.includes(index))
+    }
     // For each variable all assessments are selected
-    const allSelected = state.gridVariables.every((variable:any) => {
+    const allSelected = filteredGridVariables.every((variable:any) => {
       if (state.gridSelection.hasOwnProperty(variable.id) && state.gridSelection[variable.id].length) {
         const visibleSelectedRowCells = state.gridSelection[variable.id].filter((i:any) => gridColumns.find((_i) => i === _i.id))
         return visibleSelectedRowCells.length === gridColumns.length
@@ -225,18 +232,13 @@ export default {
     })
 
     if (allSelected) {
-      state.gridVariables.forEach((variable:any) => {
+      filteredGridVariables.forEach((variable:any) => {
         const hiddenSelectedRowCells = state.gridSelection[variable.id].filter((i:any) => !gridColumns.find((_i) => i === _i.id))
-        // Deselect all visible cells in the row, but keep
-        // the hidden selected cells.
-        if (hiddenSelectedRowCells.length) {
-          Vue.set(state.gridSelection, variable.id, hiddenSelectedRowCells)
-        } else {
-          Vue.delete(state.gridSelection, variable.id)
-        }
+        // Deselect all visible cells in the row; keep the hidden selected cells.
+        Vue.set(state.gridSelection, variable.id, hiddenSelectedRowCells)
       })
     } else {
-      state.gridVariables.forEach((variable:any) => {
+      filteredGridVariables.forEach((variable:any) => {
         let hiddenSelectedRowCells:any = []
         if (state.gridSelection[variable.id]) {
           hiddenSelectedRowCells = state.gridSelection[variable.id].filter((i:any) => !gridColumns.find((_i) => i === _i.id))
