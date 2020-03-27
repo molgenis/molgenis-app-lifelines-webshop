@@ -1,6 +1,5 @@
 import Assessment from '@/types/Assessment'
 import CartSection from '@/types/CartSection'
-import Filter from '@/types/Filter'
 import GridSelection from '@/types/GridSelection'
 import groupBy from 'lodash.groupby'
 import property from 'lodash.property'
@@ -107,6 +106,14 @@ transforms.grid = (gridRows:VariableWithVariants[], gridColumns:any, variantCoun
   return grid
 }
 
+transforms.gridRows = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any, findZeroRowsAndCols:any, hideZeroData: boolean) => {
+  let grid = transforms.grid(gridRows, gridColumns, variantCounts)
+  if (grid && hideZeroData) {
+    grid = grid.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
+  }
+  return grid
+}
+
 transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null = null) => {
   const assessmentIds: number[] = variants.reduce((acc: number[], variant: Variant) => acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
   const gridAssessments = Object.values(assessments).filter((assessment:any) => assessmentIds.includes(assessment.id))
@@ -117,6 +124,14 @@ transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessme
   }
 
   return gridAssessments
+}
+
+transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols:any, hideZeroData: boolean) => {
+  let results = transforms.gridAssessments(variants, assessments, filterAssessments)
+  if (results && hideZeroData) {
+    results = results.filter((_:any, index:number) => !findZeroRowsAndCols.cols.includes(index))
+  }
+  return results
 }
 
 transforms.gridSelections = (gridAssessments:any, gridSelection:any, gridVariables:VariableWithVariants[]) => {

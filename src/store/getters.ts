@@ -102,39 +102,26 @@ export default {
   grid: (state: ApplicationState, getters: Getters) => {
     return transforms.grid(state.gridVariables, getters.gridAssessments, state.variantCounts)
   },
-  gridColumns: (state: ApplicationState, getters: Getters) => {
-    const toHide = getters.findZeroRowsAndCols
-    const assessmentFilter = state.facetFilter.assessment
-    let assessments = transforms.gridAssessments(getters.variants, state.assessments, assessmentFilter)
-    if (assessments && state.hideZeroData) {
-      assessments = assessments.filter((_:any, index:number) => !toHide.cols.includes(index))
-    }
-    return assessments
-  },
   gridRows: (state: ApplicationState, getters: Getters) => {
-    const toHide = getters.findZeroRowsAndCols
-    let grid = transforms.grid(state.gridVariables, getters.gridColumns, state.variantCounts)
-    if (grid && state.hideZeroData) {
-      grid = grid.filter((_:any, index:number) => !toHide.rows.includes(index))
-    }
-    return grid
-  },
-  gridVariables: (state: ApplicationState, getters: Getters) => {
-    let variables = state.gridVariables
-    const toHide = getters.findZeroRowsAndCols
-    if (variables && state.hideZeroData) {
-      variables = variables.filter((_:any, index:number) => !toHide.rows.includes(index))
-    }
-    return variables
+    return transforms.gridRows(state.gridVariables, getters.gridColumns, state.variantCounts, getters.findZeroRowsAndCols, state.hideZeroData)
   },
   gridAssessments: (state: ApplicationState, getters: Getters) => {
     return transforms.gridAssessments(getters.variants, state.assessments, null)
   },
+  gridColumns: (state: ApplicationState, getters: Getters) => {
+    return transforms.gridColumns(getters.variants, state.assessments, state.facetFilter.assessment, getters.findZeroRowsAndCols, state.hideZeroData)
+  },
+  gridVariables: (state: ApplicationState, getters: Getters) => {
+    let variables = state.gridVariables
+    if (variables && state.hideZeroData) {
+      variables = variables.filter((_:any, index:number) => !getters.findZeroRowsAndCols.rows.includes(index))
+    }
+    return variables
+  },
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null => {
     let selections = transforms.gridSelections(getters.gridColumns, state.gridSelection, state.gridVariables)
-    const toHide = getters.findZeroRowsAndCols
     if (selections && state.hideZeroData) {
-      selections = selections.filter((_:any, index:number) => !toHide.rows.includes(index))
+      selections = selections.filter((_:any, index:number) => !getters.findZeroRowsAndCols.rows.includes(index))
     }
     return selections
   },
