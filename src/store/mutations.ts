@@ -149,15 +149,25 @@ export default {
   },
   toggleGridColumn (state: ApplicationState, assessmentId: number) {
     if (state.gridVariables === null) { return }
+    let filteredGridVariables = state.gridVariables
+
+    if (state.hideZeroData) {
+      const variants = transforms.variants(state.gridVariables)
+      const gridColumns = transforms.gridColumns(variants, state.assessments)
+      const grid = transforms.grid(state.gridVariables, gridColumns, state.variantCounts)
+      const rowColFilter = transforms.findZeroRowsAndCols(grid)
+
+      filteredGridVariables = state.gridVariables.filter((_:any, index:number) => !rowColFilter.rows.includes(index))
+    }
 
     // Check if all variables(rows) for this column are already selected.
-    const columnSelected = state.gridVariables.every((variable) => {
+    const columnSelected = filteredGridVariables.every((variable) => {
       return state.gridSelection.hasOwnProperty(variable.id) && state.gridSelection[variable.id].includes(assessmentId)
     })
 
     if (columnSelected) {
-      // Deselect all variables in this column.
-      state.gridVariables.forEach((variable) => {
+      // Deselect all visible variables in this column.
+      filteredGridVariables.forEach((variable) => {
         const assessmentIndex = state.gridSelection[variable.id].indexOf(assessmentId)
         if (assessmentIndex >= 0) {
           state.gridSelection[variable.id].splice(assessmentIndex, 1)
@@ -167,7 +177,7 @@ export default {
         }
       })
     } else {
-      state.gridVariables.forEach((variable) => {
+      filteredGridVariables.forEach((variable) => {
         if (!state.gridSelection[variable.id]) {
           Vue.set(state.gridSelection, variable.id, [assessmentId])
         } else {
@@ -185,7 +195,6 @@ export default {
     const variants = transforms.variants(state.gridVariables)
     const assessmentFilter = state.facetFilter.assessment
     const gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, assessmentFilter, true)
-    const toHide = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
 
     const gridAssessments = transforms.gridAssessments(variants, state.assessments, state.facetFilter, false)
     const gridSelections:any = transforms.gridSelections(gridAssessments, state.gridSelection, state.gridVariables)
@@ -212,7 +221,8 @@ export default {
     } else {
       let toSelect = gridColumns.map((it) => it.id).concat(selectedRowCells.hidden)
       if (state.hideZeroData) {
-        toSelect = toSelect.filter((_:any, index:number) => !toHide.cols.includes(index))
+        const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
+        toSelect = toSelect.filter((_:any, index:number) => !rowColFilter.cols.includes(index))
       }
       Vue.set(state.gridSelection, variableId, toSelect)
     }
@@ -221,11 +231,11 @@ export default {
     const variants = transforms.variants(state.gridVariables)
     let gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, state.facetFilter.assessment, true)
     let filteredGridVariables = state.gridVariables
-    const toHide = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
+    const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
     // Exclude hidden rows and columns from the selection.
     if (state.hideZeroData) {
-      gridColumns = gridColumns.filter((_:any, index:number) => !toHide.cols.includes(index))
-      filteredGridVariables = state.gridVariables.filter((_:any, index:number) => !toHide.rows.includes(index))
+      gridColumns = gridColumns.filter((_:any, index:number) => !rowColFilter.cols.includes(index))
+      filteredGridVariables = state.gridVariables.filter((_:any, index:number) => !rowColFilter.rows.includes(index))
     }
     // For each variable all assessments are selected
     const allSelected = filteredGridVariables.every((variable:any) => {
