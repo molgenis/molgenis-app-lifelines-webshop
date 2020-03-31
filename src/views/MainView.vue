@@ -37,10 +37,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['loading']),
-    selectedVariableIds () {
-      return Object.keys(this.$store.state.gridSelection).length
-    }
+    ...mapGetters(['selectedVariableIds']),
+    ...mapState(['loading'])
   },
   methods: {
     ...mapMutations(['setLoading']),
