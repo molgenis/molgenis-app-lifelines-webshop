@@ -194,8 +194,8 @@ export default {
     }
     return []
   },
-  cartTree: (state: ApplicationState): CartSection[] => {
-    return transforms.cartTree(state.gridSelection, state.treeStructure, state.sections, state.subSectionList, state.variables)
+  cartTree: (state: ApplicationState, getters: Getters): CartSection[] => {
+    return transforms.cartTree(getters.gridSelectionFiltered, state.treeStructure, state.sections, state.subSectionList, state.variables)
   },
   isGridLoading: (state: ApplicationState): boolean => {
     return (state.gridVariables === null || state.variantCounts === null) && state.treeSelected !== -1

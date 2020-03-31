@@ -59,7 +59,7 @@
                     <h5 class="h6">{{subsection.name}}</h5>
                     <ul>
                       <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="subvariable-line" :class="variableSetClass(variable)">
-                        <span>{{variable.label||variable.name}} {{ variableAssesments[variable.id] }}</span>
+                        <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
                       </li>
                     </ul>
                   </div>
@@ -185,24 +185,19 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['cartTree', 'isSignedIn']),
-    ...mapState(['gridSelection', 'variables', 'assessments']),
-    selectedVariableIds () {
-      return Object.keys(this.gridSelection)
-    },
-    variableAssesments () {
-      let variableAssesmentsStings = {}
-      for (const [variableId, assessmentIds] of Object.entries(
-        this.gridSelection
-      )) {
+    ...mapGetters(['cartTree', 'gridSelectionFiltered', 'isSignedIn', 'selectedVariableIds']),
+    ...mapState(['variables', 'assessments']),
+    variableAssessments () {
+      let variableAssessmentStrings = {}
+      for (const [variableId, assessmentIds] of Object.entries(this.gridSelectionFiltered)) {
         const assessmentNames = assessmentIds
           .map(assessmentId => this.assessments[assessmentId].name)
           .sort()
-        variableAssesmentsStings[variableId] =
+        variableAssessmentStrings[variableId] =
           '( ' + assessmentNames.join(', ') + ' )'
       }
 
-      return variableAssesmentsStings
+      return variableAssessmentStrings
     },
     loading () {
       return !(
