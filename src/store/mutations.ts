@@ -235,7 +235,11 @@ export default {
       filteredGridVariables.forEach((variable:any) => {
         const hiddenSelectedRowCells = state.gridSelection[variable.id].filter((i:any) => !gridColumns.find((_i) => i === _i.id))
         // Deselect all visible cells in the row; keep the hidden selected cells.
-        Vue.set(state.gridSelection, variable.id, hiddenSelectedRowCells)
+        if (hiddenSelectedRowCells.length) {
+          Vue.set(state.gridSelection, variable.id, hiddenSelectedRowCells)
+        } else {
+          Vue.delete(state.gridSelection, variable.id)
+        }
       })
     } else {
       filteredGridVariables.forEach((variable:any) => {
