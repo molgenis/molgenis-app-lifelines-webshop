@@ -185,6 +185,7 @@ export default {
     const variants = transforms.variants(state.gridVariables)
     const assessmentFilter = state.facetFilter.assessment
     const gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, assessmentFilter, true)
+    const toHide = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
 
     const gridAssessments = transforms.gridAssessments(variants, state.assessments, state.facetFilter, false)
     const gridSelections:any = transforms.gridSelections(gridAssessments, state.gridSelection, state.gridVariables)
@@ -209,7 +210,11 @@ export default {
         Vue.delete(state.gridSelection, variableId)
       }
     } else {
-      Vue.set(state.gridSelection, variableId, gridColumns.map((it) => it.id).concat(selectedRowCells.hidden))
+      let toSelect = gridColumns.map((it) => it.id).concat(selectedRowCells.hidden)
+      if (state.hideZeroData) {
+        toSelect = toSelect.filter((_:any, index:number) => !toHide.cols.includes(index))
+      }
+      Vue.set(state.gridSelection, variableId, toSelect)
     }
   },
   toggleAll (state:any) {
