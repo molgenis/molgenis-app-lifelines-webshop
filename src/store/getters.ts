@@ -118,20 +118,44 @@ export default {
     }
     return variables
   },
+  /**
+   * This is gridSelection with applied zero row/col filter
+   * active assessment filtering. Useful to count the number
+   * of variables when filtering is active.
+   */
   gridSelectionFiltered: (state: ApplicationState, getters: Getters) => {
-    if (!state.hideZeroData) {
-      return state.gridSelection
+    const assessmentFilter = state.facetFilter.assessment
+    const emptyRowsColsFilter = getters.findZeroRowsAndCols
+
+    // Start with all assessments (columns).
+    let assessments = transforms.gridColumns(getters.variants, state.assessments, assessmentFilter)
+
+    // Filter out zero-assessments.
+    if (state.hideZeroData) {
+      let emptyAssessmentIds:number[] = []
+      emptyAssessmentIds = emptyRowsColsFilter.cols.map((i) => assessments[i].id)
+
+      assessments = assessments.filter((assessment:any) => !emptyAssessmentIds.includes(assessment.id))
     }
 
-    const gridColumns = transforms.gridColumns(getters.variants, state.assessments, state.facetFilter.assessment)
-    const zeros = getters.findZeroRowsAndCols
-    const zeroAssessments = zeros.cols.map((i) => gridColumns[i].id)
+    // Filter out deselected filter assessments.
+    assessments = assessments.filter((assessment:any) => assessmentFilter.includes(assessment.id))
 
+    const assessmentIds = assessments.map((assessment:any) => assessment.id)
     const selection:any = {}
-    Object.keys(state.gridSelection).forEach((variableId:any, rowNr) => {
-      const assessments = state.gridSelection[variableId].filter((assessmentId) => !zeroAssessments.includes(assessmentId))
-      if (!zeros.rows.includes(rowNr) && assessments.length) {
-        selection[variableId] = assessments
+
+    Object.keys(state.gridSelection).forEach((variableId:any) => {
+      // Filter columns
+      const variableAssessments = state.gridSelection[variableId].filter((assessmentId) => assessmentIds.includes(assessmentId))
+      // @ts-ignore
+      const variableIndex = state.gridVariables.findIndex((i) => i.id === Number(variableId))
+
+      if (state.hideZeroData) {
+        if (!emptyRowsColsFilter.rows.includes(variableIndex) && variableAssessments.length) {
+          selection[variableId] = variableAssessments
+        }
+      } else if (variableAssessments.length) {
+        selection[variableId] = variableAssessments
       }
     })
 
@@ -143,6 +167,9 @@ export default {
       selections = selections.filter((_:any, index:number) => !getters.findZeroRowsAndCols.rows.includes(index))
     }
     return selections
+  },
+  gridSelectionsFiltered: (state: ApplicationState, getters: Getters) => {
+    return transforms.gridSelectionsFiltered(getters.gridColumns, state.gridSelection, state.gridVariables)
   },
   findZeroRowsAndCols: (state: ApplicationState, getters: Getters) => {
     return transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, getters.gridAssessments, state.variantCounts))
