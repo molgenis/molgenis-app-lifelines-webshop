@@ -147,15 +147,16 @@ export default {
     Object.keys(state.gridSelection).forEach((variableId:any) => {
       // Filter columns
       const variableAssessments = state.gridSelection[variableId].filter((assessmentId) => assessmentIds.includes(assessmentId))
-      // @ts-ignore
-      const variableIndex = state.gridVariables.findIndex((i) => i.id === Number(variableId))
+      if (state.gridVariables) {
+        const variableIndex = state.gridVariables.findIndex((i) => i.id === Number(variableId))
 
-      if (state.hideZeroData) {
-        if (!emptyRowsColsFilter.rows.includes(variableIndex) && variableAssessments.length) {
+        if (state.hideZeroData) {
+          if (!emptyRowsColsFilter.rows.includes(variableIndex) && variableAssessments.length) {
+            selection[variableId] = variableAssessments
+          }
+        } else if (variableAssessments.length) {
           selection[variableId] = variableAssessments
         }
-      } else if (variableAssessments.length) {
-        selection[variableId] = variableAssessments
       }
     })
 
