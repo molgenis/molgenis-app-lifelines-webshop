@@ -129,7 +129,20 @@ transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessme
 transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
   let results = transforms.gridAssessments(variants, assessments, filterAssessments)
   if (results && hideZeroData) {
-    results = results.filter((_:any, index:number) => !findZeroRowsAndCols.cols.includes(index))
+    const assessmentsInOrder = Object.keys(assessments)
+    // dont filter out rows that are disabled
+    results = results.filter((_:any, index:number) => {
+      if (assessmentsInOrder.length > index) {
+        const id = assessmentsInOrder[index]
+        // @ts-ignore
+        if (filterAssessments && filterAssessments.includes(parseInt(id))) {
+          return !findZeroRowsAndCols.cols.includes(index)
+        } else {
+          return true
+        }
+      }
+      return false
+    })
   }
   return results
 }
