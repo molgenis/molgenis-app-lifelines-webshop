@@ -496,7 +496,7 @@ describe('mutations', () => {
     it('removes if all already selected', () => {
       Object.assign(state, { gridSelection: { 100: [200, 201, 202], 101: [200] } })
       mutations.toggleGridRow(state, 100)
-      expect(state.gridSelection).toEqual({ 100: [], 101: [200] })
+      expect(state.gridSelection).toEqual({ 101: [200] })
     })
 
     it('selects all if one already selected', () => {
@@ -559,7 +559,9 @@ describe('mutations', () => {
         },
         facetFilter: { assessment: [200, 201, 202] },
         gridVariables,
-        treeSelected: -1
+        treeSelected: -1,
+        variantCounts: [],
+        hideZeroData: false
       }
     })
 
@@ -586,7 +588,7 @@ describe('mutations', () => {
       })
 
       mutations.toggleAll(state)
-      expect(state.gridSelection).toEqual({ '100': [], '101': [], '102': [] })
+      expect(state.gridSelection).toEqual({ })
     })
 
     it('selects all if one already selected', () => {
