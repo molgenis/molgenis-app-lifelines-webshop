@@ -1,5 +1,6 @@
 import Assessment from '@/types/Assessment'
 import GridCell from '@/types/GridCell'
+import GridSelection from '@/types/GridSelection'
 import { TreeNode } from './TreeNode'
 import Variant from './Variant'
 
@@ -12,6 +13,7 @@ export default interface Getters {
   gridActive: number[][]
   gridAssessments: Assessment[]
   gridColumns: Assessment[]
+  gridSelectionFiltered: GridSelection
   gridSelections: boolean[][]
   treeStructure: TreeNode[]
   searchTermQuery: string | null

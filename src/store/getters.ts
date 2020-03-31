@@ -118,6 +118,25 @@ export default {
     }
     return variables
   },
+  gridSelectionFiltered: (state: ApplicationState, getters: Getters) => {
+    if (!state.hideZeroData) {
+      return state.gridSelection
+    }
+
+    const gridColumns = transforms.gridColumns(getters.variants, state.assessments, state.facetFilter.assessment)
+    const zeros = getters.findZeroRowsAndCols
+    const zeroAssessments = zeros.cols.map((i) => gridColumns[i].id)
+
+    const selection:any = {}
+    Object.keys(state.gridSelection).forEach((variableId:any, rowNr) => {
+      const assessments = state.gridSelection[variableId].filter((assessmentId) => !zeroAssessments.includes(assessmentId))
+      if (!zeros.rows.includes(rowNr) && assessments.length) {
+        selection[variableId] = assessments
+      }
+    })
+
+    return selection
+  },
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null => {
     let selections = transforms.gridSelections(getters.gridColumns, state.gridSelection, state.gridVariables)
     if (selections && state.hideZeroData) {
@@ -132,6 +151,9 @@ export default {
     getters.gridSelections.reduce((total: number, item: boolean[]) => {
       return total + item.filter(Boolean).length
     }, 0),
+  selectedVariableIds: (state: ApplicationState, getters: Getters) => {
+    return Object.keys(getters.gridSelectionFiltered).length
+  },
   treeStructure: (state: ApplicationState, getters: Getters) => {
     const loadedSection: boolean = Object.keys(state.sections).length > 0
     const loadedSubSection: boolean = state.subSectionList.length > 0
