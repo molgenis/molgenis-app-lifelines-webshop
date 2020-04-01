@@ -525,11 +525,13 @@ th {
   }
 
   &.hover-all-cells {
-    td, th:not(:nth-child(1)):not(:nth-child(2)){
+    td,
+    th:not(:nth-child(1)):not(:nth-child(2)) {
       background-color: $light;
     }
-    tr:first-child{
-      th:not(:nth-child(1)):not(:nth-child(2)){
+
+    tr:first-child {
+      th:not(:nth-child(1)):not(:nth-child(2)) {
         background-color: $light;
       }
     }
