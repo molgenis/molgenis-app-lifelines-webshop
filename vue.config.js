@@ -112,27 +112,29 @@ module.exports = {
       }
     },
     before: function (app, server) {
-      const orders = require('./tests/e2e/mocks/orders.js')
-
       app.get('/api/v2/i18n/lifelines-webshop/en', function (req, res) {
         res.json(i18n.en)
       })
       app.get('/api/v2/i18n/lifelines-webshop', function (req, res) {
         res.json(i18n.en)
       })
-      app.get('/api/v2/i18n/ui-form/en', function (req, res) {
-        res.json(i18n.en)
-      })
-      app.get('/api/v2/i18n/ui-form', function (req, res) {
-        res.json(i18n.en)
-      })
-      app.get('/api/v2/lifelines_order', function (req, res) {
-        res.json(orders)
-      })
 
       // /api/v2/lifelines_order?num=10&start=0&sort=creationDate:desc
       // E2E tests on Jenkins require this mock response.
       if (process.env.NODE_ENV !== 'development') {
+        app.get('/api/v2/i18n/ui-form/en', function (req, res) {
+          res.json(i18n.en)
+        })
+        app.get('/api/v2/i18n/ui-form', function (req, res) {
+          res.json(i18n.en)
+        })
+
+        const orders = require('./tests/e2e/mocks/orders.js')
+
+        app.get('/api/v2/lifelines_order', function (req, res) {
+          res.json(orders)
+        })
+
         app.get('/app-ui-context', function (req, res) {
           res.json(require('./tests/e2e/resources/uiContext.js'))
         })
