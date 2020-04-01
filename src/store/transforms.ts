@@ -82,7 +82,7 @@ transforms.grid = (gridRows:VariableWithVariants[], gridColumns:any, variantCoun
       // Get all counts for this variant.
       variants.forEach((variant: Variant) => {
         // @ts-ignore
-        const variantCount = variantCounts.find((variantCount) => variant.id === variantCount.variantId)
+        const variantCount = variantCounts.find((variantCount:any) => variant.id === variantCount.variantId)
         if (variantCount) {
           _variantCounts.push(variantCount.count)
         } else {

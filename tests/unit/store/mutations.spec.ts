@@ -483,9 +483,14 @@ describe('mutations', () => {
           201: { id: 201, name: 'a2' },
           202: { id: 202, name: 'a3' }
         },
-        facetFilter: { assessment: [200, 201, 202] },
+        facetFilter: { assessment: [200, 201, 202], hideZeroData: true },
         gridVariables,
-        treeSelected: -1
+        treeSelected: -1,
+        variantCounts: [
+          { variantId: 300, count: 10 },
+          { variantId: 301, count: 10 },
+          { variantId: 302, count: 10 }
+        ]
       }
     })
 
