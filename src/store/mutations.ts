@@ -194,7 +194,10 @@ export default {
 
     const variants = transforms.variants(state.gridVariables)
     const assessmentFilter = state.facetFilter.assessment
-    const gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, assessmentFilter, true)
+
+    let gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, assessmentFilter, true)
+    const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
+    const filteredGridColumns = transforms.gridColumns(variants, state.assessments, assessmentFilter, rowColFilter, state.facetFilter.hideZeroData)
 
     const gridAssessments = transforms.gridAssessments(variants, state.assessments, state.facetFilter, false)
     const gridSelections:any = transforms.gridSelections(gridAssessments, state.gridSelection, state.gridVariables)
@@ -203,13 +206,17 @@ export default {
     const rowSelection = gridSelections[gridRowIndex]
 
     let allCellsSelected = false
+
     if (rowSelection) {
-      allCellsSelected = rowSelection.every((i:any) => i)
+      allCellsSelected = rowSelection.every((i:boolean, index: number) => {
+        if (state.facetFilter.hideZeroData && rowColFilter.cols.includes(index)) { return true }
+        return i
+      })
     }
 
     if (state.gridSelection[variableId]) {
-      selectedRowCells.hidden = state.gridSelection[variableId].filter((i:any) => !gridColumns.find((_i) => i === _i.id))
-      selectedRowCells.visible = state.gridSelection[variableId].filter((i:any) => gridColumns.find((_i) => i === _i.id))
+      selectedRowCells.hidden = state.gridSelection[variableId].filter((i:any) => !filteredGridColumns.find((_i:any) => i === _i.id))
+      selectedRowCells.visible = state.gridSelection[variableId].filter((i:any) => filteredGridColumns.find((_i:any) => i === _i.id))
     }
 
     if (allCellsSelected) {
@@ -221,7 +228,6 @@ export default {
     } else {
       let toSelect = gridColumns.map((it) => it.id).concat(selectedRowCells.hidden)
       if (state.facetFilter.hideZeroData) {
-        const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
         toSelect = toSelect.filter((_:any, index:number) => !rowColFilter.cols.includes(index))
       }
       Vue.set(state.gridSelection, variableId, toSelect)

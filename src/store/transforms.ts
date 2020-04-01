@@ -156,14 +156,6 @@ transforms.gridSelections = (gridAssessments:any, gridSelection:any, gridVariabl
   })
 }
 
-transforms.gridSelectionsFiltered = (gridAssessments:any, gridSelection:any, gridVariables:VariableWithVariants[], findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
-  let selections = transforms.gridSelections(gridAssessments, gridSelection, gridVariables)
-  if (selections && hideZeroData) {
-    selections = selections.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
-  }
-  return selections
-}
-
 transforms.sections = (apiItems:any) => {
   return apiItems.reduce((sections: { [key: number]: Section }, item: any) => {
     sections[item.id] = item
