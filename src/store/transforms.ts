@@ -1,11 +1,13 @@
-import { gridSelectionFromCart } from '@/store/helpers'
-import CartSection from '@/types/CartSection'
 import Assessment from '@/types/Assessment'
-import { Section } from '@/types/Section.ts'
-import { TreeParent } from '@/types/Tree'
-import { Variable } from '@/types/Variable'
+import CartSection from '@/types/CartSection'
+import GridSelection from '@/types/GridSelection'
 import groupBy from 'lodash.groupby'
 import property from 'lodash.property'
+import { Section } from '@/types/Section.ts'
+import { TreeParent } from '@/types/Tree'
+import { VariableWithVariants, Variable } from '@/types/Variable'
+import Variant from '@/types/Variant'
+import { RowColSet } from '@/types/Getters'
 
 const transforms:any = {}
 
@@ -17,7 +19,7 @@ transforms.assessments = (apiItems:any) => {
   return assessments
 }
 
-transforms.cartTree = (gridSelection:any, treeStructure:any, sections:any, subSectionList:any, variables:{ [key: number]: Variable }): CartSection[] => {
+transforms.cartTree = (gridSelection:GridSelection, treeStructure:any, sections:TreeParent[], subSectionList:any, variables:{ [key: number]: Variable }): CartSection[] => {
   const selectedVariableIds: number[] = Object.keys(gridSelection) as unknown as number[]
   const selectedVariables: Variable[] = selectedVariableIds
     .filter((id: number) => variables.hasOwnProperty(id))
@@ -39,6 +41,119 @@ transforms.cartTree = (gridSelection:any, treeStructure:any, sections:any, subSe
 
     return { ...sections[section.key], subsections }
   }).filter((section:any) => section.subsections.length > 0)
+}
+
+transforms.helpers = {
+  findEmpty: (grid: Array<Array<number>>) => {
+    return grid.reduce((previous, current, index) => {
+      if (current.every((value:number) => value === 0)) {
+        previous.push(index)
+      }
+      return previous
+    }, [])
+  },
+  transpose: (matrix: Array<Array<number>>) => {
+    return (matrix && matrix.length && matrix[0].map && matrix[0].map(function (_, c) { return matrix.map(function (r) { return r[c] }) })) || []
+  }
+}
+
+transforms.findZeroRowsAndCols = (grid:any) => {
+  let rows: number[] = []
+  let cols: number[] = []
+
+  if (grid) {
+    rows = transforms.helpers.findEmpty(grid)
+    cols = transforms.helpers.findEmpty(transforms.helpers.transpose(grid))
+  } else {
+    return { rows: [], cols: [] }
+  }
+  return { rows, cols }
+}
+
+transforms.grid = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any) => {
+  if (gridRows === null) { return null }
+  let grid = gridRows.map((variable: VariableWithVariants) => {
+    const _assessments = gridColumns.map((assessment: Assessment) => {
+      if (variantCounts === null) { return NaN }
+
+      const variants: Variant[] = variable.variants.filter((variant: Variant) => variant.assessmentId === assessment.id)
+      const _variantCounts: number[] = []
+
+      // Get all counts for this variant.
+      variants.forEach((variant: Variant) => {
+        // @ts-ignore
+        const variantCount = variantCounts.find((variantCount:any) => variant.id === variantCount.variantId)
+        if (variantCount) {
+          _variantCounts.push(variantCount.count)
+        } else {
+          _variantCounts.push(0)
+        }
+      })
+
+      if (_variantCounts.every((value) => value === 0)) {
+        return 0
+      }
+      if (_variantCounts.every((value) => value <= 0)) { return -1 } else {
+        // Filter out any below threshold.
+        const positiveVariantCounts = _variantCounts.filter((value) => value >= 0)
+        // Sum it.
+        return positiveVariantCounts.reduce((sum: number, nextValue: number) => sum + nextValue)
+      }
+    })
+
+    return _assessments
+  })
+
+  return grid
+}
+
+transforms.gridRows = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any, findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
+  let grid = transforms.grid(gridRows, gridColumns, variantCounts)
+  if (grid && hideZeroData) {
+    grid = grid.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
+  }
+  return grid
+}
+
+transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null = null) => {
+  const assessmentIds: number[] = variants.reduce((acc: number[], variant: Variant) => acc.includes(variant.assessmentId) ? acc : [...acc, variant.assessmentId], [])
+  const gridAssessments = Object.values(assessments).filter((assessment:any) => assessmentIds.includes(assessment.id))
+
+  if (Array.isArray(filterAssessments)) {
+    // @ts-ignore
+    return gridAssessments.filter((i:any) => filterAssessments.includes(i.id))
+  }
+
+  return gridAssessments
+}
+
+transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
+  let results = transforms.gridAssessments(variants, assessments, filterAssessments)
+  if (results && hideZeroData) {
+    const assessmentsInOrder = Object.keys(assessments)
+    // dont filter out rows that are disabled
+    results = results.filter((_:any, index:number) => {
+      if (assessmentsInOrder.length > index) {
+        const id = assessmentsInOrder[index]
+        // @ts-ignore
+        if (filterAssessments && filterAssessments.includes(parseInt(id))) {
+          return !findZeroRowsAndCols.cols.includes(index)
+        } else {
+          return true
+        }
+      }
+      return false
+    })
+  }
+  return results
+}
+
+transforms.gridSelections = (gridAssessments:any, gridSelection:any, gridVariables:VariableWithVariants[]) => {
+  if (gridVariables === null) { return null }
+  return gridVariables.map((variable:any) => {
+    const variableSelections = gridSelection[variable.id]
+    return gridAssessments.map((assessment:any) => !!variableSelections && variableSelections.includes(assessment.id))
+  })
 }
 
 transforms.sections = (apiItems:any) => {
@@ -98,6 +213,27 @@ transforms.variables = (variables:[]) => {
         }, {})
 
   return variableMap
+}
+
+transforms.gridVariablesFiltered = (gridVariables:any, findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
+  if (gridVariables && hideZeroData) {
+    gridVariables = gridVariables.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
+  }
+  return gridVariables
+}
+
+transforms.variants = (gridVariables:any): Variant[] => {
+  if (gridVariables === null) { return [] }
+
+  return gridVariables.reduce((result: Variant[], variable: VariableWithVariants): Variant[] => {
+    return variable.variants.reduce((accumulator: Variant[], variant: Variant) => {
+      if (accumulator.some((candidate: Variant): boolean => candidate.id === variant.id)) {
+        return accumulator
+      } else {
+        return [...accumulator, variant]
+      }
+    }, result)
+  }, [])
 }
 
 export default transforms

@@ -62,7 +62,11 @@ const toCartId = (options: FacetOption[], id: string, groupName: string): string
 }
 
 const toCartFilters = ({ genderOptions, subcohortOptions, ageGroupOptions, facetFilter }: ApplicationState) : CartFilter => {
-  const result: CartFilter = {}
+  const result: CartFilter = {
+    assessment: facetFilter.assessment,
+    hideZeroData: facetFilter.hideZeroData
+  }
+
   if (facetFilter.ageGroupAt1A.length > 0) {
     result.ageGroupAt1A = facetFilter.ageGroupAt1A.map(id => toCartId(ageGroupOptions, id, 'ageGroupAt1A'))
   }
@@ -81,6 +85,7 @@ const toCartFilters = ({ genderOptions, subcohortOptions, ageGroupOptions, facet
   if (facetFilter.yearOfBirthRange.length > 0) {
     result.yearOfBirthRange = facetFilter.yearOfBirthRange
   }
+
   return result
 }
 
@@ -130,16 +135,22 @@ const toFilterId = (options: FacetOption[], text: string, groupName: string): st
   return option.value
 }
 
-const facetFilterFromCart = (filters: CartFilter, { ageGroupOptions, genderOptions, subcohortOptions }: ApplicationState) : Filter => ({
-  ageGroupAt1A: (filters.ageGroupAt1A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt1A')),
-  ageGroupAt2A: (filters.ageGroupAt2A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt2A')),
-  ageGroupAt3A: (filters.ageGroupAt3A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt3A')),
-  gender: (filters.gender || []).map(optionText => toFilterId(genderOptions, optionText, 'gender')),
-  subcohort: (filters.subcohort || []).map(optionText => toFilterId(subcohortOptions, optionText, 'subcohort')),
-  yearOfBirthRange: (filters.yearOfBirthRange || [])
-})
+const facetFilterFromCart = (filters: CartFilter, { ageGroupOptions, genderOptions, subcohortOptions }: ApplicationState) : Filter => {
+  return {
+    assessment: filters.assessment,
+    hideZeroData: filters.hideZeroData,
+    ageGroupAt1A: (filters.ageGroupAt1A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt1A')),
+    ageGroupAt2A: (filters.ageGroupAt2A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt2A')),
+    ageGroupAt3A: (filters.ageGroupAt3A || []).map(optionText => toFilterId(ageGroupOptions, optionText, 'ageGroupAt3A')),
+    gender: (filters.gender || []).map(optionText => toFilterId(genderOptions, optionText, 'gender')),
+    subcohort: (filters.subcohort || []).map(optionText => toFilterId(subcohortOptions, optionText, 'subcohort')),
+    yearOfBirthRange: (filters.yearOfBirthRange || [])
+  }
+}
 
-export const fromCart = (cart: Cart, state: ApplicationState) : {facetFilter: Filter, gridSelection: GridSelection} => ({
-  facetFilter: facetFilterFromCart(cart.filters, state),
-  gridSelection: gridSelectionFromCart(cart.selection, state)
-})
+export const fromCart = (cart: Cart, state: ApplicationState) : {facetFilter: Filter, gridSelection: GridSelection} => {
+  return {
+    facetFilter: facetFilterFromCart(cart.filters, state),
+    gridSelection: gridSelectionFromCart(cart.selection, state)
+  }
+}

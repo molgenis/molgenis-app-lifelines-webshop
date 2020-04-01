@@ -1,13 +1,18 @@
 <template>
   <div id="grid">
+    <div v-if="gridRows && (findZeroRowsAndCols.rows.length > 0 || findZeroRowsAndCols.cols.length > 0)">
+      <a href="#" v-if="hideZeroData" @click.prevent="setZeroDataVisibility(false)"><font-awesome-icon icon="eye" /> Show {{findZeroRowsAndCols.rows.length}} hidden empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
+      <a href="#" v-else @click.prevent="setZeroDataVisibility(true)"><font-awesome-icon icon="eye-slash" /> Hide {{findZeroRowsAndCols.rows.length}} empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
+    </div>
     <div class="row">
       <div class="col vld-parent">
+
         <table ref="gridheader" class="grid-header-table" :class="{'sticky':stickyTableHeader}">
           <tr>
             <th class="collapse-holder"></th>
             <th class="variable-column-spacer" ref="varspacer"></th>
             <th></th>
-            <th v-for="assessment in gridAssessments" :key="assessment.id" class="text-center">
+            <th v-for="assessment in gridColumns" :key="assessment.id" class="text-center">
               <div class="assessments-title">
                 <span>{{assessment.name}}</span>
               </div>
@@ -15,7 +20,8 @@
           </tr>
         </table>
 
-        <div :class="{'space-holder':stickyTableHeader || !grid}"></div>
+        <div :class="{'space-holder':stickyTableHeader || !gridRows}"></div>
+
         <div class="table-holder">
           <loading
             :active="isLoading"
@@ -25,8 +31,11 @@
             background-color="var(--light)"
           ></loading>
 
+          <div class="empty-columns" v-if="gridRows && !gridColumns.length">
+            <h3 class="mg-header">{{$t('lifelines-webshop-no-assessments-found')}}</h3>
+          </div>
           <table
-            v-if="grid"
+            v-else-if="gridRows"
             ref="grid"
             class="grid-table"
             @click.stop="clickGridDelegate"
@@ -46,7 +55,7 @@
                 >All</button>
               </th>
               <th
-                v-for="(assessment, colIndex) in gridAssessments"
+                v-for="(assessment, colIndex) in gridColumns"
                 :key="assessment.id"
                 class="column-toggle grid-toggle"
               >
@@ -62,7 +71,7 @@
             </tr>
 
             <tr
-              v-for="(row, rowIndex) in grid"
+              v-for="(row, rowIndex) in gridRows"
               :key="rowIndex"
               :class="{'d-none': !isVisibleVariable(gridVariables[rowIndex])}"
             >
@@ -127,47 +136,24 @@ import {
   faArrowRight,
   faArrowsAlt,
   faPlusSquare,
-  faMinusSquare
+  faMinusSquare,
+  faEye,
+  faEyeSlash
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { formatCount } from '@/filters/GridComponentFilters'
 
-library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare)
+library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare, faEye, faEyeSlash)
 
 export default Vue.extend({
   name: 'GridComponent',
   components: { FontAwesomeIcon, Loading, GridTitelInfo },
-  computed: {
-    /**
-     * Provides visual feedback for grid selection helpers,
-     * e.g. All/Column/Row select.
-     */
-    selected: function () {
-      const selected = { all: true, row: [], col: [] }
-      if (!this.grid.length) {
-        return selected
-      }
-      selected.col = this.grid[0].map(i => true)
-
-      this.grid.forEach((row, i) => {
-        selected.row[i] = true
-        row.forEach((col, j) => {
-          if (!this.gridSelections[i][j]) {
-            selected.col[j] = false
-            selected.row[i] = false
-            selected.all = false
-          }
-        })
-      })
-      return selected
-    }
-  },
   props: {
-    grid: {
+    gridRows: {
       type: Array,
       required: false
     },
-    gridAssessments: {
+    gridColumns: {
       type: Array,
       required: true
     },
@@ -186,6 +172,39 @@ export default Vue.extend({
     isSignedIn: {
       type: Boolean,
       required: true
+    },
+    hideZeroData: {
+      type: Boolean,
+      default: () => true
+    },
+    findZeroRowsAndCols: {
+      type: Object,
+      default: () => { return { cols: [], rows: [] } }
+    },
+    setZeroDataVisibility: {
+      type: Function,
+      default: () => () => {}
+    }
+  },
+  computed: {
+    gridMarkers: function () {
+      const selected = { all: true, row: [], col: [] }
+      if (!this.gridRows.length) {
+        return selected
+      }
+      selected.col = this.gridRows[0].map(i => true)
+
+      this.gridRows.forEach((row, i) => {
+        selected.row[i] = true
+        row.forEach((col, j) => {
+          if (!this.gridSelections[i][j]) {
+            selected.col[j] = false
+            selected.row[i] = false
+            selected.all = false
+          }
+        })
+      })
+      return selected
     }
   },
   data: function () {
@@ -257,13 +276,13 @@ export default Vue.extend({
       const classes = {}
 
       if (target === 'allSelect') {
-        if (this.selected.all) {
+        if (this.gridMarkers.all) {
           classes['active'] = true
         }
       } else if (target === 'columnSelect') {
-        classes['active'] = this.selected.col[context.colIndex]
+        classes['active'] = this.gridMarkers.col[context.colIndex]
       } else if (target === 'rowSelect') {
-        classes['active'] = this.selected.row[context.rowIndex]
+        classes['active'] = this.gridMarkers.row[context.rowIndex]
       } else if (target === 'cell') {
         const cell = !!this.gridSelections[context.rowIndex][context.colIndex]
         if (cell) {
@@ -285,7 +304,7 @@ export default Vue.extend({
         if (data.col && data.row) {
           this.$emit('gridCellToggle', parseInt(data.row), parseInt(data.col))
         } else if (data.col && !data.row) {
-          this.$emit('gridColumnToggle', this.gridAssessments[data.col].id)
+          this.$emit('gridColumnToggle', this.gridColumns[data.col].id)
         } else if (!data.col && data.row) {
           const variable = this.gridVariables[parseInt(data.row)]
           this.$emit('gridRowToggle', variable.id)
@@ -374,7 +393,7 @@ export default Vue.extend({
     gridVariables: function () {
       this.closeVariableSet()
     },
-    grid: function () {
+    gridRows: function () {
       this.$nextTick(this.setGridHeaderSpacer)
     }
   },
@@ -389,6 +408,14 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.empty-columns {
+  padding: 1rem 0;
+
+  .mg-header {
+    color: $gray-500;
+  }
+}
+
 .selected-variable div {
   pointer-events: none;
   position: relative;
@@ -496,13 +523,20 @@ th {
   }
 
   &.hover-all-cells {
-    td {
+    td,
+    th:not(:nth-child(1)):not(:nth-child(2)) {
       background-color: $light;
+    }
+
+    tr:first-child {
+      th:not(:nth-child(1)):not(:nth-child(2)) {
+        background-color: $light;
+      }
     }
   }
 
   td:hover::after,
-  th:not(:nth-child(1)):not(:nth-child(2)):hover::after {
+  th:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):hover::after {
     background-color: $light;
     content: "";
     display: inline-block;

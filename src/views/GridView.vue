@@ -3,16 +3,19 @@
 
     <grid-component
       v-if="!isSearchResultEmpty"
-      :grid="grid"
-      :gridAssessments="gridAssessments"
+      :gridRows="gridRows"
+      :gridColumns="gridColumns"
       :gridVariables="gridVariables"
       :gridSelections="gridSelections"
       :isLoading="isGridLoading"
       :isSignedIn="isSignedIn"
-      @gridRowToggle="handleGridRowToggle"
-      @gridColumnToggle="handleGridColumnToggle"
+      :hideZeroData="hideZeroData"
+      :findZeroRowsAndCols="findZeroRowsAndCols"
+      :setZeroDataVisibility="setZeroDataVisibility"
+      @gridRowToggle="toggleGridRow"
+      @gridColumnToggle="toggleGridColumn"
       @gridCellToggle="handleGridCellToggle"
-      @gridAllToggle="handleGridAllToggle"
+      @gridAllToggle="toggleAll"
     />
   </div>
 </template>
@@ -26,32 +29,25 @@ export default Vue.extend({
   name: 'GridView',
   components: { GridComponent },
   computed: {
-    ...mapState(['gridVariables', 'searchTerm', 'subSectionList', 'treeSelected']),
+    ...mapState({
+      hideZeroData: state => state.facetFilter.hideZeroData,
+      searchTerm: 'searchTerm',
+      subSectionList: 'subSectionList',
+      treeSelected: 'treeSelected'
+    }),
     ...mapGetters([
-      'searchTermQuery', 'rsql', 'gridAssessments', 'grid', 'gridSelections',
+      'findZeroRowsAndCols', 'gridVariables', 'searchTermQuery', 'rsql', 'gridRows', 'gridColumns', 'gridSelections',
       'numberOfSelectedItems', 'isSignedIn', 'isGridLoading', 'isSearchResultEmpty'
     ])
   },
   methods: {
-    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll']),
+    ...mapMutations(['toggleGridSelection', 'toggleGridRow', 'toggleGridColumn', 'toggleAll', 'setZeroDataVisibility']),
     ...mapActions(['loadGridVariables', 'loadGridData', 'loadAssessments']),
-    handleGridRowToggle (variableId) {
-      this.toggleGridRow({
-        variableId,
-        gridAssessments: this.gridAssessments
-      })
-    },
-    handleGridColumnToggle (assessmentId) {
-      this.toggleGridColumn({ assessmentId })
-    },
     handleGridCellToggle (rowIndex, colIndex) {
       this.toggleGridSelection({
         variableId: this.gridVariables[rowIndex].id,
-        assessmentId: this.gridAssessments[colIndex].id
+        assessmentId: this.gridColumns[colIndex].id
       })
-    },
-    handleGridAllToggle () {
-      this.toggleAll({ gridAssessments: this.gridAssessments })
     }
   },
   watch: {

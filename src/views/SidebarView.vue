@@ -1,12 +1,13 @@
 <template>
   <div id="sidebar-view" :class="{'hide-bar':!value}">
-    <div class="label" @click="toggleVisibility">
-      {{$t('lifelines-webshop-sidebar-header')}}
+
+    <div class="label label-participants" @click="toggleVisibility">
+      {{$t('lifelines-webshop-sidebar-header-participants')}}
       <font-awesome-icon icon="angle-double-down" class="ml-2"></font-awesome-icon>
     </div>
     <div class="overflow-hidden">
       <div class="sidebar-width">
-        <h3 class="px-4 mg-header">{{$t('lifelines-webshop-sidebar-header')}}</h3>
+        <h3 class="px-4 mg-header">{{$t('lifelines-webshop-sidebar-header-participants')}}</h3>
         <ul class="list-unstyled sidebar-content p-4">
           <li class="hide-sidebar" @click="hide">
             <font-awesome-icon icon="angle-double-left" size="lg"></font-awesome-icon>
@@ -58,6 +59,7 @@
             </facet-container>
           </li>
           <li>
+
             <facet-container
               facetId="cohort"
               :label="$t('lifelines-webshop-subcohort-facet-label')"
@@ -77,6 +79,39 @@
         </ul>
         <count-view class="px-4"></count-view>
       </div>
+
+      <div class="label label-assessments" @click="toggleVisibility">
+        {{$t('lifelines-webshop-sidebar-header-assessments')}}
+        <font-awesome-icon icon="angle-double-down" class="ml-2"></font-awesome-icon>
+      </div>
+
+      <div class="overflow-hidden">
+        <div class="sidebar-width">
+          <h3 class="px-4 mg-header">{{$t('lifelines-webshop-sidebar-header-assessments')}}</h3>
+          <ul class="list-unstyled sidebar-content p-4">
+            <li class="hide-sidebar" @click="hide">
+              <font-awesome-icon icon="angle-double-left" size="lg"></font-awesome-icon>
+            </li>
+            <li>
+              <facet-container
+                facetId="assessment"
+                :label="$t('lifelines-webshop-facet-assessment-label')"
+              >
+                <template v-slot:label-slot>
+                  <info-icon id="assessment-info-icon" :title="$t('lifelines-webshop-assessment-facet-label')" href="http://wiki-lifelines.web.rug.nl/doku.php?id=general_assessments">
+                    <span v-html="$t('lifelines-webshop-sidebar-assessment-info')"></span>
+                  </info-icon><br/>
+                </template>
+                <toggle-facet
+                  facetId="cohort"
+                  :options="assessments"
+                  v-model="assessmentsActive"
+                />
+              </facet-container>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -87,17 +122,18 @@ import FacetContainer from '../components/facets/FacetContainer.vue'
 import ToggleFacet from '../components/facets/ToggleFacet.vue'
 import AgeFacet from '../components/facets/AgeFacet.vue'
 import RangeFacet from '../components/facets/RangeFacet.vue'
-import { mapMutations } from 'vuex'
 import CountView from '@/views/CountView'
 import ClickOutside from 'v-click-outside'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faAngleDoubleLeft,
-  faAngleDoubleDown
+  faAngleDoubleDown,
+  faEye,
+  faEyeSlash
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import InfoIcon from '../components/InfoIcon'
-library.add(faAngleDoubleLeft, faAngleDoubleDown)
+library.add(faAngleDoubleLeft, faAngleDoubleDown, faEye, faEyeSlash)
 
 export default Vue.extend({
   name: 'SidebarView',
@@ -120,7 +156,8 @@ export default Vue.extend({
   data: function () {
     return {
       activeAgeFacetId: 'age',
-      cachedAgeState: []
+      cachedAgeState: [],
+      showHidden: false
     }
   },
   methods: {
@@ -160,6 +197,9 @@ export default Vue.extend({
     genderOptions () {
       return this.$store.state.genderOptions
     },
+    assessments () {
+      return Object.values(this.$store.state.assessments).map((i) => ({ value: i.id, text: i.name }))
+    },
     subcohortOptions () {
       return this.$store.state.subcohortOptions
     },
@@ -175,6 +215,14 @@ export default Vue.extend({
       },
       set (value) {
         this.$store.commit('updateGenderFilter', value)
+      }
+    },
+    assessmentsActive: {
+      get () {
+        return this.$store.state.facetFilter.assessment
+      },
+      set (value) {
+        this.$store.commit('assessmentsActive', value)
       }
     },
     selectedSubcohortOptions: {
@@ -214,7 +262,11 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+.count-view {
+  margin-bottom: 1rem;
+}
+
 #sidebar-view {
   padding: 0;
   position: relative;
@@ -238,13 +290,21 @@ export default Vue.extend({
     overflow: hidden;
     padding: 0 1rem;
     position: absolute;
-    right: 0;
-    top: 4rem;
     transform: rotate(-90deg) translate(0, 1rem);
     transform-origin: 100% 100%;
     transition: height 0.3s;
     white-space: nowrap;
     z-index: 1000; // zindex-dropdown
+  }
+
+  .label-participants {
+    right: 0;
+    top: 4rem;
+  }
+
+  .label-assessments {
+    right: 0;
+    top: 30rem;
   }
 
   &.hide-bar {

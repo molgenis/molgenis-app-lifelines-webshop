@@ -8,8 +8,9 @@ localVue.directive('b-popover', { /* stub */ })
 
 describe('GridComponent.vue', () => {
   const emptyProps = {
-    grid: null,
     gridAssessments: [],
+    gridColumns: [],
+    gridRows: null,
     gridVariables: null,
     gridSelections: null,
     isLoading: false,
@@ -67,8 +68,9 @@ describe('GridComponent.vue', () => {
     let props
     beforeEach(() => {
       props = {
-        grid: [[1, 2], [3, 4]],
-        gridAssessments: [],
+        gridRows: [[1, 2], [3, 4]],
+        gridAssessments: [{ id: 'c1' }, { id: 'c2' }],
+        gridColumns: [{ id: 'c1' }, { id: 'c2' }],
         gridVariables: [{
           name: 'a',
           id: 101
@@ -98,8 +100,9 @@ describe('GridComponent.vue', () => {
 
     beforeEach(() => {
       props = {
-        grid: [[1, 2], [3, 4]],
+        gridRows: [[1, 2], [3, 4]],
         gridAssessments: [{ id: 'c1' }, { id: 'c2' }],
+        gridColumns: [{ id: 'c1' }, { id: 'c2' }],
         gridVariables: [{
           name: 'a',
           id: 101
@@ -144,8 +147,9 @@ describe('GridComponent.vue', () => {
 
     beforeEach(() => {
       props = {
-        grid: [[1, 2], [3, 4]],
         gridAssessments: [{ id: 10 }, { id: 11 }, { id: 12 }],
+        gridColumns: [{ id: 10 }, { id: 11 }, { id: 12 }],
+        gridRows: [[1, 2], [3, 4]],
         gridVariables: [{
           name: 'a',
           id: 101,
@@ -287,8 +291,8 @@ describe('GridComponent.vue', () => {
     let wrapper:any
 
     const propsData = {
-      grid: [[1]],
-      gridAssessments: [{ id: 10 }],
+      gridRows: [[1]],
+      gridColumns: [{ id: 10 }],
       gridVariables: [{
         name: 'a',
         id: 101,
@@ -306,7 +310,7 @@ describe('GridComponent.vue', () => {
         id: 101,
         subvariables: []
       }] })
-      wrapper.setProps({ grid: [[101]] })
+      wrapper.setProps({ gridRows: [[101]] })
       wrapper.vm.$nextTick(() => {
         expect(wrapper).toBeDefined()
         // 0px as jest dom has no width

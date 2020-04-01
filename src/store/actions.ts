@@ -1,7 +1,6 @@
 // @ts-ignore
 import api from '@molgenis/molgenis-api-client'
 import { successMessage, tryAction, toCart, fromCart } from './helpers'
-import { Section } from '@/types/Section.ts'
 import { Cart } from '@/types/Cart'
 import ApplicationState from '@/types/ApplicationState'
 import Getters from '@/types/Getters'
@@ -11,7 +10,6 @@ import { OrderState } from '@/types/Order'
 import moment from 'moment'
 import axios from 'axios'
 import { setRolePermission, setUserPermission } from '@/services/permissionService'
-
 import transforms from './transforms'
 import { finalVariableSetSort } from '@/services/variableSetOrderService'
 import { QueryParams } from '@/types/QueryParams'
@@ -118,6 +116,8 @@ export default {
     const response = await api.get('/api/v2/lifelines_assessment')
     const assessments = transforms.assessments(response.items)
     commit('updateAssessments', assessments)
+    // All assessment filters are selected by default.
+    commit('assessmentsActive', Object.values(assessments).map((i:any) => i.id))
   }),
   loadVariables: tryAction(async ({ state, commit }: any) => {
     const [response0, response1] = await Promise.all([
