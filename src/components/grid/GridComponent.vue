@@ -525,13 +525,18 @@ th {
   }
 
   &.hover-all-cells {
-    td {
+    td, th:not(:nth-child(1)):not(:nth-child(2)){
       background-color: $light;
+    }
+    tr:first-child{
+      th:not(:nth-child(1)):not(:nth-child(2)){
+        background-color: $light;
+      }
     }
   }
 
   td:hover::after,
-  th:not(:nth-child(1)):not(:nth-child(2)):hover::after {
+  th:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):hover::after {
     background-color: $light;
     content: "";
     display: inline-block;
