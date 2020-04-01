@@ -584,7 +584,6 @@ describe('actions', () => {
       await actions.load({ commit, state }, 'fghij')
       expect(commit).toHaveBeenCalledWith('setToast', { message: 'Loaded order with orderNumber fghij', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
       expect(commit).toHaveBeenCalledWith('updateGridSelection', { 1: [1], 2: [1] })
-
       expect(commit).toHaveBeenCalledWith('updateFacetFilter', { ...emptyState.facetFilter, ageGroupAt1A: ['2', '3'] })
       done()
     })

@@ -412,7 +412,6 @@ describe('getters', () => {
     it('return filtered gridColumns results', () => {
       const state: ApplicationState = {
         ...emptyState,
-
         // @ts-ignore
         facetFilter: { assessment: [1, 2], hideZeroData: true },
         gridVariables: [variable11, variable12],

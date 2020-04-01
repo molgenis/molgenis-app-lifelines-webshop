@@ -99,7 +99,6 @@ const state: AppState = {
   filteredSections: null, // contains the IDs of sections that match the search term
   orders: null,
   ordersTotal: 0
-
 }
 
 export default state
