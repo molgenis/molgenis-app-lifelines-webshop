@@ -1,6 +1,4 @@
 import Assessment from '@/types/Assessment'
-import GridCell from '@/types/GridCell'
-import GridSelection from '@/types/GridSelection'
 import { TreeNode } from './TreeNode'
 import Variant from './Variant'
 
@@ -18,5 +16,10 @@ export default interface Getters {
   searchTermQuery: string | null
   isSearchResultEmpty: boolean
   numberOfSelectedItems: Number
-  findZeroRowsAndCols: { cols: number[], rows: number[] }
+  findZeroRowsAndCols: RowColSet
+}
+
+export interface RowColSet {
+  rows: number[]
+  cols: number[]
 }

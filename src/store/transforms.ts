@@ -7,6 +7,7 @@ import { Section } from '@/types/Section.ts'
 import { TreeParent } from '@/types/Tree'
 import { VariableWithVariants, Variable } from '@/types/Variable'
 import Variant from '@/types/Variant'
+import { RowColSet } from '@/types/Getters'
 
 const transforms:any = {}
 
@@ -106,7 +107,7 @@ transforms.grid = (gridRows:VariableWithVariants[], gridColumns:any, variantCoun
   return grid
 }
 
-transforms.gridRows = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any, findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
+transforms.gridRows = (gridRows:VariableWithVariants[], gridColumns:any, variantCounts:any, findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
   let grid = transforms.grid(gridRows, gridColumns, variantCounts)
   if (grid && hideZeroData) {
     grid = grid.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
@@ -126,7 +127,7 @@ transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessme
   return gridAssessments
 }
 
-transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
+transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
   let results = transforms.gridAssessments(variants, assessments, filterAssessments)
   if (results && hideZeroData) {
     const assessmentsInOrder = Object.keys(assessments)
@@ -155,7 +156,7 @@ transforms.gridSelections = (gridAssessments:any, gridSelection:any, gridVariabl
   })
 }
 
-transforms.gridSelectionsFiltered = (gridAssessments:any, gridSelection:any, gridVariables:VariableWithVariants[], findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
+transforms.gridSelectionsFiltered = (gridAssessments:any, gridSelection:any, gridVariables:VariableWithVariants[], findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
   let selections = transforms.gridSelections(gridAssessments, gridSelection, gridVariables)
   if (selections && hideZeroData) {
     selections = selections.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
@@ -222,7 +223,7 @@ transforms.variables = (variables:[]) => {
   return variableMap
 }
 
-transforms.gridVariablesFiltered = (gridVariables:any, findZeroRowsAndCols: { rows: number[], cols: number[] }, hideZeroData: boolean) => {
+transforms.gridVariablesFiltered = (gridVariables:any, findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
   if (gridVariables && hideZeroData) {
     gridVariables = gridVariables.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
   }
