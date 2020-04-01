@@ -185,11 +185,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['cartTree', 'gridSelectionFiltered', 'isSignedIn', 'selectedVariableIds']),
-    ...mapState(['variables', 'assessments']),
+    ...mapGetters(['cartTree', 'isSignedIn', 'selectedVariableIds']),
+    ...mapState(['gridSelection', 'variables', 'assessments']),
     variableAssessments () {
       let variableAssessmentStrings = {}
-      for (const [variableId, assessmentIds] of Object.entries(this.gridSelectionFiltered)) {
+      for (const [variableId, assessmentIds] of Object.entries(this.gridSelection)) {
         const assessmentNames = assessmentIds
           .map(assessmentId => this.assessments[assessmentId].name)
           .sort()

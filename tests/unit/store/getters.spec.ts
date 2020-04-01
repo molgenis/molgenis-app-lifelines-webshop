@@ -10,7 +10,6 @@ import CartSection from '@/types/CartSection'
 
 describe('getters', () => {
   const emptyGetters: Getters = {
-    gridSelectionFiltered: [],
     gridActive: [],
     isSignedIn: false,
     variants: [],

@@ -118,51 +118,6 @@ export default {
     }
     return variables
   },
-  /**
-   * This is gridSelection with applied zero row/col filter
-   * active assessment filtering. Useful to count the number
-   * of variables when filtering is active.
-   */
-  gridSelectionFiltered: (state: ApplicationState, getters: Getters) => {
-    if (!state.gridVariables) { return [] }
-    const assessmentFilter = state.facetFilter.assessment
-    const emptyRowsColsFilter = getters.findZeroRowsAndCols
-
-    // Start with all assessments (columns).
-    let assessments = transforms.gridColumns(getters.variants, state.assessments, assessmentFilter)
-
-    // Filter out zero-assessments.
-    if (state.facetFilter.hideZeroData) {
-      let emptyAssessmentIds:number[] = []
-      emptyAssessmentIds = emptyRowsColsFilter.cols.map((i) => assessments[i].id)
-
-      assessments = assessments.filter((assessment:any) => !emptyAssessmentIds.includes(assessment.id))
-    }
-
-    // Filter out deselected filter assessments.
-    assessments = assessments.filter((assessment:any) => assessmentFilter.includes(assessment.id))
-
-    const assessmentIds = assessments.map((assessment:any) => assessment.id)
-    const selection:any = {}
-
-    Object.keys(state.gridSelection).forEach((variableId:any) => {
-      // Filter columns
-      const variableAssessments = state.gridSelection[variableId].filter((assessmentId) => assessmentIds.includes(assessmentId))
-      if (state.gridVariables) {
-        const variableIndex = state.gridVariables.findIndex((i) => i.id === Number(variableId))
-
-        if (state.facetFilter.hideZeroData) {
-          if (!emptyRowsColsFilter.rows.includes(variableIndex) && variableAssessments.length) {
-            selection[variableId] = variableAssessments
-          }
-        } else if (variableAssessments.length) {
-          selection[variableId] = variableAssessments
-        }
-      }
-    })
-
-    return selection
-  },
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null => {
     let selections = transforms.gridSelections(getters.gridColumns, state.gridSelection, state.gridVariables)
     if (selections && state.facetFilter.hideZeroData) {
@@ -178,7 +133,7 @@ export default {
       return total + item.filter(Boolean).length
     }, 0),
   selectedVariableIds: (state: ApplicationState, getters: Getters) => {
-    return Object.keys(getters.gridSelectionFiltered).length
+    return Object.keys(state.gridSelection).length
   },
   treeStructure: (state: ApplicationState, getters: Getters) => {
     const loadedSection: boolean = Object.keys(state.sections).length > 0
@@ -194,7 +149,7 @@ export default {
     return []
   },
   cartTree: (state: ApplicationState, getters: Getters): CartSection[] => {
-    return transforms.cartTree(getters.gridSelectionFiltered, state.treeStructure, state.sections, state.subSectionList, state.variables)
+    return transforms.cartTree(state.gridSelection, state.treeStructure, state.sections, state.subSectionList, state.variables)
   },
   isGridLoading: (state: ApplicationState): boolean => {
     return (state.gridVariables === null || state.variantCounts === null) && state.treeSelected !== -1

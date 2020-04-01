@@ -13,7 +13,6 @@ export default interface Getters {
   gridActive: number[][]
   gridAssessments: Assessment[]
   gridColumns: Assessment[]
-  gridSelectionFiltered: GridSelection
   gridSelections: boolean[][]
   treeStructure: TreeNode[]
   searchTermQuery: string | null
