@@ -343,6 +343,7 @@ describe('mutations', () => {
       mutations.updateFacetFilter(baseAppState, {
         assessment: [],
         gender: ['female'],
+        hideZeroData: true,
         subcohort: [],
         ageGroupAt1A: [],
         ageGroupAt2A: ['65+'],
@@ -352,6 +353,7 @@ describe('mutations', () => {
       expect(baseAppState.facetFilter).toEqual({
         assessment: [],
         gender: ['female'],
+        hideZeroData: true,
         subcohort: [],
         ageGroupAt1A: [],
         ageGroupAt2A: ['65+'],

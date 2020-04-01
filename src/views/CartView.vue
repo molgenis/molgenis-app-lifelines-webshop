@@ -185,8 +185,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['cartTree', 'isSignedIn', 'selectedVariableIds']),
+    ...mapGetters(['cartTree', 'isSignedIn']),
     ...mapState(['gridSelection', 'variables', 'assessments']),
+    selectedVariableIds () {
+      return Object.keys(this.gridSelection)
+    },
     variableAssessments () {
       let variableAssessmentStrings = {}
       for (const [variableId, assessmentIds] of Object.entries(this.gridSelection)) {

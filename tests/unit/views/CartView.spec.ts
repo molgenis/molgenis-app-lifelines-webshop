@@ -33,7 +33,8 @@ describe('CartView.vue', () => {
 
   const getters = {
     cartTree: () => cartTree,
-    isSignedIn: () => true
+    isSignedIn: () => true,
+    selectedVariableIds: () => []
   }
 
   beforeEach(() => {

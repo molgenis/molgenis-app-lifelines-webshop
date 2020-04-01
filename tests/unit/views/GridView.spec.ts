@@ -23,6 +23,7 @@ describe('GridView', () => {
 
   beforeEach(() => {
     state = {
+      facetFilter: { hideZeroData: true },
       searchTermQueryMock: null,
       rsqlMock: '',
       treeSelected: -1,

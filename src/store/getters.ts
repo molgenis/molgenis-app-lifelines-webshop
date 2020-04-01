@@ -132,9 +132,6 @@ export default {
     getters.gridSelections.reduce((total: number, item: boolean[]) => {
       return total + item.filter(Boolean).length
     }, 0),
-  selectedVariableIds: (state: ApplicationState, getters: Getters) => {
-    return Object.keys(state.gridSelection).length
-  },
   treeStructure: (state: ApplicationState, getters: Getters) => {
     const loadedSection: boolean = Object.keys(state.sections).length > 0
     const loadedSubSection: boolean = state.subSectionList.length > 0
@@ -148,7 +145,7 @@ export default {
     }
     return []
   },
-  cartTree: (state: ApplicationState, getters: Getters): CartSection[] => {
+  cartTree: (state: ApplicationState): CartSection[] => {
     return transforms.cartTree(state.gridSelection, state.treeStructure, state.sections, state.subSectionList, state.variables)
   },
   isGridLoading: (state: ApplicationState): boolean => {
