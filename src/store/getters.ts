@@ -5,9 +5,7 @@ import Getters from '@/types/Getters'
 import Variant from '@/types/Variant'
 import { VariableWithVariants } from '@/types/Variable'
 import CartSection from '@/types/CartSection'
-
 import 'core-js/fn/array/flat-map'
-
 import transforms from './transforms'
 
 export default {

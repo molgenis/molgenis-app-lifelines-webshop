@@ -143,7 +143,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { formatCount } from '@/filters/GridComponentFilters'
-import { mapState, mapGetters, mapMutations } from 'vuex'
 
 library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare, faEye, faEyeSlash)
 
@@ -525,11 +524,13 @@ th {
   }
 
   &.hover-all-cells {
-    td, th:not(:nth-child(1)):not(:nth-child(2)){
+    td,
+    th:not(:nth-child(1)):not(:nth-child(2)) {
       background-color: $light;
     }
-    tr:first-child{
-      th:not(:nth-child(1)):not(:nth-child(2)){
+
+    tr:first-child {
+      th:not(:nth-child(1)):not(:nth-child(2)) {
         background-color: $light;
       }
     }
