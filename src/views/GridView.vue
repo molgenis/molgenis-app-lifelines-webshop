@@ -29,7 +29,12 @@ export default Vue.extend({
   name: 'GridView',
   components: { GridComponent },
   computed: {
-    ...mapState(['hideZeroData', 'searchTerm', 'subSectionList', 'treeSelected']),
+    ...mapState({
+      hideZeroData: state => state.facetFilter.hideZeroData,
+      searchTerm: 'searchTerm',
+      subSectionList: 'subSectionList',
+      treeSelected: 'treeSelected'
+    }),
     ...mapGetters([
       'findZeroRowsAndCols', 'gridVariables', 'searchTermQuery', 'rsql', 'gridRows', 'gridColumns', 'gridSelections',
       'numberOfSelectedItems', 'isSignedIn', 'isGridLoading', 'isSearchResultEmpty'

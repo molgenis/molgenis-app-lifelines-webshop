@@ -394,7 +394,8 @@ describe('getters', () => {
     it('return filtered grid results', () => {
       const state: ApplicationState = {
         ...emptyState,
-        hideZeroData: true,
+        // @ts-ignore
+        facetFilter: { hideZeroData: true },
         gridVariables: [variable11, variable12],
         variantCounts: [{ variantId: 1, count: 10 }, { variantId: 2, count: 100 }]
       }
@@ -412,9 +413,9 @@ describe('getters', () => {
     it('return filtered gridColumns results', () => {
       const state: ApplicationState = {
         ...emptyState,
-        hideZeroData: true,
+
         // @ts-ignore
-        facetFilter: { assessment: [1, 2] },
+        facetFilter: { assessment: [1, 2], hideZeroData: true },
         gridVariables: [variable11, variable12],
         assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ],
         variantCounts: [{ variantId: 1, count: 10 }, { variantId: 2, count: 100 }]

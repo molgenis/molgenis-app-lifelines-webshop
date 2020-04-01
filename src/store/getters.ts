@@ -103,17 +103,17 @@ export default {
     return transforms.grid(state.gridVariables, getters.gridAssessments, state.variantCounts)
   },
   gridRows: (state: ApplicationState, getters: Getters) => {
-    return transforms.gridRows(state.gridVariables, getters.gridColumns, state.variantCounts, getters.findZeroRowsAndCols, state.hideZeroData)
+    return transforms.gridRows(state.gridVariables, getters.gridColumns, state.variantCounts, getters.findZeroRowsAndCols, state.facetFilter.hideZeroData)
   },
   gridAssessments: (state: ApplicationState, getters: Getters) => {
     return transforms.gridAssessments(getters.variants, state.assessments, null)
   },
   gridColumns: (state: ApplicationState, getters: Getters) => {
-    return transforms.gridColumns(getters.variants, state.assessments, state.facetFilter.assessment, getters.findZeroRowsAndCols, state.hideZeroData)
+    return transforms.gridColumns(getters.variants, state.assessments, state.facetFilter.assessment, getters.findZeroRowsAndCols, state.facetFilter.hideZeroData)
   },
   gridVariables: (state: ApplicationState, getters: Getters) => {
     let variables = state.gridVariables
-    if (variables && state.hideZeroData) {
+    if (variables && state.facetFilter.hideZeroData) {
       variables = variables.filter((_:any, index:number) => !getters.findZeroRowsAndCols.rows.includes(index))
     }
     return variables
@@ -124,6 +124,7 @@ export default {
    * of variables when filtering is active.
    */
   gridSelectionFiltered: (state: ApplicationState, getters: Getters) => {
+    if (!state.gridVariables) { return [] }
     const assessmentFilter = state.facetFilter.assessment
     const emptyRowsColsFilter = getters.findZeroRowsAndCols
 
@@ -131,7 +132,7 @@ export default {
     let assessments = transforms.gridColumns(getters.variants, state.assessments, assessmentFilter)
 
     // Filter out zero-assessments.
-    if (state.hideZeroData) {
+    if (state.facetFilter.hideZeroData) {
       let emptyAssessmentIds:number[] = []
       emptyAssessmentIds = emptyRowsColsFilter.cols.map((i) => assessments[i].id)
 
@@ -150,7 +151,7 @@ export default {
       if (state.gridVariables) {
         const variableIndex = state.gridVariables.findIndex((i) => i.id === Number(variableId))
 
-        if (state.hideZeroData) {
+        if (state.facetFilter.hideZeroData) {
           if (!emptyRowsColsFilter.rows.includes(variableIndex) && variableAssessments.length) {
             selection[variableId] = variableAssessments
           }
@@ -164,13 +165,10 @@ export default {
   },
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null => {
     let selections = transforms.gridSelections(getters.gridColumns, state.gridSelection, state.gridVariables)
-    if (selections && state.hideZeroData) {
+    if (selections && state.facetFilter.hideZeroData) {
       selections = selections.filter((_:any, index:number) => !getters.findZeroRowsAndCols.rows.includes(index))
     }
     return selections
-  },
-  gridSelectionsFiltered: (state: ApplicationState, getters: Getters) => {
-    return transforms.gridSelectionsFiltered(getters.gridColumns, state.gridSelection, state.gridVariables)
   },
   findZeroRowsAndCols: (state: ApplicationState, getters: Getters) => {
     return transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, getters.gridAssessments, state.variantCounts))

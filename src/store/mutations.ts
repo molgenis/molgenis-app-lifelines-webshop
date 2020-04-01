@@ -13,7 +13,8 @@ import transforms from './transforms'
 
 export default {
   setZeroDataVisibility (state: ApplicationState, visibility: boolean) {
-    state.hideZeroData = visibility
+    console.log(visibility)
+    state.facetFilter.hideZeroData = visibility
   },
   assessmentsActive (state: ApplicationState, selectedAssessments: number[]) {
     state.facetFilter.assessment = selectedAssessments
@@ -151,7 +152,7 @@ export default {
     if (state.gridVariables === null) { return }
     let filteredGridVariables = state.gridVariables
 
-    if (state.hideZeroData) {
+    if (state.facetFilter.hideZeroData) {
       const variants = transforms.variants(state.gridVariables)
       const gridColumns = transforms.gridColumns(variants, state.assessments)
       const grid = transforms.grid(state.gridVariables, gridColumns, state.variantCounts)
@@ -220,7 +221,7 @@ export default {
       }
     } else {
       let toSelect = gridColumns.map((it) => it.id).concat(selectedRowCells.hidden)
-      if (state.hideZeroData) {
+      if (state.facetFilter.hideZeroData) {
         const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
         toSelect = toSelect.filter((_:any, index:number) => !rowColFilter.cols.includes(index))
       }
@@ -233,7 +234,7 @@ export default {
     let filteredGridVariables = state.gridVariables
     const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
     // Exclude hidden rows and columns from the selection.
-    if (state.hideZeroData) {
+    if (state.facetFilter.hideZeroData) {
       gridColumns = gridColumns.filter((_:any, index:number) => !rowColFilter.cols.includes(index))
       filteredGridVariables = state.gridVariables.filter((_:any, index:number) => !rowColFilter.rows.includes(index))
     }
