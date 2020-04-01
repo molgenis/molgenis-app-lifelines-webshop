@@ -13,7 +13,6 @@ import transforms from './transforms'
 
 export default {
   setZeroDataVisibility (state: ApplicationState, visibility: boolean) {
-    console.log(visibility)
     state.facetFilter.hideZeroData = visibility
   },
   assessmentsActive (state: ApplicationState, selectedAssessments: number[]) {
