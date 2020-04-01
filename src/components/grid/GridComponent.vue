@@ -528,6 +528,11 @@ th {
     td {
       background-color: $light;
     }
+    tr:first-child{
+      th:not(:nth-child(1)):not(:nth-child(2)){
+        background-color: $light;
+      }
+    }
   }
 
   td:hover::after,
