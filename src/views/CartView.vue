@@ -12,12 +12,17 @@
             class="my-3"
           ></toast-component>
 
-          <spinner-animation v-if="loading" />
+          <spinner-animation v-if="loading || isLoadingallVariables" />
 
-          <div v-if="selectedVariableIds.length === 0">
+          <div v-else-if="selectedVariableIds.length === 0">
             <h4 class="h5">No variables selected</h4>
             <p v-if="isSignedIn">{{$t('lifelines-webshop-cart-info-msg')}}</p>
             <p v-else>{{$t('lifelines-webshop-cart-not-signedin-msg')}}</p>
+
+            <button class="btn btn-secondary t-toggle-all-variables" @click="toggleAllVariables(true)">
+              {{$t('lifelines-webshop-add-all-variables')}}
+            </button>
+
           </div>
 
           <div v-else class="mt-3 mb-2" role="tablist">
@@ -33,32 +38,40 @@
                 to="/order"
                 tag="button"
               >{{$t('lifelines-webshop-order-btn-label')}}</router-link>
+
+              <button class="btn btn-secondary ml-2 t-toggle-all-variables" @click="toggleAllVariables(false)">
+                {{$t('lifelines-webshop-remove-all-variables')}}
+              </button>
+
             </div>
-            <b-card no-body class="mb-2" v-for="(section, index) in cartTree" :key="section.id">
+            <b-card no-body class="mb-2" v-for="(section, sectionIndex) in cartTree" :key="section.id">
               <b-card-header
                 header-tag="header"
                 class="pl-1 pt-2 pr-2 pb-2 hoverable"
                 role="tab"
-                @click.stop="collapseStatus(index)"
+                @click.stop="collapseStatus(sectionIndex)"
               >
                 <h5 class="pl-3 m-0 text-black">
                   {{section.name}}
-                  <collapse-tree-icon class="ml-2" :state="isActive(index)"></collapse-tree-icon>
+                  <collapse-tree-icon class="ml-2" :state="isActive(sectionIndex)"></collapse-tree-icon>
                 </h5>
               </b-card-header>
 
               <!-- Don't use the same accordion index, so all items can be expanded at the same time -->
               <b-collapse
-                :visible="isActive(index)"
-                :id="`accordion-${index}`"
-                :accordion="`my-accordion-${index}`"
+                :visible="isActive(sectionIndex)"
+                :id="`accordion-${sectionIndex}`"
+                :accordion="`my-accordion-${sectionIndex}`"
                 role="tabpanel"
               >
                 <b-card-body class="mx-3 my-1">
-                  <div v-for="subsection in section.subsections" :key="subsection.id">
+                  <div v-for="(subsection, subsectionIndex) in section.subsections" :key="subsection.id">
                     <h5 class="h6">{{subsection.name}}</h5>
                     <ul>
-                      <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="subvariable-line" :class="variableSetClass(variable)">
+                      <li
+                        v-for="(variable, variableIndex) in variablesWithSet(subsection.variables)"
+                        :key="`${sectionIndex}-${subsectionIndex}-${variableIndex}`"
+                        class="subvariable-line" :class="variableSetClass(variable)">
                         <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
                       </li>
                     </ul>
@@ -90,17 +103,21 @@
 </template>
 
 <script>
+import api from '@molgenis/molgenis-api-client'
 import Vue from 'vue'
 import SpinnerAnimation from '../components/animations/SpinnerAnimation'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { toVariable } from '@/repository/VariableRepository'
 import CollapseTreeIcon from '@/components/animations/CollapseTreeIcon'
 import ToastComponent from '@molgenis-ui/components/src/components/ToastComponent.vue'
+import transforms from '@/store/transforms'
 
 export default Vue.extend({
   name: 'CartView',
   components: { SpinnerAnimation, CollapseTreeIcon, ToastComponent },
   data () {
     return {
+      isLoadingallVariables: false,
       openItems: ['accordion-0'],
       toast: [
         {
@@ -113,6 +130,40 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['save']),
+    toggleAllVariables: async function (loadVariables) {
+      if (!loadVariables) {
+        this.$store.commit('updateGridSelection', {})
+        return
+      }
+
+      this.isLoadingallVariables = true
+      const attrs = 'id,name,label,variants(id,assessment_id)'
+      let fetchMore = true
+
+      const batch = { num: 1000, start: 0 }
+      const selection = {}
+
+      while (fetchMore) {
+        const response = await api.get(`/api/v2/lifelines_variable?&attrs=${attrs}&start=${batch.start}&num=${batch.num}&sort=id`)
+        batch.start += batch.num
+        if (response.items.length !== batch.num) {
+          fetchMore = false
+        }
+
+        const variables = response.items.map(toVariable)
+
+        for (const variable of variables) {
+          const variableAssessmentIds = transforms.gridAssessments(variable.variants, this.$store.state.assessments, null).map((i) => i.id)
+          if (variableAssessmentIds.length) {
+            selection[variable.id] = variableAssessmentIds
+          }
+        }
+      }
+
+      this.isLoadingallVariables = false
+
+      this.$store.commit('updateGridSelection', selection)
+    },
     async onSave () {
       const orderNumber = await this.save()
       this.$router.push({ name: 'load', params: { orderNumber } })
@@ -185,7 +236,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['cartTree', 'isSignedIn']),
+    ...mapGetters(['cartTree', 'hasManagerRole', 'isSignedIn']),
     ...mapState(['gridSelection', 'variables', 'assessments']),
     selectedVariableIds () {
       return Object.keys(this.gridSelection)

@@ -24,7 +24,7 @@ export const fetchVariables = async (searchTermQuery: string, treeSelected: numb
   return variables
 }
 
-const toVariable = (response: any):VariableWithVariants => {
+export const toVariable = (response: any):VariableWithVariants => {
   return {
     id: response.id,
     label: response.label ? response.label : '',
