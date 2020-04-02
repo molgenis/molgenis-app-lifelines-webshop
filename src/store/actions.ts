@@ -13,7 +13,7 @@ import { setRolePermission, setUserPermission } from '@/services/permissionServi
 import transforms from './transforms'
 import { finalVariableSetSort } from '@/services/variableSetOrderService'
 import { QueryParams } from '@/types/QueryParams'
-import { fetchVariables } from '@/repository/VariableRepository'
+import { toVariable, fetchVariables } from '@/repository/VariableRepository'
 
 const buildPostOptions = (formData: any, formFields: FormField[]) => {
   return {
@@ -257,6 +257,33 @@ export default {
     commit('updateGridSelection', gridSelection)
     return true
   }),
+  loadAllVariables: async ({ state, commit }: { state: ApplicationState, commit: any }) => {
+    const attrs = 'id,name,label,variants(id,assessment_id)'
+    const BATCH_SIZE = 250
+    const selection:any = {}
+    const processBatch = (response:any) => {
+      const variables = response.items.map(toVariable)
+
+      for (const variable of variables) {
+        const variableAssessmentIds = transforms.gridAssessments(variable.variants, state.assessments, null).map((i:any) => i.id)
+        if (variableAssessmentIds.length) {
+          selection[variable.id] = variableAssessmentIds
+        }
+      }
+      commit('appendGridSelection', selection)
+    }
+
+    const initialBatchResp = await api.get(`/api/v2/lifelines_variable?&attrs=${attrs}&start=0&num=${BATCH_SIZE}&sort=id`)
+    processBatch(initialBatchResp)
+    const allVarsCount = initialBatchResp.total
+    const batchesNeeded = Math.ceil(allVarsCount / BATCH_SIZE)
+
+    for (let batchCount = 1; batchCount < batchesNeeded; batchCount++) {
+      const batchOffset = batchCount * BATCH_SIZE
+      const batchResp = await api.get(`/api/v2/lifelines_variable?&attrs=${attrs}&start=${batchOffset}&num=${BATCH_SIZE}&sort=id`)
+      processBatch(batchResp)
+    }
+  },
   loadOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
     return loadOrder({ state, commit }, orderNumber)
   }),

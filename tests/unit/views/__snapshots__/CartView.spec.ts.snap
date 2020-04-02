@@ -1,15 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CartView.vue renders cart view, showing the assesment labels sorted alphabetically 1`] = `
+exports[`CartView.vue renders cart view, showing the assessment labels sorted alphabetically 1`] = `
 <div id="cart-view">
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-6">
         <h3 class="h4">lifelines-webshop-cart-header</h3>
         <toast-component-stub value="[object Object]" class="my-3"></toast-component-stub>
-        <!---->
         <div role="tablist" class="mt-3 mb-2">
-          <div class="mb-2 d-flex justify-content-end"><button type="button" class="btn btn-primary save">lifelines-webshop-save-btn-label</button> <button type="button" class="btn btn-success ml-2">lifelines-webshop-order-btn-label</button></div>
+          <div class="mb-2 d-flex justify-content-end"><button type="button" class="btn btn-primary save">lifelines-webshop-save-btn-label</button> <button type="button" class="btn btn-success ml-2">lifelines-webshop-order-btn-label</button> <button class="btn btn-secondary ml-2 t-toggle-all-variables">
+              lifelines-webshop-remove-all-variables
+            </button></div>
           <div class="card mb-2">
             <!---->
             <!---->
@@ -27,9 +28,9 @@ exports[`CartView.vue renders cart view, showing the assesment labels sorted alp
                 <div>
                   <h5 class="h6">Subsection 1</h5>
                   <ul>
-                    <li class="subvariable-line start"><span>var 123 ( 1A, 2C )</span></li>
-                    <li class="subvariable-line line"><span>var 456 ( 2B )</span></li>
-                    <li class="subvariable-line end"><span>var 789 </span></li>
+                    <li class="subvariable-line start"><span>variable 100 label ( 1A, 2C )</span></li>
+                    <li class="subvariable-line line"><span>variable 101 label ( 2B )</span></li>
+                    <li class="subvariable-line end"><span>variable 102 label </span></li>
                   </ul>
                 </div>
               </div>
@@ -54,7 +55,9 @@ exports[`CartView.vue renders cart view, showing the assesment labels sorted alp
                 <div>
                   <h5 class="h6">Subsection 2</h5>
                   <ul>
-                    <li class="subvariable-line"><span>var 456 ( 2B )</span></li>
+                    <li class="subvariable-line start"><span>variable 100 label ( 1A, 2C )</span></li>
+                    <li class="subvariable-line line"><span>variable 101 label ( 2B )</span></li>
+                    <li class="subvariable-line end"><span>variable 102 label </span></li>
                   </ul>
                 </div>
               </div>

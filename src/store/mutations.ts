@@ -147,6 +147,10 @@ export default {
   updateGridSelection (state: ApplicationState, gridSelection: GridSelection) {
     state.gridSelection = gridSelection
   },
+  appendGridSelection (state: ApplicationState, gridSelection: GridSelection) {
+    const selection = Object.assign(JSON.parse(JSON.stringify(state.gridSelection)), gridSelection)
+    Vue.set(state, 'gridSelection', selection)
+  },
   updateSearchTerm (state: ApplicationState, searchTerm: string|null) {
     state.searchTerm = searchTerm
   },

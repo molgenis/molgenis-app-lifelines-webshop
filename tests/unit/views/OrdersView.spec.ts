@@ -43,7 +43,7 @@ describe('OrdersView.vue', () => {
   let store: any
   let mutations: any
 
-  const hasManagerRole = jest.fn()
+  const hasManagerRole = jest.fn(() => true)
   const copyOrder = jest.fn()
 
   let actions = {
