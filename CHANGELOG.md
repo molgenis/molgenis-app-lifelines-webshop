@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.14.2...v1.15.0) (2020-04-02)
+
+
+### Features
+
+* fix html characters and force release ([75d10d1](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/75d10d1))
+
 ## [1.14.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.14.1...v1.14.2) (2020-03-26)
 
 
