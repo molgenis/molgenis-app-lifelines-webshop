@@ -13,7 +13,7 @@ import { setRolePermission, setUserPermission } from '@/services/permissionServi
 import transforms from './transforms'
 import { finalVariableSetSort } from '@/services/variableSetOrderService'
 import { QueryParams } from '@/types/QueryParams'
-import { fetchVariables } from '@/repository/VariableRepository'
+import { toVariable, fetchVariables } from '@/repository/VariableRepository'
 
 const buildPostOptions = (formData: any, formFields: FormField[]) => {
   return {
@@ -257,6 +257,31 @@ export default {
     commit('updateGridSelection', gridSelection)
     return true
   }),
+  loadAllVariables: async ({ state, commit }: { state: ApplicationState, commit: any }) => {
+    const attrs = 'id,name,label,variants(id,assessment_id)'
+    let fetchMore = true
+
+    const batch = { num: 250, start: 0 }
+    const selection:any = {}
+
+    while (fetchMore) {
+      const response = await api.get(`/api/v2/lifelines_variable?&attrs=${attrs}&start=${batch.start}&num=${batch.num}&sort=id`)
+      batch.start += batch.num
+      if (response.items.length !== batch.num) {
+        fetchMore = false
+      }
+
+      const variables = response.items.map(toVariable)
+
+      for (const variable of variables) {
+        const variableAssessmentIds = transforms.gridAssessments(variable.variants, state.assessments, null).map((i:any) => i.id)
+        if (variableAssessmentIds.length) {
+          selection[variable.id] = variableAssessmentIds
+        }
+      }
+      commit('appendGridSelection', selection)
+    }
+  },
   loadOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
     return loadOrder({ state, commit }, orderNumber)
   }),

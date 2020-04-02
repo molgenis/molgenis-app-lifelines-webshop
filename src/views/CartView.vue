@@ -5,84 +5,100 @@
         <div class="col-sm-12 col-md-12 col-lg-6">
           <h3 class="h4">{{$t('lifelines-webshop-cart-header')}}</h3>
 
-          <toast-component
-            v-if="selectedVariableIds.length > 0"
-            :value="toast"
-            :fixed="false"
-            class="my-3"
-          ></toast-component>
-
           <spinner-animation v-if="loading" />
 
-          <div v-if="selectedVariableIds.length === 0">
-            <h4 class="h5">No variables selected</h4>
-            <p v-if="isSignedIn">{{$t('lifelines-webshop-cart-info-msg')}}</p>
-            <p v-else>{{$t('lifelines-webshop-cart-not-signedin-msg')}}</p>
-          </div>
+          <template v-else>
 
-          <div v-else class="mt-3 mb-2" role="tablist">
-            <div class="mb-2 d-flex justify-content-end">
-              <button
-                type="button"
-                class="btn btn-primary save"
-                @click="onSave"
-              >{{$t('lifelines-webshop-save-btn-label')}}</button>
-              <router-link
-                class="btn btn-success ml-2"
-                type="button"
-                to="/order"
-                tag="button"
-              >{{$t('lifelines-webshop-order-btn-label')}}</router-link>
+            <toast-component
+              v-if="selectedVariableIds.length > 0"
+              :value="toast"
+              :fixed="false"
+              class="my-3"
+            ></toast-component>
+
+            <div v-if="selectedVariableIds.length === 0">
+              <h4 class="h5">No variables selected</h4>
+              <p v-if="isSignedIn">{{$t('lifelines-webshop-cart-info-msg')}}</p>
+              <p v-else>{{$t('lifelines-webshop-cart-not-signedin-msg')}}</p>
+
+              <button v-if="hasManagerRole" class="btn btn-secondary t-toggle-all-variables" @click="toggleAllVariables(true)">
+                {{$t('lifelines-webshop-add-all-variables')}}
+              </button>
             </div>
-            <b-card no-body class="mb-2" v-for="(section, index) in cartTree" :key="section.id">
-              <b-card-header
-                header-tag="header"
-                class="pl-1 pt-2 pr-2 pb-2 hoverable"
-                role="tab"
-                @click.stop="collapseStatus(index)"
-              >
-                <h5 class="pl-3 m-0 text-black">
-                  {{section.name}}
-                  <collapse-tree-icon class="ml-2" :state="isActive(index)"></collapse-tree-icon>
-                </h5>
-              </b-card-header>
 
-              <!-- Don't use the same accordion index, so all items can be expanded at the same time -->
-              <b-collapse
-                :visible="isActive(index)"
-                :id="`accordion-${index}`"
-                :accordion="`my-accordion-${index}`"
-                role="tabpanel"
-              >
-                <b-card-body class="mx-3 my-1">
-                  <div v-for="subsection in section.subsections" :key="subsection.id">
-                    <h5 class="h6">{{subsection.name}}</h5>
-                    <ul>
-                      <li v-for="variable in variablesWithSet(subsection.variables)" :key="variable.id" class="subvariable-line" :class="variableSetClass(variable)">
-                        <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
-                      </li>
-                    </ul>
-                  </div>
-                </b-card-body>
-              </b-collapse>
-            </b-card>
-          </div>
+            <div v-else class="mt-3 mb-2" role="tablist">
+              <div class="mb-2 d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-primary save"
+                  @click="onSave"
+                >{{$t('lifelines-webshop-save-btn-label')}}</button>
+                <router-link
+                  class="btn btn-success ml-2"
+                  type="button"
+                  to="/order"
+                  tag="button"
+                >{{$t('lifelines-webshop-order-btn-label')}}</router-link>
 
-          <div class="mb-3" v-if="selectedVariableIds.length > 10">
-            <div class="d-flex justify-content-end">
-              <button
-                type="button"
-                class="btn btn-primary save"
-                @click="onSave"
-              >{{$t('lifelines-webshop-save-btn-label')}}</button>
-              <router-link
-                class="btn btn-success ml-2"
-                type="button"
-                to="/order"
-                tag="button"
-              >{{$t('lifelines-webshop-order-btn-label')}}</router-link>
+                <button v-if="hasManagerRole" class="btn btn-secondary ml-2 t-toggle-all-variables" @click="toggleAllVariables(false)">
+                  {{$t('lifelines-webshop-remove-all-variables')}}
+                </button>
+
+              </div>
+              <b-card no-body class="mb-2" v-for="(section, sectionIndex) in cartTree" :key="section.id">
+                <b-card-header
+                  header-tag="header"
+                  class="pl-1 pt-2 pr-2 pb-2 hoverable"
+                  role="tab"
+                  @click.stop="collapseStatus(sectionIndex)"
+                >
+                  <h5 class="pl-3 m-0 text-black">
+                    {{section.name}}
+                    <collapse-tree-icon class="ml-2" :state="isActive(sectionIndex)"></collapse-tree-icon>
+                  </h5>
+                </b-card-header>
+
+                <!-- Don't use the same accordion index, so all items can be expanded at the same time -->
+                <b-collapse
+                  :visible="isActive(sectionIndex)"
+                  :id="`accordion-${sectionIndex}`"
+                  :accordion="`my-accordion-${sectionIndex}`"
+                  role="tabpanel"
+                >
+                  <b-card-body class="mx-3 my-1">
+                    <div v-for="(subsection, subsectionIndex) in section.subsections" :key="subsection.id">
+                      <h5 class="h6">{{subsection.name}}</h5>
+                      <ul>
+                        <li
+                          v-for="(variable, variableIndex) in variablesWithSet(subsection.variables)"
+                          :key="`${sectionIndex}-${subsectionIndex}-${variableIndex}`"
+                          class="subvariable-line" :class="variableSetClass(variable)">
+                          <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </b-card-body>
+                </b-collapse>
+              </b-card>
             </div>
-          </div>
+
+            <div class="mb-3" v-if="selectedVariableIds.length > 10">
+              <div class="d-flex justify-content-end">
+                <button
+                  type="button"
+                  class="btn btn-primary save"
+                  @click="onSave"
+                >{{$t('lifelines-webshop-save-btn-label')}}</button>
+                <router-link
+                  class="btn btn-success ml-2"
+                  type="button"
+                  to="/order"
+                  tag="button"
+                >{{$t('lifelines-webshop-order-btn-label')}}</router-link>
+              </div>
+            </div>
+          </template>
+
         </div>
       </div>
     </div>
@@ -101,6 +117,7 @@ export default Vue.extend({
   components: { SpinnerAnimation, CollapseTreeIcon, ToastComponent },
   data () {
     return {
+      isLoading: false,
       openItems: ['accordion-0'],
       toast: [
         {
@@ -112,7 +129,16 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapActions(['save']),
+    ...mapActions(['save', 'loadAllVariables']),
+    async toggleAllVariables (selectAll) {
+      if (!selectAll) {
+        this.$store.commit('updateGridSelection', {})
+      } else {
+        this.isLoading = true
+        await this.loadAllVariables()
+        this.isLoading = false
+      }
+    },
     async onSave () {
       const orderNumber = await this.save()
       this.$router.push({ name: 'load', params: { orderNumber } })
@@ -185,7 +211,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['cartTree', 'isSignedIn']),
+    ...mapGetters(['cartTree', 'hasManagerRole', 'isSignedIn']),
     ...mapState(['gridSelection', 'variables', 'assessments']),
     selectedVariableIds () {
       return Object.keys(this.gridSelection)
@@ -203,7 +229,7 @@ export default Vue.extend({
       return variableAssessmentStrings
     },
     loading () {
-      return !(
+      return this.isLoading || !(
         Object.keys(this.assessments).length &&
         Object.keys(this.variables).length
       )

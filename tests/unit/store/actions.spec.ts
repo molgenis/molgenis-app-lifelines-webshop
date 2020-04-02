@@ -4,6 +4,7 @@ import actions from '@/store/actions'
 import { Cart } from '@/types/Cart'
 import emptyState from '../fixtures/state'
 import orders from '../fixtures/orders'
+import { assessments, variables } from '../fixtures/grid'
 
 // @ts-ignore
 import { post } from '@molgenis/molgenis-api-client'
@@ -54,6 +55,10 @@ function getApplicationState () {
 }
 
 const mockResponses: { [key: string]: Object } = {
+  '/api/v2/lifelines_variable?&attrs=id,name,label,variants(id,assessment_id)&start=0&num=250&sort=id': {
+    items: variables,
+    total: variables.length
+  },
   '/api/v2/lifelines_order?num=10&start=0': {
     items: orders,
     total: orders.length
@@ -286,6 +291,7 @@ const mockDelete = jest.fn()
 
 jest.mock('@/repository/VariableRepository', () => {
   return {
+    ...(jest.requireActual('@/repository/VariableRepository')),
     fetchVariables: jest.fn()
   }
 })
@@ -899,6 +905,20 @@ describe('actions', () => {
       await actions.sendApproveTrigger({}, 'my-order-nr')
       expect(axios.post).toHaveBeenCalledWith('/edge-server/approve?ordernumber=my-order-nr')
       done()
+    })
+  })
+
+  describe('loadAllVariables', () => {
+    let state:any = { assessments }
+    it('loads all variables into gridSelection', async () => {
+      const commit = jest.fn()
+      await actions.loadAllVariables({ state, commit })
+
+      expect(commit).toHaveBeenCalledWith('appendGridSelection', {
+        '100': [200, 201, 202],
+        '101': [200, 201, 202],
+        '102': [200, 201, 202]
+      })
     })
   })
 })
