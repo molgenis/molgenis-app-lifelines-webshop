@@ -34,7 +34,7 @@
         </div>
 
         <div class="no-gutters search-info">
-          <span>{{searchMessage}}</span>
+          <span v-html="searchMessage"></span>
         </div>
         <grid-view />
       </div>
@@ -46,7 +46,7 @@
 import Vue from 'vue'
 import TreeView from './TreeView.vue'
 import GridView from './GridView.vue'
-import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
+import { mapMutations, mapGetters, mapState } from 'vuex'
 import SearchComponent from '../components/search/SearchComponent.vue'
 import ToastComponent from '@molgenis-ui/components/src/components/ToastComponent.vue'
 import InfoIcon from '../components/InfoIcon'
@@ -103,7 +103,6 @@ export default Vue.extend({
             subSection: this.selectedSubsection
           })
       }
-
       return `${searchMessage}.`
     },
     selectedSubsection: function () {
