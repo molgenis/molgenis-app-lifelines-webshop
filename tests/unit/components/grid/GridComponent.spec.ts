@@ -3,19 +3,31 @@ import Vue from 'vue'
 import GridComponent from '@/components/grid/GridComponent.vue'
 
 const localVue = createLocalVue()
+const emptyProps = {
+  gridAssessments: [],
+  gridColumns: [],
+  gridRows: null,
+  gridVariables: null,
+  gridSelections: null,
+  isLoading: false,
+  isSignedIn: true
+}
+const oneByOneGridProps = {
+  gridRows: [[1]],
+  gridColumns: [{ id: 10 }],
+  gridVariables: [{
+    name: 'a',
+    id: 101,
+    subvariables: []
+  }],
+  gridSelections: [[false]],
+  isLoading: false,
+  isSignedIn: true
+}
 
 localVue.directive('b-popover', { /* stub */ })
 
 describe('GridComponent.vue', () => {
-  const emptyProps = {
-    gridAssessments: [],
-    gridColumns: [],
-    gridRows: null,
-    gridVariables: null,
-    gridSelections: null,
-    isLoading: false,
-    isSignedIn: true
-  }
   describe('when created', () => {
     let wrapper: Wrapper<Vue>
 
@@ -250,6 +262,7 @@ describe('GridComponent.vue', () => {
     const propsData = {
       grid: [[1]],
       gridAssessments: [{ id: 10 }],
+      gridColumns: [],
       gridVariables: [{
         name: 'a',
         id: 101,
@@ -317,6 +330,46 @@ describe('GridComponent.vue', () => {
         expect(wrapper.vm.$refs.varspacer.style.width).toEqual('0px')
         done()
       })
+    })
+
+    it('should not throw error in case of empty grid', () => {
+      const propsData = {
+        gridRows: [],
+        gridColumns: [],
+        gridVariables: [],
+        gridSelections: [],
+        isLoading: false,
+        isSignedIn: true
+      }
+      wrapper = shallowMount(GridComponent, { localVue, propsData })
+      try {
+        wrapper.vm.setGridHeaderSpacer()
+      } catch (e) {
+        // have test fail
+        expect(false).toBeTruthy()
+      }
+      expect(true).toBeTruthy()
+    })
+  })
+
+  describe('getTableTop', () => {
+    it('should return null in case of no grid', () => {
+      const wrapper:any = shallowMount(GridComponent, { localVue, propsData: { ...emptyProps } })
+      expect(wrapper.vm.getTableTop()).toEqual(null)
+    })
+
+    it('should return something in case of grid', () => {
+      const wrapper:any = shallowMount(GridComponent, { localVue, propsData: { ...oneByOneGridProps } })
+      // expect zero due to jsdom
+      expect(wrapper.vm.getTableTop()).toEqual(0)
+    })
+  })
+
+  describe('getHeaderHeight', () => {
+    it('should return number in case of grid', () => {
+      const wrapper:any = shallowMount(GridComponent, { localVue, propsData: { ...oneByOneGridProps } })
+      // expect zero due to jsdom
+      expect(wrapper.vm.getHeaderHeight()).toEqual(0)
     })
   })
 })
