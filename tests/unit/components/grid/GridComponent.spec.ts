@@ -318,5 +318,24 @@ describe('GridComponent.vue', () => {
         done()
       })
     })
+
+    it('should not throw error in case of empty grid', () => {
+      const propsData = {
+        gridRows: [],
+        gridColumns: [],
+        gridVariables: [],
+        gridSelections: [],
+        isLoading: false,
+        isSignedIn: true
+      }
+      wrapper = shallowMount(GridComponent, { localVue, propsData })
+      try {
+        wrapper.vm.setGridHeaderSpacer()
+      } catch (e) {
+        // have test fail
+        expect(false).toBeTruthy()
+      }
+      expect(true).toBeTruthy()
+    })
   })
 })
