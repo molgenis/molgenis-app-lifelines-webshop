@@ -250,6 +250,7 @@ describe('GridComponent.vue', () => {
     const propsData = {
       grid: [[1]],
       gridAssessments: [{ id: 10 }],
+      gridColumns: [],
       gridVariables: [{
         name: 'a',
         id: 101,
@@ -336,6 +337,21 @@ describe('GridComponent.vue', () => {
         expect(false).toBeTruthy()
       }
       expect(true).toBeTruthy()
+    })
+  })
+
+  describe('getTableTop', () => {
+    it('should return null in case of no grid', () => {
+      const propsData = {
+        gridRows: [],
+        gridColumns: [],
+        gridVariables: [],
+        gridSelections: [],
+        isLoading: false,
+        isSignedIn: true
+      }
+      const wrapper:any = shallowMount(GridComponent, { localVue, propsData })
+      expect(wrapper.vm.getTableTop()).toEqual(null)
     })
   })
 })
