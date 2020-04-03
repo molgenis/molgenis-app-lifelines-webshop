@@ -332,8 +332,7 @@ export default Vue.extend({
      * and use this as the header offSet to align column headers.
     **/
     setGridHeaderSpacer () {
-      const variableHTMLElements = this.$refs.variable
-      const elemArray = [].slice.call(variableHTMLElements)
+      const elemArray = this.$refs.variable ? [].slice.call(this.$refs.variable) : []
       let maxSize = -1 // 16px basesize
       elemArray.forEach((elem) => {
         if (elem.offsetWidth > maxSize) {
