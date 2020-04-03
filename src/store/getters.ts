@@ -184,5 +184,5 @@ export default {
   isSearchResultEmpty: (state: ApplicationState): boolean => {
     return !!(state.searchTerm && state.gridVariables && state.gridVariables.length === 0)
   },
-  hasManagerRole: (state: ApplicationState) => state.context.context.roles.includes('ROLE_LIFELINES_MANAGER')
+  hasManagerRole: (state: ApplicationState) => state.context.context.roles.includes('ROLE_lifelines_MANAGER')
 }

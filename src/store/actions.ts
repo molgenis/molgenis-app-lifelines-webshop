@@ -310,12 +310,12 @@ export default {
       throw new Error('Can not set permission if orderNumber is not set')
     }
     const setPermissionRequests = [
-      setRolePermission(state.order.orderNumber, 'lifelines_order', 'LIFELINES_MANAGER', 'WRITE'),
-      setRolePermission(state.order.contents.id, 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
+      setRolePermission(state.order.orderNumber, 'lifelines_order', 'lifelines_MANAGER', 'WRITE'),
+      setRolePermission(state.order.contents.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
     ]
     if (state.order.applicationForm && state.order.applicationForm.id) {
       setPermissionRequests.push(
-        setRolePermission(state.order.applicationForm.id, 'sys_FileMeta', 'LIFELINES_MANAGER', 'WRITE')
+        setRolePermission(state.order.applicationForm.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
       )
     }
     Promise.all(setPermissionRequests)
