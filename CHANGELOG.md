@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.15.0...v1.15.1) (2020-04-03)
+
+
+### Bug Fixes
+
+* [#289](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/289) null pointer issue ([3a7db9b](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/3a7db9b))
+
 # [1.15.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.14.2...v1.15.0) (2020-04-02)
 
 
