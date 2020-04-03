@@ -347,9 +347,7 @@ export default Vue.extend({
         : null
     },
     getHeaderHeight () {
-      return this.$refs.gridheader
-        ? this.$refs.gridheader.getBoundingClientRect().height
-        : null
+      return this.$refs.gridheader.getBoundingClientRect().height
     },
     closeVariableSet () {
       if (this.gridVariables) {
