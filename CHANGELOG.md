@@ -1,3 +1,10 @@
+## [1.15.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.15.1...v1.15.2) (2020-04-07)
+
+
+### Bug Fixes
+
+* rename roles to proper casing ([969443d](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/969443d))
+
 ## [1.15.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.15.0...v1.15.1) (2020-04-03)
 
 
