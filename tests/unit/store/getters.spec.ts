@@ -588,7 +588,7 @@ describe('getters', () => {
       expect(getters.hasManagerRole(testState)).toBe(false)
     })
     it('is true when user is a manager', () => {
-      const testState = { ...emptyState, context: { context: { roles: ['ROLE_LIFELINES_MANAGER'] } } as any }
+      const testState = { ...emptyState, context: { context: { roles: ['ROLE_lifelines_MANAGER'] } } as any }
       expect(getters.hasManagerRole(testState)).toBe(true)
     })
   })

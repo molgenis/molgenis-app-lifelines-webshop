@@ -1,8 +1,8 @@
 module.exports = {
   roles: [
     'ROLE_USER',
-    'ROLE_LIFELINES_SHOPPER',
-    'ROLE_LIFELINES_MANAGER'
+    'ROLE_lifelines_SHOPPER',
+    'ROLE_lifelines_MANAGER'
   ],
   email: 'll_admin@molgenis.org',
   username: 'll_admin',
