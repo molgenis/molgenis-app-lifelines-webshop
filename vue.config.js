@@ -13,6 +13,7 @@ build-date: ${buildDate}`
 
 const config = require('rc')('lifelines', {
   development: {
+    edge_proxy: 'https://dev-lifelines.test.molgenis.org/',
     molgenis_proxy: 'https://dev-lifelines.test.molgenis.org/',
     pdf_proxy: 'https://dev-lifelines.test.molgenis.org/'
   }
@@ -64,6 +65,10 @@ module.exports = {
     proxy: process.env.NODE_ENV === 'production' ? undefined : {
       '^/vuepdf*': {
         'target': config.development.pdf_proxy,
+        'keepOrigin': true
+      },
+      '^/edge-server*': {
+        'target': config.development.edge_proxy,
         'keepOrigin': true
       },
       '^/api': {

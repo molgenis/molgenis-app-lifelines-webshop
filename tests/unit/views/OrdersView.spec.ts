@@ -47,7 +47,7 @@ describe('OrdersView.vue', () => {
   const copyOrder = jest.fn()
 
   let actions = {
-    loadOrder: jest.fn(),
+    load: jest.fn(),
     deleteOrder: jest.fn(),
     loadOrders: jest.fn(() => {
       return {
@@ -197,7 +197,7 @@ describe('OrdersView.vue', () => {
         })
 
         it('approve order success', () => {
-          expect(actions.loadOrder).toHaveBeenCalled()
+          expect(actions.load).toHaveBeenCalled()
           expect(mutations.changeOrderStatus).toHaveBeenCalled()
           expect(actions.save).toHaveBeenCalled()
           expect(actions.sendApproveTrigger).toHaveBeenCalled()
