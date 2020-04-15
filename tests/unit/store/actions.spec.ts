@@ -14,6 +14,8 @@ import * as orderService from '@/services/orderService'
 import { setRolePermission, setUserPermission } from '@/services/permissionService'
 import { fetchVariables } from '@/repository/VariableRepository'
 
+jest.mock('axios')
+
 const cart: Cart = {
   selection: [{
     assessment: '1A',
@@ -889,4 +891,15 @@ describe('actions', () => {
     })
   })
 
+  describe('sendApproveTrigger', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      axios.post.mockResolvedValueOnce(() => Promise.resolve())
+    })
+    it('should send the port to the edge server', async (done) => {
+      await actions.sendApproveTrigger('my-order-nr')
+      expect(axios.post).toHaveBeenCalledWith('/edge-server/approve?ordernumber=my-order-nr')
+      done()
+    })
+  })
 })
