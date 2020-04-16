@@ -70,54 +70,53 @@
               </th>
             </tr>
 
-            <tr
-              v-for="(row, rowIndex) in gridRows"
-              :key="rowIndex"
-              :class="{'d-none': !isVisibleVariable(gridVariables[rowIndex])}"
-            >
-              <th
-                class="collapse-holder subvariable-line"
-                :class="variableSetClass(gridVariables[rowIndex])"
-                @click="variableSetClickHandler(gridVariables[rowIndex])"
-              >
-                <font-awesome-icon
-                  class="mb-1"
-                  v-if="gridVariables[rowIndex].subvariables && gridVariables[rowIndex].subvariables.length>0"
-                  :icon="variableSetIsOpen(gridVariables[rowIndex])?'plus-square':'minus-square'"
-                />
-              </th>
-              <th
-                class="variable-column"
-                ref="variable"
-                v-b-popover.hover.left.html="popupBody(rowIndex)"
-                :title="popupTitle(rowIndex)"
-                :class="{'selected-variable': rowIndex === selectedRowIndex }"
-              >
-                <grid-titel-info
-                  :class="{'ml-3': !!gridVariables[rowIndex].subvariableOf}"
-                  v-bind="gridVariables[rowIndex]"
-                />
-              </th>
-              <th class="row-toggle grid-toggle">
-                <button
-                  :disabled="!isSignedIn"
-                  class="btn btn-sm select-row btn-outline-secondary t-btn-row-toggle"
-                  :data-row="rowIndex"
-                  :class="classes('rowSelect', {rowIndex})"
+            <template v-for="(row, rowIndex) in gridRows">
+              <tr v-if=isVisibleVariable(gridVariables[rowIndex]) :key="rowIndex" >
+                <th
+                  class="collapse-holder subvariable-line"
+                  :class="variableSetClass(gridVariables[rowIndex])"
+                  @click="variableSetClickHandler(gridVariables[rowIndex])"
                 >
-                  <font-awesome-icon icon="arrow-right" />
-                </button>
-              </th>
-              <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
-                <button
-                  :disabled="!isSignedIn"
-                  :data-col="colIndex"
-                  :data-row="rowIndex"
-                  :class="classes('cell', {rowIndex, colIndex})"
-                  class="btn btn-sm t-btn-cell-toggle"
-                >{{count | formatCount}}</button>
-              </td>
-            </tr>
+                  <font-awesome-icon
+                    class="mb-1"
+                    v-if="gridVariables[rowIndex].subvariables && gridVariables[rowIndex].subvariables.length>0"
+                    :icon="variableSetIsOpen(gridVariables[rowIndex])?'plus-square':'minus-square'"
+                  />
+                </th>
+                <th
+                  class="variable-column"
+                  ref="variable"
+                  v-b-popover.hover.left.html="popupBody(rowIndex)"
+                  :title="popupTitle(rowIndex)"
+                  :class="{'selected-variable': rowIndex === selectedRowIndex }"
+                >
+                  <grid-titel-info
+                    :class="{'ml-3': !!gridVariables[rowIndex].subvariableOf}"
+                    v-bind="gridVariables[rowIndex]"
+                  />
+                </th>
+                <th class="row-toggle grid-toggle">
+                  <button
+                    :disabled="!isSignedIn"
+                    class="btn btn-sm select-row btn-outline-secondary t-btn-row-toggle"
+                    :data-row="rowIndex"
+                    :class="classes('rowSelect', {rowIndex})"
+                  >
+                    <font-awesome-icon icon="arrow-right" />
+                  </button>
+                </th>
+                <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
+                  <button
+                    :disabled="!isSignedIn"
+                    :data-col="colIndex"
+                    :data-row="rowIndex"
+                    :class="classes('cell', {rowIndex, colIndex})"
+                    class="btn btn-sm t-btn-cell-toggle"
+                  >{{count | formatCount}}</button>
+                </td>
+              </tr>
+
+            </template>
           </table>
         </div>
       </div>
