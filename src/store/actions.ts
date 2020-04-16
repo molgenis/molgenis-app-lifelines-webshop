@@ -247,7 +247,6 @@ export default {
     const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     commit('restoreOrderState', newOrderResponse)
     dispatch('givePermissionToOrder')
-    dispatch('sendSubmissionTrigger')
     successMessage(`Submitted order with order number ${orderNumber}`, commit)
   }),
   load: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
@@ -336,13 +335,7 @@ export default {
     await Promise.all(results)
   }),
 
-  sendSubmissionTrigger: async () => {
-    return axios.post('/edge-server/trigger?type=submit').catch((err: any) => {
-      console.log('Send submit trigger failed')
-      console.log(err)
-    })
-  },
-  sendApproveTrigger: tryAction(async ({ state }: { state: ApplicationState }, orderNumber: string) => {
-    return axios.post(`/edge-server/trigger?type=approve&ordernumber=${orderNumber}`)
+  sendApproveTrigger: tryAction(async (orderNumber: string) => {
+    return axios.post(`/edge-server/approve?ordernumber=${orderNumber}`)
   })
 }
