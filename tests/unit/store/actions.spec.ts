@@ -897,7 +897,7 @@ describe('actions', () => {
       axios.post.mockResolvedValueOnce(() => Promise.resolve())
     })
     it('should send the port to the edge server', async (done) => {
-      await actions.sendApproveTrigger('my-order-nr')
+      await actions.sendApproveTrigger({}, 'my-order-nr')
       expect(axios.post).toHaveBeenCalledWith('/edge-server/approve?ordernumber=my-order-nr')
       done()
     })
