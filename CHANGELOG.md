@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.0.0...v2.0.1) (2020-04-16)
+
+
+### Bug Fixes
+
+* add missing context param to sendAproveTrigger action ([7ae6c20](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/7ae6c20))
+
 # [2.0.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.15.2...v2.0.0) (2020-04-16)
 
 
