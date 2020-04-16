@@ -335,7 +335,7 @@ export default {
     await Promise.all(results)
   }),
 
-  sendApproveTrigger: tryAction(async (orderNumber: string) => {
+  sendApproveTrigger: tryAction(async (context:any, orderNumber: string) => {
     return axios.post(`/edge-server/approve?ordernumber=${orderNumber}`)
   })
 }
