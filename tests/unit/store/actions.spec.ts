@@ -14,6 +14,8 @@ import * as orderService from '@/services/orderService'
 import { setRolePermission, setUserPermission } from '@/services/permissionService'
 import { fetchVariables } from '@/repository/VariableRepository'
 
+jest.mock('axios')
+
 const cart: Cart = {
   selection: [{
     assessment: '1A',
@@ -743,7 +745,6 @@ describe('actions', () => {
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
         expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
-        expect(dispatch).toHaveBeenCalledWith('sendSubmissionTrigger')
         done()
       })
     })
@@ -757,7 +758,6 @@ describe('actions', () => {
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
         expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
-        expect(dispatch).toHaveBeenCalledWith('sendSubmissionTrigger')
         done()
       })
     })
@@ -781,7 +781,6 @@ describe('actions', () => {
         expect(result).toBeUndefined()
         expect(commit).not.toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
         expect(dispatch).not.toHaveBeenCalledWith('givePermissionToOrder')
-        expect(dispatch).not.toHaveBeenCalledWith('sendSubmissionTrigger')
       })
     })
   })
@@ -892,38 +891,15 @@ describe('actions', () => {
     })
   })
 
-  describe('sendSubmissionTrigger', () => {
-    let mockPost = jest.fn()
-    beforeEach(async (done) => {
-      mockPost.mockResolvedValue('yep yep')
-      axios.post = mockPost
-      await actions.sendSubmissionTrigger()
-      done()
-    })
-    it('should send a trigger of type submit', () => {
-      expect(mockPost).toHaveBeenCalledWith('/edge-server/trigger?type=submit')
-    })
-  })
-
-  describe('sendSubmissionTrigger error handling', () => {
-    let mockPost = jest.fn()
-
-    beforeEach(async (done) => {
-      console.log = jest.fn()
-      mockPost.mockRejectedValue('my err')
-      axios.post = mockPost
-      await actions.sendSubmissionTrigger()
-      done()
-    })
-
-    it('should send a trigger of type submit', () => {
-      expect(console.log).toBeCalledWith('Send submit trigger failed')
-      expect(console.log).toBeCalledWith('my err')
-    })
-
-    afterEach(() => {
+  describe('sendApproveTrigger', () => {
+    beforeEach(() => {
       // @ts-ignore
-      console.log.mockClear()
+      axios.post.mockResolvedValueOnce(() => Promise.resolve())
+    })
+    it('should send the port to the edge server', async (done) => {
+      await actions.sendApproveTrigger({}, 'my-order-nr')
+      expect(axios.post).toHaveBeenCalledWith('/edge-server/approve?ordernumber=my-order-nr')
+      done()
     })
   })
 })

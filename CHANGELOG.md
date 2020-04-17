@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.15.2...v2.0.0) (2020-04-16)
+
+
+### task
+
+* Update edge server endpoints ([a07e578](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/a07e578))
+
+
+### BREAKING CHANGES
+
+* new approve trigger endpoint
+
 ## [1.15.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v1.15.1...v1.15.2) (2020-04-07)
 
 
