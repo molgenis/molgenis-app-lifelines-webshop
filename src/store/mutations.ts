@@ -39,6 +39,15 @@ export default {
   setToast (state: ApplicationState, toast: Toast) {
     state.toast.unshift(toast)
   },
+  setSuccessMessage (state: ApplicationState, message: string) {
+    state.toast = [{
+      message,
+      type: 'success',
+      textType: 'light',
+      title: 'Success',
+      timeout: Vue.prototype.$global.toastTimeoutTime
+    }]
+  },
   clearToast (state: ApplicationState) {
     state.toast = []
   },

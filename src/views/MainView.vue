@@ -24,7 +24,7 @@ import SidebarView from './SidebarView.vue'
 import CartView from './CartView.vue'
 import NavigationBar from '../components/NavigationBar.vue'
 
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default Vue.extend({
   name: 'MainView',
@@ -43,7 +43,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapMutations(['setLoading']),
+    ...mapMutations(['setLoading', 'setSuccessMessage']),
     ...mapActions(['loadOrderAndCart', 'loadVariables', 'loadAssessments'])
   },
   created: async function () {
@@ -52,8 +52,9 @@ export default Vue.extend({
     const promises = Promise.all([this.loadVariables(), this.loadAssessments()])
     await promises
 
-    if (this.$route.params.orderNumber) {
-      await this.loadOrderAndCart(this.$route.params.orderNumber)
+    const orderNumber = this.$route.params.orderNumber
+    if (orderNumber && await this.loadOrderAndCart(orderNumber)) {
+      this.setSuccessMessage(`Loaded order with orderNumber ${orderNumber}`)
     }
     this.setLoading(false)
   }
