@@ -264,7 +264,7 @@ export default Vue.extend({
       })
     },
     changeStateConfirmed: async function (orderNumber, targetState) {
-      await this.load(orderNumber)
+      await this.loadOrderAndCart(orderNumber)
       this.changeOrderStatus(targetState)
       await this.save()
 
@@ -389,7 +389,7 @@ export default Vue.extend({
       await this.loadOrders(query)
       this.table.isBusy = false
     },
-    ...mapActions(['save', 'load', 'loadVariables', 'loadAssessments', 'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
+    ...mapActions(['save', 'loadOrderAndCart', 'loadVariables', 'loadAssessments', 'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
     ...mapMutations(['changeOrderStatus', 'setToast'])
   },
   mounted: function () {

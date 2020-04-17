@@ -44,7 +44,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations(['setLoading']),
-    ...mapActions(['load', 'loadVariables', 'loadAssessments'])
+    ...mapActions(['loadOrderAndCart', 'loadVariables', 'loadAssessments'])
   },
   created: async function () {
     this.setLoading(true)
@@ -53,7 +53,7 @@ export default Vue.extend({
     await promises
 
     if (this.$route.params.orderNumber) {
-      await this.load(this.$route.params.orderNumber)
+      await this.loadOrderAndCart(this.$route.params.orderNumber)
     }
     this.setLoading(false)
   }

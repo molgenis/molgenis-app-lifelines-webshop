@@ -572,8 +572,8 @@ describe('actions', () => {
     })
   })
 
-  describe('load', () => {
-    it('loads grid selection', async (done) => {
+  describe('loadOrderAndCart', () => {
+    it('loads the order and cart data and updates the state with current order grid selection', async (done) => {
       const commit = jest.fn()
       const state = {
         ...emptyState,
@@ -583,7 +583,7 @@ describe('actions', () => {
           2: { id: 2, name: 'VAR2', label: 'Variable 2', subsections: [2] }
         }
       }
-      await actions.load({ commit, state }, 'fghij')
+      await actions.loadOrderAndCart({ commit, state }, 'fghij')
       expect(commit).toHaveBeenCalledWith('setToast', { message: 'Loaded order with orderNumber fghij', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
       expect(commit).toHaveBeenCalledWith('updateGridSelection', { 1: [1], 2: [1] })
       expect(commit).toHaveBeenCalledWith('updateFacetFilter', { ...emptyState.facetFilter, ageGroupAt1A: ['2', '3'] })
