@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.0.1...v2.0.2) (2020-04-20)
+
+
+### Bug Fixes
+
+* make sure the order/cart is in the state before approving ([#294](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/294)) ([c9e838a](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/c9e838a))
+
 ## [2.0.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.0.0...v2.0.1) (2020-04-16)
 
 
