@@ -5,6 +5,7 @@ import { OrderState } from '@/types/Order'
 import { Toast } from '@/types/ApplicationState'
 import { VariableWithVariants } from '@/types/Variable'
 import initialState from '@/store/state'
+import '@/globals/variables'
 
 const gridVariables:VariableWithVariants[] = [
   {
@@ -210,6 +211,20 @@ describe('mutations', () => {
       let baseAppState = Object.assign({}, state)
       mutations.setToast(baseAppState, { type: 'danger', message: 'message' })
       expect(baseAppState.toast).toEqual([{ type: 'danger', message: 'message' }])
+    })
+  })
+
+  describe('setSuccessMessage', () => {
+    it('set the succes toast with given message', () => {
+      let baseAppState = Object.assign({}, state)
+      mutations.setSuccessMessage(baseAppState, 'suc msg')
+      expect(baseAppState.toast).toEqual([{
+        message: 'suc msg',
+        textType: 'light',
+        timeout: 5000,
+        title: 'Success',
+        type: 'success'
+      }])
     })
   })
 

@@ -249,13 +249,13 @@ export default {
     dispatch('givePermissionToOrder')
     successMessage(`Submitted order with order number ${orderNumber}`, commit)
   }),
-  load: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
+  loadOrderAndCart: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
     const response = await loadOrder({ state, commit }, orderNumber)
     const cart: Cart = await api.get(`/files/${response.contents.id}`)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('updateFacetFilter', facetFilter)
     commit('updateGridSelection', gridSelection)
-    successMessage(`Loaded order with orderNumber ${orderNumber}`, commit)
+    return true
   }),
   loadOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
     return loadOrder({ state, commit }, orderNumber)

@@ -27,7 +27,8 @@ describe('MainView.vue', () => {
     actions = {
       loadVariables: jest.fn(),
       loadAssessments: jest.fn(),
-      load: jest.fn(),
+      loadOrderAndCart: jest.fn(),
+      setSuccessMessage: jest.fn(),
       save: jest.fn()
     }
     mutations = {
@@ -54,10 +55,11 @@ describe('MainView.vue', () => {
   it('loads an order, after loading variables and assessments, if a orderNumber route param is present', (done) => {
     actions.loadVariables.mockReturnValueOnce(Promise.resolve())
     actions.loadAssessments.mockReturnValueOnce(Promise.resolve())
+    actions.loadOrderAndCart.mockReturnValueOnce(Promise.resolve(true))
     mocks.$route.params.orderNumber = 'abcde'
     shallowMount(MainView, { store, localVue, mocks, stubs })
     setTimeout(() => {
-      expect(actions.load).toHaveBeenCalledWith(expect.anything(), 'abcde', undefined)
+      expect(actions.loadOrderAndCart).toHaveBeenCalledWith(expect.anything(), 'abcde', undefined)
       done()
     }, 0)
   })

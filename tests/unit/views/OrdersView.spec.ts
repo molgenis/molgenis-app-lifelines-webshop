@@ -47,7 +47,7 @@ describe('OrdersView.vue', () => {
   const copyOrder = jest.fn()
 
   let actions = {
-    loadOrder: jest.fn(),
+    loadOrderAndCart: jest.fn(),
     deleteOrder: jest.fn(),
     loadOrders: jest.fn(() => {
       return {
@@ -58,7 +58,9 @@ describe('OrdersView.vue', () => {
     sendApproveTrigger: jest.fn(),
     copyOrder,
     save: jest.fn(),
-    submit: jest.fn()
+    submit: jest.fn(),
+    loadVariables: jest.fn(),
+    loadAssessments: jest.fn()
   }
 
   let getters = {
@@ -197,7 +199,7 @@ describe('OrdersView.vue', () => {
         })
 
         it('approve order success', () => {
-          expect(actions.loadOrder).toHaveBeenCalled()
+          expect(actions.loadOrderAndCart).toHaveBeenCalled()
           expect(mutations.changeOrderStatus).toHaveBeenCalled()
           expect(actions.save).toHaveBeenCalled()
           expect(actions.sendApproveTrigger).toHaveBeenCalled()
