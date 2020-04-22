@@ -269,7 +269,7 @@ describe('GridComponent.vue', () => {
         subvariables: [],
         options: [{ label_en: 'my option' }],
         definitionEn: 'enDef',
-        definitionNL: 'nlDef'
+        definitionNl: 'nlDef'
       }],
       gridSelections: [[false]],
       isLoading: false,

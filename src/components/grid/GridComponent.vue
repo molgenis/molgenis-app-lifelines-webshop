@@ -378,7 +378,7 @@ export default Vue.extend({
         <strong>Description (en):</strong>
         <p>${this.gridVariables[rowIndex].definitionEn}</p>
         <strong>Description (nl):</strong>
-        <p>${this.gridVariables[rowIndex].definitionNL}</p>
+        <p>${this.gridVariables[rowIndex].definitionNl}</p>
         <strong>Categorical values (en):</strong>
         <p>${optonsHtml}</p>
       </div>`
