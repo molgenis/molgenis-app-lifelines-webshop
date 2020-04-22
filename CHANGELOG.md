@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.0.2...v2.1.0) (2020-04-22)
+
+
+### Features
+
+* improve variable render preformance ([19c340a](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/19c340a))
+
 ## [2.0.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.0.1...v2.0.2) (2020-04-20)
 
 
