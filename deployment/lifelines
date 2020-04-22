@@ -8,7 +8,8 @@ add group lifelines
 add user ll_admin --set-password xxxxx
 make ll_admin lifelines_MANAGER
 
-$wait Create custom role lifelines_SHOPPER and add group "lifelines" to role
+# Create shopper role in lifelines group 
+add role lifelines_SHOPPER --to-group lifelines
 
 # Give plugin permissions
 give --role ANONYMOUS read --plugin app
