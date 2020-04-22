@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.1.0...v2.1.1) (2020-04-22)
+
+
+### Bug Fixes
+
+* Use lower case for nl ([d0c9590](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/d0c9590)), closes [#303](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/303)
+
 # [2.1.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.0.2...v2.1.0) (2020-04-22)
 
 
