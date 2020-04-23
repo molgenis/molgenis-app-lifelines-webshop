@@ -370,10 +370,9 @@ export default Vue.extend({
     popupBody (rowIndex) {
       let optonsHtml = ''
       if (this.gridVariables[rowIndex].options) {
-        const optionSpans = this.gridVariables[rowIndex].options.map((option) => {
-          return `<span>${option['label_en']}</span>`
-        })
-        optonsHtml = optionSpans.join(', ')
+        optonsHtml = this.gridVariables[rowIndex].options.map((option) => {
+          return `<div>${option['label_en']}</div>`
+        }).join('')
       }
 
       return `
@@ -383,7 +382,7 @@ export default Vue.extend({
         <strong>Description (nl):</strong>
         <p>${this.gridVariables[rowIndex].definitionNl}</p>
         <strong>Categorical values (en):</strong>
-        <p>${optonsHtml}</p>
+        ${optonsHtml}
       </div>`
     }
   },

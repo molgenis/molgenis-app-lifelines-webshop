@@ -294,7 +294,7 @@ describe('GridComponent.vue', () => {
         <strong>Description (nl):</strong>
         <p>nlDef</p>
         <strong>Categorical values (en):</strong>
-        <p><span>my option</span></p>
+        <div>my option</div>
       </div>`
       expect(bodyHtml).toEqual(expectedHtml)
     })
