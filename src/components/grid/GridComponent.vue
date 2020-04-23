@@ -226,7 +226,7 @@ export default Vue.extend({
         this.openVariableSets.includes(variable.id)
       )
     },
-    variableSetClickHandler (variable) {
+    async variableSetClickHandler (variable) {
       if (variable.subvariables && variable.subvariables.length > 0) {
         if (this.variableSetIsOpen(variable)) {
           this.openVariableSets = this.openVariableSets.filter(
@@ -235,6 +235,9 @@ export default Vue.extend({
         } else {
           this.openVariableSets.push(variable.id)
         }
+        // Ajust the header for collapesed variables after layout is recalculated
+        await this.$nextTick()
+        this.setGridHeaderSpacer()
       }
     },
     isVisibleVariable (variable) {

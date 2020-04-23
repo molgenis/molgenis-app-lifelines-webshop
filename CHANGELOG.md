@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.1.1...v2.1.2) (2020-04-23)
+
+
+### Bug Fixes
+
+* Fix header position for collapse vars ([e761365](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/e761365)), closes [#300](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/300)
+
 ## [2.1.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.1.0...v2.1.1) (2020-04-22)
 
 
