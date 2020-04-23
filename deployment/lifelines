@@ -11,7 +11,7 @@ make ll_admin lifelines_MANAGER
 # Create shopper role in lifelines group 
 add role lifelines_SHOPPER --to-group lifelines
 # Add 'Lifelines shopper' to includes of USER role
-make USER lifelines_USER
+make USER lifelines_SHOPPER
 
 # Give plugin permissions
 give --role ANONYMOUS read --plugin app
