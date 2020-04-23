@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.1.2...v2.2.0) (2020-04-23)
+
+
+### Features
+
+* Place variable options on separate line ([b1a97db](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/b1a97db))
+
 ## [2.1.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.1.1...v2.1.2) (2020-04-23)
 
 
