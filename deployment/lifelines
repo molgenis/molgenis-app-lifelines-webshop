@@ -8,7 +8,10 @@ add group lifelines
 add user ll_admin --set-password xxxxx
 make ll_admin lifelines_MANAGER
 
-$wait Create custom role lifelines_SHOPPER and add group "lifelines" to role
+# Create shopper role in lifelines group 
+add role lifelines_SHOPPER --to-group lifelines
+# Add 'Lifelines shopper' to includes of USER role
+make USER lifelines_SHOPPER
 
 # Give plugin permissions
 give --role ANONYMOUS read --plugin app
@@ -40,8 +43,7 @@ set app title LifeLines
 set auth signup true
 set auth signup_moderation false
 
-$wait Add 'Lifelines shopper' to includes of USER role
-$wait Add redirect menu item 'Catalogue' using query string: url=https%3A%2F%2F{{domain}}%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Fshop
-$wait Add redirect menu item 'Orders' using query string: url=https%3A%2F%2F{{domain}}%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Forders
+$wait Add redirect menu item 'Catalogue' using query string: url=%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Fshop
+$wait Add redirect menu item 'Orders' using query string: url=%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Forders
 $wait Copy the contents of homepage.html to the home plugin
 $wait Delete password of user from this script
