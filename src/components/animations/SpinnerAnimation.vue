@@ -1,5 +1,6 @@
 <template>
   <font-awesome-icon
+    class="spinner-animation"
     icon="spinner"
     spin
     size="lg"
@@ -18,3 +19,9 @@ export default Vue.extend({
   components: { FontAwesomeIcon }
 })
 </script>
+
+<style lang="scss">
+.spinner-animation {
+  color: $primary;
+}
+</style>
