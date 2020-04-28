@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.2.0...v2.3.0) (2020-04-28)
+
+
+### Features
+
+* select all variables from cart ([8792f40](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/8792f40))
+
 # [2.2.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.1.2...v2.2.0) (2020-04-23)
 
 
