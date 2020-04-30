@@ -1,21 +1,88 @@
-# molgenis-app-lifelines-webshop
+# Lifelines webshop
 
-## Project setup
+## Install
 
 ```bash
 cp .lifelinesrc.example .lifelinesrc
 yarn install
-```
-
-### Compiles and hot-reloads for development
-
-```bash
 yarn run serve
 ```
 
-### Production usage
+- **i18n**
+  For development and testing you can add your translations to `i18n.schemas.js`
+  For production make sure to add the translations to the molgenis entity `Localization` using `lifelines-webshop` as a namespace.
 
-You need to configure a couple of things to run this app in production.
+  >tip:
+  Use `i18n.schemas.js` to create the `Localization` entities. For `msgid` add the schema key (for example: "lifelines-webshop-sidebar-header")
+  The namespace should be `lifelines-webshop` and than add all of the needed translations.
+
+## Common commands
+
+```bash
+yarn build     # Compile and minify
+yarn test      # Run your tests
+yarn lint      # Lints and fixes files
+yarn test:e2e  # Run your end-to-end tests
+yarn test:unit # Run your unit tests
+```
+
+## Deployment (Kubernetes)
+
+  > Ask Ops for help to setup kubectl and Rancher if you don't have them setup yet.
+
+- Deploy the `lifelines-webshop` Helm chart on [Rancher](https://rancher.molgenis.org:7777/p/c-rrz2w:p-dtpjq/apps/catalog/cattle-global-data:molgenis-helm-lifelines-webshop). Write down the generated Molgenis token in the `TRANSFORM` section.
+
+- Install [Molgenis commander](https://github.com/molgenis/molgenis-tools-commander)
+- Add `deployment/datasets` directory to the `dataset_folders` section of `~/.mcmd/mcmc.yaml`
+- Add `deployment/resources` folder to the `resource_folders` section of `~/.mcmd/mcmc.yaml`
+- Configure Molgenis commander to run on the lifelines server
+
+  ```bash
+  mcmd config add host
+  mcmd config set host
+  ```
+
+- Set the ll_admin password in the lifelines script
+
+  ```bash
+  cp ./deployment/lifelines ~/.mcmd/scripts/
+  vim ~/.mcmd/scripts/lifelines
+  add user ll_admin --set-password *******
+  ```
+
+- Proxy the Molgenis instance and follow the commander script to setup the server:
+
+  ```bash
+  kubectl port-forward svc/molgenis 8080:8080 --namespace lifelines-catalog-test
+  mcmd run lifelines -i
+  ```
+
+- Login as admin to Molgenis and add the `TRANSFORM` Molgenis token you generated
+  earlier the Helm chart.
+
+- Go to the [Transform pod](https://rancher.molgenis.org:7777/p/c-rrz2w:p-dtpjq/workload/cronjob:lifelines-catalog-test:transform) on Rancher and test the Transform with:
+
+```bash
+kubectl create job manual-transform --from cronjob/transform --namespace lifelines-catalog-test
+```
+
+## Dataflows
+
+![https://yuml.me/edit/e9dd81eb](./docs/img/data-model.svg)
+To transform the raw data to a format that can be used by this app, use the
+[molgenis-py-lifelines-transform](https://github.com/molgenis/molgenis-py-lifelines-transform) tool.
+
+### Workflow of the catalog
+
+![order states](docs/img/catalogue-work-flow.svg)
+
+### Order process
+
+![order states](docs/img/order-states.png)
+
+## Production settings
+
+A couple of things have to be configured in order to run this app in production:
 
 - **vue.config.js**
   Add a public path to specify the path on which the app is served.
@@ -69,69 +136,3 @@ You need to configure a couple of things to run this app in production.
   ...
   base: process.env.NODE_ENV === 'production' ? packageJson.name : process.env.BASE_URL,
   ```
-
-- **i18n**
-  For development and testing you can add your translations to `i18n.schemas.js`
-  For production make sure to add the translations to the molgenis entity `Localization` using `lifelines-webshop` as a namespace.
-
-  >tip:
-  Use `i18n.schemas.js` to create the `Localization` entities. For `msgid` add the schema key (for example: "lifelines-webshop-sidebar-header")
-  The namespace should be `lifelines-webshop` and than add all of the needed translations.
-
-#### Compile and minify
-
-```bash
-yarn build
-```
-
-### Run your tests
-
-```bash
-yarn test
-```
-
-### Lints and fixes files
-
-```bash
-yarn lint
-```
-
-### Run your end-to-end tests
-
-```bash
-yarn test:e2e
-```
-
-### Run your unit tests
-
-```bash
-yarn test:unit
-```
-
-## Data
-
-![https://yuml.me/edit/e9dd81eb](./docs/img/data-model.svg)
-To transform the raw data to a format that can be used by this app, use the
-[molgenis-py-lifelines-transform](https://github.com/molgenis/molgenis-py-lifelines-transform) tool.
-
-## Deployment using molgenis commander
-
-Add the `deployment/datasets` folder of this repository to the `dataset_folders` section of `~/.mcmd/mcmc.yaml` and the
-`deployment/resources` folder to the `resource_folders` section, or alternatively copy the files in
-`deployment/datasets` to one of your configured `dataset_folders` and the contents of `deployment/resources` to one of
-your configured `resource_folders`.
-Now configure your molgenis commander to run on the lifelines server using `mcmd config add host` and
-`mcmd config set host`. Then you can run the commander script to setup the server:
-
-```bash
-cp ~/molgenis-app-lifelines-webshop/deployment/lifelines ~/.mcmd/scripts/
-mcmd run lifelines -i
-```
-
-### Workflow of the catalogue
-
-![order states](docs/img/catalogue-work-flow.svg)
-
-### Order process
-
-![order states](docs/img/order-states.png)
