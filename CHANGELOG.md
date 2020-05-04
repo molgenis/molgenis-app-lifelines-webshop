@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.3.0...v2.3.1) (2020-05-04)
+
+
+### Bug Fixes
+
+* bump jquery from 3.3.1 to 3.5.0 ([#310](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/310)) ([70096cf](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/70096cf))
+
 # [2.3.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.2.0...v2.3.0) (2020-04-28)
 
 
