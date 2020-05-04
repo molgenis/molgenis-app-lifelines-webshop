@@ -42,7 +42,7 @@
     "fetch-ponyfill": "^6.1.0",
     "glob": "^7.1.6",
     "install": "^0.13.0",
-    "jquery": "3.3",
+    "jquery": "3.5",
     "js-file-download": "^0.4.10",
     "lodash.debounce": "^4.0.8",
     "lodash.groupby": "^4.6.0",
