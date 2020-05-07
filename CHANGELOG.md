@@ -1,3 +1,10 @@
+## [2.3.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.3.1...v2.3.2) (2020-05-07)
+
+
+### Bug Fixes
+
+* use trailing slash on vuepdf endpoint ([#311](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/311)) ([797b944](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/797b944))
+
 ## [2.3.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.3.0...v2.3.1) (2020-05-04)
 
 
