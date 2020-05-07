@@ -332,7 +332,7 @@ export default Vue.extend({
       }
 
       try {
-        const res = await axios.post('/vuepdf', { component: 'orders', state }, { responseType: 'blob' })
+        const res = await axios.post('/vuepdf/', { component: 'orders', state }, { responseType: 'blob' })
         // We could have used URL.createObjectURL manually, but
         // this library takes care of IE/Safari edge cases as well.
         const fileName = `${order.name ? order.name : `order-${order.orderNumber}`}.pdf`
