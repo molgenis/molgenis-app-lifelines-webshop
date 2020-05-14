@@ -43,6 +43,16 @@ set app title LifeLines
 set auth signup true
 set auth signup_moderation false
 
+# Set mail settings
+mcmd set mail host smtp.rug.nl
+mcmd set mail port 25
+mcmd set mail protocol smtp
+mcmd set mail username ''
+mcmd set mail password ''
+mcmd set mail auth false
+mcmd set mail startTlsEnabled false
+mcmd set mail fromAddress no-reply@molgenis.org
+
 $wait Add redirect menu item 'Catalogue' using query string: url=%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Fshop
 $wait Add redirect menu item 'Orders' using query string: url=%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Forders
 $wait Copy the contents of homepage.html to the home plugin
