@@ -1,5 +1,5 @@
 $wait Run the l10n.js script to generate sys_L10nString.csv
-$wait If you haven't set the password for the user in this script, kill it now and alter it
+$wait If you haven't set the password for the users in this script, kill it now and alter it
 
 # Add group
 add group lifelines
@@ -7,6 +7,8 @@ add group lifelines
 # Create user
 add user ll_admin --set-password xxxxx
 make ll_admin lifelines_MANAGER
+add user importer --set-password xxxxx
+make importer lifelines_MANAGER 
 
 # Create shopper role in lifelines group 
 add role lifelines_SHOPPER --to-group lifelines
@@ -44,16 +46,16 @@ set auth signup true
 set auth signup_moderation false
 
 # Set mail settings
-mcmd set mail host smtp.rug.nl
-mcmd set mail port 25
-mcmd set mail protocol smtp
-mcmd set mail username ''
-mcmd set mail password ''
-mcmd set mail auth false
-mcmd set mail startTlsEnabled false
-mcmd set mail fromAddress no-reply@molgenis.org
+set mail host smtp.rug.nl
+set mail port 25
+set mail protocol smtp
+set mail username ''
+set mail password ''
+set mail auth false
+set mail startTlsEnabled false
+set mail fromAddress no-reply@molgenis.org
 
 $wait Add redirect menu item 'Catalogue' using query string: url=%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Fshop
 $wait Add redirect menu item 'Orders' using query string: url=%2F@molgenis-experimental%2Fmolgenis-app-lifelines-webshop%2Fdist%2Findex.html%23%2Forders
 $wait Copy the contents of homepage.html to the home plugin
-$wait Delete password of user from this script
+$wait Delete password of users from this script
