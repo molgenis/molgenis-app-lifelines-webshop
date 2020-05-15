@@ -28,9 +28,24 @@ exports[`CartView.vue renders cart view, showing the assessment labels sorted al
                 <div>
                   <h5 class="h6">Subsection 1</h5>
                   <ul>
-                    <li class="subvariable-line start"><span>variable 100 label ( 1A, 2C )</span></li>
-                    <li class="subvariable-line line"><span>variable 101 label ( 2B )</span></li>
-                    <li class="subvariable-line end"><span>variable 102 label </span></li>
+                    <li class="subvariable-line start">
+                      <div class="variable-line">
+                        <div class="name">variable 100 label</div>
+                        <div class="assessments">1A 2C</div>
+                      </div>
+                    </li>
+                    <li class="subvariable-line line">
+                      <div class="variable-line">
+                        <div class="name">variable 101 label</div>
+                        <div class="assessments">2B</div>
+                      </div>
+                    </li>
+                    <li class="subvariable-line end">
+                      <div class="variable-line">
+                        <div class="name">variable 102 label</div>
+                        <div class="assessments"></div>
+                      </div>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -55,9 +70,24 @@ exports[`CartView.vue renders cart view, showing the assessment labels sorted al
                 <div>
                   <h5 class="h6">Subsection 2</h5>
                   <ul>
-                    <li class="subvariable-line start"><span>variable 100 label ( 1A, 2C )</span></li>
-                    <li class="subvariable-line line"><span>variable 101 label ( 2B )</span></li>
-                    <li class="subvariable-line end"><span>variable 102 label </span></li>
+                    <li class="subvariable-line start">
+                      <div class="variable-line">
+                        <div class="name">variable 100 label</div>
+                        <div class="assessments">1A 2C</div>
+                      </div>
+                    </li>
+                    <li class="subvariable-line line">
+                      <div class="variable-line">
+                        <div class="name">variable 101 label</div>
+                        <div class="assessments">2B</div>
+                      </div>
+                    </li>
+                    <li class="subvariable-line end">
+                      <div class="variable-line">
+                        <div class="name">variable 102 label</div>
+                        <div class="assessments"></div>
+                      </div>
+                    </li>
                   </ul>
                 </div>
               </div>

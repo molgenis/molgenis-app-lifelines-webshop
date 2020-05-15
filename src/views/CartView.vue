@@ -73,7 +73,10 @@
                           v-for="(variable, variableIndex) in variablesWithSet(subsection.variables)"
                           :key="`${sectionIndex}-${subsectionIndex}-${variableIndex}`"
                           class="subvariable-line" :class="variableSetClass(variable)">
-                          <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
+                          <div class="variable-line">
+                            <div class="name">{{variable.label||variable.name}}</div>
+                            <div class="assessments">{{ variableAssessments[variable.id] }}</div>
+                          </div>
                         </li>
                       </ul>
                     </div>
@@ -115,6 +118,16 @@ import ToastComponent from '@molgenis-ui/components/src/components/ToastComponen
 export default Vue.extend({
   name: 'CartView',
   components: { SpinnerAnimation, CollapseTreeIcon, ToastComponent },
+  beforeMount: function () {
+    const variableAssessments = {}
+
+    for (const [variableId, assessmentIds] of Object.entries(this.gridSelection)) {
+      const assessmentNames = assessmentIds.map(assessmentId => this.assessments[assessmentId].name)
+      variableAssessments[variableId] = assessmentNames.sort().join(' ')
+    }
+
+    this.variableAssessments = variableAssessments
+  },
   data () {
     return {
       isLoading: false,
@@ -125,7 +138,8 @@ export default Vue.extend({
           textType: 'dark',
           message: this.$t('lifelines-webshop-cart-empty-variables-warning')
         }
-      ]
+      ],
+      variableAssessments: {}
     }
   },
   methods: {
@@ -216,18 +230,6 @@ export default Vue.extend({
     selectedVariableIds () {
       return Object.keys(this.gridSelection)
     },
-    variableAssessments () {
-      let variableAssessmentStrings = {}
-      for (const [variableId, assessmentIds] of Object.entries(this.gridSelection)) {
-        const assessmentNames = assessmentIds
-          .map(assessmentId => this.assessments[assessmentId].name)
-          .sort()
-        variableAssessmentStrings[variableId] =
-          '( ' + assessmentNames.join(', ') + ' )'
-      }
-
-      return variableAssessmentStrings
-    },
     loading () {
       return this.isLoading || !(
         Object.keys(this.assessments).length &&
@@ -260,6 +262,21 @@ export default Vue.extend({
   &.line,
   &.end {
     padding-left: 0.75rem;
+  }
+}
+
+.variable-line {
+  display: flex;
+
+  .name {
+    font-weight: 500;
+    width: 300px;
+  }
+
+  .assessments {
+    color: $primary;
+    display: inline-block;
+    font-weight: bold;
   }
 }
 </style>

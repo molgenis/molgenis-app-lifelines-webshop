@@ -63,8 +63,8 @@ describe('CartView.vue', () => {
 
   it('renders cart view, showing the assessment labels sorted alphabetically', () => {
     const wrapper = mount(CartView, { stubs, store, localVue })
-    expect(wrapper.findAll('li').at(0).text()).toEqual(`${variables[0].label} ( 1A, 2C )`)
-    expect(wrapper.findAll('li').at(1).text()).toEqual(`${variables[1].label} ( 2B )`)
+    expect(wrapper.findAll('li').at(0).text()).toEqual(`${variables[0].label} 1A 2C`)
+    expect(wrapper.findAll('li').at(1).text()).toEqual(`${variables[1].label} 2B`)
     expect(wrapper.find('#cart-view')).toMatchSnapshot()
   })
 
