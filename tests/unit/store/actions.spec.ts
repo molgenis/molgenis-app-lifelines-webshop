@@ -746,6 +746,7 @@ describe('actions', () => {
         const dispatch = jest.fn()
         let state = getApplicationState()
         let applicationForm = new File(['foobar'], 'my-file-name')
+        // @ts-ignore
         state.order.applicationForm = applicationForm
         state.order.orderNumber = 'with-app-form'
 
