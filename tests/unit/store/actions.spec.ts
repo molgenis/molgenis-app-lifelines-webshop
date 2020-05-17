@@ -673,6 +673,17 @@ describe('actions', () => {
     })
   })
 
+  describe('loadOrder', () => {
+    it('should fetch the order details', async (done) => {
+      const commit = jest.fn()
+      const dispatch = jest.fn()
+      const state = getApplicationState()
+      await actions.loadOrder({ state, commit, dispatch }, 'fghij')
+      expect(commit).toHaveBeenCalledWith('restoreOrderState', { contents: { id: 'xxyyzz' } })
+      done()
+    })
+  })
+
   describe('save', () => {
     describe('if orderNumber is set', () => {
       it('saves grid selection', async (done) => {

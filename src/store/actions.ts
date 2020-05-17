@@ -56,7 +56,7 @@ const createOrder = async (formData: any, formFields: FormField[]) => {
   return trySubmission(10)
 }
 
-const loadOrder = async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
+const loadOrder = async ({ commit }: { commit: any }, orderNumber: string) => {
   const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
   commit('restoreOrderState', response)
   return response
@@ -254,7 +254,7 @@ export default {
     successMessage(`Submitted order with order number ${orderNumber}`, commit)
   }),
   loadOrderAndCart: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
-    const response = await loadOrder({ state, commit }, orderNumber)
+    const response = await loadOrder({ commit }, orderNumber)
     const cart: Cart = await api.get(`/files/${response.contents.id}`)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('updateFacetFilter', facetFilter)
@@ -288,8 +288,8 @@ export default {
       processBatch(batchResp)
     }
   },
-  loadOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
-    return loadOrder({ state, commit }, orderNumber)
+  loadOrder: tryAction(async ({ commit }: { commit: any }, orderNumber: string) => {
+    return loadOrder({ commit }, orderNumber)
   }),
   copyOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, sourceOrderNumber: string) => {
     // Fetch source data
