@@ -5,7 +5,7 @@ export enum OrderState {
     Draft = 'Draft'
 }
 
-export interface File {
+export interface MolgenisFile {
     id: string
     filename: string
     url: string
@@ -16,11 +16,11 @@ export interface Order {
     name: string | null
     submissionDate: string | null
     projectNumber: string | null
-    applicationForm: File | null
+    applicationForm: MolgenisFile | File | null
     state: OrderState | null
     creationDate: string | null
     updateDate: string | null
-    contents: File | null
+    contents: MolgenisFile | File | null
     user: string | null
     email: string | null
 }
