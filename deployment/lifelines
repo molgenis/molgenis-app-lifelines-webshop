@@ -4,7 +4,7 @@ $wait If you haven't set the password for the users in this script, kill it now 
 # Add group
 add group lifelines
 
-# Create user
+# Create users
 add user ll_admin --set-password xxxxx
 make ll_admin lifelines_MANAGER
 add user importer --set-password xxxxx
