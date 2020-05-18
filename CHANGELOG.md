@@ -1,3 +1,10 @@
+## [2.3.3](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.3.2...v2.3.3) (2020-05-18)
+
+
+### Bug Fixes
+
+* 314 error during approve ([#316](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/316)) ([04154e0](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/04154e0)), closes [#314](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/314)
+
 ## [2.3.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.3.1...v2.3.2) (2020-05-07)
 
 
