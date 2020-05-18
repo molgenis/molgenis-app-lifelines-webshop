@@ -56,7 +56,7 @@ const createOrder = async (formData: any, formFields: FormField[]) => {
   return trySubmission(10)
 }
 
-const loadOrder = async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
+const loadOrder = async ({ commit }: { commit: any }, orderNumber: string) => {
   const response = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
   commit('restoreOrderState', response)
   return response
@@ -190,14 +190,18 @@ export default {
     if (state.order.orderNumber) {
       formData.user = state.order.user
       formData.email = state.order.email
+      const isapplicationFormUpdate = formData.applicationForm && (typeof formData.applicationForm.filename !== 'string')
 
       await updateOrder(formData, formFields)
 
-      // Assume admin edits the user's order.
+      // If a admin edits the order, put back permissions
       if (context.username !== state.order.user) {
         const newOrderResponse = await api.get(`/api/v2/lifelines_order/${state.order.orderNumber}`)
         commit('restoreOrderState', newOrderResponse)
-        await dispatch('fixUserPermission')
+        await setUserPermission(newOrderResponse.contents.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
+        if (isapplicationFormUpdate) {
+          await setUserPermission(newOrderResponse.applicationForm.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
+        }
       }
 
       successMessage(`Saved order with order number ${state.order.orderNumber}`, commit)
@@ -250,7 +254,7 @@ export default {
     successMessage(`Submitted order with order number ${orderNumber}`, commit)
   }),
   loadOrderAndCart: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
-    const response = await loadOrder({ state, commit }, orderNumber)
+    const response = await loadOrder({ commit }, orderNumber)
     const cart: Cart = await api.get(`/files/${response.contents.id}`)
     const { facetFilter, gridSelection } = fromCart(cart, state)
     commit('updateFacetFilter', facetFilter)
@@ -284,8 +288,8 @@ export default {
       processBatch(batchResp)
     }
   },
-  loadOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
-    return loadOrder({ state, commit }, orderNumber)
+  loadOrder: tryAction(async ({ commit }: { commit: any }, orderNumber: string) => {
+    return loadOrder({ commit }, orderNumber)
   }),
   copyOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, sourceOrderNumber: string) => {
     // Fetch source data
@@ -345,21 +349,6 @@ export default {
       )
     }
     Promise.all(setPermissionRequests)
-  }),
-  fixUserPermission: tryAction(async ({ state }: { state: ApplicationState }) => {
-    if (state.order.orderNumber === null || state.order.contents === null || state.order.user === null) {
-      throw new Error('Can not set permission if orderNumber or contents or user is not set')
-    }
-    // @ts-ignore
-    const results = [
-      setUserPermission(state.order.contents.id, 'sys_FileMeta', state.order.user, 'WRITE')
-    ]
-
-    if (state.order.applicationForm) {
-      results.push(setUserPermission(state.order.applicationForm.id, 'sys_FileMeta', state.order.user, 'WRITE'))
-    }
-
-    await Promise.all(results)
   }),
 
   sendApproveTrigger: tryAction(async (context:any, orderNumber: string) => {

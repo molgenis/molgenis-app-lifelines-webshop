@@ -134,6 +134,13 @@ const mockResponses: { [key: string]: Object } = {
       id: 'bla'
     }
   },
+  '/api/v2/lifelines_order/with-app-form': {
+    contents: {
+      id: 'with-app-form'
+    },
+    user: 'with-app-form-user',
+    applicationForm: { id: 'applicationForm-id' }
+  },
   '/files/xxyyzz': cart,
   '/files/dm_test': cart,
   '/api/v2/lifelines_section?num=10000': {
@@ -666,6 +673,17 @@ describe('actions', () => {
     })
   })
 
+  describe('loadOrder', () => {
+    it('should fetch the order details', async (done) => {
+      const commit = jest.fn()
+      const dispatch = jest.fn()
+      const state = getApplicationState()
+      await actions.loadOrder({ state, commit, dispatch }, 'fghij')
+      expect(commit).toHaveBeenCalledWith('restoreOrderState', { contents: { id: 'xxyyzz' } })
+      done()
+    })
+  })
+
   describe('save', () => {
     describe('if orderNumber is set', () => {
       it('saves grid selection', async (done) => {
@@ -715,7 +733,9 @@ describe('actions', () => {
     })
 
     describe('if applicationForm is a fileRef', () => {
-      it('saves order', async (done) => {
+      it('saves order and set content perm to order user', async (done) => {
+        // @ts-ignore
+        setUserPermission.mockReset()
         const commit = jest.fn()
         const dispatch = jest.fn()
         const state = getApplicationState()
@@ -725,6 +745,29 @@ describe('actions', () => {
         await actions.save({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Saved order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
         expect(post).toHaveBeenCalledWith('/api/v1/lifelines_order/12345?_method=PUT', expect.anything(), true)
+        // set user permission should be called only once as no application form permission should be set
+        expect(setUserPermission).toHaveBeenCalledTimes(1)
+        done()
+      })
+    })
+
+    describe('if applicationForm is file', () => {
+      it('saves order give set applicationForm permission to order user', async (done) => {
+        const commit = jest.fn()
+        const dispatch = jest.fn()
+        let state = getApplicationState()
+        let applicationForm = new File(['foobar'], 'my-file-name')
+        // @ts-ignore
+        state.order.applicationForm = applicationForm
+        state.order.orderNumber = 'with-app-form'
+
+        let formData:any = new FormData()
+        formData.applicationForm = applicationForm
+        jest.spyOn(orderService, 'buildFormData').mockImplementation(() => formData)
+        post.mockResolvedValue('success')
+        await actions.save({ state, commit, dispatch })
+        expect(setUserPermission).toHaveBeenCalledWith('with-app-form', 'sys_FileMeta', 'with-app-form-user', 'WRITE')
+        expect(setUserPermission).toHaveBeenCalledWith('applicationForm-id', 'sys_FileMeta', 'with-app-form-user', 'WRITE')
         done()
       })
     })
@@ -816,56 +859,6 @@ describe('actions', () => {
     })
   })
 
-  describe('fixUserPermission', () => {
-    describe('state does not contain required parameters', () => {
-      let state: any
-      let commit = jest.fn()
-      beforeEach(() => {
-        state = {
-          order: {
-            orderNumber: null
-          }
-        }
-      })
-
-      it('throws an error', async (done) => {
-        await actions.fixUserPermission({ commit, state })
-        expect(commit).toHaveBeenCalledWith('setToast', expect.objectContaining({
-          message: 'Can not set permission if orderNumber or contents or user is not set'
-        }))
-        done()
-      })
-    })
-
-    describe('state contains required parameters', () => {
-      let state: any
-      let commit = jest.fn()
-
-      beforeEach(async (done) => {
-        state = {
-          order: {
-            applicationForm: { id: 'applicationForm' },
-            orderNumber: '12345',
-            contents: { id: 'contents' },
-            user: 'user'
-          }
-        }
-
-        await actions.fixUserPermission({ commit, state })
-        done()
-      })
-
-      afterEach(() => {
-        jest.resetAllMocks()
-      })
-
-      it('calls setUserPermission', () => {
-        expect(setUserPermission).toHaveBeenCalledWith('contents', 'sys_FileMeta', 'user', 'WRITE')
-        expect(setUserPermission).toHaveBeenCalledWith('applicationForm', 'sys_FileMeta', 'user', 'WRITE')
-      })
-    })
-  })
-
   describe('givePermissionToOrder with missing orderNumber', () => {
     let state: any
     beforeEach(async (done) => {
@@ -886,6 +879,8 @@ describe('actions', () => {
   describe('givePermissionToOrder with file attached', () => {
     let state: any
     beforeEach(async (done) => {
+      // @ts-ignore
+      setRolePermission.mockReset()
       state = {
         order: {
           orderNumber: '12345',
