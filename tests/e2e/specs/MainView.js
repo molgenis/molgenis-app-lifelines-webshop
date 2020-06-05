@@ -6,7 +6,7 @@ module.exports = {
     browser
       .url(process.env.VUE_DEV_SERVER_URL + 'index.html')
       .waitForElementVisible('#main-view', 50000)
-      .assert.elementPresent('h1')
+      .assert.elementPresent('h3')
       .end()
   }
 }
