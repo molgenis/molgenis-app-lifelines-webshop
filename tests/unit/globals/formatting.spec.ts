@@ -7,6 +7,7 @@ describe('formatters', () => {
     })
     it('should round 10 to 99 to "≈ floor n"', () => {
       expect(formatNumber(23)).toBe('≈ 20')
+      expect(formatNumber(26)).toBe('≈ 30')
     })
     it('should round 100 to 999 to "≈ floor n"', () => {
       expect(formatNumber(723)).toBe('≈ 700')
