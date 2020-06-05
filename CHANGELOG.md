@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.3.3...v2.4.0) (2020-06-05)
+
+
+### Features
+
+* approx values in grid ([a0b0291](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/a0b0291))
+
 ## [2.3.3](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.3.2...v2.3.3) (2020-05-18)
 
 
