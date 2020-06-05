@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.4.0...v2.4.1) (2020-06-05)
+
+
+### Bug Fixes
+
+* Fix 318 safari redirect error ([871b8e3](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/871b8e3)), closes [#318](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/318)
+
 # [2.4.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.3.3...v2.4.0) (2020-06-05)
 
 
