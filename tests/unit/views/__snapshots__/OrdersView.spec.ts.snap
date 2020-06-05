@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`OrdersView.vue When component is mounted is manager checks content of order tables 1`] = `
-<table role="table" aria-busy="false" aria-colcount="7" class="table b-table table-striped order-table container-fluid" id="__BVID__136">
+<table role="table" aria-busy="false" aria-colcount="7" class="table b-table table-striped order-table container-fluid" id="__BVID__134">
   <!---->
   <!---->
   <thead role="rowgroup" class="">

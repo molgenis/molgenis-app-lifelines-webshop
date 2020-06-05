@@ -1,7 +1,6 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Router from 'vue-router'
-import { routes } from '@/router'
 import OrdersView from '@/views/OrdersView.vue'
 import moment from 'moment'
 import Vuex from 'vuex'
@@ -67,6 +66,29 @@ describe('OrdersView.vue', () => {
     hasManagerRole
   }
 
+  const router = new Router(
+    {
+      base: process.env.BASE_URL,
+      routes: [
+        {
+          path: '/orders/:orderNumber?',
+          name: 'orders',
+          component: OrdersView,
+          children: [
+            {
+              name: 'orderDelete',
+              path: 'delete'
+            },
+            {
+              name: 'orderStateChange',
+              path: 'state/:state'
+            }
+          ]
+        }
+      ]
+    }
+  )
+
   beforeEach(() => {
     localVue = createLocalVue()
     localVue.directive('b-popover', { /* stub */ })
@@ -74,6 +96,7 @@ describe('OrdersView.vue', () => {
     localVue.filter('i18n', (value: string) => `#${value}#`)
     localVue.use(Vuex)
     localVue.use(BootstrapVue)
+    localVue.use(Router)
 
     let state: any = {
       orders
@@ -99,7 +122,7 @@ describe('OrdersView.vue', () => {
       const params = {
         localVue,
         store,
-        router: new Router({ routes })
+        router
       }
       hasManagerRole.mockReturnValue(false)
       wrapper = mount(OrdersView, params)
@@ -118,7 +141,7 @@ describe('OrdersView.vue', () => {
       const params = {
         localVue,
         store,
-        router: new Router({ routes })
+        router
       }
 
       hasManagerRole.mockReturnValue(true)

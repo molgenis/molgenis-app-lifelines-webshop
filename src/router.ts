@@ -1,11 +1,15 @@
 import Vue from 'vue'
-import Router, { NavigationGuard } from 'vue-router'
+import Router, { Route, NavigationGuardNext } from 'vue-router'
 
 import MainView from './views/MainView.vue'
 import OrdersView from './views/OrdersView.vue'
 import OrderView from './views/OrderView.vue'
 
 import store from '@/store/store'
+
+const handleProtectedRoute = (to: Route, from: Route, next: NavigationGuardNext) => {
+  !store.getters.isSignedIn ? next('/shop') : next()
+}
 
 Vue.use(Router)
 export const routes = [
@@ -22,7 +26,8 @@ export const routes = [
         name: 'orderStateChange',
         path: 'state/:state'
       }
-    ]
+    ],
+    beforeEnter: handleProtectedRoute
   },
   {
     path: '/shop',
@@ -32,16 +37,20 @@ export const routes = [
   {
     path: '/shop/:orderNumber',
     name: 'load',
-    component: MainView
+    component: MainView,
+    beforeEnter: handleProtectedRoute
   },
   {
     path: '/order',
     name: 'order',
-    component: OrderView
+    component: OrderView,
+    beforeEnter: handleProtectedRoute
   },
   {
     path: '/*',
-    redirect: '/shop'
+    beforeEnter: (to: Route, from: Route, next: NavigationGuardNext) => {
+      store.getters.isSignedIn ? next('/orders') : next('/shop')
+    }
   }
 ]
 
@@ -51,12 +60,3 @@ export const router = new Router({
   base: process.env.NODE_ENV === 'production' ? packageJson.name + '/dist/index.html' : process.env.BASE_URL,
   routes
 })
-
-export const anonymousNavigationGuard: NavigationGuard = (to, _from, next) => {
-  if (to.name !== 'shop' && !store.getters.isSignedIn) {
-    router.push({ name: 'shop' })
-  } else {
-    next()
-  }
-}
-router.beforeResolve(anonymousNavigationGuard)
