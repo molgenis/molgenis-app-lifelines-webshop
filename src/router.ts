@@ -10,11 +10,6 @@ import store from '@/store/store'
 Vue.use(Router)
 export const routes = [
   {
-    path: '/',
-    name: 'home',
-    redirect: () => ({ name: store.getters.isSignedIn ? 'orders' : 'shop' })
-  },
-  {
     path: '/orders/:orderNumber?',
     name: 'orders',
     component: OrdersView,
@@ -43,6 +38,10 @@ export const routes = [
     path: '/order',
     name: 'order',
     component: OrderView
+  },
+  {
+    path: '/*',
+    redirect: '/shop'
   }
 ]
 

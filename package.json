@@ -52,7 +52,7 @@
     "v-click-outside": "^2.1.4",
     "vue": "^2.6.10",
     "vue-loading-overlay": "^3.2.0",
-    "vue-router": "^3.0.3",
+    "vue-router": "^3.3.2",
     "vue-slider-component": "^3.0.32",
     "vuex": "^3.0.1"
   },
