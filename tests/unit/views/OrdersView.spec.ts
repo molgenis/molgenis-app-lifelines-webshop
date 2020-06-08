@@ -1,15 +1,37 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import BootstrapVue from 'bootstrap-vue'
 import Router from 'vue-router'
-import { routes } from '@/router'
 import OrdersView from '@/views/OrdersView.vue'
 import moment from 'moment'
 import Vuex from 'vuex'
 import orders from '../fixtures/orders'
 import '@/globals/variables'
-
+import transforms from '@/store/transforms'
+import { gridSelectionFromCart, successMessage } from '@/store/helpers'
 // @ts-ignore
 import { get } from '@molgenis/molgenis-api-client'
+import axios from 'axios'
+
+jest.mock('@/store/transforms', () => {
+  return {
+    assessments: jest.fn(),
+    cartTree: jest.fn(),
+    helpers: jest.fn(),
+    findZeroRowsAndCols: jest.fn(),
+    grid: jest.fn(),
+    gridRows: jest.fn(),
+    gridAssessments: jest.fn(),
+    gridColumns: jest.fn(),
+    gridSelections: jest.fn(),
+    sections: jest.fn(),
+    sectionTree: jest.fn(),
+    subSectionList: jest.fn(),
+    treeStructure: jest.fn(),
+    variables: jest.fn(),
+    gridVariablesFiltered: jest.fn(),
+    variants: jest.fn()
+  }
+})
 
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
@@ -37,6 +59,12 @@ jest.mock('@molgenis/molgenis-api-client', () => {
 
 jest.mock('axios')
 jest.mock('js-file-download', () => jest.fn(() => {}))
+jest.mock('@/store/helpers', () => {
+  return {
+    gridSelectionFromCart: jest.fn(),
+    successMessage: jest.fn()
+  }
+})
 
 describe('OrdersView.vue', () => {
   let localVue: any
@@ -67,6 +95,29 @@ describe('OrdersView.vue', () => {
     hasManagerRole
   }
 
+  const router = new Router(
+    {
+      base: process.env.BASE_URL,
+      routes: [
+        {
+          path: '/orders/:orderNumber?',
+          name: 'orders',
+          component: OrdersView,
+          children: [
+            {
+              name: 'orderDelete',
+              path: 'delete'
+            },
+            {
+              name: 'orderStateChange',
+              path: 'state/:state'
+            }
+          ]
+        }
+      ]
+    }
+  )
+
   beforeEach(() => {
     localVue = createLocalVue()
     localVue.directive('b-popover', { /* stub */ })
@@ -74,6 +125,7 @@ describe('OrdersView.vue', () => {
     localVue.filter('i18n', (value: string) => `#${value}#`)
     localVue.use(Vuex)
     localVue.use(BootstrapVue)
+    localVue.use(Router)
 
     let state: any = {
       orders
@@ -99,7 +151,7 @@ describe('OrdersView.vue', () => {
       const params = {
         localVue,
         store,
-        router: new Router({ routes })
+        router
       }
       hasManagerRole.mockReturnValue(false)
       wrapper = mount(OrdersView, params)
@@ -118,7 +170,7 @@ describe('OrdersView.vue', () => {
       const params = {
         localVue,
         store,
-        router: new Router({ routes })
+        router
       }
 
       hasManagerRole.mockReturnValue(true)
@@ -324,6 +376,33 @@ describe('OrdersView.vue', () => {
           },
           undefined
         )
+      })
+    })
+
+    describe('pdf dowload method', () => {
+      it('should build a data object and call the service', async (done) => {
+        transforms.cartTree.mockReturnValueOnce({ my: 'tree' })
+        // @ts-ignore
+        axios.post.mockResolvedValueOnce({ data: 'mydata' })
+        await wrapper.vm.downloadPdf('12345')
+        expect(axios.post).toHaveBeenCalledWith(
+          '/vuepdf/',
+          { component: 'orders',
+            state: {
+              assessments: undefined,
+              cartTree: undefined,
+              filters: {},
+              gridSelection: undefined,
+              order: {
+                contents: {
+                  id: 1
+                },
+                name: 'testName'
+              }
+            } },
+          { responseType: 'blob' }
+        )
+        done()
       })
     })
   })

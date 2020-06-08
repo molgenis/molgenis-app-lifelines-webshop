@@ -1,7 +1,10 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import App from '@/App.vue'
 import Vuex from 'vuex'
-import { router } from '@/router'
+import routes from '@/routes'
+import VueRouter from 'vue-router'
+
+const router = new VueRouter({ base: process.env.BASE_URL, routes })
 
 describe('App.vue', () => {
   const localVue = createLocalVue()
@@ -12,7 +15,8 @@ describe('App.vue', () => {
     'footer-component': true,
     'navigation-bar': true,
     'sidebar-view': true,
-    'content-view': true
+    'content-view': true,
+    'router-view': true
   }
 
   const store = new Vuex.Store({
@@ -33,10 +37,7 @@ describe('App.vue', () => {
     mutations: {}
   })
 
-  beforeEach(() => {
-  })
-
-  it('renders the main view at / route', async (done) => {
+  it('renders the page content', async (done) => {
     const wrapper = mount(App, {
       localVue,
       router,
@@ -47,8 +48,7 @@ describe('App.vue', () => {
     expect(wrapper).toBeDefined()
     router.push('/')
     await wrapper.vm.$nextTick()
-
-    expect(wrapper.find('div #main-view').exists()).toBe(true)
+    expect(wrapper.find('main.mg-page-content').exists()).toBe(true)
     done()
   })
 })
