@@ -1,7 +1,16 @@
 {
-    "development": {
-        "edge_proxy": "https://lifelines-catalog.test.molgenis.org/",
-        "molgenis_proxy": "https://lifelines-catalog.test.molgenis.org/",
-        "pdf_proxy": "https://lifelines-catalog.test.molgenis.org/"
+    "proxy": {
+        "edge": {
+            "auth": null,
+            "url": "https://lifelines-catalog.test.molgenis.org/"
+        },
+        "molgenis": {
+            "auth": null,
+            "url": "https://lifelines-catalog.test.molgenis.org/"
+        },
+        "pdf": {
+            "auth": null,
+            "url": "https://lifelines-catalog.test.molgenis.org/"
+        }
     }
 }

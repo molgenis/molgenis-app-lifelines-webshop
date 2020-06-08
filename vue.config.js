@@ -12,12 +12,31 @@ package-version: ${pkgVersion}
 build-date: ${buildDate}`
 
 const config = require('rc')('lifelines', {
-  development: {
-    edge_proxy: 'https://lifelines-catalog.test.molgenis.org/',
-    molgenis_proxy: 'https://lifelines-catalog.test.molgenis.org/',
-    pdf_proxy: 'https://lifelines-catalog.test.molgenis.org/'
+  proxy: {
+    edge: { auth: null, url: 'https://lifelines-catalog.test.molgenis.org/' },
+    molgenis: { auth: null, url: 'https://lifelines-catalog.test.molgenis.org/' },
+    pdf: { auth: null, url: 'https://lifelines-catalog.test.molgenis.org/' }
   }
 })
+
+const devProxy = {
+  edge: {
+    target: config.proxy.edge.url,
+    keepOrigin: true
+  },
+  molgenis: {
+    target: config.proxy.molgenis.url,
+    keepOrigin: true
+  },
+  pdf: {
+    target: config.proxy.pdf.url,
+    keepOrigin: true
+  }
+}
+
+if (config.proxy.edge.auth) { devProxy.edge.auth = config.proxy.edge.auth }
+if (config.proxy.molgenis.auth) { devProxy.molgenis.auth = config.proxy.molgenis.auth }
+if (config.proxy.pdf.auth) { devProxy.pdf.auth = config.proxy.pdf.auth }
 
 module.exports = {
   outputDir: 'dist',
@@ -63,58 +82,19 @@ module.exports = {
     // In CI mode, Safari cannot contact "localhost", so as a workaround, run the dev server using the jenkins agent pod dns instead.
     host: process.env.JENKINS_AGENT_NAME || 'localhost',
     proxy: process.env.NODE_ENV === 'production' ? undefined : {
-      '^/vuepdf*': {
-        'target': config.development.pdf_proxy,
-        'keepOrigin': true
-      },
-      '^/edge-server*': {
-        'target': config.development.edge_proxy,
-        'keepOrigin': true
-      },
-      '^/api': {
-        'target': config.development.molgenis_proxy,
-        'keepOrigin': true
-      },
-      '^/menu': {
-        'target': config.development.molgenis_proxy,
-        'keepOrigin': true
-      },
-      '^/app-ui-context': {
-        'target': config.development.molgenis_proxy,
-        'keepOrigin': true
-      },
-      '^/fonts': {
-        'target': config.development.molgenis_proxy,
-        'keepOrigin': true
-      },
-      '^/img': {
-        'target': config.development.molgenis_proxy,
-        'keepOrigin': true
-      },
-      '^/css': {
-        'target': config.development.molgenis_proxy,
-        'changeOrigin': true
-      },
-      '^/js': {
-        'target': config.development.molgenis_proxy,
-        'changeOrigin': true
-      },
-      '^/logo': {
-        'target': config.development.molgenis_proxy,
-        'changeOrigin': true
-      },
-      '^/login': {
-        'target': config.development.molgenis_proxy,
-        'changeOrigin': true
-      },
-      '^/@molgenis-ui': {
-        'target': config.development.molgenis_proxy,
-        'changeOrigin': true
-      },
-      '^/files': {
-        'target': config.development.molgenis_proxy,
-        'changeOrigin': true
-      }
+      '^/vuepdf*': devProxy.pdf,
+      '^/edge-server*': devProxy.edge,
+      '^/api': devProxy.molgenis,
+      '^/menu': devProxy.molgenis,
+      '^/app-ui-context': devProxy.molgenis,
+      '^/fonts': devProxy.molgenis,
+      '^/img': devProxy.molgenis,
+      '^/css': devProxy.molgenis,
+      '^/js': devProxy.molgenis,
+      '^/logo': devProxy.molgenis,
+      '^/login': devProxy.molgenis,
+      '^/@molgenis-ui': devProxy.molgenis,
+      '^/files': devProxy.molgenis
     },
     before: function (app, server) {
       app.get('/api/v2/i18n/lifelines-webshop/en', function (req, res) {
