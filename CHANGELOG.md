@@ -1,3 +1,10 @@
+## [2.4.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.4.1...v2.4.2) (2020-06-08)
+
+
+### Bug Fixes
+
+* fix routing in safari ([0fb5990](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/0fb5990)), closes [#320](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/320)
+
 ## [2.4.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.4.0...v2.4.1) (2020-06-05)
 
 
