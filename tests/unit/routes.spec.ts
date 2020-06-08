@@ -37,7 +37,7 @@ describe('routes', () => {
     expect(mockNext).toHaveBeenCalledWith('/shop')
   })
 
-  it('when signed in orders route pass on', () => {
+  it('when signed in orders route should pass to next', () => {
     Object.defineProperty(store.getters, 'isSignedIn', {
       get: jest.fn(() => true),
       configurable: true
