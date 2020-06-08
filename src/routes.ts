@@ -1,18 +1,14 @@
-import Vue from 'vue'
-import Router, { Route, NavigationGuardNext } from 'vue-router'
-
+import { Route, NavigationGuardNext } from 'vue-router'
 import MainView from './views/MainView.vue'
 import OrdersView from './views/OrdersView.vue'
 import OrderView from './views/OrderView.vue'
-
 import store from '@/store/store'
 
 const handleProtectedRoute = (to: Route, from: Route, next: NavigationGuardNext) => {
-  !store.getters.isSignedIn ? next('/shop') : next()
+  store.getters.isSignedIn === false ? next('/shop') : next()
 }
 
-Vue.use(Router)
-export const routes = [
+export default [
   {
     path: '/orders/:orderNumber?',
     name: 'orders',
@@ -48,15 +44,9 @@ export const routes = [
   },
   {
     path: '/*',
+    name: 'catchAll',
     beforeEnter: (to: Route, from: Route, next: NavigationGuardNext) => {
-      store.getters.isSignedIn ? next('/orders') : next('/shop')
+      store.getters.isSignedIn === true ? next('/orders') : next('/shop')
     }
   }
 ]
-
-const packageJson = require('../package.json')
-
-export const router = new Router({
-  base: process.env.NODE_ENV === 'production' ? packageJson.name + '/dist/index.html' : process.env.BASE_URL,
-  routes
-})
