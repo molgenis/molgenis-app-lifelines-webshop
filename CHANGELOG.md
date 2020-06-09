@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.0...v2.5.1) (2020-06-09)
+
+
+### Bug Fixes
+
+* use correct 18-64 filter value ([62d0fa2](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/62d0fa2))
+
 # [2.5.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.4.2...v2.5.0) (2020-06-09)
 
 
