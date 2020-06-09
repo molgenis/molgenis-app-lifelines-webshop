@@ -10,7 +10,7 @@ describe('AgeFacet.vue', () => {
   ]
   const ageGroupOptions = [
     { value: '1', text: '0-17' },
-    { value: '2', text: '18-65' },
+    { value: '2', text: '18-64' },
     { value: '3', text: '65+' }
   ]
   const basicProps = {

@@ -77,7 +77,7 @@ describe('store', () => {
     const cartFilter: CartFilter = {
       assessment: [1, 2],
       ageGroupAt1A: ['0-17'],
-      ageGroupAt2A: ['18-65', '65+'],
+      ageGroupAt2A: ['18-64', '65+'],
       ageGroupAt3A: ['65+'],
       gender: ['Male'],
       hideZeroData: true,

@@ -65,7 +65,7 @@ const state: AppState = {
   ],
   ageGroupOptions: [
     { value: '1', text: '0-17', info: 'lifelines-webshop-sidebar-child-info', href: 'lifelines-webshop-sidebar-child-link' },
-    { value: '2', text: '18-65', info: 'lifelines-webshop-sidebar-adult-info', href: 'lifelines-webshop-sidebar-adult-link' },
+    { value: '2', text: '18-64', info: 'lifelines-webshop-sidebar-adult-info', href: 'lifelines-webshop-sidebar-adult-link' },
     { value: '3', text: '65+', info: 'lifelines-webshop-sidebar-elderly-info', href: 'lifelines-webshop-sidebar-elderly-link' }
   ],
   ageAtOptions: [

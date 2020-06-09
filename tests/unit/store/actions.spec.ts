@@ -23,7 +23,7 @@ const cart: Cart = {
     variables: ['VAR1', 'VAR2']
   }],
   filters: {
-    ageGroupAt1A: ['18-65', '65+'],
+    ageGroupAt1A: ['18-64', '65+'],
     assessment: [],
     hideZeroData: true
   }
