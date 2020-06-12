@@ -21,9 +21,7 @@ const config = require('rc')('lifelines', {
 
 module.exports = {
   outputDir: 'dist',
-  publicPath: process.env.NODE_ENV === 'production'
-    ? pkgName + '/dist/'
-    : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? `/${pkgName}@${pkgVersion}/dist/` : '/',
   configureWebpack: config => {
     if (process.env.NODE_ENV !== 'production') {
       /*
