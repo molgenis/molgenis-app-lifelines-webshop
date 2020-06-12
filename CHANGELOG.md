@@ -1,3 +1,11 @@
+## [2.5.3](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.2...v2.5.3) (2020-06-12)
+
+
+### Bug Fixes
+
+* [#329](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/329) Cannot view old app version via browser url ([0f74133](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/0f74133)), closes [#330](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/330) [#331](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/331)
+* remove double app name in build path ([284c96b](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/284c96b))
+
 ## [2.5.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.1...v2.5.2) (2020-06-10)
 
 
