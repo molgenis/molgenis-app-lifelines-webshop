@@ -1,3 +1,10 @@
+## [2.5.5](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.4...v2.5.5) (2020-06-24)
+
+
+### Bug Fixes
+
+* use https for wiki links ([efd5c2b](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/efd5c2b))
+
 ## [2.5.4](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.3...v2.5.4) (2020-06-12)
 
 
