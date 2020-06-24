@@ -1,3 +1,10 @@
+## [2.5.4](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.3...v2.5.4) (2020-06-12)
+
+
+### Bug Fixes
+
+* allow npx to trigger build ([17e93bb](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/17e93bb))
+
 ## [2.5.3](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.2...v2.5.3) (2020-06-12)
 
 
