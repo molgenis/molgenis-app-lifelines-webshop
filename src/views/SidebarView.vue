@@ -21,7 +21,7 @@
               @facetToggle="handleAgeToggle"
             >
               <template v-slot:label-slot>
-                <info-icon id="age-info-icon" :title="$t('lifelines-webshop-age-facet-label')" href="http://wiki-lifelines.web.rug.nl/doku.php?id=cohort#age_groups">
+                <info-icon id="age-info-icon" :title="$t('lifelines-webshop-age-facet-label')" href="https://wiki-lifelines.web.rug.nl/doku.php?id=cohort#age_groups">
                   <span v-html="$t('lifelines-webshop-sidebar-age-info')"></span>
                 </info-icon>
               </template>
@@ -52,7 +52,7 @@
                 v-model="selectedGenderOptions"
               />
               <template v-slot:label-slot>
-                <info-icon id="gender-info-icon" :title="$t('lifelines-webshop-gender-facet-label')" href="http://wiki-lifelines.web.rug.nl/doku.php?id=cohort#gender">
+                <info-icon id="gender-info-icon" :title="$t('lifelines-webshop-gender-facet-label')" href="https://wiki-lifelines.web.rug.nl/doku.php?id=cohort#gender">
                   <span v-html="$t('lifelines-webshop-sidebar-gender-info')"></span>
                 </info-icon>
               </template>
@@ -65,7 +65,7 @@
               :label="$t('lifelines-webshop-subcohort-facet-label')"
             >
               <template v-slot:label-slot>
-                <info-icon id="cohort-info-icon" :title="$t('lifelines-webshop-subcohort-facet-label')"  href="http://wiki-lifelines.web.rug.nl/doku.php?id=cohort#subcohorts">
+                <info-icon id="cohort-info-icon" :title="$t('lifelines-webshop-subcohort-facet-label')"  href="https://wiki-lifelines.web.rug.nl/doku.php?id=cohort#subcohorts">
                   <span v-html="$t('lifelines-webshop-sidebar-cohort-info')"></span>
                 </info-icon>
               </template>
@@ -98,7 +98,7 @@
                 :label="$t('lifelines-webshop-facet-assessment-label')"
               >
                 <template v-slot:label-slot>
-                  <info-icon id="assessment-info-icon" :title="$t('lifelines-webshop-assessment-facet-label')" href="http://wiki-lifelines.web.rug.nl/doku.php?id=general_assessments">
+                  <info-icon id="assessment-info-icon" :title="$t('lifelines-webshop-assessment-facet-label')" href="https://wiki-lifelines.web.rug.nl/doku.php?id=general_assessments">
                     <span v-html="$t('lifelines-webshop-sidebar-assessment-info')"></span>
                   </info-icon><br/>
                 </template>
