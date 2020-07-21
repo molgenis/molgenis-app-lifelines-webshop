@@ -1,3 +1,11 @@
+## [2.5.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.5...v2.5.6) (2020-07-21)
+
+
+### Bug Fixes
+
+* add loading bar to show approving order status ([97b41a9](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/97b41a9))
+* changed wrong title ([6f89cce](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/6f89cce))
+
 ## [2.5.5](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.4...v2.5.5) (2020-06-24)
 
 
