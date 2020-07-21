@@ -3,6 +3,18 @@
   <div id="orders-view" class="container pt-1">
 
     <ConfirmationModal
+      v-if="$route && $route.name === 'orderStateChangeBar'"
+      :backRoute="$router.resolve({name: 'orders'}).route"
+      :title="$t('lifelines-webshop-modal-state-header')">
+
+      <template v-slot:body>
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="orderChangeStateProgress" aria-valuemin="0" aria-valuemax="100" :style="{width: orderChangeStateProgress + '%'}"></div>
+        </div>
+      </template>
+    </ConfirmationModal>
+
+    <ConfirmationModal
       v-if="$route && $route.name === 'orderDelete'"
       :backRoute="$router.resolve({name: 'orders'}).route"
       :title="$t('lifelines-webshop-modal-delete-header', {order: $route.params.orderNumber})">
@@ -234,6 +246,7 @@ export default Vue.extend({
           'Rejected': 'danger'
         }
       },
+      orderChangeStateProgress: 0, // [0 - 100]
       pdfLoadState: {},
       table: {
         currentPage: 1,
@@ -264,10 +277,14 @@ export default Vue.extend({
       })
     },
     changeStateConfirmed: async function (orderNumber, targetState) {
+      this.orderChangeStateProgress = 0
+      this.$router.push({ name: 'orderStateChangeBar' })
       await this.loadOrderAndCart(orderNumber)
+      this.orderChangeStateProgress = 20
       this.changeOrderStatus(targetState)
+      this.orderChangeStateProgress = 40
       await this.save()
-
+      this.orderChangeStateProgress = 60
       if (targetState === 'Submitted') {
         this.submit()
       } else if (targetState === 'Approved') {
@@ -278,9 +295,10 @@ export default Vue.extend({
           this.setToast({ type: 'danger', textType: 'light', message: `Order ${orderNumber} approval failed` })
         }
       }
-
-      this.$router.push({ name: 'orders' })
+      this.orderChangeStateProgress = 80
       this.updateTable()
+      this.orderChangeStateProgress = 100
+      this.$router.push({ name: 'orders' })
     },
     deleteOrderConfirmed: function (orderNumber) {
       this.deleteOrder(orderNumber)

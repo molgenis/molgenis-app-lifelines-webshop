@@ -21,6 +21,10 @@ export default [
       {
         name: 'orderStateChange',
         path: 'state/:state'
+      },
+      {
+        name: 'orderStateChangeBar',
+        path: 'state/:state'
       }
     ],
     beforeEnter: handleProtectedRoute
