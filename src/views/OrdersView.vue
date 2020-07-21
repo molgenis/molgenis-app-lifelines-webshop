@@ -5,14 +5,13 @@
     <ConfirmationModal
       v-if="$route && $route.name === 'orderStateChangeBar'"
       :backRoute="$router.resolve({name: 'orders'}).route"
-      :title="$t('lifelines-webshop-modal-delete-header', {order: $route.params.orderNumber})">
+      :title="$t('lifelines-webshop-modal-state-header')">
 
       <template v-slot:body>
         <div class="progress">
           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="orderChangeStateProgress" aria-valuemin="0" aria-valuemax="100" :style="{width: orderChangeStateProgress + '%'}"></div>
         </div>
       </template>
-
     </ConfirmationModal>
 
     <ConfirmationModal
@@ -286,7 +285,6 @@ export default Vue.extend({
       this.orderChangeStateProgress = 40
       await this.save()
       this.orderChangeStateProgress = 60
-
       if (targetState === 'Submitted') {
         this.submit()
       } else if (targetState === 'Approved') {
@@ -297,7 +295,6 @@ export default Vue.extend({
           this.setToast({ type: 'danger', textType: 'light', message: `Order ${orderNumber} approval failed` })
         }
       }
-
       this.orderChangeStateProgress = 80
       this.updateTable()
       this.orderChangeStateProgress = 100
