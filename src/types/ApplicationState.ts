@@ -20,6 +20,7 @@ export type Toast = {
 
 export interface AppState {
   loading: number
+  isSearching: boolean
   order: Order
   orderFormFields: FormField[]
   variables: { [key:number]: Variable }

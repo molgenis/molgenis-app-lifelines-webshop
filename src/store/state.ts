@@ -2,6 +2,7 @@ import { AppState } from '@/types/ApplicationState'
 
 const state: AppState = {
   loading: 0,
+  isSearching: false,
   toast: [],
   order: {
     orderNumber: null,

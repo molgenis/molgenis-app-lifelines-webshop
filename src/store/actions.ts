@@ -135,12 +135,14 @@ export default {
     if (!searchTermQuery) {
       return
     }
+    state.isSearching = true
 
     const variables = await fetchVariables(searchTermQuery, state.treeSelected)
     if (searchTermQuery === getters.searchTermQuery) {
       const sortedGridVariables = finalVariableSetSort(variables)
       commit('updateGridVariables', sortedGridVariables)
     }
+    state.isSearching = false
   }),
   loadParticipantCount: tryAction(async ({ commit, getters }: any) => {
     commit('updateParticipantCount', null)

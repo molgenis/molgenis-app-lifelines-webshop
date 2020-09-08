@@ -547,6 +547,11 @@ describe('getters', () => {
     it('is true while loading gridVariables', () => {
       expect(getters.isGridLoading({ ...emptyState, variantCounts: [], treeSelected: 1 })).toBe(true)
     })
+    it('is true when searching', () => {
+      const state = { ...emptyState }
+      state.isSearching = true
+      expect(getters.isGridLoading(state)).toBe(true)
+    })
     it('is false when loaded', () => {
       expect(getters.isGridLoading({ ...emptyState, gridVariables: [], variantCounts: [], treeSelected: 1 })).toBe(false)
     })
