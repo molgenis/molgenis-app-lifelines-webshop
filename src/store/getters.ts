@@ -147,7 +147,8 @@ export default {
     return transforms.cartTree(state.gridSelection, state.treeStructure, state.sections, state.subSectionList, state.variables)
   },
   isGridLoading: (state: ApplicationState): boolean => {
-    return (state.gridVariables === null || state.variantCounts === null) && state.treeSelected !== -1
+    return state.isSearching ||
+      ((state.gridVariables === null || state.variantCounts === null) && state.treeSelected !== -1)
   },
   searchTermQuery: (state: ApplicationState) => {
     const operands = []
