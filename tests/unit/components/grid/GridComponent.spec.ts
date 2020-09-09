@@ -180,6 +180,11 @@ describe('GridComponent.vue', () => {
           name: 'd',
           id: 104,
           subvariables: []
+        }, {
+          name: 'h',
+          id: 106,
+          subvariables: [],
+          subvariableOf: { id: 'non-exist' }
         }],
         gridSelections: [[false, false], [false, false]],
         isLoading: false,
@@ -223,6 +228,10 @@ describe('GridComponent.vue', () => {
       wrapper.vm.openVariableSets = []
       // @ts-ignore
       expect(wrapper.vm.isVisibleVariable(props.gridVariables[1])).toBeTruthy()
+
+      // Test that subvariable is hidden if parent is hidden
+      // @ts-ignore
+      expect(wrapper.vm.isVisibleVariable(props.gridVariables[4])).toBeFalsy()
     })
 
     it('can use variableSetClickHandler to open en close variable sets', () => {

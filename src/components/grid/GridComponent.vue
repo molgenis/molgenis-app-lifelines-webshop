@@ -242,8 +242,11 @@ export default Vue.extend({
     },
     isVisibleVariable (variable) {
       if (
-        variable.subvariableOf &&
-        this.openVariableSets.includes(variable.subvariableOf.id)
+        variable.subvariableOf && (
+          this.openVariableSets.includes(variable.subvariableOf.id) ||
+          // test if subvariable parent is shown, if not hide subvariable
+          !(this.gridVariables.find(gridVariables => variable.subvariableOf.id === gridVariables.id))
+        )
       ) {
         return false
       }
