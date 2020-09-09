@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.6.0...v2.7.0) (2020-09-09)
+
+
+### Features
+
+* show loading indicator during search ([#340](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/340)) ([edf8b73](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/edf8b73))
+
 # [2.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.6...v2.6.0) (2020-09-09)
 
 
