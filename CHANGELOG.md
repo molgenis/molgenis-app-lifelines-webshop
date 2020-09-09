@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.6...v2.6.0) (2020-09-09)
+
+
+### Features
+
+* sort grid variables alphabetically ([#339](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/339)) ([1015d87](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/1015d87))
+
 ## [2.5.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.5.5...v2.5.6) (2020-07-21)
 
 
