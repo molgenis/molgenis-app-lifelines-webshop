@@ -1,3 +1,12 @@
+## [2.7.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.0...v2.7.1) (2020-09-10)
+
+
+### Bug Fixes
+
+* broken grafical representation of variableset ([638458f](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/638458f))
+* filter out subvariable row that have a zero parent ([d27fbe1](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/d27fbe1))
+* parent with hidden children is no longer a parent ([bb2333e](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/bb2333e))
+
 # [2.7.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.6.0...v2.7.0) (2020-09-09)
 
 
