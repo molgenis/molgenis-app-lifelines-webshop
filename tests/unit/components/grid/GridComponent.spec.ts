@@ -180,6 +180,11 @@ describe('GridComponent.vue', () => {
           name: 'd',
           id: 104,
           subvariables: []
+        }, {
+          name: 'h',
+          id: 106,
+          subvariables: [],
+          subvariableOf: { id: 'non-exist' }
         }],
         gridSelections: [[false, false], [false, false]],
         isLoading: false,
@@ -198,51 +203,55 @@ describe('GridComponent.vue', () => {
     it('starts with closed collapsible variable-sets', async () => {
       await wrapper.vm.$nextTick()
       // @ts-ignore
-      expect(wrapper.vm.openVariableSets).toEqual([101])
+      expect(wrapper.vm.closedVariableSets).toEqual([101])
     })
 
-    it('can use variableSetIsOpen to find open variables sets', () => {
+    it('can use variableSetIsClosed to find open variables sets', () => {
       // @ts-ignore
-      expect(wrapper.vm.variableSetIsOpen(props.gridVariables[0])).toBeTruthy()
+      expect(wrapper.vm.variableSetIsClosed(props.gridVariables[0])).toBeTruthy()
       // @ts-ignore
-      expect(wrapper.vm.variableSetIsOpen(props.gridVariables[1])).toBeFalsy()
+      expect(wrapper.vm.variableSetIsClosed(props.gridVariables[1])).toBeFalsy()
       // @ts-ignore
-      wrapper.vm.openVariableSets = []
+      wrapper.vm.closedVariableSets = []
       // @ts-ignore
-      expect(wrapper.vm.variableSetIsOpen(props.gridVariables[0])).toBeFalsy()
+      expect(wrapper.vm.variableSetIsClosed(props.gridVariables[0])).toBeFalsy()
     })
 
     it('can use isVisibleVariable to find visable variables sets', () => {
       // @ts-ignore
-      expect(wrapper.vm.openVariableSets).toEqual([101])
+      expect(wrapper.vm.closedVariableSets).toEqual([101])
       // @ts-ignore
       expect(wrapper.vm.isVisibleVariable(props.gridVariables[0])).toBeTruthy()
       // @ts-ignore
       expect(wrapper.vm.isVisibleVariable(props.gridVariables[1])).toBeFalsy()
       // @ts-ignore
-      wrapper.vm.openVariableSets = []
+      wrapper.vm.closedVariableSets = []
       // @ts-ignore
       expect(wrapper.vm.isVisibleVariable(props.gridVariables[1])).toBeTruthy()
+
+      // Test that subvariable is hidden if parent is hidden
+      // @ts-ignore
+      expect(wrapper.vm.isVisibleVariable(props.gridVariables[4])).toBeFalsy()
     })
 
     it('can use variableSetClickHandler to open en close variable sets', () => {
       // @ts-ignore
-      expect(wrapper.vm.openVariableSets).toEqual([101])
+      expect(wrapper.vm.closedVariableSets).toEqual([101])
       // @ts-ignore
       wrapper.vm.variableSetClickHandler(props.gridVariables[0])
       // @ts-ignore
-      expect(wrapper.vm.openVariableSets).toEqual([])
+      expect(wrapper.vm.closedVariableSets).toEqual([])
       // @ts-ignore
       wrapper.vm.variableSetClickHandler(props.gridVariables[0])
       // @ts-ignore
-      expect(wrapper.vm.openVariableSets).toEqual([101])
+      expect(wrapper.vm.closedVariableSets).toEqual([101])
     })
 
     it('can use variableSetClass to help with rendering', () => {
       // @ts-ignore
       expect(wrapper.vm.variableSetClass(props.gridVariables[0])).toEqual('closed')
       // @ts-ignore
-      wrapper.vm.openVariableSets = []
+      wrapper.vm.closedVariableSets = []
       // @ts-ignore
       expect(wrapper.vm.variableSetClass(props.gridVariables[0])).toEqual('start')
       // @ts-ignore

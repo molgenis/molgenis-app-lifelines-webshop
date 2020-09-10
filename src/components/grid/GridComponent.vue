@@ -79,8 +79,8 @@
                 >
                   <font-awesome-icon
                     class="mb-1"
-                    v-if="gridVariables[rowIndex].subvariables && gridVariables[rowIndex].subvariables.length>0"
-                    :icon="variableSetIsOpen(gridVariables[rowIndex])?'plus-square':'minus-square'"
+                    v-if="isParentVariable(gridVariables[rowIndex])"
+                    :icon="variableSetIsClosed(gridVariables[rowIndex])?'plus-square':'minus-square'"
                   />
                 </th>
                 <th
@@ -186,6 +186,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    visibleGridChildVariableIds () {
+      return this.gridVariables.filter(item => item.subvariableOf !== undefined).map(gridVar => gridVar.id)
+    },
     gridMarkers: function () {
       const selected = { all: true, row: [], col: [] }
       if (!this.gridRows.length) {
@@ -212,67 +215,99 @@ export default Vue.extend({
       stickyTableHeader: false,
       dialogInfo: null,
       selectedRowIndex: '',
-      openVariableSets: []
+      closedVariableSets: []
     }
   },
   filters: {
     formatCount
   },
   methods: {
-    variableSetIsOpen (variable) {
+    variableSetIsClosed (variable) {
       return (
         variable.subvariables &&
         variable.subvariables.length > 0 &&
-        this.openVariableSets.includes(variable.id)
+        this.closedVariableSets.includes(variable.id)
       )
     },
     async variableSetClickHandler (variable) {
       if (variable.subvariables && variable.subvariables.length > 0) {
-        if (this.variableSetIsOpen(variable)) {
-          this.openVariableSets = this.openVariableSets.filter(
+        if (this.variableSetIsClosed(variable)) {
+          this.closedVariableSets = this.closedVariableSets.filter(
             varid => varid !== variable.id
           )
         } else {
-          this.openVariableSets.push(variable.id)
+          this.closedVariableSets.push(variable.id)
         }
         // Ajust the header for collapesed variables after layout is recalculated
         await this.$nextTick()
         this.setGridHeaderSpacer()
       }
     },
+    getParentVariable (variable) {
+      if (variable.subvariableOf) {
+        return this.gridVariables.find(gridVariable => variable.subvariableOf.id === gridVariable.id)
+      }
+      return undefined
+    },
     isVisibleVariable (variable) {
       if (
-        variable.subvariableOf &&
-        this.openVariableSets.includes(variable.subvariableOf.id)
+        variable.subvariableOf && (
+          this.closedVariableSets.includes(variable.subvariableOf.id) ||
+          // test if subvariable parent is shown, if not hide subvariable
+          !(this.gridVariables.find(gridVariables => variable.subvariableOf.id === gridVariables.id))
+        )
       ) {
         return false
       }
       return true
     },
     variableSetClass (variable) {
-      if (this.openVariableSets.includes(variable.id)) {
-        return 'closed'
-      }
-      if (variable.subvariableOf) {
-        const index = this.gridVariables.findIndex(
-          varid => varid.id === variable.id
-        )
-        if (
-          index + 1 < this.gridVariables.length &&
-          this.gridVariables[index + 1] &&
-          !this.gridVariables[index + 1].subvariableOf
-        ) {
-          return 'end'
+      // Parent checks
+      if (this.isParentVariable(variable)) {
+        if (this.closedVariableSets.includes(variable.id)) {
+          return 'closed'
+        } else {
+          return 'start'
         }
-        return 'line'
       }
-      if (
-        variable &&
-        variable.subvariables &&
-        variable.subvariables.length > 0
-      ) {
-        return 'start'
+      // Child checks
+      if (variable.subvariableOf) {
+        if (this.isEndingSubVariable(variable)) {
+          return 'end'
+        } else {
+          return 'line'
+        }
       }
+      // Normal variables dont have a class
+    },
+    isParentVariable (variable) {
+      if (!variable) {
+        return false
+      }
+      if (variable.subvariables && variable.subvariables.length > 0) {
+        const subVariableIds = variable.subvariables.map(subvar => subvar.id)
+        if (subVariableIds.some(subVarId => this.visibleGridChildVariableIds.includes(subVarId))) {
+          return true
+        }
+      }
+      return false
+    },
+    isEndingSubVariable (variable) {
+      const parent = this.getParentVariable(variable)
+      let last = null
+      // Check if sub variable is the last in the list by checking it against all visible variables
+      for (let i = parent.subvariables.length - 1; i >= 0; i--) {
+        const potentiallyLast = parent.subvariables[i]
+        if (this.visibleGridChildVariableIds.includes(potentiallyLast.id)) {
+          last = potentiallyLast
+          break
+        }
+      }
+
+      if (last && variable.id === last.id) {
+        return true
+      }
+      return false
     },
     classes (target, context) {
       const classes = {}
@@ -357,9 +392,9 @@ export default Vue.extend({
           if (
             variable.subvariables &&
             variable.subvariables.length > 0 &&
-            !this.openVariableSets.includes(variable.id)
+            !this.closedVariableSets.includes(variable.id)
           ) {
-            this.openVariableSets.push(variable.id)
+            this.closedVariableSets.push(variable.id)
           }
         })
       }
