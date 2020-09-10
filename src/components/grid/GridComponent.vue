@@ -303,10 +303,8 @@ export default Vue.extend({
           break
         }
       }
-      if (!last) {
-        return false
-      }
-      if (variable.id === last.id) {
+
+      if (last && variable.id === last.id) {
         return true
       }
       return false
