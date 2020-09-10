@@ -79,7 +79,7 @@
                 >
                   <font-awesome-icon
                     class="mb-1"
-                    v-if="gridVariables[rowIndex].subvariables && gridVariables[rowIndex].subvariables.length>0"
+                    v-if="isParentVariable(gridVariables[rowIndex])"
                     :icon="variableSetIsOpen(gridVariables[rowIndex])?'plus-square':'minus-square'"
                   />
                 </th>
@@ -244,7 +244,7 @@ export default Vue.extend({
       }
     },
     getParentVariable (variable) {
-      if (variable.subvariableOf !== undefined) {
+      if (variable.subvariableOf) {
         return this.gridVariables.find(gridVariable => variable.subvariableOf.id === gridVariable.id)
       }
       return undefined
@@ -262,22 +262,35 @@ export default Vue.extend({
       return true
     },
     variableSetClass (variable) {
-      if (this.openVariableSets.includes(variable.id)) {
-        return 'closed'
+      // Parent checks
+      if (this.isParentVariable(variable)) {
+        if (this.openVariableSets.includes(variable.id)) {
+          return 'closed'
+        } else {
+          return 'start'
+        }
       }
+      // Child checks
       if (variable.subvariableOf) {
         if (this.isEndingSubVariable(variable)) {
           return 'end'
+        } else {
+          return 'line'
         }
-        return 'line'
       }
-      if (
-        variable &&
-        variable.subvariables &&
-        variable.subvariables.length > 0
-      ) {
-        return 'start'
+      // Normal variables dont have a class
+    },
+    isParentVariable (variable) {
+      if (!variable) {
+        return false
       }
+      if (variable.subvariables && variable.subvariables.length > 0) {
+        const subVariableIds = variable.subvariables.map(subvar => subvar.id)
+        if (subVariableIds.some(subVarId => this.visibleGridChildVariableIds.includes(subVarId))) {
+          return true
+        }
+      }
+      return false
     },
     isEndingSubVariable (variable) {
       const parent = this.getParentVariable(variable)
