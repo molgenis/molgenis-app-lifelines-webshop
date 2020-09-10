@@ -80,7 +80,7 @@
                   <font-awesome-icon
                     class="mb-1"
                     v-if="isParentVariable(gridVariables[rowIndex])"
-                    :icon="variableSetIsOpen(gridVariables[rowIndex])?'plus-square':'minus-square'"
+                    :icon="variableSetIsClosed(gridVariables[rowIndex])?'plus-square':'minus-square'"
                   />
                 </th>
                 <th
@@ -215,28 +215,28 @@ export default Vue.extend({
       stickyTableHeader: false,
       dialogInfo: null,
       selectedRowIndex: '',
-      openVariableSets: []
+      closedVariableSets: []
     }
   },
   filters: {
     formatCount
   },
   methods: {
-    variableSetIsOpen (variable) {
+    variableSetIsClosed (variable) {
       return (
         variable.subvariables &&
         variable.subvariables.length > 0 &&
-        this.openVariableSets.includes(variable.id)
+        this.closedVariableSets.includes(variable.id)
       )
     },
     async variableSetClickHandler (variable) {
       if (variable.subvariables && variable.subvariables.length > 0) {
-        if (this.variableSetIsOpen(variable)) {
-          this.openVariableSets = this.openVariableSets.filter(
+        if (this.variableSetIsClosed(variable)) {
+          this.closedVariableSets = this.closedVariableSets.filter(
             varid => varid !== variable.id
           )
         } else {
-          this.openVariableSets.push(variable.id)
+          this.closedVariableSets.push(variable.id)
         }
         // Ajust the header for collapesed variables after layout is recalculated
         await this.$nextTick()
@@ -252,7 +252,7 @@ export default Vue.extend({
     isVisibleVariable (variable) {
       if (
         variable.subvariableOf && (
-          this.openVariableSets.includes(variable.subvariableOf.id) ||
+          this.closedVariableSets.includes(variable.subvariableOf.id) ||
           // test if subvariable parent is shown, if not hide subvariable
           !(this.gridVariables.find(gridVariables => variable.subvariableOf.id === gridVariables.id))
         )
@@ -264,7 +264,7 @@ export default Vue.extend({
     variableSetClass (variable) {
       // Parent checks
       if (this.isParentVariable(variable)) {
-        if (this.openVariableSets.includes(variable.id)) {
+        if (this.closedVariableSets.includes(variable.id)) {
           return 'closed'
         } else {
           return 'start'
@@ -392,9 +392,9 @@ export default Vue.extend({
           if (
             variable.subvariables &&
             variable.subvariables.length > 0 &&
-            !this.openVariableSets.includes(variable.id)
+            !this.closedVariableSets.includes(variable.id)
           ) {
-            this.openVariableSets.push(variable.id)
+            this.closedVariableSets.push(variable.id)
           }
         })
       }
