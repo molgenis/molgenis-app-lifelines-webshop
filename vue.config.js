@@ -14,7 +14,7 @@ build-date: ${buildDate}`
 const config = require('rc')('lifelines', {
   development: {
     edge_proxy: 'https://lifelines-catalog.test.molgenis.org/',
-    molgenis_proxy: 'https://lifelines-catalog.test.molgenis.org/',
+    molgenis_proxy: 'https://molgenis81.gcc.rug.nl',
     pdf_proxy: 'https://lifelines-catalog.test.molgenis.org/'
   }
 })

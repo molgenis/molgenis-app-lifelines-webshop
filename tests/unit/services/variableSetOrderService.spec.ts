@@ -12,12 +12,12 @@ describe('finalVariableSetSort', () => {
     }, {
       id: 3, // Sub variable
       name: '3',
-      subvariableOf: { id: 2 },
+      subvariableOf: { id: 2, name: '2' },
       subvariables: []
     }, {
       id: 2, // Parent variable
       name: '2',
-      subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ]
+      subvariables: [ { id: 3, name: '3' }, { id: 4, name: '4' }, { id: 5, name: '5' } ]
     }, {
       id: 6, // Normal variable
       name: '6',
@@ -25,12 +25,12 @@ describe('finalVariableSetSort', () => {
     }, {
       id: 4, // Sub variable
       name: '4',
-      subvariableOf: { id: 2 },
+      subvariableOf: { id: 2, name: '2' },
       subvariables: []
     }, {
       id: 5, // Sub variable
       name: '5',
-      subvariableOf: { id: 2 },
+      subvariableOf: { id: 2, name: '2' },
       subvariables: []
     }]
 
@@ -42,21 +42,21 @@ describe('finalVariableSetSort', () => {
     }, {
       id: 2, // Parent variable
       name: '2',
-      subvariables: [ { id: 3 }, { id: 4 }, { id: 5 } ]
+      subvariables: [ { id: 3, name: '3' }, { id: 4, name: '4' }, { id: 5, name: '5' } ]
     }, {
       id: 3, // Sub variable
       name: '3',
-      subvariableOf: { id: 2 },
+      subvariableOf: { id: 2, name: '2' },
       subvariables: []
     }, {
       id: 4, // Sub variable
       name: '4',
-      subvariableOf: { id: 2 },
+      subvariableOf: { id: 2, name: '2' },
       subvariables: []
     }, {
       id: 5, // Normal variable
       name: '5',
-      subvariableOf: { id: 2 },
+      subvariableOf: { id: 2, name: '2' },
       subvariables: []
     }, {
       id: 6, // Normal variable

@@ -186,6 +186,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    visibleGridChildVariableIds () {
+      return this.gridVariables.filter(item => item.subvariableOf !== undefined).map(gridVar => gridVar.id)
+    },
     gridMarkers: function () {
       const selected = { all: true, row: [], col: [] }
       if (!this.gridRows.length) {
@@ -240,6 +243,12 @@ export default Vue.extend({
         this.setGridHeaderSpacer()
       }
     },
+    getParentVariable (variable) {
+      if (variable.subvariableOf !== undefined) {
+        return this.gridVariables.find(gridVariable => variable.subvariableOf.id === gridVariable.id)
+      }
+      return undefined
+    },
     isVisibleVariable (variable) {
       if (
         variable.subvariableOf && (
@@ -257,14 +266,7 @@ export default Vue.extend({
         return 'closed'
       }
       if (variable.subvariableOf) {
-        const index = this.gridVariables.findIndex(
-          varid => varid.id === variable.id
-        )
-        if (
-          index + 1 < this.gridVariables.length &&
-          this.gridVariables[index + 1] &&
-          !this.gridVariables[index + 1].subvariableOf
-        ) {
+        if (this.isEndingSubVariable(variable)) {
           return 'end'
         }
         return 'line'
@@ -276,6 +278,25 @@ export default Vue.extend({
       ) {
         return 'start'
       }
+    },
+    isEndingSubVariable (variable) {
+      const parent = this.getParentVariable(variable)
+      let last = null
+      // Check if sub variable is the last in the list by checking it against all visible variables
+      for (let i = parent.subvariables.length - 1; i >= 0; i--) {
+        const potentiallyLast = parent.subvariables[i]
+        if (this.visibleGridChildVariableIds.includes(potentiallyLast.id)) {
+          last = potentiallyLast
+          break
+        }
+      }
+      if (!last) {
+        return false
+      }
+      if (variable.id === last.id) {
+        return true
+      }
+      return false
     },
     classes (target, context) {
       const classes = {}
