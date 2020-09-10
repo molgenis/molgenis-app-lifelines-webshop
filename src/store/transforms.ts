@@ -215,6 +215,13 @@ transforms.variables = (variables:[]) => {
   return variableMap
 }
 
+transforms.gridVariables = (gridVariables:any, facetFilter:any, findZeroRowsAndCols:any) => {
+  if (gridVariables && facetFilter.hideZeroData) {
+    gridVariables = gridVariables.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))
+  }
+  return gridVariables
+}
+
 transforms.gridVariablesFiltered = (gridVariables:any, findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
   if (gridVariables && hideZeroData) {
     gridVariables = gridVariables.filter((_:any, index:number) => !findZeroRowsAndCols.rows.includes(index))

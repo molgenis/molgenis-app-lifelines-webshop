@@ -110,11 +110,16 @@ export default {
     return transforms.gridColumns(getters.variants, state.assessments, state.facetFilter.assessment, getters.findZeroRowsAndCols, state.facetFilter.hideZeroData)
   },
   gridVariables: (state: ApplicationState, getters: Getters) => {
-    let variables = state.gridVariables
-    if (variables && state.facetFilter.hideZeroData) {
-      variables = variables.filter((_:any, index:number) => !getters.findZeroRowsAndCols.rows.includes(index))
+    return transforms.gridVariables(state.gridVariables, state.facetFilter, getters.findZeroRowsAndCols)
+  },
+  gridVariablesMap: (state: ApplicationState, getters: Getters) => {
+    const gridVariablesMap:any = {}
+    const gridVariables = transforms.gridVariables(state.gridVariables, state.facetFilter, getters.findZeroRowsAndCols)
+    for (const gridVariable of gridVariables) {
+      gridVariablesMap[gridVariable.id] = gridVariable
     }
-    return variables
+
+    return gridVariablesMap
   },
   gridSelections: (state: ApplicationState, getters: Getters): boolean[][] | null => {
     let selections = transforms.gridSelections(getters.gridColumns, state.gridSelection, state.gridVariables)
@@ -161,7 +166,8 @@ export default {
       const prefix = state.treeSelected >= 0 ? 'variable_id.' : ''
       let searchTermoperands:any = [
         { selector: `${prefix}name`, comparison: '=like=', arguments: state.searchTerm },
-        { selector: `${prefix}label`, comparison: '=like=', arguments: state.searchTerm }
+        // Always include subvariables of the parent in the search
+        { selector: `${prefix}subvariable_of.name`, comparison: '=like=', arguments: state.searchTerm }
       ]
 
       if (!state.searchExact) {

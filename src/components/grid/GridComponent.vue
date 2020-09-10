@@ -70,53 +70,46 @@
               </th>
             </tr>
 
-            <template v-for="(row, rowIndex) in gridRows">
-              <tr v-if=isVisibleVariable(gridVariables[rowIndex]) :key="rowIndex" >
-                <th
-                  class="collapse-holder subvariable-line"
-                  :class="variableSetClass(gridVariables[rowIndex])"
-                  @click="variableSetClickHandler(gridVariables[rowIndex])"
+            <tr v-for="(row, rowIndex) in renderedGridRows" :key="rowIndex" :class="variableSetClass(renderedGridVariables[rowIndex])">
+              <th
+                class="collapse-holder"
+                @click="variableSetClickHandler(renderedGridVariables[rowIndex])"
+              >
+                <font-awesome-icon
+                  class="mb-1"
+                  v-if="renderedGridVariables[rowIndex].subvariables && renderedGridVariables[rowIndex].subvariables.length>0"
+                  :icon="variableSetIsOpen(renderedGridVariables[rowIndex])?'plus-square':'minus-square'"
+                />
+              </th>
+              <th
+                class="variable-column"
+                ref="variable"
+                v-b-popover.hover.left.html="popupBody(rowIndex)"
+                :title="popupTitle(rowIndex)"
+                :class="{'selected-variable': rowIndex === selectedRowIndex }"
+              >
+                <grid-titel-info v-bind="renderedGridVariables[rowIndex]"/>
+              </th>
+              <th class="row-toggle grid-toggle">
+                <button
+                  :disabled="!isSignedIn"
+                  class="btn btn-sm select-row btn-outline-secondary t-btn-row-toggle"
+                  :data-row="rowIndex"
+                  :class="classes('rowSelect', {rowIndex})"
                 >
-                  <font-awesome-icon
-                    class="mb-1"
-                    v-if="gridVariables[rowIndex].subvariables && gridVariables[rowIndex].subvariables.length>0"
-                    :icon="variableSetIsOpen(gridVariables[rowIndex])?'plus-square':'minus-square'"
-                  />
-                </th>
-                <th
-                  class="variable-column"
-                  ref="variable"
-                  v-b-popover.hover.left.html="popupBody(rowIndex)"
-                  :title="popupTitle(rowIndex)"
-                  :class="{'selected-variable': rowIndex === selectedRowIndex }"
-                >
-                  <grid-titel-info
-                    :class="{'ml-3': !!gridVariables[rowIndex].subvariableOf}"
-                    v-bind="gridVariables[rowIndex]"
-                  />
-                </th>
-                <th class="row-toggle grid-toggle">
-                  <button
-                    :disabled="!isSignedIn"
-                    class="btn btn-sm select-row btn-outline-secondary t-btn-row-toggle"
-                    :data-row="rowIndex"
-                    :class="classes('rowSelect', {rowIndex})"
-                  >
-                    <font-awesome-icon icon="arrow-right" />
-                  </button>
-                </th>
-                <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
-                  <button
-                    :disabled="!isSignedIn"
-                    :data-col="colIndex"
-                    :data-row="rowIndex"
-                    :class="classes('cell', {rowIndex, colIndex})"
-                    class="btn btn-sm t-btn-cell-toggle"
-                  >{{count | formatCount}}</button>
-                </td>
-              </tr>
-
-            </template>
+                  <font-awesome-icon icon="arrow-right" />
+                </button>
+              </th>
+              <td class="cell" :key="colIndex" v-for="(count,colIndex) in row">
+                <button
+                  :disabled="!isSignedIn"
+                  :data-col="colIndex"
+                  :data-row="rowIndex"
+                  :class="classes('cell', {rowIndex, colIndex})"
+                  class="btn btn-sm t-btn-cell-toggle"
+                >{{count | formatCount}}</button>
+              </td>
+            </tr>
           </table>
         </div>
       </div>
@@ -128,6 +121,7 @@
 import Vue from 'vue'
 import Loading from 'vue-loading-overlay'
 import GridTitelInfo from './GridTitelInfo.vue'
+import globalMethods from '@/globals/methods'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -204,13 +198,32 @@ export default Vue.extend({
         })
       })
       return selected
+    },
+    renderedGridRows: function () {
+      const _renderedGridRows = []
+
+      this.renderedGridVariables = [] // eslint-disable-line
+      if (!this.gridRows) { return _renderedGridRows }
+
+      for (const [rowIndex, row] of this.gridRows.entries()) {
+        const variable = this.gridVariables[rowIndex]
+
+        if (!(variable.subvariableOf && this.openVariableSets.includes(variable.subvariableOf.id))) {
+          _renderedGridRows.push(row)
+          this.renderedGridVariables.push(variable) // eslint-disable-line
+        }
+      }
+
+      return _renderedGridRows
     }
   },
+
   data: function () {
     return {
       hoverAllCells: false,
       stickyTableHeader: false,
       dialogInfo: null,
+      renderedGridVariables: [],
       selectedRowIndex: '',
       openVariableSets: []
     }
@@ -235,45 +248,12 @@ export default Vue.extend({
         } else {
           this.openVariableSets.push(variable.id)
         }
-        // Ajust the header for collapesed variables after layout is recalculated
+        // Ajust the header for collapsed variables after layout is recalculated
         await this.$nextTick()
         this.setGridHeaderSpacer()
       }
     },
-    isVisibleVariable (variable) {
-      if (
-        variable.subvariableOf &&
-        this.openVariableSets.includes(variable.subvariableOf.id)
-      ) {
-        return false
-      }
-      return true
-    },
-    variableSetClass (variable) {
-      if (this.openVariableSets.includes(variable.id)) {
-        return 'closed'
-      }
-      if (variable.subvariableOf) {
-        const index = this.gridVariables.findIndex(
-          varid => varid.id === variable.id
-        )
-        if (
-          index + 1 < this.gridVariables.length &&
-          this.gridVariables[index + 1] &&
-          !this.gridVariables[index + 1].subvariableOf
-        ) {
-          return 'end'
-        }
-        return 'line'
-      }
-      if (
-        variable &&
-        variable.subvariables &&
-        variable.subvariables.length > 0
-      ) {
-        return 'start'
-      }
-    },
+    variableSetClass: globalMethods.variableSetClass,
     classes (target, context) {
       const classes = {}
 
@@ -352,16 +332,16 @@ export default Vue.extend({
       return this.$refs.gridheader.getBoundingClientRect().height
     },
     closeVariableSet () {
-      if (this.gridVariables) {
-        this.gridVariables.forEach(variable => {
-          if (
-            variable.subvariables &&
-            variable.subvariables.length > 0 &&
-            !this.openVariableSets.includes(variable.id)
-          ) {
-            this.openVariableSets.push(variable.id)
-          }
-        })
+      if (!this.renderedGridRows.length) { return }
+
+      for (const variable of this.renderedGridVariables) {
+        if (
+          variable.subvariables &&
+          variable.subvariables.length > 0 &&
+          !this.openVariableSets.includes(variable.id)
+        ) {
+          this.openVariableSets.push(variable.id)
+        }
       }
     },
     popupTitle (rowIndex) {
@@ -456,14 +436,14 @@ table {
     white-space: nowrap;
 
     &.collapse-holder {
-      max-width: 3rem;
-      min-width: 3rem;
-      width: 3rem;
+      max-width: 1.5rem;
+      min-width: 1.5rem;
+      width: 1.5rem;
 
       svg {
-        left: 0.5rem;
+        left: 0;
         position: relative;
-        top: 0.3rem;
+        top: 0.35rem;
 
         path {
           fill: $primary;
@@ -602,10 +582,28 @@ th {
   }
 }
 
-.subvariable-line {
-  &.closed,
-  &.start {
-    cursor: pointer;
+.subvariable-parent .collapse-holder svg:hover {
+  cursor: pointer;
+}
+
+.subvariable {
+  .collapse-holder {
+    &::after {
+      border-left: 1px solid $primary;
+      bottom: 0;
+      content: "";
+      left: 7px;
+      position: absolute;
+      top: 0;
+      width: 1px;
+    }
+  }
+
+  .collapse-holder + th {
+    color: $gray-800;
+    font-size: 0.85rem;
+    font-style: italic;
   }
 }
+
 </style>

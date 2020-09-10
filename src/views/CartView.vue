@@ -70,9 +70,9 @@
                       <h5 class="h6">{{subsection.name}}</h5>
                       <ul>
                         <li
-                          v-for="(variable, variableIndex) in variablesWithSet(subsection.variables)"
+                          v-for="(variable, variableIndex) in subsection.variables"
                           :key="`${sectionIndex}-${subsectionIndex}-${variableIndex}`"
-                          class="subvariable-line" :class="variableSetClass(variable)">
+                          :class="variableSetClass(variable)">
                           <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
                         </li>
                       </ul>
@@ -111,6 +111,8 @@ import SpinnerAnimation from '../components/animations/SpinnerAnimation'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import CollapseTreeIcon from '@/components/animations/CollapseTreeIcon'
 import ToastComponent from '@molgenis-ui/components/src/components/ToastComponent.vue'
+import globalMethods from '@/globals/methods'
+import { toVariable } from '@/repository/VariableRepository'
 
 export default Vue.extend({
   name: 'CartView',
@@ -157,61 +159,14 @@ export default Vue.extend({
       let clickedItem = `accordion-${index}`
       return this.openItems.indexOf(clickedItem) >= 0
     },
-    // Set a collection of flags that are useful for styling
-    variablesWithSet (variables) {
-      let isStart = []
-      let isEnd = []
-      let isChild = []
-      // Find child / parent status of variables sets
-      variables.forEach(variable => {
-        if (variable.subvariable_of) {
-          if (variables.find(target => target.id === variable.subvariable_of.id)) {
-            isChild.push(variable.id)
-            isStart.push(variable.subvariable_of.id)
-          }
-        }
-      })
-      variables.forEach((variable, index, array) => {
-        if (isChild.includes(variable.id)) {
-          array[index].isChild = true
-        }
-      })
-      let lastVariable
-      variables.forEach((variable, index, set) => {
-        if (!variable.isChild && lastVariable && lastVariable.isChild) {
-          isEnd.push(lastVariable.id)
-        }
-        // last item in set: close the set
-        if (variable.isChild && set.length - 1 === index) {
-          isEnd.push(variable.id)
-        }
-        lastVariable = variable
-      })
-      variables.forEach((variable, index, array) => {
-        if (isEnd.includes(variable.id)) {
-          array[index].isEnd = true
-        }
-        if (isStart.includes(variable.id)) {
-          array[index].isStart = true
-        }
-      })
-      return variables
-    },
-    variableSetClass (variable) {
-      if (variable.isStart) {
-        return 'start'
-      }
-      if (variable.isChild) {
-        if (variable.isEnd) {
-          return 'end'
-        }
-        return 'line'
-      }
-      return ''
+    variableSetClass: function (cartVariable) {
+      // Map back to the variable version that contains subvariables.
+      const variable = this.gridVariablesMap[cartVariable.id]
+      return globalMethods.variableSetClass(this.gridVariablesMap[variable.id])
     }
   },
   computed: {
-    ...mapGetters(['cartTree', 'hasManagerRole', 'isSignedIn']),
+    ...mapGetters(['cartTree', 'hasManagerRole', 'isSignedIn', 'gridVariablesMap']),
     ...mapState(['gridSelection', 'variables', 'assessments']),
     selectedVariableIds () {
       return Object.keys(this.gridSelection)
@@ -251,15 +206,20 @@ export default Vue.extend({
   cursor: pointer;
 }
 
-.subvariable-line {
-  &::after {
-    left: -$spacer;
-    right: auto;
-  }
-
-  &.line,
-  &.end {
-    padding-left: 0.75rem;
-  }
+.subvariable-parent {
+  color: $primary;
+  font-weight: bold;
 }
+
+.subvariable {
+  border-left: 1px solid $primary;
+  bottom: 0;
+  color: $gray-800;
+  content: "";
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-left: 1px;
+  padding-left: 8px;
+}
+
 </style>

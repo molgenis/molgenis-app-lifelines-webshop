@@ -63,3 +63,9 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style scoped type="scss">
+.grid-table .variable-column {
+  background: #f00;
+}
+</style>
