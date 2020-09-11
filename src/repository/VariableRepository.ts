@@ -5,7 +5,7 @@ import api from '@molgenis/molgenis-api-client'
 import { VariableWithVariants } from '@/types/Variable'
 
 /**
- * Combine tree (variable with subvariables) into list of variables and subvaribles
+ * Combine tree (variable with subvariables) into list of variables and subvariables
  */
 const flattenResponseItem = (accum: any[], current: any) => {
   accum.push(current)
@@ -15,6 +15,19 @@ const flattenResponseItem = (accum: any[], current: any) => {
     })
   }
   return accum
+}
+
+/**
+ * Takes a list of VariableWithVariants possibly containing duplicates and returns the set
+ * VariableWithVariants <a,b> are considered equal if and only if a.id = b.id
+ */
+const removeDuplicates = (variables: VariableWithVariants[]): VariableWithVariants[] => {
+  const variableMap = variables.reduce((accum:Record<number, VariableWithVariants>, variable:VariableWithVariants) => {
+    accum[variable.id] = variable
+    return accum
+  }, {})
+
+  return Object.values(variableMap)
 }
 
 export const fetchVariables = async (searchTermQuery: string, treeSelected: number) => {
@@ -37,7 +50,7 @@ export const fetchVariables = async (searchTermQuery: string, treeSelected: numb
       .reduce(flattenResponseItem, [])
       .map(toVariable)
   }
-  return variables
+  return removeDuplicates(variables)
 }
 
 export const toVariable = (response: any):VariableWithVariants => {
