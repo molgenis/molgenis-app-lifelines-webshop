@@ -17,6 +17,19 @@ const flattenResponseItem = (accum: any[], current: any) => {
   return accum
 }
 
+/**
+ * Takes a list of VariableWithVariants possibly containing duplicates and retuns the set
+ * VariableWithVariants <a,b> are considered equal if and only if a.id = b.id
+ */
+const removeDuplicates = (variables: VariableWithVariants[]): VariableWithVariants[] => {
+  const variableMap = variables.reduce((accum:Record<number, VariableWithVariants>, variable:VariableWithVariants) => {
+    accum[variable.id] = variable
+    return accum
+  }, {})
+
+  return Object.values(variableMap)
+}
+
 export const fetchVariables = async (searchTermQuery: string, treeSelected: number) => {
   let variables:VariableWithVariants[]
   const subvariableAttrs = 'id,name,label,subvariable_of,definition_en,definition_nl,options(label_en),variants(id,assessment_id)'
@@ -37,7 +50,7 @@ export const fetchVariables = async (searchTermQuery: string, treeSelected: numb
       .reduce(flattenResponseItem, [])
       .map(toVariable)
   }
-  return variables
+  return removeDuplicates(variables)
 }
 
 export const toVariable = (response: any):VariableWithVariants => {
