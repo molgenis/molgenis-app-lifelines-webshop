@@ -1,3 +1,11 @@
+## [2.7.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.5...v2.7.6) (2020-09-11)
+
+
+### Bug Fixes
+
+* firefox render issue ([54a75d8](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/54a75d8))
+* make line consistent with shopping cart ([23158fc](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/23158fc))
+
 ## [2.7.5](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.4...v2.7.5) (2020-09-11)
 
 
