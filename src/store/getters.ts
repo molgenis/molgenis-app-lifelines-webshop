@@ -162,7 +162,8 @@ export default {
       const prefix = state.treeSelected >= 0 ? 'variable_id.' : ''
       let searchTermoperands:any = [
         { selector: `${prefix}name`, comparison: '=like=', arguments: state.searchTerm },
-        { selector: `${prefix}label`, comparison: '=like=', arguments: state.searchTerm }
+        { selector: `${prefix}label`, comparison: '=like=', arguments: state.searchTerm },
+        { selector: `${prefix}subvariable_of.name`, comparison: '=like=', arguments: state.searchTerm }
       ]
 
       if (!state.searchExact) {

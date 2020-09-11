@@ -518,13 +518,13 @@ describe('getters', () => {
 
     it('should give rsql that searches variable name and label for the search term', () => {
       expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'hello' })).toBe(
-        'name=like=hello,label=like=hello,definition_en=q=hello,definition_nl=q=hello,options.label_en=like=hello,options.label_nl=like=hello'
+        'name=like=hello,label=like=hello,subvariable_of.name=like=hello,definition_en=q=hello,definition_nl=q=hello,options.label_en=like=hello,options.label_nl=like=hello'
       )
     })
 
     it('should escape rsql characters', () => {
       expect(getters.searchTermQuery({ ...emptyState, searchTerm: 'a==b' })).toBe(
-        'name=like=\'a==b\',label=like=\'a==b\',definition_en=q=\'a==b\',definition_nl=q=\'a==b\',options.label_en=like=\'a==b\',options.label_nl=like=\'a==b\'')
+        'name=like=\'a==b\',label=like=\'a==b\',subvariable_of.name=like=\'a==b\',definition_en=q=\'a==b\',definition_nl=q=\'a==b\',options.label_en=like=\'a==b\',options.label_nl=like=\'a==b\'')
     })
 
     it('should give rsql that filters subsection', () => {
@@ -533,7 +533,7 @@ describe('getters', () => {
 
     it('should give rsql that searches within subsection', () => {
       expect(getters.searchTermQuery({ ...emptyState, treeSelected: 3, searchTerm: 'hello' })).toBe(
-        'subsection_id==3;(variable_id.name=like=hello,variable_id.label=like=hello,variable_id.definition_en=q=hello,variable_id.definition_nl=q=hello,variable_id.options.label_en=like=hello,variable_id.options.label_nl=like=hello)'
+        'subsection_id==3;(variable_id.name=like=hello,variable_id.label=like=hello,variable_id.subvariable_of.name=like=hello,variable_id.definition_en=q=hello,variable_id.definition_nl=q=hello,variable_id.options.label_en=like=hello,variable_id.options.label_nl=like=hello)'
       )
     })
   })
