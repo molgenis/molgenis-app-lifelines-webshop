@@ -73,6 +73,7 @@ describe('VariableRepository', () => {
           options: [],
           variants: [],
           subvariableOf: null,
+          subvariables: [],
           definitionEn: '',
           definitionNl: ''
         })
@@ -108,6 +109,7 @@ describe('VariableRepository', () => {
           variants: [{ assessmentId: '1', id: 1 }],
           subsections: [1],
           subvariableOf: 1,
+          subvariables: [],
           definitionEn: '',
           definitionNl: ''
         })
