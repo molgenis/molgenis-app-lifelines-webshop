@@ -1,3 +1,10 @@
+## [2.7.3](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.2...v2.7.3) (2020-09-11)
+
+
+### Bug Fixes
+
+* include sub variables in search query ([#344](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/344)) ([f5cf032](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/f5cf032))
+
 ## [2.7.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.1...v2.7.2) (2020-09-11)
 
 
