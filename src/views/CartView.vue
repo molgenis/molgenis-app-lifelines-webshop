@@ -72,7 +72,7 @@
                         <li
                           v-for="(variable, variableIndex) in subsection.variables"
                           :key="`${sectionIndex}-${subsectionIndex}-${variableIndex}`"
-                          class="subvariable-line" :class="variable.subvariable_of  ? 'border-primary child' : ''">
+                          :class="variable.subvariable_of ? 'border-primary child' : ''">
                           <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
                         </li>
                       </ul>
