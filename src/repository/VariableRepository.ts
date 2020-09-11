@@ -5,7 +5,7 @@ import api from '@molgenis/molgenis-api-client'
 import { VariableWithVariants } from '@/types/Variable'
 
 /**
- * Combine tree (variable with subvaribles) into list of variables and subvaribles
+ * Combine tree (variable with subvariables) into list of variables and subvaribles
  */
 const flattenResponseItem = (accum: any[], current: any) => {
   accum.push(current)
