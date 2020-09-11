@@ -1,3 +1,10 @@
+## [2.7.5](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.4...v2.7.5) (2020-09-11)
+
+
+### Bug Fixes
+
+* hover above instead of left ([#347](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/347)) ([76d87be](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/76d87be))
+
 ## [2.7.4](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.3...v2.7.4) (2020-09-11)
 
 
