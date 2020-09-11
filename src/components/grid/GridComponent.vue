@@ -1,12 +1,19 @@
 <template>
   <div id="grid">
-    <div v-if="gridRows && (findZeroRowsAndCols.rows.length > 0 || findZeroRowsAndCols.cols.length > 0)">
-      <a href="#" v-if="hideZeroData" @click.prevent="setZeroDataVisibility(false)"><font-awesome-icon icon="eye" /> Show {{findZeroRowsAndCols.rows.length}} hidden empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
-      <a href="#" v-else @click.prevent="setZeroDataVisibility(true)"><font-awesome-icon icon="eye-slash" /> Hide {{findZeroRowsAndCols.rows.length}} empty rows and {{findZeroRowsAndCols.cols.length}} columns</a>
+    <div
+      v-if="gridRows && (findZeroRowsAndCols.rows.length > 0 || findZeroRowsAndCols.cols.length > 0)"
+    >
+      <a href="#" v-if="hideZeroData" @click.prevent="setZeroDataVisibility(false)">
+        <font-awesome-icon icon="eye" />
+        Show {{findZeroRowsAndCols.rows.length}} hidden empty rows and {{findZeroRowsAndCols.cols.length}} columns
+      </a>
+      <a href="#" v-else @click.prevent="setZeroDataVisibility(true)">
+        <font-awesome-icon icon="eye-slash" />
+        Hide {{findZeroRowsAndCols.rows.length}} empty rows and {{findZeroRowsAndCols.cols.length}} columns
+      </a>
     </div>
     <div class="row">
       <div class="col vld-parent">
-
         <table ref="gridheader" class="grid-header-table" :class="{'sticky':stickyTableHeader}">
           <tr>
             <th class="collapse-holder"></th>
@@ -71,14 +78,13 @@
             </tr>
 
             <template v-for="(row, rowIndex) in gridRows">
-              <tr v-if=isVisibleVariable(gridVariables[rowIndex]) :key="rowIndex" >
+              <tr v-if="isVisibleVariable(gridVariables[rowIndex])" :key="rowIndex">
                 <th
-                  class="collapse-holder subvariable-line"
-                  :class="variableSetClass(gridVariables[rowIndex])"
+                  class="collapse-holder"
                   @click="variableSetClickHandler(gridVariables[rowIndex])"
                 >
                   <font-awesome-icon
-                    class="mb-1"
+                    class="mb-1 expandable"
                     v-if="isParentVariable(gridVariables[rowIndex])"
                     :icon="variableSetIsClosed(gridVariables[rowIndex])?'plus-square':'minus-square'"
                   />
@@ -88,10 +94,11 @@
                   ref="variable"
                   v-b-popover.hover.top.html="popupBody(rowIndex)"
                   :title="popupTitle(rowIndex)"
-                  :class="{'selected-variable': rowIndex === selectedRowIndex }"
+                  :class="{'selected-variable': rowIndex === selectedRowIndex,'child' : gridVariables[rowIndex].subvariableOf }"
                 >
+                  <div class="line border-primary "></div>
                   <grid-titel-info
-                    :class="{'ml-3': !!gridVariables[rowIndex].subvariableOf}"
+                    :class="{'ml-3': gridVariables[rowIndex].subvariableOf}"
                     v-bind="gridVariables[rowIndex]"
                   />
                 </th>
@@ -115,7 +122,6 @@
                   >{{count | formatCount}}</button>
                 </td>
               </tr>
-
             </template>
           </table>
         </div>
@@ -142,7 +148,15 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { formatCount } from '@/filters/GridComponentFilters'
 
-library.add(faArrowDown, faArrowRight, faArrowsAlt, faMinusSquare, faPlusSquare, faEye, faEyeSlash)
+library.add(
+  faArrowDown,
+  faArrowRight,
+  faArrowsAlt,
+  faMinusSquare,
+  faPlusSquare,
+  faEye,
+  faEyeSlash
+)
 
 export default Vue.extend({
   name: 'GridComponent',
@@ -178,7 +192,9 @@ export default Vue.extend({
     },
     findZeroRowsAndCols: {
       type: Object,
-      default: () => { return { cols: [], rows: [] } }
+      default: () => {
+        return { cols: [], rows: [] }
+      }
     },
     setZeroDataVisibility: {
       type: Function,
@@ -187,14 +203,16 @@ export default Vue.extend({
   },
   computed: {
     visibleGridChildVariableIds () {
-      return this.gridVariables.filter(item => item.subvariableOf !== undefined).map(gridVar => gridVar.id)
+      return this.gridVariables
+        .filter((item) => item.subvariableOf !== undefined)
+        .map((gridVar) => gridVar.id)
     },
     gridMarkers: function () {
       const selected = { all: true, row: [], col: [] }
       if (!this.gridRows.length) {
         return selected
       }
-      selected.col = this.gridRows[0].map(i => true)
+      selected.col = this.gridRows[0].map((i) => true)
 
       this.gridRows.forEach((row, i) => {
         selected.row[i] = true
@@ -233,7 +251,7 @@ export default Vue.extend({
       if (variable.subvariables && variable.subvariables.length > 0) {
         if (this.variableSetIsClosed(variable)) {
           this.closedVariableSets = this.closedVariableSets.filter(
-            varid => varid !== variable.id
+            (varid) => varid !== variable.id
           )
         } else {
           this.closedVariableSets.push(variable.id)
@@ -245,67 +263,38 @@ export default Vue.extend({
     },
     getParentVariable (variable) {
       if (variable.subvariableOf) {
-        return this.gridVariables.find(gridVariable => variable.subvariableOf.id === gridVariable.id)
+        return this.gridVariables.find(
+          (gridVariable) => variable.subvariableOf.id === gridVariable.id
+        )
       }
       return undefined
     },
     isVisibleVariable (variable) {
       if (
-        variable.subvariableOf && (
-          this.closedVariableSets.includes(variable.subvariableOf.id) ||
+        variable.subvariableOf &&
+        (this.closedVariableSets.includes(variable.subvariableOf.id) ||
           // test if subvariable parent is shown, if not hide subvariable
-          !(this.gridVariables.find(gridVariables => variable.subvariableOf.id === gridVariables.id))
-        )
+          !this.gridVariables.find(
+            (gridVariables) => variable.subvariableOf.id === gridVariables.id
+          ))
       ) {
         return false
       }
       return true
-    },
-    variableSetClass (variable) {
-      // Parent checks
-      if (this.isParentVariable(variable)) {
-        if (this.closedVariableSets.includes(variable.id)) {
-          return 'closed'
-        } else {
-          return 'start'
-        }
-      }
-      // Child checks
-      if (variable.subvariableOf) {
-        if (this.isEndingSubVariable(variable)) {
-          return 'end'
-        } else {
-          return 'line'
-        }
-      }
-      // Normal variables dont have a class
     },
     isParentVariable (variable) {
       if (!variable) {
         return false
       }
       if (variable.subvariables && variable.subvariables.length > 0) {
-        const subVariableIds = variable.subvariables.map(subvar => subvar.id)
-        if (subVariableIds.some(subVarId => this.visibleGridChildVariableIds.includes(subVarId))) {
+        const subVariableIds = variable.subvariables.map((subvar) => subvar.id)
+        if (
+          subVariableIds.some((subVarId) =>
+            this.visibleGridChildVariableIds.includes(subVarId)
+          )
+        ) {
           return true
         }
-      }
-      return false
-    },
-    isEndingSubVariable (variable) {
-      const parent = this.getParentVariable(variable)
-      let last = null
-      // Check if sub variable is the last in the list by checking it against all visible variables
-      for (let i = parent.subvariables.length - 1; i >= 0; i--) {
-        const potentiallyLast = parent.subvariables[i]
-        if (this.visibleGridChildVariableIds.includes(potentiallyLast.id)) {
-          last = potentiallyLast
-          break
-        }
-      }
-
-      if (last && variable.id === last.id) {
-        return true
       }
       return false
     },
@@ -357,7 +346,10 @@ export default Vue.extend({
 
       // Update grid header offset to compansate for horizontal scrollbar
       // This is needed due to use of absolute positioning used for foating header
-      if (this.$refs.gridheader && this.$refs.gridheader.className.indexOf('sticky') > -1) {
+      if (
+        this.$refs.gridheader &&
+        this.$refs.gridheader.className.indexOf('sticky') > -1
+      ) {
         const left = window.pageXOffset || document.documentElement.scrollLeft
         this.$refs.gridheader.style.marginLeft = '-' + left + 'px'
       } else {
@@ -367,9 +359,11 @@ export default Vue.extend({
     /**
      * Find largest variable width
      * and use this as the header offSet to align column headers.
-    **/
+     **/
     setGridHeaderSpacer () {
-      const elemArray = this.$refs.variable ? [].slice.call(this.$refs.variable) : []
+      const elemArray = this.$refs.variable
+        ? [].slice.call(this.$refs.variable)
+        : []
       let maxSize = -1 // 16px basesize
       elemArray.forEach((elem) => {
         if (elem.offsetWidth > maxSize) {
@@ -388,7 +382,7 @@ export default Vue.extend({
     },
     closeVariableSet () {
       if (this.gridVariables) {
-        this.gridVariables.forEach(variable => {
+        this.gridVariables.forEach((variable) => {
           if (
             variable.subvariables &&
             variable.subvariables.length > 0 &&
@@ -405,9 +399,11 @@ export default Vue.extend({
     popupBody (rowIndex) {
       let optonsHtml = ''
       if (this.gridVariables[rowIndex].options) {
-        optonsHtml = this.gridVariables[rowIndex].options.map((option) => {
-          return `<div>${option['label_en']}</div>`
-        }).join('')
+        optonsHtml = this.gridVariables[rowIndex].options
+          .map((option) => {
+            return `<div>${option['label_en']}</div>`
+          })
+          .join('')
       }
 
       return `
@@ -491,9 +487,9 @@ table {
     white-space: nowrap;
 
     &.collapse-holder {
-      max-width: 3rem;
-      min-width: 3rem;
-      width: 3rem;
+      max-width: 2rem;
+      min-width: 2rem;
+      width: 2rem;
 
       svg {
         left: 0.5rem;
@@ -637,10 +633,27 @@ th {
   }
 }
 
-.subvariable-line {
-  &.closed,
-  &.start {
-    cursor: pointer;
+.expandable {
+  cursor: pointer;
+}
+
+.grid-titel {
+  margin-left: -2px;
+}
+
+.variable-column {
+  position: relative;
+}
+
+.child {
+  .line {
+    border-left-style: solid;
+    border-left-width: 2px;
+    bottom: 0;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    width: 2px;
   }
 }
 </style>

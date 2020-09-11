@@ -246,21 +246,6 @@ describe('GridComponent.vue', () => {
       // @ts-ignore
       expect(wrapper.vm.closedVariableSets).toEqual([101])
     })
-
-    it('can use variableSetClass to help with rendering', () => {
-      // @ts-ignore
-      expect(wrapper.vm.variableSetClass(props.gridVariables[0])).toEqual('closed')
-      // @ts-ignore
-      wrapper.vm.closedVariableSets = []
-      // @ts-ignore
-      expect(wrapper.vm.variableSetClass(props.gridVariables[0])).toEqual('start')
-      // @ts-ignore
-      expect(wrapper.vm.variableSetClass(props.gridVariables[1])).toEqual('line')
-      // @ts-ignore
-      expect(wrapper.vm.variableSetClass(props.gridVariables[2])).toEqual('end')
-      // @ts-ignore
-      expect(wrapper.vm.variableSetClass(props.gridVariables[3])).toEqual(undefined)
-    })
   })
 
   describe('Building popup data', () => {
