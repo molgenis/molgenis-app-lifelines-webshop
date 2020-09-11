@@ -1,3 +1,10 @@
+## [2.7.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.1...v2.7.2) (2020-09-11)
+
+
+### Bug Fixes
+
+* **cart:** made child relationship visible with css ([f98fc92](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/f98fc92))
+
 ## [2.7.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.0...v2.7.1) (2020-09-10)
 
 
