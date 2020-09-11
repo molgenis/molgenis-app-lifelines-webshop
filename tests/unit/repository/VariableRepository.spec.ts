@@ -15,19 +15,31 @@ jest.mock('@molgenis/molgenis-api-client', () => {
   }
 })
 
+const mockQueryresponse = { items: [{
+  variable_id: {
+    id: 0,
+    name: 'name',
+    label: 'label',
+    variants: [{ assessment_id: '1', id: 1 }],
+    subvariable_of: 1,
+    subsections: [1],
+    subvariables: [{
+      id: 1,
+      name: 's-name'
+    }],
+    options: [{ label_en: 'foo', bar: 'bas' }],
+    definitionEn: '',
+    definitionNl: ''
+  }
+}] }
+
 describe('VariableRepository', () => {
   describe('fetchVariable', () => {
     describe('treeSelected is set', () => {
       let result:VariableWithVariants[]
 
       beforeAll(async (done) => {
-        get.mockResolvedValue({
-          items: [{
-            variable_id: {
-              id: 0
-            }
-          }]
-        })
+        get.mockResolvedValue(mockQueryresponse)
         result = await fetchVariables('subsection_id=1', 1)
         done()
       })
@@ -35,6 +47,10 @@ describe('VariableRepository', () => {
       it('should fetch the variables with selected subsection', () => {
         expect(get).toHaveBeenCalledWith(expect.stringContaining('lifelines_subsection_variable'))
         expect(result[0].id).toEqual(0)
+      })
+
+      it('should flatten the results', () => {
+        expect(result.length).toEqual(2) // 1 main var + 1 flattend subvar
       })
     })
 
@@ -73,6 +89,7 @@ describe('VariableRepository', () => {
           options: [],
           variants: [],
           subvariableOf: null,
+          subvariables: [],
           definitionEn: '',
           definitionNl: ''
         })
@@ -82,19 +99,7 @@ describe('VariableRepository', () => {
     describe('toVariable converts variants and options', () => {
       let result:VariableWithVariants[]
       beforeAll(async (done) => {
-        get.mockResolvedValue({ items: [{
-          variable_id: {
-            id: 0,
-            name: 'name',
-            label: 'label',
-            variants: [{ assessment_id: '1', id: 1 }],
-            subvariable_of: 1,
-            subsections: [1],
-            options: [{ label_en: 'foo', bar: 'bas' }],
-            definitionEn: '',
-            definitionNl: ''
-          }
-        }] })
+        get.mockResolvedValue(mockQueryresponse)
         result = await fetchVariables('subsection_id=1', 1)
         done()
       })
@@ -108,6 +113,10 @@ describe('VariableRepository', () => {
           variants: [{ assessmentId: '1', id: 1 }],
           subsections: [1],
           subvariableOf: 1,
+          subvariables: [{
+            id: 1,
+            name: 's-name'
+          }],
           definitionEn: '',
           definitionNl: ''
         })
