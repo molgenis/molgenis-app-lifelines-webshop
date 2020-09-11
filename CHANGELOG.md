@@ -1,3 +1,10 @@
+## [2.7.4](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.3...v2.7.4) (2020-09-11)
+
+
+### Bug Fixes
+
+* remove duplicate subvariables ([b7f12d1](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/b7f12d1))
+
 ## [2.7.3](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.2...v2.7.3) (2020-09-11)
 
 
