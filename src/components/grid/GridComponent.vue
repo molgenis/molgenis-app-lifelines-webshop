@@ -94,10 +94,11 @@
                   ref="variable"
                   v-b-popover.hover.left.html="popupBody(rowIndex)"
                   :title="popupTitle(rowIndex)"
-                  :class="{'selected-variable': rowIndex === selectedRowIndex, 'border-primary child' : gridVariables[rowIndex].subvariableOf}"
+                  :class="{'selected-variable': rowIndex === selectedRowIndex,'child' : gridVariables[rowIndex].subvariableOf }"
                 >
+                  <div class="line border-primary "></div>
                   <grid-titel-info
-                    :class="{'ml-3': gridVariables[rowIndex].subvariableOf }"
+                    :class="{'ml-3': gridVariables[rowIndex].subvariableOf}"
                     v-bind="gridVariables[rowIndex]"
                   />
                 </th>
@@ -636,12 +637,23 @@ th {
   cursor: pointer;
 }
 
-.child {
-  border-left-style: solid;
-  border-left-width: 2px;
-}
-
 .grid-titel {
   margin-left: -2px;
+}
+
+.variable-column{
+  position: relative;
+}
+
+.child {
+  .line{
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    bottom:0px;
+    border-left-style: solid;
+    border-left-width: 2px;
+    width: 2px;
+  }
 }
 </style>
