@@ -540,7 +540,7 @@ table {
 
 table td,
 th {
-  // padding: 0 1px;
+  padding: 0 1px;
   position: relative;
 }
 
