@@ -86,7 +86,7 @@
                 <th
                   class="variable-column"
                   ref="variable"
-                  v-b-popover.hover.left.html="popupBody(rowIndex)"
+                  v-b-popover.hover.top.html="popupBody(rowIndex)"
                   :title="popupTitle(rowIndex)"
                   :class="{'selected-variable': rowIndex === selectedRowIndex }"
                 >
