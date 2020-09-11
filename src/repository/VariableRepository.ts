@@ -5,7 +5,7 @@ import api from '@molgenis/molgenis-api-client'
 import { VariableWithVariants } from '@/types/Variable'
 
 /**
- * Combine tree (variable with subvariables) into list of variables and subvaribles
+ * Combine tree (variable with subvariables) into list of variables and subvariables
  */
 const flattenResponseItem = (accum: any[], current: any) => {
   accum.push(current)
@@ -18,7 +18,7 @@ const flattenResponseItem = (accum: any[], current: any) => {
 }
 
 /**
- * Takes a list of VariableWithVariants possibly containing duplicates and retuns the set
+ * Takes a list of VariableWithVariants possibly containing duplicates and returns the set
  * VariableWithVariants <a,b> are considered equal if and only if a.id = b.id
  */
 const removeDuplicates = (variables: VariableWithVariants[]): VariableWithVariants[] => {
