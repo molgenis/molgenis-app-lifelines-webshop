@@ -641,18 +641,18 @@ th {
   margin-left: -2px;
 }
 
-.variable-column{
+.variable-column {
   position: relative;
 }
 
 .child {
-  .line{
-    display: inline-block;
-    position: absolute;
-    top: 0px;
-    bottom:0px;
+  .line {
     border-left-style: solid;
     border-left-width: 2px;
+    bottom: 0;
+    display: inline-block;
+    position: absolute;
+    top: 0;
     width: 2px;
   }
 }
