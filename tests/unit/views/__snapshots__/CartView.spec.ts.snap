@@ -28,9 +28,9 @@ exports[`CartView.vue renders cart view, showing the assessment labels sorted al
                 <div>
                   <h5 class="h6">Subsection 1</h5>
                   <ul>
-                    <li class="subvariable-line start"><span>variable 100 label ( 1A, 2C )</span></li>
-                    <li class="subvariable-line line"><span>variable 101 label ( 2B )</span></li>
-                    <li class="subvariable-line end"><span>variable 102 label </span></li>
+                    <li class=""><span>variable 100 label ( 1A, 2C )</span></li>
+                    <li class="border-primary child"><span>variable 101 label ( 2B )</span></li>
+                    <li class="border-primary child"><span>variable 102 label </span></li>
                   </ul>
                 </div>
               </div>
@@ -55,9 +55,9 @@ exports[`CartView.vue renders cart view, showing the assessment labels sorted al
                 <div>
                   <h5 class="h6">Subsection 2</h5>
                   <ul>
-                    <li class="subvariable-line start"><span>variable 100 label ( 1A, 2C )</span></li>
-                    <li class="subvariable-line line"><span>variable 101 label ( 2B )</span></li>
-                    <li class="subvariable-line end"><span>variable 102 label </span></li>
+                    <li class=""><span>variable 100 label ( 1A, 2C )</span></li>
+                    <li class="border-primary child"><span>variable 101 label ( 2B )</span></li>
+                    <li class="border-primary child"><span>variable 102 label </span></li>
                   </ul>
                 </div>
               </div>

@@ -116,13 +116,6 @@ describe('CartView.vue', () => {
     expect(wrapper.vm.openItems).toHaveLength(1)
   })
 
-  it('can render variables sets correctly', async () => {
-    const wrapper:any = mount(CartView, { stubs, store, localVue, mocks })
-    expect(wrapper.vm.variableSetClass(cartTree[0].subsections[0].variables[0])).toEqual('start')
-    expect(wrapper.vm.variableSetClass(cartTree[0].subsections[0].variables[1])).toEqual('line')
-    expect(wrapper.vm.variableSetClass(cartTree[0].subsections[0].variables[2])).toEqual('end')
-  })
-
   it('select all available variables', async () => {
     state.gridSelection = {}
     const wrapper = shallowMount(CartView, { stubs, localVue, store, mocks })
