@@ -449,7 +449,8 @@ describe('actions', () => {
         commit = jest.fn()
         await actions.loadGridVariables({
           getters: { searchTermQuery: '' },
-          commit
+          commit,
+          state: { isSearching: true }
         })
         done()
       })
