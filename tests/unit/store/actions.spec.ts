@@ -449,7 +449,8 @@ describe('actions', () => {
         commit = jest.fn()
         await actions.loadGridVariables({
           getters: { searchTermQuery: '' },
-          commit
+          commit,
+          state: { isSearching: true }
         })
         done()
       })
@@ -511,6 +512,26 @@ describe('actions', () => {
       it('should not commit the fetched results', () => {
         expect(fetchVariables).toHaveBeenCalled()
         expect(commit).not.toHaveBeenCalledWith('updateGridVariables', [{ foo: 'bar' }])
+      })
+    })
+
+    describe('when variable fetch fails ', () => {
+      let commit: any
+      let state: any = {}
+
+      beforeEach(async (done) => {
+        commit = jest.fn()
+        const getters = { searchTermQuery: 'searchTermQuery' }
+        state.isSearching = true
+        // @ts-ignore
+        fetchVariables.mockRejectedValueOnce()
+        await actions.loadGridVariables({ getters, commit, state })
+        done()
+      })
+
+      it('should throw an error', () => {
+        expect(commit).toHaveBeenCalledWith('setToast', expect.objectContaining({ message: 'Failed to fetch variables' }))
+        expect(state.isSearching).toEqual(false)
       })
     })
   })
