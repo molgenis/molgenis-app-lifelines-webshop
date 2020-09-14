@@ -141,8 +141,8 @@ export default {
     if (searchTermQuery === getters.searchTermQuery) {
       const sortedGridVariables = finalVariableSetSort(variables)
       commit('updateGridVariables', sortedGridVariables)
+      state.isSearching = false
     }
-    state.isSearching = false
   }),
   loadParticipantCount: tryAction(async ({ commit, getters }: any) => {
     commit('updateParticipantCount', null)
