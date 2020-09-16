@@ -8,6 +8,7 @@ import { TreeParent } from '@/types/Tree'
 import { VariableWithVariants, Variable } from '@/types/Variable'
 import Variant from '@/types/Variant'
 import { RowColSet } from '@/types/Getters'
+import { sortAlphabetically } from '@/services/variableSetOrderService'
 
 const transforms:any = {}
 
@@ -29,7 +30,7 @@ transforms.cartTree = (gridSelection:GridSelection, treeStructure:any, sections:
     .flatMap((variable) => variable.subsections.map((subsection) => ({ ...variable, subsection })))
   const variablesPerSubsection = groupBy(flatVariables, property('subsection'))
 
-  return treeStructure.map((section: TreeParent) => {
+  const cartSections = treeStructure.map((section: TreeParent) => {
     const subsections = section.list
       .filter((subsectionId) => variablesPerSubsection.hasOwnProperty(subsectionId))
       .map((subsectionId) => {
@@ -41,6 +42,11 @@ transforms.cartTree = (gridSelection:GridSelection, treeStructure:any, sections:
 
     return { ...sections[section.key], subsections }
   }).filter((section:any) => section.subsections.length > 0)
+
+  // sort variables withing subsections
+  cartSections.forEach((section:CartSection) => section.subsections.forEach(subSection => subSection.variables.sort(sortAlphabetically)))
+
+  return cartSections
 }
 
 transforms.helpers = {
