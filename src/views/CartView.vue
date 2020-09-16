@@ -70,7 +70,7 @@
                       <h5 class="h6">{{subsection.name}}</h5>
                       <ul>
                         <li
-                          v-for="(variable, variableIndex) in subsection.variables"
+                          v-for="(variable, variableIndex) in sorted(subsection.variables)"
                           :key="`${sectionIndex}-${subsectionIndex}-${variableIndex}`"
                           :class="variable.subvariable_of ? 'border-primary child' : ''">
                           <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
@@ -111,6 +111,7 @@ import SpinnerAnimation from '../components/animations/SpinnerAnimation'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import CollapseTreeIcon from '@/components/animations/CollapseTreeIcon'
 import ToastComponent from '@molgenis-ui/components/src/components/ToastComponent.vue'
+import { finalVariableSetSortCart } from '@/services/variableSetOrderService'
 
 export default Vue.extend({
   name: 'CartView',
@@ -156,6 +157,9 @@ export default Vue.extend({
     isActive (index) {
       let clickedItem = `accordion-${index}`
       return this.openItems.indexOf(clickedItem) >= 0
+    },
+    sorted (variables) {
+      return finalVariableSetSortCart(variables)
     }
   },
   computed: {

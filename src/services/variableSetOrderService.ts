@@ -1,6 +1,6 @@
-import { VariableWithVariants, Variable } from '@/types/Variable'
+import { VariableWithVariants, Variable, VariableBase, CartVariable, CartVariableBase } from '@/types/Variable'
 
-const sortAlphabetically = (a: Variable, b:Variable) => {
+const sortAlphabetically = (a: VariableBase, b:VariableBase) => {
   return a.name.localeCompare(b.name)
 }
 
@@ -23,7 +23,7 @@ export const finalVariableSetSort = (gridVariables: VariableWithVariants[]) => {
   orderedGridVariables.sort(sortAlphabetically)
 
   // Step 2: select variables with subvariables
-  variableSets.forEach((setVariable:VariableWithVariants) => {
+  variableSets.forEach((setVariable:Variable) => {
     // Step 3: add subvariables in correct order
     let offset = 1
     gridVariables.forEach((variable:VariableWithVariants) => {
@@ -42,4 +42,37 @@ export const finalVariableSetSort = (gridVariables: VariableWithVariants[]) => {
     }
   })
   return orderedGridVariables
+}
+
+// Variables in the cart have a more limited set of properties
+// By not being able to have a 'variableSets' (speed, database reasons) the sorting will need to be done slighty difrent
+export const finalVariableSetSortCart = (gridVariables: CartVariable[]) => {
+  let orderedVariables:CartVariable[] = []
+  let childVariables:CartVariable[] = []
+
+  // 1: Split variables from sub variables
+  gridVariables.forEach((variable:any) => {
+    if (!variable.subvariable_of) {
+      orderedVariables.push(variable)
+    } else {
+      childVariables.push(variable)
+    }
+  })
+
+  orderedVariables.sort(sortAlphabetically)
+  childVariables.sort(sortAlphabetically)
+
+  // Step 2: select variables with subvariables
+  orderedVariables.forEach((nonChildVariable:CartVariable) => {
+    // Step 3: add subvariables in correct order
+    let offset = 1
+    childVariables.forEach((childVariable:CartVariable) => {
+      if (childVariable.subvariable_of && childVariable.subvariable_of.id === nonChildVariable.id) {
+        const index:number = orderedVariables.findIndex((item:CartVariable) => item.id === nonChildVariable.id)
+        orderedVariables.splice(index + offset, 0, childVariable)
+        offset++
+      }
+    })
+  })
+  return orderedVariables
 }
