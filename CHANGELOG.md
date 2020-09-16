@@ -1,3 +1,10 @@
+## [2.7.7](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.6...v2.7.7) (2020-09-14)
+
+
+### Bug Fixes
+
+* loading indicator is removed if query is outdated by other query ([#352](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/352)) ([5245235](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/5245235))
+
 ## [2.7.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.5...v2.7.6) (2020-09-11)
 
 
