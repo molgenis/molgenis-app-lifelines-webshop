@@ -82,7 +82,7 @@ describe('getters', () => {
     it('should group selection by sections and subsections', () => {
       const state: ApplicationState = {
         ...emptyState,
-        variables: { 11: variable11, 12: variable12, 13: variable13 },
+        variables: { 11: variable13, 12: variable12, 13: variable11 },
         sections: { 1: section1, 2: section2 },
         subSectionList: ['subsection 0', 'subsection 1', 'subsection 2', 'subsection 3'],
         treeStructure: [
