@@ -1,4 +1,4 @@
-import { finalVariableSetSort } from '@/services/variableSetOrderService'
+import { finalVariableSetSort, sortAlphabetically } from '@/services/variableSetOrderService'
 
 describe('finalVariableSetSort', () => {
   // finalVariableSetSort takes a set of data and sorts so that subvariable are always after the parent variable
@@ -64,5 +64,24 @@ describe('finalVariableSetSort', () => {
       subvariables: []
     }]
     expect(finalVariableSetSort(data)).toEqual(out)
+  })
+
+  describe('sortAlphabetically', () => {
+    it('should sort the varaibles alphabetically by name prop', () => {
+      const varaibles: any = [
+        { name: 'z' },
+        { name: 'A' },
+        { name: 'b' }
+      ]
+      varaibles.sort(sortAlphabetically)
+
+      expect(varaibles).toEqual(
+        [
+          { name: 'A' },
+          { name: 'b' },
+          { name: 'z' }
+        ]
+      )
+    })
   })
 })
