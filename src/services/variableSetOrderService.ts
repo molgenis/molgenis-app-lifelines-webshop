@@ -1,6 +1,6 @@
 import { VariableWithVariants, Variable } from '@/types/Variable'
 
-const sortAlphabetically = (a: Variable, b:Variable) => {
+export const sortAlphabetically = (a: Variable, b:Variable) => {
   return a.name.localeCompare(b.name)
 }
 

@@ -71,8 +71,7 @@
                       <ul>
                         <li
                           v-for="(variable, variableIndex) in subsection.variables"
-                          :key="`${sectionIndex}-${subsectionIndex}-${variableIndex}`"
-                          :class="variable.subvariable_of ? 'border-primary child' : ''">
+                          :key="`${sectionIndex}-${subsectionIndex}-${variableIndex}`">
                           <span>{{variable.label||variable.name}} {{ variableAssessments[variable.id] }}</span>
                         </li>
                       </ul>
@@ -187,15 +186,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.child {
-  border-left-style: solid;
-  border-left-width: 2px;
-  padding-left: 0.75rem;
-}
-
-.child+li:not(.child) {
-  margin-top: 0.3rem;
-}
 
 /deep/ .card {
   ul {
