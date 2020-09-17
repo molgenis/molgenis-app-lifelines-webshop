@@ -1,3 +1,10 @@
+## [2.7.8](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.7...v2.7.8) (2020-09-17)
+
+
+### Bug Fixes
+
+* fix cart variable  order ([#355](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/355)) ([cb2ebe3](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/cb2ebe3))
+
 ## [2.7.7](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.6...v2.7.7) (2020-09-14)
 
 
