@@ -34,6 +34,7 @@ function getApplicationState () {
     ...emptyState,
     order: {
       orderNumber: '12345',
+      requestId: '12345',
       name: null,
       projectNumber: null,
       applicationForm: null,
@@ -729,6 +730,7 @@ describe('actions', () => {
           ...emptyState,
           order: {
             orderNumber: null,
+            requestId: null,
             name: null,
             projectNumber: null,
             applicationForm: null,

@@ -41,6 +41,7 @@ const createOrder = async (formData: any, formFields: FormField[]) => {
   const trySubmission = (reTryCount:number) => {
     var orderNr = generateOrderNumber()
     formData.orderNumber = orderNr
+    formData.requestId = orderNr // initialize copy from orderNr
     const options = buildPostOptions(formData, formFields)
     return api.post('/api/v1/lifelines_order', options, true).then(() => {
       return orderNr
@@ -196,7 +197,7 @@ export default {
     if (state.order.orderNumber) {
       formData.user = state.order.user
       formData.email = state.order.email
-      const isapplicationFormUpdate = formData.applicationForm && (typeof formData.applicationForm.filename !== 'string')
+      const isApplicationFormUpdate = formData.applicationForm && (typeof formData.applicationForm.filename !== 'string')
 
       await updateOrder(formData, formFields)
 
@@ -205,7 +206,7 @@ export default {
         const newOrderResponse = await api.get(`/api/v2/lifelines_order/${state.order.orderNumber}`)
         commit('restoreOrderState', newOrderResponse)
         await setUserPermission(newOrderResponse.contents.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
-        if (isapplicationFormUpdate) {
+        if (isApplicationFormUpdate) {
           await setUserPermission(newOrderResponse.applicationForm.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
         }
       }
@@ -340,6 +341,9 @@ export default {
     }
 
     return orderNumber
+  }),
+  updateRequestId: tryAction(async (context:any, payload: {orderNumber: string, requestId: string}) => {
+    return axios.patch(`/api/data/lifelines_order/${payload.orderNumber}`, { requestId: payload.requestId })
   }),
   givePermissionToOrder: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }) => {
     if (state.order.orderNumber === null || state.order.contents === null) {

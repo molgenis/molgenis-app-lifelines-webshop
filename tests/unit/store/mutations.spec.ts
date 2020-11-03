@@ -271,6 +271,7 @@ describe('mutations', () => {
       const baseAppState = { ...state }
       const order = {
         orderNumber: 'edit',
+        requestId: 'edit',
         name: 'name',
         projectNumber: 'projectNumber',
         applicationForm: {
@@ -290,6 +291,7 @@ describe('mutations', () => {
 
       expect(baseAppState.order).toEqual({
         orderNumber: null,
+        requestId: null,
         name: 'name',
         projectNumber: 'projectNumber',
         applicationForm: {
@@ -315,6 +317,7 @@ describe('mutations', () => {
         href: 'href',
         meta: 'meta',
         orderNumber: 'edit',
+        requestId: 'edit',
         name: 'name',
         projectNumber: 'projectNumber',
         applicationForm: {

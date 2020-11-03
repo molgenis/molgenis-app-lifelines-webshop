@@ -13,6 +13,7 @@ export interface MolgenisFile {
 
 export interface Order {
     orderNumber: string | null
+    requestId: string | null
     name: string | null
     submissionDate: string | null
     projectNumber: string | null

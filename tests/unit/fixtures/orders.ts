@@ -2,6 +2,7 @@ import { Order, OrderState } from '@/types/Order'
 
 const orders: Order[] = [{
   orderNumber: 'edcba',
+  requestId: 'edcba',
   name: null,
   creationDate: null,
   submissionDate: null,
@@ -14,6 +15,7 @@ const orders: Order[] = [{
   user: null
 }, {
   orderNumber: 'abcde',
+  requestId: 'xzy',
   name: 'My draft order',
   creationDate: null,
   submissionDate: null,
