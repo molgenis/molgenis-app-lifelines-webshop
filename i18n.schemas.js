@@ -85,7 +85,11 @@ const en = {
   'lifelines-webshop-search-variables-search-all': 'Search all sections',
   'lifelines-webshop-textsearch-label': 'Search in name fields only',
   'lifelines-webshop-textsearch-info-title': 'Name field search',
-  'lifelines-webshop-textsearch-info-text': 'Limits search to variable names. Without it, a broader search is applied which also looks for matches in the definition and categorial values.'
+  'lifelines-webshop-textsearch-info-text': 'Limits search to variable names. Without it, a broader search is applied which also looks for matches in the definition and categorial values.',
+  'lifelines-webshop-orders-col-header-request-id': 'Request id',
+  'lifelines-webshop-modal-request-id-header': 'Update request id',
+  'lifelines-webshop-modal-request-id-input-label': 'Request id',
+  'lifelines-webshop-modal-request-id-confirm-btn-txt': 'Update'
 }
 
 module.exports = {

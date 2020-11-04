@@ -56,12 +56,12 @@
     <ConfirmationModal
       v-if="$route && $route.name === 'editRequestId'"
       :backRoute="$router.resolve({name: 'orders'}).route"
-      title="Update request id">
+      :title="$t('lifelines-webshop-modal-request-id-header')">
 
       <template v-slot:body>
         <form>
           <div class="form-group">
-            <label for="exampleFormControlInput1">Request id</label>
+            <label for="exampleFormControlInput1"> {{$t('lifelines-webshop-modal-request-id-input-label')}}</label>
             <input type="text" class="form-control" id="text-id-input" v-model="$route.params.requestId">
           </div>
         </form>
@@ -70,7 +70,7 @@
       <template v-slot:confirmButton>
         <button type="button" class="btn btn-secondary t-btn-confirm-state"
           @click="onUpdateRequestId($route.params.orderNumber, $route.params.requestId)">
-          Update
+          {{$t('lifelines-webshop-modal-request-id-confirm-btn-txt')}}
         </button>
       </template>
     </ConfirmationModal>
@@ -159,13 +159,18 @@
       </template>
 
       <template v-slot:cell(requestId)="data">
-        {{data.item.requestId}}
-        <button
-        class="btn btn-sm btn-secondary edit-btn ml-1"
-        type="button"
-        @click="showChangeRequestIdModal(data.item)">
-          <font-awesome-icon icon="edit" aria-label="edit"/>
-        </button>
+        <div class="row">
+          <span class="col-6">{{data.item.requestId}}</span>
+          <span class="col-6">
+            <button
+              v-if="hasManagerRole"
+              class="btn btn-sm btn-secondary edit-btn"
+              type="button"
+              @click="showChangeRequestIdModal(data.item)">
+                <font-awesome-icon icon="edit" aria-label="edit"/>
+            </button>
+          </span>
+        </div>
       </template>
 
       <template v-slot:cell(submissionDate)="data">
@@ -246,7 +251,7 @@ export default Vue.extend({
       fields = fields.concat([
         { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true, class: 'td-project' },
         { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true, class: 'td-order' },
-        { key: 'requestId', label: 'Request Id', sortable: true, class: 'td-request-id' },
+        { key: 'requestId', label: this.$t('lifelines-webshop-orders-col-header-request-id'), sortable: true, class: 'td-request-id' },
         { key: 'submissionDate', label: this.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true, class: 'td-submitted' },
         {
           key: 'state',
@@ -478,7 +483,7 @@ export default Vue.extend({
   }
 
   .order-table {
-    min-width: 60rem; // Make sure the table stays big enough to display the 7 rows in smaller devices or browsers
+    min-width: 70rem; // Make sure the table stays big enough to display the 7 rows in smaller devices or browsers
   }
 
   .td-actions {
