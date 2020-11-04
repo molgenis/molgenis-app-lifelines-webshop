@@ -950,4 +950,16 @@ describe('actions', () => {
       })
     })
   })
+
+  describe('update request id', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      axios.patch.mockResolvedValueOnce(() => Promise.resolve())
+    })
+    it('should the update request to the serer', async (done) => {
+      await actions.updateRequestId({}, { orderNumber: '1234', requestId: '5678' })
+      expect(axios.patch).toHaveBeenCalledWith('/api/data/lifelines_order/1234', { requestId: '5678' })
+      done()
+    })
+  })
 })

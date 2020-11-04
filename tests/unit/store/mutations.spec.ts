@@ -337,6 +337,7 @@ describe('mutations', () => {
 
       expect(baseAppState.order).toEqual({
         orderNumber: 'edit',
+        requestId: 'edit',
         name: 'name',
         projectNumber: 'projectNumber',
         applicationForm: {

@@ -68,7 +68,7 @@
       </template>
 
       <template v-slot:confirmButton>
-        <button type="button" class="btn btn-secondary t-btn-confirm-state"
+        <button type="button" class="btn btn-secondary t-btn-confirm-edit"
           @click="onUpdateRequestId($route.params.orderNumber, $route.params.requestId)">
           {{$t('lifelines-webshop-modal-request-id-confirm-btn-txt')}}
         </button>
