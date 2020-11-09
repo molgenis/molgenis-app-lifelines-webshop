@@ -1,3 +1,13 @@
+# [3.0.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.8...v3.0.0) (2020-11-09)
+
+
+* Feat/add request (#356) ([4d91977](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4d91977)), closes [#356](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/356)
+
+
+### BREAKING CHANGES
+
+* The 'order' entity gets a new field requestId.
+
 ## [2.7.8](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.7...v2.7.8) (2020-09-17)
 
 
