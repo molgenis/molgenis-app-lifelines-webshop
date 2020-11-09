@@ -34,6 +34,7 @@ function getApplicationState () {
     ...emptyState,
     order: {
       orderNumber: '12345',
+      requestId: '12345',
       name: null,
       projectNumber: null,
       applicationForm: null,
@@ -729,6 +730,7 @@ describe('actions', () => {
           ...emptyState,
           order: {
             orderNumber: null,
+            requestId: null,
             name: null,
             projectNumber: null,
             applicationForm: null,
@@ -946,6 +948,18 @@ describe('actions', () => {
         '101': [200, 201, 202],
         '102': [200, 201, 202]
       })
+    })
+  })
+
+  describe('update request id', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      axios.patch.mockResolvedValueOnce(() => Promise.resolve())
+    })
+    it('should the update request to the serer', async (done) => {
+      await actions.updateRequestId({}, { orderNumber: '1234', requestId: '5678' })
+      expect(axios.patch).toHaveBeenCalledWith('/api/data/lifelines_order/1234', { requestId: '5678' })
+      done()
     })
   })
 })

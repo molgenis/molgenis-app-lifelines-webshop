@@ -25,6 +25,10 @@ export default [
       {
         name: 'orderStateChangeBar',
         path: 'state/:state'
+      },
+      {
+        name: 'editRequestId',
+        path: 'state/:requestId'
       }
     ],
     beforeEnter: handleProtectedRoute

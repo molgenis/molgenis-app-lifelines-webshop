@@ -70,6 +70,7 @@ export default {
   restoreOrderState (state: ApplicationState, loadOrderResponse: Order) {
     state.order = {
       orderNumber: loadOrderResponse.orderNumber,
+      requestId: loadOrderResponse.requestId,
       email: loadOrderResponse.email,
       name: loadOrderResponse.name,
       projectNumber: loadOrderResponse.projectNumber,

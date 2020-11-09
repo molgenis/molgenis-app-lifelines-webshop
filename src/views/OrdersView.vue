@@ -1,6 +1,6 @@
 <template>
 
-  <div id="orders-view" class="container pt-1">
+  <div id="orders-view" class="pt-1" :class="{'container-fluid': hasManagerRole, 'container': !hasManagerRole}">
 
     <ConfirmationModal
       v-if="$route && $route.name === 'orderStateChangeBar'"
@@ -49,6 +49,28 @@
         <button type="button" class="btn btn-secondary t-btn-confirm-state"
           @click="changeStateConfirmed($route.params.orderNumber, $route.params.state)">
           {{$t('lifelines-webshop-modal-button-update-state')}}
+        </button>
+      </template>
+    </ConfirmationModal>
+
+    <ConfirmationModal
+      v-if="$route && $route.name === 'editRequestId'"
+      :backRoute="$router.resolve({name: 'orders'}).route"
+      :title="$t('lifelines-webshop-modal-request-id-header')">
+
+      <template v-slot:body>
+        <form>
+          <div class="form-group">
+            <label for="exampleFormControlInput1"> {{$t('lifelines-webshop-modal-request-id-input-label')}}</label>
+            <input type="text" class="form-control" id="text-id-input" v-model="$route.params.requestId">
+          </div>
+        </form>
+      </template>
+
+      <template v-slot:confirmButton>
+        <button type="button" class="btn btn-secondary t-btn-confirm-edit"
+          @click="onUpdateRequestId($route.params.orderNumber, $route.params.requestId)">
+          {{$t('lifelines-webshop-modal-request-id-confirm-btn-txt')}}
         </button>
       </template>
     </ConfirmationModal>
@@ -136,6 +158,21 @@
         </a>
       </template>
 
+      <template v-slot:cell(requestId)="data">
+        <div class="row">
+          <span class="col-6">{{data.item.requestId}}</span>
+          <span class="col-6">
+            <button
+              v-if="hasManagerRole"
+              class="btn btn-sm btn-secondary edit-btn"
+              type="button"
+              @click="showChangeRequestIdModal(data.item)">
+                <font-awesome-icon icon="edit" aria-label="edit"/>
+            </button>
+          </span>
+        </div>
+      </template>
+
       <template v-slot:cell(submissionDate)="data">
         <span v-if="hasManagerRole">{{ data.item.submissionDate | dateManager }}</span>
         <span v-else>{{ data.item.submissionDate | dateShopper }}</span>
@@ -214,6 +251,7 @@ export default Vue.extend({
       fields = fields.concat([
         { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true, class: 'td-project' },
         { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true, class: 'td-order' },
+        { key: 'requestId', label: this.$t('lifelines-webshop-orders-col-header-request-id'), sortable: true, class: 'td-request-id' },
         { key: 'submissionDate', label: this.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true, class: 'td-submitted' },
         {
           key: 'state',
@@ -276,6 +314,12 @@ export default Vue.extend({
         params: { orderNumber: order.orderNumber, state: selectedState.value }
       })
     },
+    showChangeRequestIdModal: function (order) {
+      this.$router.push({
+        name: 'editRequestId',
+        params: { orderNumber: order.orderNumber, requestId: order.requestId }
+      })
+    },
     changeStateConfirmed: async function (orderNumber, targetState) {
       this.orderChangeStateProgress = 0
       this.$router.push({ name: 'orderStateChangeBar' })
@@ -302,6 +346,11 @@ export default Vue.extend({
     },
     deleteOrderConfirmed: function (orderNumber) {
       this.deleteOrder(orderNumber)
+      this.$router.push({ name: 'orders' })
+    },
+    onUpdateRequestId: async function (orderNumber, requestId) {
+      await this.updateRequestId({ orderNumber, requestId })
+      this.updateTable()
       this.$router.push({ name: 'orders' })
     },
     downloadPdf: async function (orderNumber) {
@@ -407,7 +456,9 @@ export default Vue.extend({
       await this.loadOrders(query)
       this.table.isBusy = false
     },
-    ...mapActions(['save', 'loadOrderAndCart', 'loadVariables', 'loadAssessments', 'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder']),
+    ...mapActions(['save', 'loadOrderAndCart', 'loadVariables', 'loadAssessments',
+      'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder',
+      'updateRequestId']),
     ...mapMutations(['changeOrderStatus', 'setToast'])
   },
   mounted: function () {
@@ -432,7 +483,7 @@ export default Vue.extend({
   }
 
   .order-table {
-    min-width: 60rem; // Make sure the table stays big enough to display the 7 rows in smaller devices or browsers
+    min-width: 70rem; // Make sure the table stays big enough to display the 7 rows in smaller devices or browsers
   }
 
   .td-actions {

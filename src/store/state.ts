@@ -6,6 +6,7 @@ const state: AppState = {
   toast: [],
   order: {
     orderNumber: null,
+    requestId: null,
     name: null,
     projectNumber: null,
     applicationForm: null,

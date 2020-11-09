@@ -77,6 +77,7 @@ describe('OrdersView.vue', () => {
   let actions = {
     loadOrderAndCart: jest.fn(),
     deleteOrder: jest.fn(),
+    updateRequestId: jest.fn(),
     loadOrders: jest.fn(() => {
       return {
         items: orders,
@@ -227,6 +228,18 @@ describe('OrdersView.vue', () => {
         expect(wrapper.find('.modal-dialog').exists()).toBe(true)
         wrapper.find('.t-btn-confirm-delete').trigger('click')
         expect(actions.deleteOrder).toHaveBeenCalled()
+      })
+    })
+
+    describe('when the user edit request id', () => {
+      beforeEach(() => {
+        wrapper.find('.td-request-id .edit-btn').trigger('click')
+      })
+      it('should show the edit modal', () => {
+        wrapper.html()
+        expect(wrapper.find('.modal-dialog').exists()).toBe(true)
+        wrapper.find('.t-btn-confirm-edit').trigger('click')
+        expect(actions.updateRequestId).toHaveBeenCalled()
       })
     })
 
