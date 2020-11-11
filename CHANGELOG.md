@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v3.0.0...v3.0.1) (2020-11-11)
+
+
+### Bug Fixes
+
+* Fix order save/update, add missing requestId field to formFields being posted ([#357](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/357)) ([273e85b](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/273e85b))
+
 # [3.0.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v2.7.8...v3.0.0) (2020-11-09)
 
 
