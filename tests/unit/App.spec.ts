@@ -12,6 +12,7 @@ describe('App.vue', () => {
   const stubs: any = {
     'toast-component': true,
     'cookie-wall': true,
+    'header-component': true,
     'footer-component': true,
     'navigation-bar': true,
     'sidebar-view': true,

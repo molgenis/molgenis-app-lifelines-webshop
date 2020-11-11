@@ -96,7 +96,8 @@ const mockResponses: { [key: string]: Object } = {
     user: 'bert',
     email: 'bert@test.org',
     name: 'dm_test_name',
-    projectNumber: 'dm_test_projectNumber'
+    projectNumber: 'dm_test_projectNumber',
+    requestId: '12345'
   },
   '/api/v2/lifelines_order/Copy123': {
     contents: {
