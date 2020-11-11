@@ -33,7 +33,8 @@ describe('MainView.vue', () => {
     }
     mutations = {
       setLoading: setLoading,
-      setToast: setToastMock
+      setToast: setToastMock,
+      setSuccessMessage: jest.fn()
     }
     store = new Vuex.Store({
       state,

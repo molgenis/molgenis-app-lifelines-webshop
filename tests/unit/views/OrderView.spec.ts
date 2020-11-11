@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import OrderView from '@/views/OrderView.vue'
 import Vuex from 'vuex'
 import flushPromises from 'flush-promises'
@@ -53,9 +53,10 @@ describe('OrderView', () => {
       mutations
     })
 
-    const stubs = {
-      RouterLink: RouterLinkStub
-    }
+    const stubs = [
+      'router-link',
+      'font-awesome-icon'
+    ]
 
     mocks = {
       $router: {

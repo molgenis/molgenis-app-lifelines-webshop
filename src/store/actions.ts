@@ -178,13 +178,14 @@ export default {
     }
   }),
   save: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
-    const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
+    const formFields = [...state.orderFormFields, { id: 'requestId', type: 'text' }, { id: 'contents', type: 'file' }]
     const { context } = state.context
     const cart = toCart(state)
 
     const formData:any = {
       name: state.order.name,
       orderNumber: state.order.orderNumber,
+      requestId: state.order.requestId,
       projectNumber: state.order.projectNumber,
       applicationForm: state.order.applicationForm,
       updateDate: moment().toISOString(),
@@ -229,7 +230,7 @@ export default {
     }
   }),
   submit: tryAction(async ({ state, commit, dispatch }: { state: ApplicationState, commit: any, dispatch: any }) => {
-    const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
+    const formFields = [...state.orderFormFields, { id: 'requestId', type: 'text' }, { id: 'contents', type: 'file' }]
     const { context: { email, username } } = state.context
     const now = moment().toISOString()
     const cart = toCart(state)
@@ -321,7 +322,7 @@ export default {
       formData.applicationForm = await getApplicationForm(response.applicationForm.id, response.applicationForm.filename)
     }
 
-    const formFields = [...state.orderFormFields, { id: 'contents', type: 'file' }]
+    const formFields = [...state.orderFormFields, { id: 'requestId', type: 'text' }, { id: 'contents', type: 'file' }]
     const orderNumber = await createOrder(formData, [...formFields, { id: 'creationDate', type: 'date' }]).catch((e) => {
       return Promise.reject(new Error('Failed to copy order'))
     })

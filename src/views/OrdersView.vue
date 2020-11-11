@@ -218,7 +218,7 @@
 import Vue from 'vue'
 import api from '@molgenis/molgenis-api-client'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faEdit, faDownload, faTrash, faCopy, faFilePdf } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faDownload, faTrash, faCopy, faFilePdf, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { gridSelectionFromCart, successMessage } from '@/store/helpers'
 import transforms from '@/store/transforms'
@@ -230,7 +230,7 @@ import axios from 'axios'
 import fileDownload from 'js-file-download'
 import moment from 'moment'
 
-library.add(faEdit, faDownload, faTrash, faCopy, faFilePdf)
+library.add(faEdit, faDownload, faTrash, faCopy, faFilePdf, faSpinner)
 
 export default Vue.extend({
   components: { ConfirmationModal, Dropdown, FontAwesomeIcon, SearchComponent },
