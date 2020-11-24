@@ -20,7 +20,7 @@ jest.mock('axios')
 const cart: Cart = {
   selection: [{
     assessment: '1A',
-    variables: ['VAR1', 'VAR2']
+    variables: [1, 2]
   }],
   filters: {
     ageGroupAt1A: ['18-64', '65+'],
@@ -625,7 +625,7 @@ describe('actions', () => {
         ...emptyState,
         assessments: { 1: { id: 1, name: '1A' } },
         variables: {
-          1: { id: 1, name: 'VAR1', label: 'Variable 1', subsections: [1, 2] },
+          1: { id: 1, name: 1, label: 'Variable 1', subsections: [1, 2] },
           2: { id: 2, name: 'VAR2', label: 'Variable 2', subsections: [2] }
         }
       }

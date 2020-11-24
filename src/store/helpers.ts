@@ -35,11 +35,10 @@ export const successMessage = (message: string, commit: any) => {
   commit('setToast', { message, type: 'success', textType: 'light', title: 'Success', timeout: Vue.prototype.$global.toastTimeoutTime })
 }
 
-const toCartSelection = ({ gridSelection, assessments, variables }: ApplicationState) : Selection[] => {
+const toCartSelection = ({ gridSelection, assessments }: ApplicationState) : Selection[] => {
   const selections: Selection[] = []
   Object.keys(gridSelection).forEach((variableKey: string) => {
     const variableId: number = parseInt(variableKey, 10)
-    const variableName: string = variables[variableId].name
     const assessmentNames: string[] = gridSelection[variableId].map(assessmentId => assessments[assessmentId].name)
     assessmentNames.forEach(assessmentName => {
       let selection = selections.find(it => it.assessment === assessmentName)
@@ -47,7 +46,7 @@ const toCartSelection = ({ gridSelection, assessments, variables }: ApplicationS
         selection = { assessment: assessmentName, variables: [] }
         selections.push(selection)
       }
-      selection.variables.push(variableName)
+      selection.variables.push(variableId)
     })
   })
   return selections
@@ -102,7 +101,7 @@ export const gridSelectionFromCart = (cartSelection: Selection[], { variables, a
   }
 
   for (const variable of Object.values(variables)) {
-    lookupMap.variables[variable.name] = variable
+    lookupMap.variables[variable.id] = variable
   }
 
   for (const selection of cartSelection) {
@@ -111,10 +110,10 @@ export const gridSelectionFromCart = (cartSelection: Selection[], { variables, a
       throw new Error(`Cannot find assessment with name ${selection.assessment}.`)
     }
 
-    selection.variables.forEach(variableName => {
-      const variable = lookupMap.variables[variableName]
+    selection.variables.forEach(variableId => {
+      const variable = lookupMap.variables[variableId]
       if (variable === undefined) {
-        throw new Error(`Cannot find variable with name ${variableName}.`)
+        throw new Error(`Cannot find variable with id ${variableId}.`)
       }
 
       if (!gridSelection.hasOwnProperty(variable.id)) {
