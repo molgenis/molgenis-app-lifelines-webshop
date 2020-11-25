@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v3.0.1...v4.0.0) (2020-11-25)
+
+
+### Features
+
+* Switch from names to ids's in cart ([#358](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/358)) ([c5ae8d2](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/c5ae8d2))
+
+
+### BREAKING CHANGES
+
+* Existing carts need to be migrated to id's and chart submittion on data platform should handle cart's containing id's
+
 ## [3.0.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v3.0.0...v3.0.1) (2020-11-11)
 
 
