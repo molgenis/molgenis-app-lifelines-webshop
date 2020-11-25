@@ -16,5 +16,5 @@ export interface CartFilter {
 
 export interface Selection {
     assessment: string
-    variables: string[]
+    variables: number[]
 }

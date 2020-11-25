@@ -127,10 +127,10 @@ describe('store', () => {
           filters: { assessment: [], hideZeroData: true },
           selection: [{
             assessment: '1A',
-            variables: ['VAR1', 'VAR2']
+            variables: [1, 2]
           }, {
             assessment: '1B',
-            variables: ['VAR1']
+            variables: [1]
           }]
         })
       })
@@ -149,10 +149,10 @@ describe('store', () => {
           filters: { assessment: [], hideZeroData: true },
           selection: [{
             assessment: '1A',
-            variables: ['VAR1', 'VAR2']
+            variables: [1, 2]
           }, {
             assessment: '1B',
-            variables: ['VAR1']
+            variables: [1]
           }]
         }, {
           ...emptyState,
@@ -202,14 +202,14 @@ describe('store', () => {
         const cart: Cart = {
           selection: [{
             assessment: 'assessment1',
-            variables: ['variable1']
+            variables: [1]
           }],
           filters: cartFilter
         }
         const assessments = {
           1: { id: 1, name: 'assessment1' }
         }
-        expect(() => (fromCart(cart, { ...emptyState, assessments }))).toThrowError('Cannot find variable with name variable1.')
+        expect(() => (fromCart(cart, { ...emptyState, assessments }))).toThrowError('Cannot find variable with id 1.')
       })
     })
   })
