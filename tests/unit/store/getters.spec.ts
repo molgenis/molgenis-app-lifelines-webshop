@@ -263,7 +263,17 @@ describe('getters', () => {
     it('determines assessments for selected variants', () => {
       const state: ApplicationState = {
         ...emptyState,
-        assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ]
+        assessments: [ assessment1A, assessment2A, assessment3A, assessment1B ],
+        facetFilter: {
+          assessment: [assessment1A.id, assessment2A.id],
+          hideZeroData: true,
+          gender: [],
+          subcohort: [],
+          ageGroupAt1A: [],
+          ageGroupAt2A: [],
+          ageGroupAt3A: [],
+          yearOfBirthRange: []
+        }
       }
       const gettersParam: Getters = {
         ...emptyGetters,
