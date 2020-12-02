@@ -41,7 +41,7 @@ describe('Search Component', () => {
         setTimeout(() => {
           expect(wrapper.emitted().searchChanged[0][0]).toEqual('dem')
           done()
-        }, 300)
+        }, 600)
       })
     })
 
@@ -55,7 +55,7 @@ describe('Search Component', () => {
         setTimeout(() => {
           expect(wrapper.emitted().searchChanged[0][0]).toEqual('')
           done()
-        }, 300)
+        }, 600)
       })
     })
 
@@ -69,7 +69,7 @@ describe('Search Component', () => {
         setTimeout(() => {
           expect(wrapper.emitted()).toEqual({})
           done()
-        }, 300)
+        }, 600)
       })
     })
   })
