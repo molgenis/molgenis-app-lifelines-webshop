@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.0.0...v4.1.0) (2020-12-03)
+
+
+### Features
+
+* [#7702](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/7702) hide empty rows ( due to assessment filter ) ([#359](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/359)) ([4428879](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4428879))
+
 # [4.0.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v3.0.1...v4.0.0) (2020-11-25)
 
 
