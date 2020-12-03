@@ -540,24 +540,34 @@ describe('mutations', () => {
     })
 
     it('selects if none selected', () => {
-      Object.assign(state, { gridSelection: {} })
+      state.gridSelection = {}
       mutations.toggleGridRow(state, 100)
-      expect(state.gridSelection).toEqual({ 100: [200, 201, 202] })
+      expect(state.gridSelection).toEqual({ '100': [200, 201, 202] })
     })
 
     it('removes if all already selected', () => {
-      Object.assign(state, { gridSelection: { 100: [200, 201, 202], 101: [200] } })
+      state.gridSelection = { '100': [200, 201, 202], '101': [200] }
       mutations.toggleGridRow(state, 100)
-      expect(state.gridSelection).toEqual({ 101: [200] })
+      expect(state.gridSelection).toEqual({ '101': [200] })
     })
 
     it('selects all if one already selected', () => {
-      Object.assign(state, { gridSelection: { 100: [200] } })
-
+      state.gridSelection = { '100': [200] }
       mutations.toggleGridRow(state, 100)
-      expect(state.gridSelection).toEqual({ 100: [200, 201, 202] })
+      expect(state.gridSelection).toEqual({ '100': [200, 201, 202] })
+    })
+
+    it('zero filter excludes hidden cells', () => {
+      state.gridSelection = { '100': [200], '101': [200] }
+      mutations.toggleGridRow(state, 100)
+      expect(state.gridSelection).toEqual({ '100': [200, 201, 202], '101': [200] })
+      mutations.setZeroDataVisibility(state, true)
+      state.gridSelection = { 100: [200] }
+      mutations.toggleGridRow(state, 100)
+      expect(state.gridSelection).toEqual({ '100': [200, 201, 202] })
     })
   })
+
   describe('toggleGridColumn', () => {
     let state:any
 
@@ -570,7 +580,12 @@ describe('mutations', () => {
         },
         facetFilter: { assessment: [1, 2, 3] },
         gridVariables,
-        treeSelected: -1
+        treeSelected: -1,
+        variantCounts: [
+          { variantId: 300, count: 10 },
+          { variantId: 301, count: 10 },
+          { variantId: 302, count: 10 }
+        ]
       }
     })
 
@@ -590,6 +605,16 @@ describe('mutations', () => {
       state.gridSelection = { 100: [200], 101: [201], 102: [] }
       mutations.toggleGridColumn(state, 200)
       expect(state.gridSelection).toEqual({ '100': [200], '101': [201, 200], '102': [200], '103': [200] })
+    })
+
+    it('zero filter excludes hidden cells', () => {
+      state.gridSelection = {}
+      mutations.toggleGridColumn(state, 200)
+      expect(state.gridSelection).toEqual({ '100': [200], '101': [200], '102': [200], '103': [200] })
+      mutations.setZeroDataVisibility(state, true)
+      state.gridSelection = {}
+      mutations.toggleGridColumn(state, 200)
+      expect(state.gridSelection).toEqual({ '100': [200], '102': [200], '103': [200] })
     })
   })
 
