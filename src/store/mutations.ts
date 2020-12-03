@@ -304,6 +304,8 @@ export default {
    */
   toggleGridSelection (state:any, { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
     const variable = state.gridVariables.find((v:any) => v.id === variableId)
+    if (!variable) { throw new Error('invalid variable argument') }
+
     let cellLength = 1 + (variable.subvariables ? variable.subvariables.length : 0)
 
     // Keep track of all selected cells (variableId(row)/columnIndex)
@@ -325,6 +327,9 @@ export default {
       // Cell and sub-cells are toggled; untoggle all.
       for (const [variableId, columnIndex] of Object.entries(selectedCells)) {
         state.gridSelection[variableId].splice(columnIndex, 1)
+        if (state.gridSelection[variableId].length === 0) {
+          Vue.delete(state.gridSelection, variableId)
+        }
       }
     } else {
       // Toggle all cells and sub-cells.
