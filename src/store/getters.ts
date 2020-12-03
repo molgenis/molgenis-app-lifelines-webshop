@@ -7,6 +7,7 @@ import { VariableWithVariants } from '@/types/Variable'
 import CartSection from '@/types/CartSection'
 import 'core-js/fn/array/flat-map'
 import transforms from './transforms'
+import Assessment from '@/types/Assessment'
 
 export default {
   isSignedIn: (state: ApplicationState): boolean => state.context.context && state.context.context.authenticated,
@@ -104,7 +105,7 @@ export default {
     return transforms.gridRows(state.gridVariables, getters.gridColumns, state.variantCounts, getters.findZeroRowsAndCols, state.facetFilter.hideZeroData)
   },
   gridAssessments: (state: ApplicationState, getters: Getters) => {
-    return transforms.gridAssessments(getters.variants, state.assessments, null)
+    return transforms.gridAssessments(getters.variants, state.assessments, state.facetFilter.assessment)
   },
   gridColumns: (state: ApplicationState, getters: Getters) => {
     return transforms.gridColumns(getters.variants, state.assessments, state.facetFilter.assessment, getters.findZeroRowsAndCols, state.facetFilter.hideZeroData)
