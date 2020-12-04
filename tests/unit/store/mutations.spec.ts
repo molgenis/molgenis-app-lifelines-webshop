@@ -57,6 +57,25 @@ const gridVariables:VariableWithVariants[] = [
     definitionNl: ''
   }]
 
+// 200 is a sub-variable of 102.
+gridVariables.push({
+  id: 103,
+  label: 'subvar1',
+  name: 'S1',
+  variants: [
+    { assessmentId: 200, id: 300 },
+    { assessmentId: 201, id: 301 },
+    { assessmentId: 202, id: 302 }],
+  subsections: [1],
+  subvariableOf: gridVariables[2],
+  subvariables: [],
+  options: [],
+  definitionEn: '',
+  definitionNl: ''
+})
+
+gridVariables[2].subvariables = [gridVariables[3]]
+
 describe('mutations', () => {
   describe('changeOrderStatus', () => {
     it('updates the orderStatus with given value', () => {
@@ -460,38 +479,45 @@ describe('mutations', () => {
   })
 
   describe('toggleGridSelection', () => {
-    it('selects if none selected', () => {
-      const state = {
-        gridSelection: {}
+    let state:any
+
+    beforeAll(() => {
+      state = {
+        gridVariables
       }
-      mutations.toggleGridSelection(state, { variableId: 123, assessmentId: 2 })
-      expect(state.gridSelection).toEqual({ 123: [2] })
     })
 
-    it('removes if already selected', () => {
-      const state = {
-        gridSelection: { 123: [1, 2, 3] }
-      }
-      mutations.toggleGridSelection(state, { variableId: 123, assessmentId: 2 })
-      expect(state.gridSelection).toEqual({ 123: [1, 3] })
+    it('selects cell', () => {
+      state.gridSelection = {}
+      mutations.toggleGridSelection(state, { variableId: 101, assessmentId: 2 })
+      expect(state.gridSelection).toEqual({ 101: [2] })
     })
 
-    it('removes variable if last selected assessment is removed', () => {
-      const state = {
-        gridSelection: { 123: [1, 2, 3], 456: [4] }
-      }
-      mutations.toggleGridSelection(state, { variableId: 456, assessmentId: 4 })
-      expect(state.gridSelection).toEqual({ 123: [1, 2, 3] })
+    it('selects cell with sub-cell(s)', () => {
+      state.gridSelection = {}
+      mutations.toggleGridSelection(state, { variableId: 102, assessmentId: 2 })
+      expect(state.gridSelection).toEqual({ 102: [2], 103: [2] })
     })
 
-    it('appends assessment to variable', () => {
-      const state = {
-        gridSelection: { 123: [1] }
-      }
-      mutations.toggleGridSelection(state, { variableId: 123, assessmentId: 2 })
-      expect(state.gridSelection).toEqual({ 123: [1, 2] })
+    it('deselects cell', () => {
+      state.gridSelection = { 101: [1, 2, 3] }
+      mutations.toggleGridSelection(state, { variableId: 101, assessmentId: 2 })
+      expect(state.gridSelection).toEqual({ 101: [1, 3] })
+    })
+
+    it('deselects cell with sub-cell(s)', () => {
+      state.gridSelection = { 102: [1, 2, 3], 103: [1, 2, 3] }
+      mutations.toggleGridSelection(state, { variableId: 102, assessmentId: 2 })
+      expect(state.gridSelection).toEqual({ 102: [1, 3], 103: [1, 3] })
+    })
+
+    it('removes empty selection after last selected assessment is removed', () => {
+      state.gridSelection = { 100: [1, 2, 3], 101: [4] }
+      mutations.toggleGridSelection(state, { variableId: 101, assessmentId: 4 })
+      expect(state.gridSelection).toEqual({ 100: [1, 2, 3] })
     })
   })
+
   describe('toggleGridRow', () => {
     let state:any
 
@@ -514,24 +540,34 @@ describe('mutations', () => {
     })
 
     it('selects if none selected', () => {
-      Object.assign(state, { gridSelection: {} })
+      state.gridSelection = {}
       mutations.toggleGridRow(state, 100)
-      expect(state.gridSelection).toEqual({ 100: [200, 201, 202] })
+      expect(state.gridSelection).toEqual({ '100': [200, 201, 202] })
     })
 
     it('removes if all already selected', () => {
-      Object.assign(state, { gridSelection: { 100: [200, 201, 202], 101: [200] } })
+      state.gridSelection = { '100': [200, 201, 202], '101': [200] }
       mutations.toggleGridRow(state, 100)
-      expect(state.gridSelection).toEqual({ 101: [200] })
+      expect(state.gridSelection).toEqual({ '101': [200] })
     })
 
     it('selects all if one already selected', () => {
-      Object.assign(state, { gridSelection: { 100: [200] } })
-
+      state.gridSelection = { '100': [200] }
       mutations.toggleGridRow(state, 100)
-      expect(state.gridSelection).toEqual({ 100: [200, 201, 202] })
+      expect(state.gridSelection).toEqual({ '100': [200, 201, 202] })
+    })
+
+    it('zero filter excludes hidden cells', () => {
+      state.gridSelection = { '100': [200], '101': [200] }
+      mutations.toggleGridRow(state, 100)
+      expect(state.gridSelection).toEqual({ '100': [200, 201, 202], '101': [200] })
+      mutations.setZeroDataVisibility(state, true)
+      state.gridSelection = { 100: [200] }
+      mutations.toggleGridRow(state, 100)
+      expect(state.gridSelection).toEqual({ '100': [200, 201, 202] })
     })
   })
+
   describe('toggleGridColumn', () => {
     let state:any
 
@@ -544,32 +580,41 @@ describe('mutations', () => {
         },
         facetFilter: { assessment: [1, 2, 3] },
         gridVariables,
-        treeSelected: -1
+        treeSelected: -1,
+        variantCounts: [
+          { variantId: 300, count: 10 },
+          { variantId: 301, count: 10 },
+          { variantId: 302, count: 10 }
+        ]
       }
     })
 
     it('selects if none selected', () => {
-      Object.assign(state, {
-        gridSelection: { 100: [], 101: [], 102: [] }
-      })
-
+      state.gridSelection = { 100: [], 101: [], 102: [] }
       mutations.toggleGridColumn(state, 200)
-      expect(state.gridSelection).toEqual({ '100': [200], '101': [200], '102': [200] })
+      expect(state.gridSelection).toEqual({ 100: [200], 101: [200], 102: [200], 103: [200] })
     })
 
     it('removes if all already selected', () => {
-      Object.assign(state, {
-        gridSelection: { 100: [200, 201, 202], 101: [200, 201, 202], 102: [200, 201, 202] }
-      })
-
+      state.gridSelection = { '100': [200, 201, 202], '101': [200, 201, 202], '102': [200, 201, 202], '103': [200, 201, 202] }
       mutations.toggleGridColumn(state, 200)
-      expect(state.gridSelection).toEqual({ '100': [201, 202], '101': [201, 202], '102': [201, 202] })
+      expect(state.gridSelection).toEqual({ '100': [201, 202], '101': [201, 202], '102': [201, 202], '103': [201, 202] })
     })
 
     it('selects all if one already selected', () => {
-      Object.assign(state, { gridSelection: { 100: [200], 101: [201], 102: [] } })
+      state.gridSelection = { 100: [200], 101: [201], 102: [] }
       mutations.toggleGridColumn(state, 200)
-      expect(state.gridSelection).toEqual({ '100': [200], '101': [201, 200], '102': [200] })
+      expect(state.gridSelection).toEqual({ '100': [200], '101': [201, 200], '102': [200], '103': [200] })
+    })
+
+    it('zero filter excludes hidden cells', () => {
+      state.gridSelection = {}
+      mutations.toggleGridColumn(state, 200)
+      expect(state.gridSelection).toEqual({ '100': [200], '101': [200], '102': [200], '103': [200] })
+      mutations.setZeroDataVisibility(state, true)
+      state.gridSelection = {}
+      mutations.toggleGridColumn(state, 200)
+      expect(state.gridSelection).toEqual({ '100': [200], '102': [200], '103': [200] })
     })
   })
 
@@ -590,7 +635,7 @@ describe('mutations', () => {
       }
     })
 
-    it('selects if none selected', () => {
+    it('selects all if none selected', () => {
       Object.assign(state, {
         gridSelection: {}
       })
@@ -599,7 +644,8 @@ describe('mutations', () => {
       expect(state.gridSelection).toEqual({
         100: [200, 201, 202],
         101: [200, 201, 202],
-        102: [200, 201, 202]
+        102: [200, 201, 202],
+        103: [200, 201, 202]
       })
     })
 
@@ -608,7 +654,8 @@ describe('mutations', () => {
         gridSelection: {
           100: [200, 201, 202],
           101: [200, 201, 202],
-          102: [200, 201, 202]
+          102: [200, 201, 202],
+          103: [200, 201, 202]
         }
       })
 
@@ -634,7 +681,8 @@ describe('mutations', () => {
       expect(state.gridSelection).toEqual({
         100: [200, 201, 202],
         101: [200, 201, 202],
-        102: [200, 201, 202]
+        102: [200, 201, 202],
+        103: [200, 201, 202]
       })
     })
   })

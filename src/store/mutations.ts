@@ -203,8 +203,15 @@ export default {
       })
     }
   },
+  /**
+   * Toggle assessment selection (columns) on a variable(row) and
+   * its sub-variables (optional extra rows).
+   * @param state Vuex state
+   * @param variableId Reference to the row to toggle
+   * @param forceToggle Force toggle state, ignoring current cell selections
+  */
   toggleGridRow (state:any, variableId: number) {
-    const selectedRowCells = { hidden: [], visible: [] }
+    const variable = state.gridVariables.find((i:any) => i.id === variableId)
 
     const variants = transforms.variants(state.gridVariables)
     const assessmentFilter = state.facetFilter.assessment
@@ -212,39 +219,41 @@ export default {
     let gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, assessmentFilter, true)
     const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
     const filteredGridColumns = transforms.gridColumns(variants, state.assessments, assessmentFilter, rowColFilter, state.facetFilter.hideZeroData)
-
     const gridAssessments = transforms.gridAssessments(variants, state.assessments, state.facetFilter, false)
+
     const gridSelections:any = transforms.gridSelections(gridAssessments, state.gridSelection, state.gridVariables)
 
-    const gridRowIndex = state.gridVariables.findIndex((i:any) => i.id === variableId)
-    const rowSelection = gridSelections[gridRowIndex]
+    const targetRows = [variable.id].concat(variable.subvariables.map((v:any) => v.id))
 
-    let allCellsSelected = false
-
-    if (rowSelection) {
-      allCellsSelected = rowSelection.every((i:boolean, index: number) => {
-        if (state.facetFilter.hideZeroData && rowColFilter.cols.includes(index)) { return true }
+    const rowToggled = targetRows.every((variableId) => {
+      const gridSelection = gridSelections[state.gridVariables.findIndex((i:any) => i.id === variableId)]
+      const rowSelected = gridSelection.every((i:boolean, index: number) => {
+        if (state.facetFilter.hideZeroData && rowColFilter.cols.includes(index)) {
+          return true
+        }
         return i
       })
-    }
 
-    if (state.gridSelection[variableId]) {
-      selectedRowCells.hidden = state.gridSelection[variableId].filter((i:any) => !filteredGridColumns.find((_i:any) => i === _i.id))
-      selectedRowCells.visible = state.gridSelection[variableId].filter((i:any) => filteredGridColumns.find((_i:any) => i === _i.id))
-    }
+      return rowSelected
+    })
 
-    if (allCellsSelected) {
-      if (selectedRowCells.hidden.length) {
-        Vue.set(state.gridSelection, variableId, selectedRowCells.hidden)
+    for (const variableId of targetRows) {
+      let hiddenSelected = []
+      // Cells that are in the grid selection but part of an invisible row/column due to zero filtering.
+      if (state.gridSelection[variableId]) {
+        hiddenSelected = state.gridSelection[variableId].filter((i:any) => !filteredGridColumns.find((_i:any) => i === _i.id))
+      }
+
+      if (!rowToggled) {
+        Vue.set(state.gridSelection, variableId, filteredGridColumns.map((assessment:any) => assessment.id))
       } else {
-        Vue.delete(state.gridSelection, variableId)
+        if (hiddenSelected.length) {
+          Vue.set(state.gridSelection, variableId, hiddenSelected)
+        } else {
+        // No hidden cells; just clear the whole selection row.
+          Vue.delete(state.gridSelection, variableId)
+        }
       }
-    } else {
-      let toSelect = gridColumns.map((it) => it.id).concat(selectedRowCells.hidden)
-      if (state.facetFilter.hideZeroData) {
-        toSelect = toSelect.filter((_:any, index:number) => !rowColFilter.cols.includes(index))
-      }
-      Vue.set(state.gridSelection, variableId, toSelect)
     }
   },
   toggleAll (state:any) {
@@ -287,20 +296,54 @@ export default {
       })
     }
   },
+  /**
+   * Toggle a selected cell in a variable row and its potential
+   * sub-cells (sub-variable rows).
+   * @param state Vuex store
+   * @param options
+   */
   toggleGridSelection (state:any, { variableId, assessmentId }: { variableId: number, assessmentId: number }) {
-    if (!state.gridSelection.hasOwnProperty(variableId)) {
-      Vue.set(state.gridSelection, variableId, [assessmentId])
-    } else {
-      const selectedAssessments = state.gridSelection[variableId]
-      const assessmentIndex = selectedAssessments.indexOf(assessmentId)
-      if (assessmentIndex >= 0) {
-        if (selectedAssessments.length === 1) {
+    const variable = state.gridVariables.find((v:any) => v.id === variableId)
+    if (!variable) { throw new Error('invalid variable argument') }
+
+    let cellLength = 1 + (variable.subvariables ? variable.subvariables.length : 0)
+
+    // Keep track of all selected cells (variableId(row)/columnIndex)
+    const selectedCells:any = {}
+    if (state.gridSelection[variableId]) {
+      const columnIndex = state.gridSelection[variableId].indexOf(assessmentId)
+      if (columnIndex !== -1) { selectedCells[variableId] = columnIndex }
+    }
+
+    for (const subvariable of variable.subvariables) {
+      const selection = state.gridSelection[subvariable.id]
+      if (selection) {
+        const columnIndex = selection.indexOf(assessmentId)
+        if (columnIndex !== -1) { selectedCells[subvariable.id] = columnIndex }
+      }
+    }
+
+    if (Object.keys(selectedCells).length === cellLength) {
+      // Cell and sub-cells are toggled; untoggle all.
+      for (const [variableId, columnIndex] of Object.entries(selectedCells)) {
+        state.gridSelection[variableId].splice(columnIndex, 1)
+        if (state.gridSelection[variableId].length === 0) {
           Vue.delete(state.gridSelection, variableId)
-        } else {
-          selectedAssessments.splice(assessmentIndex, 1)
         }
-      } else {
-        selectedAssessments.push(assessmentId)
+      }
+    } else {
+      // Toggle all cells and sub-cells.
+      if (!state.gridSelection[variableId]) {
+        Vue.set(state.gridSelection, variableId, [assessmentId])
+      } else if (!state.gridSelection[variableId].includes(assessmentId)) {
+        state.gridSelection[variableId].push(assessmentId)
+      }
+      for (const subvariable of variable.subvariables) {
+        if (!state.gridSelection[subvariable.id]) {
+          Vue.set(state.gridSelection, subvariable.id, [assessmentId])
+        } else if (!state.gridSelection[subvariable.id].includes(assessmentId)) {
+          state.gridSelection[subvariable.id].push(assessmentId)
+        }
       }
     }
   }
