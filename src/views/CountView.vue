@@ -39,4 +39,8 @@ export default Vue.extend({
 .count-view {
   height: 30px;
 }
+
+.participant-count {
+  font-size: 1.5rem;
+}
 </style>

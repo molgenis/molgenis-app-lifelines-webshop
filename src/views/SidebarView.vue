@@ -76,8 +76,10 @@
               />
             </facet-container>
           </li>
+          <li>
+               <count-view class="px-1"></count-view>
+          </li>
         </ul>
-        <count-view class="px-4"></count-view>
       </div>
 
       <div class="label label-assessments" @click="toggleVisibility">
