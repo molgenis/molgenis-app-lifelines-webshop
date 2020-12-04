@@ -1,3 +1,10 @@
+# [4.2.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.1.0...v4.2.0) (2020-12-04)
+
+
+### Features
+
+* add sub-variable aware cell/row toggle ([#360](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/360)) ([0dbe93f](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/0dbe93f))
+
 # [4.1.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.0.0...v4.1.0) (2020-12-03)
 
 
