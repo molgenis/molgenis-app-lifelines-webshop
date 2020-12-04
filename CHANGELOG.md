@@ -1,3 +1,10 @@
+# [4.3.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.2.0...v4.3.0) (2020-12-04)
+
+
+### Features
+
+* Move participant count into participant filter container ([d57029d](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/d57029d))
+
 # [4.2.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.1.0...v4.2.0) (2020-12-04)
 
 
