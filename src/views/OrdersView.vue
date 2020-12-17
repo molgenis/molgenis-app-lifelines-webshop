@@ -1,6 +1,6 @@
 <template>
 
-  <div id="orders-view" class="pt-1" :class="{'container-fluid': hasManagerRole, 'container': !hasManagerRole}">
+  <div id="orders-view" class="pt-1 container-fluid">
 
     <ConfirmationModal
       v-if="$route && $route.name === 'orderStateChangeBar'"
