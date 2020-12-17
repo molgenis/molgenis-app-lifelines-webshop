@@ -1,3 +1,10 @@
+# [4.4.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.3.0...v4.4.0) (2020-12-17)
+
+
+### Features
+
+* Add link to cart file ([#362](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/362)) ([19968f7](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/19968f7))
+
 # [4.3.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.2.0...v4.3.0) (2020-12-04)
 
 
