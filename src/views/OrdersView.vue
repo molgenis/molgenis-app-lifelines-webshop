@@ -1,6 +1,6 @@
 <template>
 
-  <div id="orders-view" class="pt-1" :class="{'container-fluid': hasManagerRole, 'container': !hasManagerRole}">
+  <div id="orders-view" class="pt-1 container-fluid">
 
     <ConfirmationModal
       v-if="$route && $route.name === 'orderStateChangeBar'"
@@ -152,7 +152,13 @@
       </template>
 
       <template v-slot:cell(orderNumber)="data">
-        {{data.item.orderNumber}}<br/>
+        <a v-if="hasManagerRole && data.item.contents && data.item.contents.url" :href="data.item.contents.url">
+          {{data.item.orderNumber}}
+        </a>
+        <span v-else>{{data.item.orderNumber}}</span><br>
+      </template>
+
+      <template v-slot:cell(applicationForm)="data">
         <a v-if="data.item.applicationForm" :href="data.item.applicationForm.url">
           {{ data.item.applicationForm.filename }} <font-awesome-icon icon="download" aria-label="download"/>
         </a>
@@ -176,10 +182,6 @@
       <template v-slot:cell(submissionDate)="data">
         <span v-if="hasManagerRole">{{ data.item.submissionDate | dateManager }}</span>
         <span v-else>{{ data.item.submissionDate | dateShopper }}</span>
-      </template>
-
-      <template v-slot:cell(applicationForm)="data">
-
       </template>
 
       <template v-slot:cell(state)="data" class="table-cell-overflow">
@@ -251,6 +253,7 @@ export default Vue.extend({
       fields = fields.concat([
         { key: 'projectNumber', label: this.$t('lifelines-webshop-orders-col-header-project'), sortable: true, class: 'td-project' },
         { key: 'orderNumber', label: this.$t('lifelines-webshop-orders-col-header-order'), sortable: true, class: 'td-order' },
+        { key: 'applicationForm', label: this.$t('lifelines-webshop-order-applicationform-label'), sortable: true, class: 'td-application-form' },
         { key: 'requestId', label: this.$t('lifelines-webshop-orders-col-header-request-id'), sortable: true, class: 'td-request-id' },
         { key: 'submissionDate', label: this.$t('lifelines-webshop-orders-col-header-sub-date'), sortable: true, class: 'td-submitted' },
         {
