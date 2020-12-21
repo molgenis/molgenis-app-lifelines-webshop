@@ -826,7 +826,9 @@ describe('actions', () => {
         post.mockResolvedValue('success')
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
+        expect(dispatch).toHaveBeenCalledWith('sendSubmitNotification', '12345')
         expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
+        console.log(dispatch.mock.calls)
         done()
       })
     })
@@ -839,6 +841,7 @@ describe('actions', () => {
         post.mockResolvedValue('success')
         await actions.submit({ state, commit, dispatch })
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
+        expect(dispatch).toHaveBeenCalledWith('sendSubmitNotification', '12345')
         expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
         done()
       })
@@ -862,6 +865,7 @@ describe('actions', () => {
       it('should return undefined', () => {
         expect(result).toBeUndefined()
         expect(commit).not.toHaveBeenCalledWith('setToast', { type: 'success', message: 'Submitted order with order number 12345' })
+        expect(dispatch).not.toHaveBeenCalledWith('sendSubmitNotification')
         expect(dispatch).not.toHaveBeenCalledWith('givePermissionToOrder')
       })
     })
@@ -930,9 +934,21 @@ describe('actions', () => {
       // @ts-ignore
       axios.post.mockResolvedValueOnce(() => Promise.resolve())
     })
-    it('should send the port to the edge server', async (done) => {
+    it('should send a post to the edge server "approve" endpoint, passing the orderNumber', async (done) => {
       await actions.sendApproveTrigger({}, 'my-order-nr')
       expect(axios.post).toHaveBeenCalledWith('/edge-server/approve?ordernumber=my-order-nr')
+      done()
+    })
+  })
+
+  describe('sendSubmitNotification', () => {
+    beforeEach(() => {
+      // @ts-ignore
+      axios.post.mockResolvedValueOnce(() => Promise.resolve())
+    })
+    it('should send a post to the edge server submit endpoint, passing the orderNumber', async (done) => {
+      await actions.sendSubmitNotification({}, 'my-order-nr')
+      expect(axios.post).toHaveBeenCalledWith('/edge-server/submit?ordernumber=my-order-nr')
       done()
     })
   })
