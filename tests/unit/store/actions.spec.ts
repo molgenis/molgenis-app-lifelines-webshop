@@ -828,7 +828,6 @@ describe('actions', () => {
         expect(commit).toHaveBeenCalledWith('setToast', { message: 'Submitted order with order number 12345', textType: 'light', timeout: Vue.prototype.$global.toastTimeoutTime, title: 'Success', type: 'success' })
         expect(dispatch).toHaveBeenCalledWith('sendSubmitNotification', '12345')
         expect(dispatch).toHaveBeenCalledWith('givePermissionToOrder')
-        console.log(dispatch.mock.calls)
         done()
       })
     })
