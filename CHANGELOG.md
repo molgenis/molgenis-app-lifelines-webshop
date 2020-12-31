@@ -1,3 +1,10 @@
+# [4.5.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.4.0...v4.5.0) (2020-12-31)
+
+
+### Features
+
+* Send trigger for notification on order submit ([#363](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/363)) ([eae0660](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/eae0660))
+
 # [4.4.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.3.0...v4.4.0) (2020-12-17)
 
 
