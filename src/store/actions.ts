@@ -259,6 +259,7 @@ export default {
     const newOrderResponse = await api.get(`/api/v2/lifelines_order/${orderNumber}`)
     commit('restoreOrderState', newOrderResponse)
     dispatch('givePermissionToOrder')
+    dispatch('sendSubmitNotification', orderNumber)
     successMessage(`Submitted order with order number ${orderNumber}`, commit)
   }),
   loadOrderAndCart: tryAction(async ({ state, commit }: { state: ApplicationState, commit: any }, orderNumber: string) => {
@@ -364,5 +365,9 @@ export default {
 
   sendApproveTrigger: tryAction(async (context:any, orderNumber: string) => {
     return axios.post(`/edge-server/approve?ordernumber=${orderNumber}`)
-  })
+  }),
+
+  sendSubmitNotification: async (context:any, orderNumber: string) => {
+    return axios.post(`/edge-server/submit?ordernumber=${orderNumber}`)
+  }
 }
