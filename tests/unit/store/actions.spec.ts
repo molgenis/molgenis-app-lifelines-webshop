@@ -792,6 +792,8 @@ describe('actions', () => {
         await actions.save({ state, commit, dispatch })
         expect(setUserPermission).toHaveBeenCalledWith('with-app-form', 'sys_FileMeta', 'with-app-form-user', 'WRITE')
         expect(setUserPermission).toHaveBeenCalledWith('applicationForm-id', 'sys_FileMeta', 'with-app-form-user', 'WRITE')
+        expect(setRolePermission).toHaveBeenCalledWith('with-app-form', 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
+        expect(setRolePermission).toHaveBeenCalledWith('applicationForm-id', 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
         done()
       })
     })

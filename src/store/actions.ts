@@ -207,8 +207,12 @@ export default {
         const newOrderResponse = await api.get(`/api/v2/lifelines_order/${state.order.orderNumber}`)
         commit('restoreOrderState', newOrderResponse)
         await setUserPermission(newOrderResponse.contents.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
+        if (newOrderResponse.contents && newOrderResponse.contents.id) {
+          await setRolePermission(newOrderResponse.contents.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
+        }
         if (isApplicationFormUpdate) {
           await setUserPermission(newOrderResponse.applicationForm.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
+          await setRolePermission(newOrderResponse.applicationForm.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
         }
       }
 
