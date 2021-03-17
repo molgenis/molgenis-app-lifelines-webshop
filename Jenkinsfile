@@ -12,16 +12,10 @@ pipeline {
                 }
                 container('vault') {
                     script {
-                        env.TUNNEL_IDENTIFIER = sh(script: 'echo ${GIT_COMMIT}-${BUILD_NUMBER}', returnStdout: true)
                         env.GITHUB_TOKEN = sh(script: 'vault read -field=value secret/ops/token/github', returnStdout: true)
                         env.CODECOV_TOKEN = sh(script: 'vault read -field=molgenis-app-lifelines-webshop secret/ops/token/codecov', returnStdout: true)
-                        env.SAUCE_CRED_USR = sh(script: 'vault read -field=username secret/ops/token/saucelabs', returnStdout: true)
-                        env.SAUCE_CRED_PSW = sh(script: 'vault read -field=value secret/ops/token/saucelabs', returnStdout: true)
                         env.NPM_TOKEN = sh(script: 'vault read -field=value secret/ops/token/npm', returnStdout: true)
                     }
-                }
-                container('node') {
-                    sh "daemon --name=sauceconnect -- /usr/local/bin/sc -u ${SAUCE_CRED_USR} -k ${SAUCE_CRED_PSW} -i ${TUNNEL_IDENTIFIER}"
                 }
             }
         }
@@ -36,7 +30,6 @@ pipeline {
                     sh "yarn lint"
                     sh "yarn lint:scss"
                     sh "yarn test:unit"
-                    sh "yarn test:e2e --env ci_chrome,ci_safari,ci_ie11,ci_firefox"
                 }
             }
             post {
@@ -60,7 +53,6 @@ pipeline {
                     sh "cp .lifelinesrc.example .lifelinesrc"
                     sh "yarn install"
                     sh "yarn test:unit"
-                    sh "yarn test:e2e --env ci_chrome,ci_safari,ci_ie11,ci_firefox"
                     sh "yarn build"
                 }
             }
@@ -97,11 +89,6 @@ pipeline {
         }
     }
     post {
-        always {
-            container('node') {
-                sh "daemon --name=sauceconnect --stop"
-            }
-        }
         success {
             notifySuccess()
         }
