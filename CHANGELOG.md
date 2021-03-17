@@ -1,3 +1,11 @@
+## [4.5.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.5.0...v4.5.1) (2021-03-17)
+
+
+### Bug Fixes
+
+* 364 Set file permissions on save ([#365](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/365)) ([e3c4790](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/e3c4790)), closes [#364](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/364)
+* Remove sauselabs ([#366](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/366)) ([a82efe1](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/a82efe1))
+
 # [4.5.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.4.0...v4.5.0) (2020-12-31)
 
 
