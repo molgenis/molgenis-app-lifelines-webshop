@@ -202,19 +202,23 @@ export default {
 
       await updateOrder(formData, formFields)
 
-      // If a admin edits the order, put back permissions
+      const newOrderResponse = await api.get(`/api/v2/lifelines_order/${state.order.orderNumber}`)
+      commit('restoreOrderState', newOrderResponse)
+
+      // If a data manager edits a user order, allow the user that created the order to still access the files 
       if (context.username !== state.order.user) {
-        const newOrderResponse = await api.get(`/api/v2/lifelines_order/${state.order.orderNumber}`)
-        commit('restoreOrderState', newOrderResponse)
         await setUserPermission(newOrderResponse.contents.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
-        if (newOrderResponse.contents && newOrderResponse.contents.id) {
-          await setRolePermission(newOrderResponse.contents.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
-        }
         if (isApplicationFormUpdate) {
           await setUserPermission(newOrderResponse.applicationForm.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
-          await setRolePermission(newOrderResponse.applicationForm.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
         }
       }
+
+      // Allow data managers to access updated files
+      await setRolePermission(newOrderResponse.contents.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
+      if (isApplicationFormUpdate) {
+        await setRolePermission(newOrderResponse.applicationForm.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
+      }
+      
 
       successMessage(`Saved order with order number ${state.order.orderNumber}`, commit)
 
