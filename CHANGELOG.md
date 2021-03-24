@@ -1,3 +1,10 @@
+## [4.5.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.5.1...v4.5.2) (2021-03-24)
+
+
+### Bug Fixes
+
+* 367 orders created by manager not shared ([#368](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/368)) ([2b5c022](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/2b5c022)), closes [#367](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/367)
+
 ## [4.5.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.5.0...v4.5.1) (2021-03-17)
 
 
