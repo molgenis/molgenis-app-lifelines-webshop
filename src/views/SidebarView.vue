@@ -200,7 +200,9 @@ export default Vue.extend({
       return this.$store.state.genderOptions
     },
     assessments () {
-      return Object.values(this.$store.state.assessments).map((i) => ({ value: i.id, text: i.name }))
+      return Object.values(this.$store.state.assessments)
+        .map((i) => ({ value: i.id, text: i.name }))
+        .sort((a, b) => a.text.localeCompare(b.text))
     },
     subcohortOptions () {
       return this.$store.state.subcohortOptions
