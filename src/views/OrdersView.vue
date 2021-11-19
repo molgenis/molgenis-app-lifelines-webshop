@@ -371,6 +371,7 @@ export default Vue.extend({
         api.get(`/api/v2/lifelines_order/${orderNumber}`),
         api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id'),
         api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id'),
+        api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=20000&sort=id'),
         api.get('/api/v2/lifelines_assessment'),
         api.get('/api/v2/lifelines_tree?num=10000'),
         api.get('/api/v2/lifelines_section?num=10000'),

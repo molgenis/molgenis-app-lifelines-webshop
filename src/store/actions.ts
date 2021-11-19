@@ -121,12 +121,13 @@ export default {
     commit('assessmentsActive', Object.values(assessments).map((i:any) => i.id))
   }),
   loadVariables: tryAction(async ({ state, commit }: any) => {
-    const [response0, response1] = await Promise.all([
+    const [response0, response1, response2] = await Promise.all([
       api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id'),
-      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id')
+      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id'),
+      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=20000&sort=id')
     ])
 
-    const variables = transforms.variables([...response0.items, ...response1.items])
+    const variables = transforms.variables([...response0.items, ...response1.items, ...response2.items])
     commit('updateVariables', variables)
   }),
   loadGridVariables: tryAction(async ({ state, commit, getters }: { state: ApplicationState, commit: any, getters: Getters }) => {
@@ -205,7 +206,7 @@ export default {
       const newOrderResponse = await api.get(`/api/v2/lifelines_order/${state.order.orderNumber}`)
       commit('restoreOrderState', newOrderResponse)
 
-      // If a data manager edits a user order, allow the user that created the order to still access the files 
+      // If a data manager edits a user order, allow the user that created the order to still access the files
       if (context.username !== state.order.user) {
         await setUserPermission(newOrderResponse.contents.id, 'sys_FileMeta', newOrderResponse.user, 'WRITE')
         if (isApplicationFormUpdate) {
@@ -218,7 +219,6 @@ export default {
       if (isApplicationFormUpdate) {
         await setRolePermission(newOrderResponse.applicationForm.id, 'sys_FileMeta', 'lifelines_MANAGER', 'WRITE')
       }
-      
 
       successMessage(`Saved order with order number ${state.order.orderNumber}`, commit)
 

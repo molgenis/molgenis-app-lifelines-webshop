@@ -208,6 +208,9 @@ const mockResponses: { [key: string]: Object } = {
       subsections: null
     }]
   },
+  '/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=20000&sort=id': {
+    items: []
+  },
   '/api/v2/lifelines_variable?q=name=q=cream,label=q=cream&attrs=id,name,label,subvariable_of,subvariables,variants(id,assessment_id),definition_en,definition_nl,options(label_en)&num=10000&sort=id': {
     items: [{
       id: 2,
