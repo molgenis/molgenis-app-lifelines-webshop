@@ -363,6 +363,7 @@ export default Vue.extend({
         order,
         { items: apiVariables1 },
         { items: apiVariables2 },
+        { items: apiVariables3 },
         { items: apiAssessments },
         { items: apiTree },
         { items: apiSections },
@@ -382,7 +383,7 @@ export default Vue.extend({
       const sections = transforms.sections(apiSections)
       const sectionTree = transforms.sectionTree(apiTree)
       const subSections = transforms.subSectionList(apiSubSections)
-      const variables = transforms.variables([...apiVariables1, ...apiVariables2])
+      const variables = transforms.variables([...apiVariables1, ...apiVariables2, ...apiVariables3])
 
       const cart = await api.get(`/files/${order.contents.id}`)
 
