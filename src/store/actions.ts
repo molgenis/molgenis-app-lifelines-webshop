@@ -125,12 +125,13 @@ export default {
     commit('assessmentsActive', defaultActiveIds)
   }),
   loadVariables: tryAction(async ({ state, commit }: any) => {
-    const [response0, response1] = await Promise.all([
+    const [response0, response1, response2] = await Promise.all([
       api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id'),
-      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id')
+      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id'),
+      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=20000&sort=id')
     ])
 
-    const variables = transforms.variables([...response0.items, ...response1.items])
+    const variables = transforms.variables([...response0.items, ...response1.items, ...response2.items])
     commit('updateVariables', variables)
   }),
   loadGridVariables: tryAction(async ({ state, commit, getters }: { state: ApplicationState, commit: any, getters: Getters }) => {
