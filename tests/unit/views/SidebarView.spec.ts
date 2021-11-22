@@ -17,7 +17,20 @@ describe('SidebarView.vue', () => {
   let commitMock = jest.fn()
 
   beforeEach(() => {
-    state = { ...emptyState }
+    state = {
+      ...emptyState,
+      assessments: {
+        0: {
+          name: 'g', id: 123
+        },
+        1: {
+          name: 'z', id: 567
+        },
+        2: {
+          name: 'a', id: 567
+        }
+      }
+    }
     wrapper = shallowMount(SidebarView, {
       mocks: {
         $store: {
@@ -80,6 +93,13 @@ describe('SidebarView.vue', () => {
 
     wrapper.setData({ activeAgeFacetId: 'age' })
     expect(commitMock).toBeCalledWith('removeYearOfBirthRangefilter')
+  })
+
+  it('should sort the assessments by name', () => {
+    // @ts-ignore
+    expect(wrapper.vm.assessments[0].text).toEqual('a') // first
+    // @ts-ignore
+    expect(wrapper.vm.assessments.pop().text).toEqual('z') // last
   })
 
   describe('handleAgeToggle', () => {

@@ -12,7 +12,7 @@ import { sortAlphabetically } from '@/services/variableSetOrderService'
 
 const transforms:any = {}
 
-transforms.assessments = (apiItems:any) => {
+transforms.assessments = (apiItems: any): { [key: number]: Assessment } => {
   const assessments = apiItems.reduce((accum: { [key: number]: Assessment }, assessment: Assessment) => {
     accum[assessment.id] = assessment
     return accum
@@ -133,7 +133,7 @@ transforms.gridAssessments = (variants:any, assessments:{ [key:number]: Assessme
   return gridAssessments
 }
 
-transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols: RowColSet, hideZeroData: boolean) => {
+transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }, filterAssessments: [] | null, findZeroRowsAndCols: RowColSet, hideZeroData: boolean):[Assessment] => {
   let results = transforms.gridAssessments(variants, assessments, filterAssessments)
   if (results && hideZeroData) {
     const assessmentsInOrder = Object.keys(assessments)
@@ -151,7 +151,7 @@ transforms.gridColumns = (variants:any, assessments:{ [key:number]: Assessment }
       return false
     })
   }
-  return results
+  return results.sort((a:Assessment, b:Assessment) => a.name.localeCompare(b.name))
 }
 
 transforms.gridSelections = (gridAssessments:any, gridSelection:any, gridVariables:VariableWithVariants[]) => {

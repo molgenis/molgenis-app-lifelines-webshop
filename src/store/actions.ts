@@ -14,6 +14,7 @@ import transforms from './transforms'
 import { finalVariableSetSort } from '@/services/variableSetOrderService'
 import { QueryParams } from '@/types/QueryParams'
 import { toVariable, fetchVariables } from '@/repository/VariableRepository'
+import Assessment from '@/types/Assessment'
 
 const buildPostOptions = (formData: any, formFields: FormField[]) => {
   return {
@@ -117,8 +118,11 @@ export default {
     const response = await api.get('/api/v2/lifelines_assessment')
     const assessments = transforms.assessments(response.items)
     commit('updateAssessments', assessments)
-    // All assessment filters are selected by default.
-    commit('assessmentsActive', Object.values(assessments).map((i:any) => i.id))
+    // All 2 char assessments filters are selected by default.
+    const defaultActiveIds = response.items
+      .filter((assessment: Assessment) => assessment.name.length === 2)
+      .map((i: any) => i.id)
+    commit('assessmentsActive', defaultActiveIds)
   }),
   loadVariables: tryAction(async ({ state, commit }: any) => {
     const [response0, response1, response2] = await Promise.all([
