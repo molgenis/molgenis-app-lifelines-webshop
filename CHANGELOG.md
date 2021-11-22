@@ -1,3 +1,10 @@
+# [4.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.5.2...v4.6.0) (2021-11-22)
+
+
+### Features
+
+* select default assessments ([#376](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/376)) ([d593a29](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/d593a29))
+
 ## [4.5.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.5.1...v4.5.2) (2021-03-24)
 
 
