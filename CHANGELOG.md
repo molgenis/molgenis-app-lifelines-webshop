@@ -1,3 +1,10 @@
+## [4.6.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.6.0...v4.6.1) (2021-11-22)
+
+
+### Bug Fixes
+
+* Apply band aid for missing variable issue ([#377](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/377)) ([73cabd6](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/73cabd6))
+
 # [4.6.0](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.5.2...v4.6.0) (2021-11-22)
 
 
