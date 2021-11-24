@@ -172,8 +172,14 @@ describe('mutations', () => {
   describe('update subsections', () => {
     it('updates subsections', () => {
       const baseAppState = { ...state }
-      mutations.updateSubSections(baseAppState, ['one', 'two'])
-      expect(baseAppState.subSectionList).toEqual(['one', 'two'])
+      mutations.updateSubSections(baseAppState, {
+        1: { id: 1, name: 'one', wiki: null },
+        2: { id: 2, name: 'two', wiki: null }
+      })
+      expect(baseAppState.subSectionList).toEqual({
+        1: { id: 1, name: 'one', wiki: null },
+        2: { id: 2, name: 'two', wiki: null }
+      })
     })
   })
   describe('update variables', () => {

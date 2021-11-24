@@ -107,7 +107,7 @@ export default Vue.extend({
     },
     selectedSubsection: function () {
       if (this.treeSelected >= 0) {
-        return this.subSectionList[this.treeSelected]
+        return this.subSectionList[this.treeSelected].name
       }
       return null
     }

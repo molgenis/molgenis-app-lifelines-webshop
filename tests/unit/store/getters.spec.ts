@@ -84,7 +84,12 @@ describe('getters', () => {
         ...emptyState,
         variables: { 11: variable13, 12: variable12, 13: variable11 },
         sections: { 1: section1, 2: section2 },
-        subSectionList: ['subsection 0', 'subsection 1', 'subsection 2', 'subsection 3'],
+        subSectionList: {
+          '0': { id: 0, name: 'subsection 0', wiki: null },
+          '1': { id: 1, name: 'subsection 1', wiki: null },
+          '2': { id: 2, name: 'subsection 2', wiki: 'http:test.org' },
+          '3': { id: 3, name: 'subsection 3', wiki: null }
+        },
         treeStructure: [
           { key: 1, list: [1, 3] },
           { key: 2, list: [2] }
@@ -115,7 +120,12 @@ describe('getters', () => {
         ...emptyState,
         variables: { 11: variable11, 12: variable12, 13: variable13 },
         sections: { 1: section1, 2: section2 },
-        subSectionList: ['subsection 0', 'subsection 1', 'subsection 2', 'subsection 3'],
+        subSectionList: {
+          '0': { id: 0, name: 'subsection 0', wiki: null },
+          '1': { id: 1, name: 'subsection 1', wiki: null },
+          '2': { id: 2, name: 'subsection 2', wiki: 'http:test.org' },
+          '3': { id: 3, name: 'subsection 3', wiki: null }
+        },
         treeStructure: [
           { key: 1, list: [1, 3] },
           { key: 2, list: [2] }
@@ -508,7 +518,9 @@ describe('getters', () => {
             name: 'section'
           }
         },
-        subSectionList: ['sub-section1'],
+        subSectionList: {
+          '0': { id: 0, name: 'sub-section1', wiki: null }
+        },
         treeStructure: [{ key: 1, list: [0] }]
       }
 
@@ -516,7 +528,7 @@ describe('getters', () => {
         ...emptyGetters
       }
       it('should return the complete tree structure', () => {
-        expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'children': [{ 'id': 0, 'name': 'sub-section1' }], 'id': 1, 'name': 'section' }])
+        expect(getters.treeStructure(state, gettersParam)).toEqual([{ 'children': [{ 'id': 0, 'name': 'sub-section1', wiki: null }], 'id': 1, 'name': 'section' }])
       })
     })
   })

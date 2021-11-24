@@ -10,6 +10,7 @@ import { TreeParent } from '@/types/Tree'
 import { Order, OrderState } from '@/types/Order'
 import FormField from '@/types/FormField'
 import transforms from './transforms'
+import { SubSection } from '@/types/SubSection'
 
 export default {
   setZeroDataVisibility (state: ApplicationState, visibility: boolean) {
@@ -124,7 +125,7 @@ export default {
   updateSections (state: ApplicationState, sections: {[key:number]: Section}) {
     state.sections = sections
   },
-  updateSubSections (state: ApplicationState, subSections: string[]) {
+  updateSubSections(state: ApplicationState, subSections: { [key: number]: SubSection }) {
     state.subSectionList = subSections
   },
   updateSectionTree (state: ApplicationState, sections: TreeParent[]) {

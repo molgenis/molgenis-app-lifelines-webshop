@@ -9,6 +9,7 @@ import { TreeParent } from '@/types/Tree'
 import FormField from './FormField'
 import { Order } from './Order'
 import { Context, ContextState } from '@molgenis/molgenis-ui-context/src/types'
+import { SubSection } from './SubSection'
 
 export type Toast = {
   type?: 'danger' | 'warning' | 'success' | 'info' | 'primary' | 'secondary'
@@ -26,7 +27,7 @@ export interface AppState {
   variables: { [key:number]: Variable }
   assessments: { [key:number]: Assessment }
   sections: { [key:number]: Section }
-  subSectionList: string[]
+  subSectionList: { [key: number]: SubSection }
   toast: Toast[]
   genderOptions: FacetOption[]
   subcohortOptions: FacetOption[]

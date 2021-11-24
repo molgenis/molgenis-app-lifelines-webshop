@@ -9,6 +9,7 @@ import { VariableWithVariants, Variable } from '@/types/Variable'
 import Variant from '@/types/Variant'
 import { RowColSet } from '@/types/Getters'
 import { sortAlphabetically } from '@/services/variableSetOrderService'
+import { SubSection } from '@/types/SubSection'
 
 const transforms:any = {}
 
@@ -35,7 +36,7 @@ transforms.cartTree = (gridSelection:GridSelection, treeStructure:any, sections:
       .filter((subsectionId) => variablesPerSubsection.hasOwnProperty(subsectionId))
       .map((subsectionId) => {
         return {
-          name: subSectionList[subsectionId],
+          name: subSectionList[subsectionId].name,
           variables: variablesPerSubsection[subsectionId]
         }
       })
@@ -186,20 +187,26 @@ transforms.sectionTree = (apiItems:any) => {
   return treeStructure
 }
 
-transforms.subSectionList = (apiItems:any) => {
-  let subSections: string[] = []
-  apiItems.map((item: any) => { subSections[item.id] = item.name })
-  return subSections
+transforms.subSectionList = (apiItems: any): { [key: number]: SubSection } => {
+  return apiItems.reduce((accum: any, item: any) => {
+    accum[item.id] = {
+      id: item.id,
+      name: item.name,
+      wiki: item.wiki
+    }
+    return accum
+  }, {})
 }
 
-transforms.treeStructure = (sectionTree:TreeParent[], sections:{ [key:number]: Section }, subSectionList: string[]) => {
+transforms.treeStructure = (sectionTree: TreeParent[], sections: { [key: number]: Section }, subSectionList: { [key: number]: SubSection }) => {
   return sectionTree.map((item: TreeParent) => {
     return {
       ...sections[item.key],
       children: item.list.map((id: number) => {
         return {
-          name: subSectionList[id],
-          id
+          name: subSectionList[id].name,
+          id,
+          wiki: subSectionList[id].wiki
         }
       })
     }

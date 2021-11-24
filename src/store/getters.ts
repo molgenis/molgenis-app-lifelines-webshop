@@ -133,7 +133,7 @@ export default {
     }, 0),
   treeStructure: (state: ApplicationState, getters: Getters) => {
     const loadedSection: boolean = Object.keys(state.sections).length > 0
-    const loadedSubSection: boolean = state.subSectionList.length > 0
+    const loadedSubSection: boolean = Object.keys(state.subSectionList).length > 0
     const loadedTreeStructure: boolean = state.treeStructure.length > 0
     if (loadedSection && loadedSubSection && loadedTreeStructure) {
       // return full tree

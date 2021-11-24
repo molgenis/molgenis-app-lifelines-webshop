@@ -86,7 +86,7 @@ const state: AppState = {
     yearOfBirthRange: []
   },
   sections: {},
-  subSectionList: [],
+  subSectionList: {},
   treeStructure: [],
   treeSelected: -1,
   treeOpenSection: -1,
