@@ -1,3 +1,10 @@
+## [4.7.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.1...v4.7.2) (2021-11-25)
+
+
+### Bug Fixes
+
+* add 'sec' to default selected assessments ([#382](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/382)) ([e6478b2](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/e6478b2))
+
 ## [4.7.1](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.0...v4.7.1) (2021-11-25)
 
 
