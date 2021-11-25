@@ -125,7 +125,7 @@ export default {
   updateSections (state: ApplicationState, sections: {[key:number]: Section}) {
     state.sections = sections
   },
-  updateSubSections(state: ApplicationState, subSections: { [key: number]: SubSection }) {
+  updateSubSections (state: ApplicationState, subSections: { [key: number]: SubSection }) {
     state.subSectionList = subSections
   },
   updateSectionTree (state: ApplicationState, sections: TreeParent[]) {

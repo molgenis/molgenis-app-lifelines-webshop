@@ -261,7 +261,7 @@ describe('GridComponent.vue', () => {
         name: 'a',
         id: 101,
         subvariables: [],
-        options: [{ label_en: 'my option' }],
+        options: [{ label_en: 'my option', code: 1 }],
         definitionEn: 'enDef',
         definitionNl: 'nlDef'
       }],
@@ -288,7 +288,7 @@ describe('GridComponent.vue', () => {
         <strong>Description (nl):</strong>
         <p>nlDef</p>
         <strong>Categorical values (en):</strong>
-        <div>my option</div>
+        <ul style="padding-left: 1rem;"><li>my option</li><ul>
       </div>`
       expect(bodyHtml).toEqual(expectedHtml)
     })
