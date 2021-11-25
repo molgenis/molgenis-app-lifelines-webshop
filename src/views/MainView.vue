@@ -48,13 +48,14 @@ export default Vue.extend({
   },
   created: async function () {
     this.setLoading(true)
-
-    const promises = Promise.all([this.loadVariables(), this.loadAssessments()])
-    await promises
-
     const orderNumber = this.$route.params.orderNumber
-    if (orderNumber && await this.loadOrderAndCart(orderNumber)) {
+    if (orderNumber) {
+      const promises = Promise.all([this.loadVariables(), this.loadAssessments()])
+      await promises
+      await this.loadOrderAndCart(orderNumber)
       this.setSuccessMessage(`Loaded order with orderNumber ${orderNumber}`)
+    } else {
+      await this.loadAssessments()
     }
     this.setLoading(false)
   }

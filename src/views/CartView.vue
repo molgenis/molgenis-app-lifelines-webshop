@@ -176,10 +176,13 @@ export default Vue.extend({
       return variableAssessmentStrings
     },
     loading () {
+      if (this.isLoading || !this.isSignedIn) {
+        return false // no data needed to show empty cart
+      }
+
       return this.isLoading || !(
         Object.keys(this.assessments).length &&
-        Object.keys(this.variables).length
-      )
+        Object.keys(this.variables).length)
     }
   }
 })
