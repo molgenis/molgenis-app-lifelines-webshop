@@ -118,9 +118,9 @@ export default {
     const response = await api.get('/api/v2/lifelines_assessment')
     const assessments = transforms.assessments(response.items)
     commit('updateAssessments', assessments)
-    // All 2 char assessments filters are selected by default.
+    // All 2 char assessments and 'sec' filters are selected by default.
     const defaultActiveIds = response.items
-      .filter((assessment: Assessment) => assessment.name.length === 2)
+      .filter((assessment: Assessment) => assessment.name.length === 2 || assessment.name === 'sec')
       .map((i: any) => i.id)
     commit('assessmentsActive', defaultActiveIds)
   }),
