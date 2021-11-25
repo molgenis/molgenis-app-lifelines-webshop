@@ -37,6 +37,9 @@
               <div class="row">
                 <div class="text-truncate col pr-2">
                   {{child.name}}
+                    <info-icon v-if="child.wiki" :id="child.name" :title="child.name" >
+                      Visit the <a :href="child.wiki" target="_blank" rel="noopener noreferrer">wiki</a> for more details
+                    </info-icon>
                 </div>
               </div>
             </li>
@@ -52,9 +55,11 @@
 import Vue from 'vue'
 import CollapseTreeIcon from '../animations/CollapseTreeIcon.vue'
 import BlockExpand from '../animations/BlockExpand.vue'
+import InfoIcon from '../InfoIcon'
 
 export default Vue.extend({
   name: 'CollapsibleTree',
+  components: { CollapseTreeIcon, BlockExpand, InfoIcon },
   props: {
     selection: {
       type: Number,
@@ -90,8 +95,7 @@ export default Vue.extend({
         this.$emit('updateopensection', id)
       }
     }
-  },
-  components: { CollapseTreeIcon, BlockExpand }
+  }
 })
 </script>
 

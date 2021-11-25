@@ -77,8 +77,8 @@ describe('ContentView.vue', () => {
 
     describe('and when grid variables are set and subsection selected', () => {
       beforeEach(() => {
+        store.commit('updateSubSections', [{ name: 'mySelectedSubsection', id: 0, wiki: null }])
         store.commit('updateTreeSelection', 0)
-        store.commit('updateSubSections', ['mySelectedSubsection'])
       })
       it('should show the subsection name in the i18n message', () => {
         expect(wrapper.find('.search-info').text()).toEqual('3 variable found in subsection "mySelectedSubsection".')
@@ -125,8 +125,8 @@ describe('ContentView.vue', () => {
   describe('When selectedSubselection is called', () => {
     let wrapper: any
     beforeEach(() => {
-      store.commit('updateTreeSelection', 2)
-      store.commit('updateTreeOpenSection', 5)
+      store.commit('updateTreeSelection', 0)
+      store.commit('updateTreeOpenSection', 0)
       wrapper = shallowMount(ContentView, { store, localVue })
     })
 

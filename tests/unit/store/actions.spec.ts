@@ -400,14 +400,13 @@ describe('actions', () => {
   })
 
   describe('loadSubSections', () => {
-    it('fetch the sub sections and commits them as a string list', async (done) => {
+    it('fetch the sub sections and commits a object map', async (done) => {
       const commit = jest.fn()
       await actions.loadSubSections({ state: { subSectionList: [] }, commit })
-      expect(commit).toHaveBeenCalledWith('updateSubSections', [
-        undefined, // todo refactor action to remove this undefined item
-        'sub_section1',
-        'sub_section2'
-      ])
+      expect(commit).toHaveBeenCalledWith('updateSubSections', {
+        1: { id: 1, name: 'sub_section1', wiki: undefined },
+        2: { id: 2, name: 'sub_section2', wiki: undefined }
+      })
       done()
     })
 
