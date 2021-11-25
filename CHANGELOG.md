@@ -1,3 +1,10 @@
+## [4.7.3](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.2...v4.7.3) (2021-11-25)
+
+
+### Bug Fixes
+
+* Improve performance, only load vars when needed ([#383](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/383)) ([30beacb](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/30beacb))
+
 ## [4.7.2](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.1...v4.7.2) (2021-11-25)
 
 
