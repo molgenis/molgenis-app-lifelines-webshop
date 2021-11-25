@@ -180,9 +180,11 @@ export default Vue.extend({
         return false // no data needed to show empty cart
       }
 
-      return this.isLoading || !(
-        Object.keys(this.assessments).length &&
-        Object.keys(this.variables).length)
+      if (!this.selectedVariableIds.length) {
+        return false // no data needed to show empty cart
+      }
+
+      return !(Object.keys(this.assessments).length && Object.keys(this.variables).length)
     }
   }
 })
