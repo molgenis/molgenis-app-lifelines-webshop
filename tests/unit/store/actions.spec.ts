@@ -211,7 +211,7 @@ const mockResponses: { [key: string]: Object } = {
   '/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=20000&sort=id': {
     items: []
   },
-  '/api/v2/lifelines_variable?q=name=q=cream,label=q=cream&attrs=id,name,label,subvariable_of,subvariables,variants(id,assessment_id),definition_en,definition_nl,options(label_en)&num=10000&sort=id': {
+  '/api/v2/lifelines_variable?q=name=q=cream,label=q=cream&attrs=id,name,label,subvariable_of,subvariables,variants(id,assessment_id),definition_en,definition_nl,options(label_en,code)&num=10000&sort=id': {
     items: [{
       id: 2,
       name: 'ARZON',
@@ -250,7 +250,7 @@ const mockResponses: { [key: string]: Object } = {
       options: []
     }]
   },
-  '/api/v2/lifelines_subsection_variable?q=subsection_id==3&attrs=~id,id,subsection_id,variable_id(id,name,label,subvariable_of,subvariables,variants(id,assessment_id),definition_en,definition_nl,options(label_en))&num=10000&sort=variable_id': {
+  '/api/v2/lifelines_subsection_variable?q=subsection_id==3&attrs=~id,id,subsection_id,variable_id(id,name,label,subvariable_of,subvariables,variants(id,assessment_id),definition_en,definition_nl,options(label_en, code))&num=10000&sort=variable_id': {
     items: [{
       variable_id: {
         id: 2,

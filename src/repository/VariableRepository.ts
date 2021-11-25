@@ -32,11 +32,11 @@ const removeDuplicates = (variables: VariableWithVariants[]): VariableWithVarian
 
 export const fetchVariables = async (searchTermQuery: string, treeSelected: number) => {
   let variables:VariableWithVariants[]
-  const subvariableAttrs = 'id,name,label,subvariable_of,definition_en,definition_nl,options(label_en),variants(id,assessment_id)'
+  const subvariableAttrs = 'id,name,label,subvariable_of,definition_en,definition_nl,options(label_en,code),variants(id,assessment_id)'
 
   if (treeSelected >= 0) {
     // we need to have specific subsection: query in subsection table
-    const attrs = `~id,id,subsection_id,variable_id(id,name,label,subvariable_of,subvariables(${subvariableAttrs}),variants(id,assessment_id),definition_en,definition_nl,options(label_en))`
+    const attrs = `~id,id,subsection_id,variable_id(id,name,label,subvariable_of,subvariables(${subvariableAttrs}),variants(id,assessment_id),definition_en,definition_nl,options(label_en,code))`
     const response = await api.get(`/api/v2/lifelines_subsection_variable?q=${encodeRsqlValue(searchTermQuery)}&attrs=${attrs}&num=10000&sort=variable_id`)
     variables = response.items
       .map((subVariable: any) => subVariable.variable_id)
@@ -44,7 +44,7 @@ export const fetchVariables = async (searchTermQuery: string, treeSelected: numb
       .map(toVariable)
   } else {
     // query variable table
-    const attrs = `id,name,label,subvariable_of,subvariables(${subvariableAttrs}),variants(id,assessment_id),definition_en,definition_nl,options(label_en)`
+    const attrs = `id,name,label,subvariable_of,subvariables(${subvariableAttrs}),variants(id,assessment_id),definition_en,definition_nl,options(label_en,code)`
     const response = await api.get(`/api/v2/lifelines_variable?q=${encodeRsqlValue(searchTermQuery)}&attrs=${attrs}&num=10000&sort=id`)
     variables = response.items
       .reduce(flattenResponseItem, [])
@@ -64,7 +64,8 @@ export const toVariable = (response: any):VariableWithVariants => {
       assessmentId: variant.assessment_id
     })) : [],
     options: response.options ? response.options.map((option: any) => ({
-      label_en: option.label_en
+      label_en: option.label_en,
+      code: option.code
     })) : [],
     subvariableOf: response.subvariable_of ? response.subvariable_of : null,
     subvariables: response.subvariables || [],

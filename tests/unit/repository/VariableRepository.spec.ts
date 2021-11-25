@@ -27,7 +27,7 @@ const mockQueryresponse = { items: [{
       id: 1,
       name: 's-name'
     }],
-    options: [{ label_en: 'foo', bar: 'bas' }],
+    options: [{ label_en: 'foo', bar: 'bas', code: 1 }],
     definitionEn: '',
     definitionNl: ''
   }
@@ -109,7 +109,7 @@ describe('VariableRepository', () => {
           id: 0,
           label: 'label',
           name: 'name',
-          options: [{ label_en: 'foo' }],
+          options: [{ label_en: 'foo', code: 1 }],
           variants: [{ assessmentId: '1', id: 1 }],
           subsections: [1],
           subvariableOf: 1,

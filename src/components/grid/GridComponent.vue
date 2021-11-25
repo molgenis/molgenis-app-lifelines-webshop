@@ -399,11 +399,10 @@ export default Vue.extend({
     popupBody (rowIndex) {
       let optonsHtml = ''
       if (this.gridVariables[rowIndex].options) {
-        optonsHtml = this.gridVariables[rowIndex].options
-          .map((option) => {
-            return `<div>${option['label_en']}</div>`
-          })
-          .join('')
+        const sortedOptions = [...this.gridVariables[rowIndex].options].sort((a, b) => a.code - b.code)
+        optonsHtml = sortedOptions.map((option) => {
+          return `<li>${option['label_en']}</li>`
+        }).join('')
       }
 
       return `
@@ -413,7 +412,7 @@ export default Vue.extend({
         <strong>Description (nl):</strong>
         <p>${this.gridVariables[rowIndex].definitionNl}</p>
         <strong>Categorical values (en):</strong>
-        ${optonsHtml}
+        <ul style="padding-left: 1rem;">${optonsHtml}<ul>
       </div>`
     }
   },
