@@ -129,4 +129,12 @@ describe('CartView.vue', () => {
     wrapper.find('.t-toggle-all-variables').trigger('click')
     expect(wrapper.vm.$store.commit).toHaveBeenCalledWith('updateGridSelection', {})
   })
+
+  it('shows loading msg if cartLoading is set to true', async () => {
+    const propsData = {
+      isCartLoading: true
+    }
+    const wrapper = shallowMount(CartView, { stubs, localVue, mocks, propsData })
+    expect(wrapper.find('p.font-italic').text()).toEqual('Fetching cart details. One moment, please..')
+  })
 })
