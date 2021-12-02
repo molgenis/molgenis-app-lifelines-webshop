@@ -5,7 +5,10 @@
         <div class="col-sm-12 col-md-12 col-lg-6">
           <h3 class="h4">{{$t('lifelines-webshop-cart-header')}}</h3>
 
-          <spinner-animation v-if="loading" />
+          <template v-if="loading">
+            <spinner-animation  />
+            <p class="font-italic">Fetching cart details. One moment, please..</p>
+          </template>
 
           <template v-else>
 
@@ -114,6 +117,12 @@ import ToastComponent from '@molgenis-ui/components/src/components/ToastComponen
 export default Vue.extend({
   name: 'CartView',
   components: { SpinnerAnimation, CollapseTreeIcon, ToastComponent },
+  props: {
+    isCartLoading: {
+      type: Boolean,
+      default: () => false
+    }
+  },
   data () {
     return {
       isLoading: false,
@@ -176,6 +185,9 @@ export default Vue.extend({
       return variableAssessmentStrings
     },
     loading () {
+      if (this.isCartLoading) {
+        return true
+      }
       if (this.isLoading || !this.isSignedIn) {
         return false // no data needed to show empty cart
       }
