@@ -20,7 +20,7 @@ describe('MainView.vue', () => {
 
   beforeEach(() => {
     Object.assign(state, {
-      state: { treeSelection: 3 },
+      state: { treeSelection: 3, gridSelection: { foo: { f: 1 }, bar: { b: 2 } } },
       toast: { type: 'danger', message: 'i am not a message' }
     })
 
@@ -63,5 +63,36 @@ describe('MainView.vue', () => {
       expect(actions.loadOrderAndCart).toHaveBeenCalledWith(expect.anything(), 'abcde', undefined)
       done()
     }, 0)
+  })
+
+  it('when the activeTab changes and vars are selected, it should call loadVariables and set isCartLoading to tue', (done) => {
+    actions.loadVariables.mockReturnValueOnce(Promise.resolve())
+    const computed = {
+      selectedVariableIds () {
+        return 12
+      }
+    }
+    const wrapper = shallowMount(MainView, {
+      store, localVue, mocks, stubs, computed })
+    wrapper.setData({ activeTab: 'selection' })
+    // @ts-ignore
+    expect(wrapper.vm.isCartLoading).toBeTruthy()
+    done()
+  })
+
+  it('when the activeTab changes and no vars are selected, isCartLoading should remain false', (done) => {
+    actions.loadVariables.mockReturnValueOnce(Promise.resolve())
+    const computed = {
+      selectedVariableIds () {
+        return 0
+      }
+    }
+    const wrapper = shallowMount(MainView, {
+      store, localVue, mocks, stubs, computed
+    })
+    wrapper.setData({ activeTab: 'selection' })
+    // @ts-ignore
+    expect(wrapper.vm.isCartLoading).toBeFalsy()
+    done()
   })
 })

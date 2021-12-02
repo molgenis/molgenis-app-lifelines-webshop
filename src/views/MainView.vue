@@ -9,7 +9,7 @@
             <content-view class="col"></content-view>
           </div>
           <div v-else>
-            <cart-view class="mt-3"></cart-view>
+            <cart-view class="mt-3" :isCartLoading="isCartLoading"></cart-view>
           </div>
         </div>
       </div>
@@ -33,11 +33,12 @@ export default Vue.extend({
     return {
       activeTab: 'variables',
       publicPath: process.env.BASE_URL,
-      showSidebar: true
+      showSidebar: true,
+      isCartLoading: false
     }
   },
   computed: {
-    ...mapState(['loading']),
+    ...mapState(['loading', 'variables']),
     selectedVariableIds () {
       return Object.keys(this.$store.state.gridSelection).length
     }
@@ -45,6 +46,16 @@ export default Vue.extend({
   methods: {
     ...mapMutations(['setLoading', 'setSuccessMessage']),
     ...mapActions(['loadOrderAndCart', 'loadVariables', 'loadAssessments'])
+  },
+  watch: {
+    activeTab: async function (newVal) {
+      // if the cart is shown and the variable map was not filled, load it
+      if (newVal !== 'variables' && this.selectedVariableIds && !Object.keys(this.variables).length) {
+        this.isCartLoading = true
+        await this.loadVariables().catch(() => { this.isCartLoading = false })
+        this.isCartLoading = false
+      }
+    }
   },
   created: async function () {
     this.setLoading(true)
