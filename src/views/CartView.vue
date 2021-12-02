@@ -185,18 +185,14 @@ export default Vue.extend({
       return variableAssessmentStrings
     },
     loading () {
-      if (this.isCartLoading) {
+      if (!this.isSignedIn) {
+        return false
+      }
+
+      if (this.isCartLoading || this.isLoading) {
         return true
       }
-      if (this.isLoading || !this.isSignedIn) {
-        return false // no data needed to show empty cart
-      }
-
-      if (!this.selectedVariableIds.length) {
-        return false // no data needed to show empty cart
-      }
-
-      return !(Object.keys(this.assessments).length && Object.keys(this.variables).length)
+      return false // no data needed to show empty cart
     }
   }
 })

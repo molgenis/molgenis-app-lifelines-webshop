@@ -134,6 +134,7 @@ describe('CartView.vue', () => {
     const propsData = {
       isCartLoading: true
     }
+    const mocks = { $store: { commit: jest.fn(), actions, getters, state } }
     const wrapper = shallowMount(CartView, { stubs, localVue, mocks, propsData })
     expect(wrapper.find('p.font-italic').text()).toEqual('Fetching cart details. One moment, please..')
   })

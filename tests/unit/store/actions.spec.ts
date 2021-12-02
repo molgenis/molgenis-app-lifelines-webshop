@@ -56,18 +56,18 @@ function getApplicationState () {
 }
 
 const mockResponses: { [key: string]: Object } = {
-  '/api/v2/lifelines_variable?&attrs=id,name,label,variants(id,assessment_id)&start=0&num=250&sort=id': {
+  '/api/v2/lifelines_variable?&attrs=id,name,label,variants(id,assessment_id)&start=0&num=10000&sort=id': {
     items: [],
-    total: 700
+    total: 22200
   },
-  '/api/v2/lifelines_variable?&attrs=id,name,label,variants(id,assessment_id)&start=250&num=250&sort=id': {
+  '/api/v2/lifelines_variable?&attrs=id,name,label,variants(id,assessment_id)&start=10000&num=10000&sort=id': {
     items: [{
       id: 100,
       name: 'variable 100',
       variants: []
     }]
   },
-  '/api/v2/lifelines_variable?&attrs=id,name,label,variants(id,assessment_id)&start=500&num=250&sort=id': {
+  '/api/v2/lifelines_variable?&attrs=id,name,label,variants(id,assessment_id)&start=20000&num=10000&sort=id': {
     items: variables
   },
   '/api/v2/lifelines_order?num=10&start=0': {
