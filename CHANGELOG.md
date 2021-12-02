@@ -1,3 +1,10 @@
+## [4.7.5](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.4...v4.7.5) (2021-12-02)
+
+
+### Bug Fixes
+
+* cart spinner does not hide when loading is completed ([#385](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/385)) ([8d3ddf3](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/8d3ddf3))
+
 ## [4.7.4](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.3...v4.7.4) (2021-11-25)
 
 
