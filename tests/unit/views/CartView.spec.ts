@@ -34,7 +34,7 @@ describe('CartView.vue', () => {
   const getters = {
     cartTree: () => cartTree,
     hasManagerRole: () => true,
-    isSignedIn: () => true,
+    isSignedIn: () => false,
     selectedVariableIds: () => []
   }
 
@@ -137,5 +137,12 @@ describe('CartView.vue', () => {
     const mocks = { $store: { commit: jest.fn(), actions, getters, state } }
     const wrapper = shallowMount(CartView, { stubs, localVue, mocks, propsData })
     expect(wrapper.find('p.font-italic').text()).toEqual('Fetching cart details. One moment, please..')
+  })
+
+  it('when not signed in, loading should be false', async () => {
+    const mocks = { $store: { commit: jest.fn(), actions, getters, state } }
+    const wrapper = shallowMount(CartView, { stubs, localVue, mocks })
+    // @ts-ignore
+    expect(wrapper.vm.loading).toEqual(false)
   })
 })
