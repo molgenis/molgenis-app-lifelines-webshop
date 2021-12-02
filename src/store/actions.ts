@@ -284,7 +284,7 @@ export default {
   }),
   loadAllVariables: async ({ state, commit }: { state: ApplicationState, commit: any }) => {
     const attrs = 'id,name,label,variants(id,assessment_id)'
-    const BATCH_SIZE = 250
+    const BATCH_SIZE = 10000
     const selection:any = {}
     const processBatch = (response:any) => {
       const variables = response.items.map(toVariable)
