@@ -1,3 +1,10 @@
+## [4.7.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.5...v4.7.6) (2021-12-02)
+
+
+### Bug Fixes
+
+* Show cart spinner on admin add all ([#386](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/386)) ([28d72d2](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/28d72d2))
+
 ## [4.7.5](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.4...v4.7.5) (2021-12-02)
 
 
