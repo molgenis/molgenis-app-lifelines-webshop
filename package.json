@@ -48,7 +48,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.groupby": "^4.6.0",
     "lodash.property": "^4.4.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "popper.js": "1.14",
     "v-click-outside": "^2.1.4",
     "vue": "^2.6.10",
