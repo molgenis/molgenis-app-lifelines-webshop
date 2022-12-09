@@ -620,7 +620,7 @@ describe('mutations', () => {
       mutations.setZeroDataVisibility(state, true)
       state.gridSelection = {}
       mutations.toggleGridColumn(state, 200)
-      expect(state.gridSelection).toEqual({ '100': [200], '102': [200], '103': [200] })
+      expect(state.gridSelection).toEqual({})
     })
   })
 
