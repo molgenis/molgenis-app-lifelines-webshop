@@ -1,7 +1,8 @@
 pipeline {
     agent {
         kubernetes {
-            label 'node-carbon'
+            inheritFrom 'shared'
+            yaml libraryResource("pod-templates/node-carbon.yaml")
         }
     }
     stages {
