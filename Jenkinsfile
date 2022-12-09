@@ -2,7 +2,7 @@ pipeline {
     agent {
         kubernetes {
             inheritFrom 'shared'
-            yaml libraryResource("pod-templates/node-carbon.yaml")
+            yaml libraryResource("pod-templates/molgenis-frontend.yaml")
         }
     }
     stages {
