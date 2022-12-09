@@ -168,10 +168,8 @@ export default {
 
     if (state.facetFilter.hideZeroData) {
       const variants = transforms.variants(state.gridVariables)
-      const gridColumns = transforms.gridColumns(variants, state.assessments)
-      const grid = transforms.grid(state.gridVariables, gridColumns, state.variantCounts)
-      const rowColFilter = transforms.findZeroRowsAndCols(grid)
-
+      const gridColumns = transforms.gridAssessments(variants, state.assessments, state.facetFilter.assessment, true)
+      const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
       filteredGridVariables = state.gridVariables.filter((_:any, index:number) => !rowColFilter.rows.includes(index))
     }
 
