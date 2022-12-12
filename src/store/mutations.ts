@@ -168,7 +168,7 @@ export default {
 
     if (state.facetFilter.hideZeroData) {
       const variants = transforms.variants(state.gridVariables)
-      const gridColumns = transforms.gridAssessments(variants, state.assessments, state.facetFilter.assessment, true)
+      const gridColumns = transforms.gridAssessments(variants, state.assessments, state.facetFilter.assessment)
       const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
       filteredGridVariables = state.gridVariables.filter((_:any, index:number) => !rowColFilter.rows.includes(index))
     }
@@ -215,10 +215,10 @@ export default {
     const variants = transforms.variants(state.gridVariables)
     const assessmentFilter = state.facetFilter.assessment
 
-    let gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, assessmentFilter, true)
+    let gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, assessmentFilter)
     const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
     const filteredGridColumns = transforms.gridColumns(variants, state.assessments, assessmentFilter, rowColFilter, state.facetFilter.hideZeroData)
-    const gridAssessments = transforms.gridAssessments(variants, state.assessments, state.facetFilter, false)
+    const gridAssessments = transforms.gridAssessments(variants, state.assessments, state.facetFilter)
 
     const gridSelections:any = transforms.gridSelections(gridAssessments, state.gridSelection, state.gridVariables)
 
@@ -257,7 +257,7 @@ export default {
   },
   toggleAll (state:any) {
     const variants = transforms.variants(state.gridVariables)
-    let gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, state.facetFilter.assessment, true)
+    let gridColumns: Assessment[] = transforms.gridAssessments(variants, state.assessments, state.facetFilter.assessment)
     let filteredGridVariables = state.gridVariables
     const rowColFilter = transforms.findZeroRowsAndCols(transforms.grid(state.gridVariables, gridColumns, state.variantCounts))
     // Exclude hidden rows and columns from the selection.
