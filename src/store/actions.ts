@@ -382,7 +382,6 @@ export default {
   },
 
   fetchAllVariables: tryAction(async (context: any, { attrs, batchSize }: { attrs?: string, batchSize?: number }) => {
-    console.log('Fetching all variables, attrs:', attrs, 'batchSize:', batchSize || 'default')
     const queryAttrs = attrs || 'id,name,label,variants(id,assessment_id)'
     const BATCH_SIZE = batchSize || 10000
 
