@@ -1,3 +1,10 @@
+## [4.7.7](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.6...v4.7.7) (2022-12-12)
+
+
+### Bug Fixes
+
+* fix column filter ([#400](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/400)) ([0044fe3](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/0044fe3)), closes [#397](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/397)
+
 ## [4.7.6](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.5...v4.7.6) (2021-12-02)
 
 
