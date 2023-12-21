@@ -124,14 +124,12 @@ export default {
       .map((i: any) => i.id)
     commit('assessmentsActive', defaultActiveIds)
   }),
-  loadVariables: tryAction(async ({ state, commit }: any) => {
-    const [response0, response1, response2] = await Promise.all([
-      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id'),
-      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id'),
-      api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=20000&sort=id')
-    ])
+  loadVariables: tryAction(async ({ dispatch, commit }: any) => {
+    const allVariables = await dispatch('fetchAllVariables', {
+      attrs: 'id,name,subvariable_of,label,subsections'
+    })
 
-    const variables = transforms.variables([...response0.items, ...response1.items, ...response2.items])
+    const variables = transforms.variables(allVariables)
     commit('updateVariables', variables)
   }),
   loadGridVariables: tryAction(async ({ state, commit, getters }: { state: ApplicationState, commit: any, getters: Getters }) => {
@@ -381,5 +379,29 @@ export default {
 
   sendSubmitNotification: async (context:any, orderNumber: string) => {
     return axios.post(`/edge-server/submit?ordernumber=${orderNumber}`)
-  }
+  },
+
+  fetchAllVariables: tryAction(async (context: any, { attrs, batchSize }: { attrs?: string, batchSize?: number }) => {
+    console.log('Fetching all variables, attrs:', attrs, 'batchSize:', batchSize || 'default')
+    const queryAttrs = attrs || 'id,name,label,variants(id,assessment_id)'
+    const BATCH_SIZE = batchSize || 10000
+
+    const allVariables: any = []
+    const processBatch = (response:any) => {
+      const variables = response.items.map(toVariable)
+      allVariables.push(...variables)
+    }
+
+    const initialBatchResp = await api.get(`/api/v2/lifelines_variable?&attrs=${queryAttrs}&start=0&num=${BATCH_SIZE}&sort=id`)
+    processBatch(initialBatchResp)
+    const allVarsCount = initialBatchResp.total
+    const batchesNeeded = Math.ceil(allVarsCount / BATCH_SIZE)
+
+    for (let batchCount = 1; batchCount < batchesNeeded; batchCount++) {
+      const batchOffset = batchCount * BATCH_SIZE
+      const batchResp = await api.get(`/api/v2/lifelines_variable?&attrs=${queryAttrs}&start=${batchOffset}&num=${BATCH_SIZE}&sort=id`)
+      processBatch(batchResp)
+    }
+    return allVariables
+  })
 }

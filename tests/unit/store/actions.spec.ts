@@ -541,19 +541,60 @@ describe('actions', () => {
   })
 
   describe('loadVariables', () => {
-    it('loads all variables', async (done) => {
-      const commit = jest.fn()
-      const action = actions.loadVariables({ commit })
-      await action
+    const commit = jest.fn();
+    const dispatch = jest.fn();
+    dispatch.mockResolvedValueOnce([
+      {
+        id: 2,
+        name: 'ARZON',
+        label: 'Suncream used',
+        subsections: '1'
+      },
+      {
+        id: 3,
+        name: 'SAF',
+        label: 'SAF',
+        subsections: '1,2'
+      },
+      {
+        id: 4,
+        name: 'UVREFLECT',
+        label: 'Reflection',
+        subsections: '1'
+      },
+      {
+        id: 5,
+        name: 'ARCREME',
+        label: 'Skin cream used',
+        subsections: null
+      }
+    ]);
+    beforeEach(async done => {
+      await actions.loadVariables({
+        commit,
+        dispatch
+      });
+      done();
+    });
+    it('loads all variables', async () => {
       expect(commit).toHaveBeenCalledWith('updateVariables', {
-        2: { 'id': 2, 'label': 'Suncream used', 'name': 'ARZON', subsections: [1] },
-        3: { 'id': 3, 'label': 'SAF', 'name': 'SAF', subsections: [1, 2] },
-        4: { 'id': 4, 'label': 'Reflection', 'name': 'UVREFLECT', subsections: [1] },
-        5: { 'id': 5, 'label': 'Skin cream used', 'name': 'ARCREME', subsections: [] }
-      })
-      done()
-    })
-  })
+        2: { id: 2, label: 'Suncream used', name: 'ARZON', subsections: [1] },
+        3: { id: 3, label: 'SAF', name: 'SAF', subsections: [1, 2] },
+        4: {
+          id: 4,
+          label: 'Reflection',
+          name: 'UVREFLECT',
+          subsections: [1]
+        },
+        5: {
+          id: 5,
+          label: 'Skin cream used',
+          name: 'ARCREME',
+          subsections: []
+        }
+      });
+    });
+  });
 
   describe('loadParticipantCount', () => {
     it('loads new participant count if rsql is empty', async (done) => {
