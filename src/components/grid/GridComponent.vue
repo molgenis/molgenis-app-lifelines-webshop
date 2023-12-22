@@ -233,7 +233,7 @@ export default Vue.extend({
       stickyTableHeader: false,
       dialogInfo: null,
       selectedRowIndex: '',
-      closedVariableSets: []
+      closedVariableSets: {}
     }
   },
   filters: {
@@ -244,17 +244,15 @@ export default Vue.extend({
       return (
         variable.subvariables &&
         variable.subvariables.length > 0 &&
-        this.closedVariableSets.includes(variable.id)
+        this.closedVariableSets[variable.id] !== undefined
       )
     },
     async variableSetClickHandler (variable) {
       if (variable.subvariables && variable.subvariables.length > 0) {
         if (this.variableSetIsClosed(variable)) {
-          this.closedVariableSets = this.closedVariableSets.filter(
-            (varid) => varid !== variable.id
-          )
+          Vue.delete(this.closedVariableSets, variable.id)
         } else {
-          this.closedVariableSets.push(variable.id)
+          Vue.set(this.closedVariableSets, variable.id, variable)
         }
         // Ajust the header for collapesed variables after layout is recalculated
         await this.$nextTick()
@@ -263,20 +261,16 @@ export default Vue.extend({
     },
     getParentVariable (variable) {
       if (variable.subvariableOf) {
-        return this.gridVariables.find(
-          (gridVariable) => variable.subvariableOf.id === gridVariable.id
-        )
+        return this.gridVariablesMap[variable.subvariableOf.id]
       }
       return undefined
     },
     isVisibleVariable (variable) {
       if (
         variable.subvariableOf &&
-        (this.closedVariableSets.includes(variable.subvariableOf.id) ||
+        (this.closedVariableSets[variable.subvariableOf.id] ||
           // test if subvariable parent is shown, if not hide subvariable
-          !this.gridVariables.find(
-            (gridVariables) => variable.subvariableOf.id === gridVariables.id
-          ))
+          !this.gridVariablesMap[variable.subvariableOf.id])
       ) {
         return false
       }
@@ -386,9 +380,9 @@ export default Vue.extend({
           if (
             variable.subvariables &&
             variable.subvariables.length > 0 &&
-            !this.closedVariableSets.includes(variable.id)
+            !this.closedVariableSets[variable.id]
           ) {
-            this.closedVariableSets.push(variable.id)
+            Vue.set(this.closedVariableSets, variable.id, variable)
           }
         })
       }
@@ -418,8 +412,14 @@ export default Vue.extend({
   },
   watch: {
     // Start with all grouped variables closed
-    gridVariables: function () {
+    gridVariables: function (gridVariables) {
       this.closeVariableSet()
+      if (gridVariables && gridVariables.length) {
+        this.gridVariablesMap = gridVariables.reduce((accum, gridVariable) => {
+          accum[gridVariable.id] = gridVariable
+          return accum
+        }, {})
+      }
     },
     gridRows: function () {
       this.$nextTick(this.setGridHeaderSpacer)
@@ -428,6 +428,12 @@ export default Vue.extend({
   created: function () {
     window.addEventListener('scroll', this.scroll)
     this.closeVariableSet()
+    if (this.gridVariables && this.gridVariables.length) {
+      this.gridVariablesMap = this.gridVariables.reduce((accum, gridVariable) => {
+        accum[gridVariable.id] = gridVariable
+        return accum
+      }, {})
+    }
   },
   destroyed: function () {
     window.removeEventListener('scroll', this.scroll)
