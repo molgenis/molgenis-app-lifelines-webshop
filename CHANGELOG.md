@@ -1,3 +1,10 @@
+## [4.7.8](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.7...v4.7.8) (2023-12-22)
+
+
+### Bug Fixes
+
+* issue 404 load all vars ([#405](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/405)) ([4ad4131](https://github.com/molgenis/molgenis-app-lifelines-webshop/commit/4ad4131)), closes [#404](https://github.com/molgenis/molgenis-app-lifelines-webshop/issues/404)
+
 ## [4.7.7](https://github.com/molgenis/molgenis-app-lifelines-webshop/compare/v4.7.6...v4.7.7) (2022-12-12)
 
 
