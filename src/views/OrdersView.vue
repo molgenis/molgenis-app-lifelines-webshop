@@ -361,18 +361,12 @@ export default Vue.extend({
 
       const [
         order,
-        { items: apiVariables1 },
-        { items: apiVariables2 },
-        { items: apiVariables3 },
         { items: apiAssessments },
         { items: apiTree },
         { items: apiSections },
         { items: apiSubSections }
       ] = await Promise.all([
         api.get(`/api/v2/lifelines_order/${orderNumber}`),
-        api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&sort=id'),
-        api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=10000&sort=id'),
-        api.get('/api/v2/lifelines_variable?attrs=id,name,subvariable_of,label,subsections&num=10000&start=20000&sort=id'),
         api.get('/api/v2/lifelines_assessment'),
         api.get('/api/v2/lifelines_tree?num=10000'),
         api.get('/api/v2/lifelines_section?num=10000'),
@@ -383,8 +377,8 @@ export default Vue.extend({
       const sections = transforms.sections(apiSections)
       const sectionTree = transforms.sectionTree(apiTree)
       const subSections = transforms.subSectionList(apiSubSections)
-      const variables = transforms.variables([...apiVariables1, ...apiVariables2, ...apiVariables3])
-
+      const allVariables = await this.fetchAllVariables({ attrs: 'id,name,subvariable_of,label,subsections' })
+      const variables = transforms.variables(allVariables)
       const cart = await api.get(`/files/${order.contents.id}`)
 
       let state
@@ -463,7 +457,7 @@ export default Vue.extend({
     },
     ...mapActions(['save', 'loadOrderAndCart', 'loadVariables', 'loadAssessments',
       'updateOrder', 'submit', 'loadOrders', 'deleteOrder', 'sendApproveTrigger', 'copyOrder',
-      'updateRequestId']),
+      'updateRequestId', 'fetchAllVariables']),
     ...mapMutations(['changeOrderStatus', 'setToast'])
   },
   mounted: function () {

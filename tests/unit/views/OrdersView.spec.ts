@@ -82,14 +82,17 @@ describe('OrdersView.vue', () => {
       return {
         items: orders,
         total: orders.length
-      }
+      };
     }),
     sendApproveTrigger: jest.fn(),
     copyOrder,
     save: jest.fn(),
     submit: jest.fn(),
     loadVariables: jest.fn(),
-    loadAssessments: jest.fn()
+    loadAssessments: jest.fn(),
+    fetchAllVariables: jest.fn(() => {
+      return []
+    })
   }
 
   let getters = {
@@ -392,18 +395,20 @@ describe('OrdersView.vue', () => {
       })
     })
 
-    describe('pdf dowload method', () => {
+    describe('pdfDownloadMethod', () => {
       it('should build a data object and call the service', async (done) => {
+        actions.fetchAllVariables.mockResolvedValue([])
         transforms.cartTree.mockReturnValueOnce({ my: 'tree' })
         // @ts-ignore
-        axios.post.mockResolvedValueOnce({ data: 'mydata' })
+        axios.post.mockResolvedValue({ data: 'mydata' })
         await wrapper.vm.downloadPdf('12345')
         expect(axios.post).toHaveBeenCalledWith(
           '/vuepdf/',
-          { component: 'orders',
+          {
+            component: 'orders',
             state: {
               assessments: undefined,
-              cartTree: undefined,
+              cartTree: { my: 'tree' },
               filters: {},
               gridSelection: undefined,
               order: {
@@ -412,9 +417,10 @@ describe('OrdersView.vue', () => {
                 },
                 name: 'testName'
               }
-            } },
+            }
+          },
           { responseType: 'blob' }
-        )
+        );
         done()
       })
     })
